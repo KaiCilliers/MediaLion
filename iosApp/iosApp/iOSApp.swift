@@ -15,12 +15,7 @@ struct CoreScreenContent: View {
     var body: some View {
         
         NavigationView {
-            VStack {
-                Text("Score: \(user.score)")
-                ContentView()
-                    .navigationTitle("Screen 1")
-                    .navigationBarTitleDisplayMode(.inline)
-            }
+            ContentView()
         }
         .environmentObject(user)
         .statusBar(hidden: true)
