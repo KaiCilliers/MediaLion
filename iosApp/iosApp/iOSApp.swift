@@ -10,20 +10,21 @@ struct iOSApp: App {
 }
 
 struct CoreScreenContent: View {
-    @StateObject var user = User()
+    @StateObject var user = User(color: Color.black)
     
     var body: some View {
-        
-        NavigationView {
-            ContentView()
-        }
-        .environmentObject(user)
-        .statusBar(hidden: true)
+        ContentView()
     }
 }
 
 class User: ObservableObject {
+    var color: Color
     @Published var score = 0
+    
+    init(color: Color, score: Int = 0) {
+        self.color = color
+        self.score = score
+    }
 }
 
 struct iOSApp_Preview: PreviewProvider {
