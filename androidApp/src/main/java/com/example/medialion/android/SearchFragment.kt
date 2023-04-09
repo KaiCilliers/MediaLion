@@ -11,8 +11,10 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
+import com.example.medialion.SharedRes
 import com.example.medialion.SharedTextResource
 import com.zhuinden.simplestackextensions.fragmentsktx.backstack
 
@@ -33,6 +35,7 @@ class SearchFragment : Fragment() {
 
                         Text(
                             fontSize = 42.sp,
+                            fontFamily = FontFamily(SharedRes.fonts.Quicksand.bold.getTypeface(requireContext())!!),
                             text = s1 + " / " + s2,
                             modifier = Modifier.clickable {
                                 backstack.goTo(DetailScreen())
