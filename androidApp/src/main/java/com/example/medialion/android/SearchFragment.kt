@@ -27,9 +27,13 @@ class SearchFragment : Fragment() {
                     Surface(
                         modifier = Modifier.fillMaxSize()
                     ) {
+
+                        val s1 = SharedTextResource().getUserName(null).toString(requireContext())
+                        val s2 = SharedTextResource().getUserName("Nadine").toString(requireContext())
+
                         Text(
                             fontSize = 42.sp,
-                            text = SharedTextResource().getGreetingWithName("Nadine").toString(requireContext()),
+                            text = s1 + " / " + s2,
                             modifier = Modifier.clickable {
                                 backstack.goTo(DetailScreen())
                             }

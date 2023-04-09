@@ -2,4 +2,5 @@
 <resources>
     <string name="greeting">Hello</string>
     <string name="greeting_with_name">Hello, %s</string>
+    <string name="placeholder">PLACEHOLDER USER</string>
 </resources>
