@@ -5,17 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
-import com.example.medialion.SharedRes
-import com.example.medialion.SharedTextResource
+import com.example.medialion.android.theme.MediaLionTheme
 import com.zhuinden.simplestackextensions.fragmentsktx.backstack
 
 class SearchFragment : Fragment() {
@@ -27,20 +29,30 @@ class SearchFragment : Fragment() {
             setContent {
                 MediaLionTheme {
                     Surface(
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize().clickable {
+                            backstack.goTo(DetailScreen())
+                        }
                     ) {
 
-                        val s1 = SharedTextResource().getUserName(null).toString(requireContext())
-                        val s2 = SharedTextResource().getUserName("Nadine").toString(requireContext())
+                        Column {
+                            Text(text = "heading 1", style = MaterialTheme.typography.h1)
+                            Spacer(modifier = Modifier.height(10.dp))
 
-                        Text(
-                            fontSize = 42.sp,
-                            fontFamily = FontFamily(SharedRes.fonts.Quicksand.bold.getTypeface(requireContext())!!),
-                            text = s1 + " / " + s2,
-                            modifier = Modifier.clickable {
-                                backstack.goTo(DetailScreen())
-                            }
-                        )
+                            Text(text = "heading 2", style = MaterialTheme.typography.h2)
+                            Spacer(modifier = Modifier.height(10.dp))
+
+                            Text(text = "heading 3", style = MaterialTheme.typography.h3)
+                            Spacer(modifier = Modifier.height(10.dp))
+
+                            Text(text = "subtitle 1", style = MaterialTheme.typography.subtitle1)
+                            Spacer(modifier = Modifier.height(10.dp))
+
+                            Text(text = "subtitle 2", style = MaterialTheme.typography.subtitle2)
+                            Spacer(modifier = Modifier.height(10.dp))
+
+                            Text(text = "body", style = MaterialTheme.typography.body1)
+                            Spacer(modifier = Modifier.height(10.dp))
+                        }
                     }
                 }
             }

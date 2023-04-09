@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.example.medialion.SharedRes
 import com.example.medialion.SharedTextResource
+import com.example.medialion.android.theme.MediaLionTheme
 import com.zhuinden.simplestackextensions.fragmentsktx.backstack
 import dev.icerock.moko.resources.desc.desc
 
@@ -66,7 +67,7 @@ class DetailFragment : Fragment() {
                                 modifier = Modifier.clickable {
                                     backstack.goBack()
                                 },
-                                color = colorResource(id = SharedRes.colors.themedColor.resourceId)
+                                color = colorResource(id = SharedRes.colors.primary.resourceId)
                             )
                         }
                     }
