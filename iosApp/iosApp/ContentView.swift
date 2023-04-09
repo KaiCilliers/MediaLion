@@ -8,13 +8,18 @@ struct ContentView: View {
     let nullUser = SharedTextResource().getUserName(user: nil).localized()
     let legitUser = SharedTextResource().getUserName(user: "Nadine").localized()
     let s = SharedRes.fontsQuicksand().boldItalic.uiFont(withSize: 40)
-
+    // toggle dark mode in emulator CMD + Shift + A
+    let asd = SharedRes.colors().themedColor.getUIColor()
+    
 	var body: some View {
         VStack {
             Slider(value: $sliderValue, in: 0...5, step: 1)
             Text(SharedTextResource().getMyPluralFormattedDesc(quantity: Int32(Int(sliderValue))).localized())
-            Text(nullUser + " / " + legitUser + " / " + sharedText)
-                .font(Font(s))
+            if #available(iOS 15.0, *) {
+                Text(nullUser + " / " + legitUser + " / " + sharedText)
+                    .foregroundColor(Color(uiColor: asd))
+                    .font(Font(s))
+            }
         }
 	}
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -46,7 +48,9 @@ class DetailFragment : Fragment() {
                 val plural = pluralStringResource(id = SharedRes.plurals.dress.resourceId, count = 1)
                 MediaLionTheme {
                     Surface(
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(colorResource(id = SharedRes.colors.valueColor.resourceId))
                     ) {
                         Column {
                             Slider(
@@ -61,7 +65,8 @@ class DetailFragment : Fragment() {
                                     .toString(requireContext()),
                                 modifier = Modifier.clickable {
                                     backstack.goBack()
-                                }
+                                },
+                                color = colorResource(id = SharedRes.colors.themedColor.resourceId)
                             )
                         }
                     }
