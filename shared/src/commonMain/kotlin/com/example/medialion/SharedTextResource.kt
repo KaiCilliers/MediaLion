@@ -17,8 +17,7 @@ class SharedTextResource {
     }
 
     fun getMyPluralFormattedDesc(quantity: Int) : StringDesc {
-        //we pass quantity once as a selector to get associated
-        //plural and once again to get the interpolated string.
+        // we pass quantity as selector for correct plural string and for pass quantity as argument for formatting
         return StringDesc.PluralFormatted(SharedRes.plurals.dress, quantity, quantity)
     }
 
