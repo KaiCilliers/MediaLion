@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
+import com.example.medialion.SharedTextResource
 import com.zhuinden.simplestackextensions.fragmentsktx.backstack
 
 class SearchFragment : Fragment() {
@@ -28,7 +29,7 @@ class SearchFragment : Fragment() {
                     ) {
                         Text(
                             fontSize = 42.sp,
-                            text = "Search Screen",
+                            text = SharedTextResource().getGreetingWithName("Nadine").toString(requireContext()),
                             modifier = Modifier.clickable {
                                 backstack.goTo(DetailScreen())
                             }

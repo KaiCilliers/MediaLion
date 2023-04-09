@@ -29,6 +29,11 @@ android {
         getByName("release") {
             isMinifyEnabled = false
         }
+        // https://github.com/icerockdev/moko-resources#android-build-types
+//        getByName("staging") {
+//            initWith(getByName("debug"))
+//            matchingFallbacks.add("debug")
+//        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
