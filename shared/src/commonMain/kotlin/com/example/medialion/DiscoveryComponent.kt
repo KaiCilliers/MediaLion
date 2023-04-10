@@ -6,6 +6,7 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -30,14 +31,15 @@ class DiscoveryComponent {
     of potential exception classes.
      */
     @Throws(Exception::class)
-    suspend fun allLaunches(): String {
-        return otherClient.getAllLaunches().map {
-            it.missionName + " Success: ${it.launchSuccess}\n"
-        }.take(10).toString()
+    suspend fun allLaunches(): List<Result> {
+        return otherClient.getAllLaunches().results?.sortedBy {
+            it.popularity
+        } ?: emptyList()
     }
 }
 
 class Client {
+    @OptIn(ExperimentalSerializationApi::class)
     private val httpClient = HttpClient {
         /*
         This code uses the Ktor ContentNegotiation plugin to deserialize
@@ -49,43 +51,12 @@ class Client {
             json(Json {
                 ignoreUnknownKeys = true
                 useAlternativeNames = false
+                explicitNulls = false
             })
         }
     }
 
-    suspend fun getAllLaunches(): List<RocketLaunch> {
-        return httpClient.get("https://api.spacexdata.com/v5/launches").body()
+    suspend fun getAllLaunches(): PagedResponse {
+        return httpClient.get("https://api.themoviedb.org/3/search/multi?api_key=9b3b6234bb46dbbd68fedc64b4d46e63&language=en-US&query=office&page=1&include_adult=false").body()
     }
 }
-
-@Serializable
-data class RocketLaunch(
-    @SerialName("flight_number")
-    val flightNumber: Int,
-    @SerialName("name")
-    val missionName: String,
-    @SerialName("date_utc")
-    val launchDateUTC: String,
-    @SerialName("details")
-    val details: String?,
-    @SerialName("success")
-    val launchSuccess: Boolean?,
-    @SerialName("links")
-    val links: Links
-)
-
-@Serializable
-data class Links(
-    @SerialName("patch")
-    val patch: Patch?,
-    @SerialName("article")
-    val article: String?
-)
-
-@Serializable
-data class Patch(
-    @SerialName("small")
-    val small: String?,
-    @SerialName("large")
-    val large: String?
-)

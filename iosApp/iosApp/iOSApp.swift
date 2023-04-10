@@ -25,7 +25,7 @@ class ViewModel: ObservableObject {
             DispatchQueue.main.async {
                 sleep(2)
                 if let text = text {
-                    self.text = text
+                    self.text = "\(text)"
                 } else {
                     self.text = error?.localizedDescription ?? "error"
                 }
