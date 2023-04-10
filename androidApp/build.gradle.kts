@@ -18,7 +18,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.0"
+        kotlinCompilerExtensionVersion = "1.4.4"
     }
     packagingOptions {
         resources {
@@ -29,11 +29,6 @@ android {
         getByName("release") {
             isMinifyEnabled = false
         }
-        // https://github.com/icerockdev/moko-resources#android-build-types
-//        getByName("staging") {
-//            initWith(getByName("debug"))
-//            matchingFallbacks.add("debug")
-//        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -41,7 +36,12 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+        languageVersion = "1.9"
     }
+}
+
+kotlin.sourceSets.all {
+    languageSettings.enableLanguageFeature("DataObjects")
 }
 
 dependencies {
