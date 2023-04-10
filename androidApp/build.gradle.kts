@@ -58,6 +58,7 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.5.6")
     implementation("androidx.activity:activity-ktx:1.7.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+    implementation("io.coil-kt:coil-compose:2.3.0")
 
     implementation("com.github.Zhuinden:simple-stack:2.7.0")
     implementation("com.github.Zhuinden.simple-stack-extensions:core-ktx:2.3.0")

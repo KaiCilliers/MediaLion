@@ -19,6 +19,10 @@ class DiscoveryComponent {
     private val client = HttpClient()
     private val otherClient = Client()
 
+    companion object {
+        const val baseUrl = "https://image.tmdb.org/t/p/w500/"
+    }
+
     suspend fun greetingFromClient(): String {
         val response = client.get("https://ktor.io/docs/")
         return response.bodyAsText()

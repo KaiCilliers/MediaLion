@@ -5,16 +5,32 @@ struct ContentView: View {
     @EnvironmentObject var viewModel: ViewModel
     
 	var body: some View {
-        VStack {
-            Text("heading 1").myFont(.h1).foregroundColor(.primary)
-            Text("heading 2").myFont(.h2).foregroundColor(.primaryVariant)
-            Text("heading 3").myFont(.h3).foregroundColor(.secondary)
-            Text("subtitle 1").myFont(.subtitle1)
-            Text("subtitle 2").myFont(.subtitle2)
-            Text("body").myFont(.body)
-            Text(viewModel.text)
+        NavigationLink(destination: ListView()) {
+            VStack {
+                Text("heading 1").myFont(.h1).foregroundColor(.primary)
+                Text("heading 2").myFont(.h2).foregroundColor(.primaryVariant)
+                Text("heading 3").myFont(.h3).foregroundColor(.secondary)
+                Text("subtitle 1").myFont(.subtitle1)
+                Text("subtitle 2").myFont(.subtitle2)
+                Text("body").myFont(.body)
+            }
         }
-	}
+    }
+}
+
+struct ListView: View {
+    @EnvironmentObject var viewModel: ViewModel
+    
+    var body: some View {
+        if #available(iOS 15.0, *) {
+            List(viewModel.mediaList, id: \.self) { item in
+                AsyncImage(url: URL(string: DiscoveryComponent.Companion().baseUrl + (item.posterPath ?? "")))
+                Spacer()
+            }
+        } else {
+            // Fallback on earlier versions
+        }
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {

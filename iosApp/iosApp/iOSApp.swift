@@ -18,16 +18,14 @@ struct iOSApp: App {
 
 
 class ViewModel: ObservableObject {
-    @Published var text = "Loading..."
+    @Published var mediaList: Array<shared.Result> = []
     
     init() {
         DiscoveryComponent().allLaunches { text, error in
             DispatchQueue.main.async {
                 sleep(2)
                 if let text = text {
-                    self.text = "\(text)"
-                } else {
-                    self.text = error?.localizedDescription ?? "error"
+                    self.mediaList = text
                 }
             }
         }
