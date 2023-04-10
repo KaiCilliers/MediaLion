@@ -8,6 +8,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Slider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -27,7 +29,9 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.example.medialion.SharedRes
 import com.example.medialion.SharedTextResource
+import com.example.medialion.android.theme.LocalSpacing
 import com.example.medialion.android.theme.MediaLionTheme
+import com.example.medialion.android.theme.spacing
 import com.zhuinden.simplestackextensions.fragmentsktx.backstack
 import dev.icerock.moko.resources.desc.desc
 
@@ -44,6 +48,7 @@ class DetailFragment : Fragment() {
                 var sliderValue by remember {
                     mutableStateOf(0f)
                 }
+                MaterialTheme.colors
                 var s = SharedRes.strings.greeting.desc().toString(requireContext())
                 var s2 = stringResource(id = SharedRes.strings.greeting.resourceId)
                 val plural = pluralStringResource(id = SharedRes.plurals.dress.resourceId, count = 1)
@@ -66,7 +71,8 @@ class DetailFragment : Fragment() {
                                     .toString(requireContext()),
                                 modifier = Modifier.clickable {
                                     backstack.goBack()
-                                },
+                                }
+                                    .padding(MaterialTheme.spacing.xLarge),
                                 color = colorResource(id = SharedRes.colors.primary.resourceId)
                             )
                         }
