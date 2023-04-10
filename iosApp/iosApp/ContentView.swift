@@ -2,14 +2,7 @@ import SwiftUI
 import shared
 
 struct ContentView: View {
-    let greet = SharedTextResource().getGreetingWithName(name: "Nadine").localized()
-    @State var sliderValue: Double = 0
-    let sharedText = SharedRes.strings().greeting.desc().localized()
-    let nullUser = SharedTextResource().getUserName(user: nil).localized()
-    let legitUser = SharedTextResource().getUserName(user: "Nadine").localized()
-    let s = SharedRes.fontsQuicksand().boldItalic.uiFont(withSize: 40)
-    // toggle dark mode in emulator CMD + Shift + A
-    let asd = SharedRes.colors().primary.getUIColor()
+    @EnvironmentObject var viewModel: ViewModel
     
 	var body: some View {
         VStack {
@@ -19,6 +12,7 @@ struct ContentView: View {
             Text("subtitle 1").myFont(.subtitle1)
             Text("subtitle 2").myFont(.subtitle2)
             Text("body").myFont(.body)
+            Text(viewModel.text)
         }
 	}
 }

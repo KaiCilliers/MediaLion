@@ -5,6 +5,6 @@ import com.zhuinden.simplestackextensions.fragments.DefaultFragmentKey
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class SearchScreen(val placeholder: String = "") : DefaultFragmentKey() {
+data object SearchKey : BaseKey() {
     override fun instantiateFragment(): Fragment = SearchFragment()
 }

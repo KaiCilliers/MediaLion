@@ -1,16 +1,8 @@
 package com.example.medialion.android
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.FragmentActivity
-import com.example.medialion.Greeting
 import com.zhuinden.simplestack.AheadOfTimeWillHandleBackChangedListener
 import com.zhuinden.simplestack.BackHandlingModel
 import com.zhuinden.simplestack.Backstack
@@ -19,6 +11,7 @@ import com.zhuinden.simplestack.SimpleStateChanger
 import com.zhuinden.simplestack.StateChange
 import com.zhuinden.simplestack.navigator.Navigator
 import com.zhuinden.simplestackextensions.fragments.DefaultFragmentStateChanger
+import com.zhuinden.simplestackextensions.services.DefaultServiceProvider
 
 class MainActivity : FragmentActivity(), SimpleStateChanger.NavigationHandler {
     private lateinit var fragmentStateChanger: DefaultFragmentStateChanger
@@ -42,7 +35,8 @@ class MainActivity : FragmentActivity(), SimpleStateChanger.NavigationHandler {
         backstack = Navigator.configure()
             .setBackHandlingModel(BackHandlingModel.AHEAD_OF_TIME)
             .setStateChanger(SimpleStateChanger(this))
-            .install(this, findViewById(R.id.container_fragment), History.single(SearchScreen()))
+            .setScopedServices(DefaultServiceProvider())
+            .install(this, findViewById(R.id.container_fragment), History.single(SearchKey))
 
         backPressedCallback.isEnabled = backstack.willHandleAheadOfTimeBack()
         backstack.addAheadOfTimeWillHandleBackChangedListener(updateBackPressedCallback)

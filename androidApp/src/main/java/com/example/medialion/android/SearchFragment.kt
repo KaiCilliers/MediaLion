@@ -30,7 +30,7 @@ class SearchFragment : Fragment() {
                 MediaLionTheme {
                     Surface(
                         modifier = Modifier.fillMaxSize().clickable {
-                            backstack.goTo(DetailScreen())
+                            backstack.goTo(DetailKey)
                         }
                     ) {
 
