@@ -58,7 +58,7 @@ class DetailFragment : Fragment() {
                 var text by remember { mutableStateOf("Loading...") }
                 LaunchedEffect(true) {
                     scope.launch { 
-                        text = discoveryComponent.greetingFromClient()
+                        text = discoveryComponent.allLaunches()
                     }
                 }
 

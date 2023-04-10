@@ -21,7 +21,7 @@ class ViewModel: ObservableObject {
     @Published var text = "Loading..."
     
     init() {
-        DiscoveryComponent().greetingFromClient { text, error in
+        DiscoveryComponent().allLaunches { text, error in
             DispatchQueue.main.async {
                 sleep(2)
                 if let text = text {
