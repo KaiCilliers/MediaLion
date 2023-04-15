@@ -19,9 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.medialion.android.theme.MediaLionTheme
-import com.example.medialion.models.MovieUiModel
-import com.example.medialion.search.SearchAction
-import com.example.medialion.search.SearchState
+import com.example.medialion.domain.models.MovieUiModel
+import com.example.medialion.domain.components.search.SearchAction
+import com.example.medialion.domain.components.search.SearchState
 
 @Composable
 fun SearchScreen(

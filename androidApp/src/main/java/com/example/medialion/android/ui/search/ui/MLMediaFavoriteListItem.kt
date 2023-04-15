@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.medialion.android.R
 import com.example.medialion.android.theme.MediaLionTheme
-import com.example.medialion.models.MovieUiModel
+import com.example.medialion.domain.models.MovieUiModel
 
 @Composable
 fun MLMediaFavoriteListItem(

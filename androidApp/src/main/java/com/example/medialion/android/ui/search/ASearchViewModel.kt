@@ -1,9 +1,9 @@
 package com.example.medialion.android.ui.search
 
-import com.example.medialion.SearchViewModel
+import com.example.medialion.domain.components.search.SearchViewModel
 import com.example.medialion.flow.CStateFlow
 import com.example.medialion.flow.cStateFlow
-import com.example.medialion.search.SearchState
+import com.example.medialion.domain.components.search.SearchState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

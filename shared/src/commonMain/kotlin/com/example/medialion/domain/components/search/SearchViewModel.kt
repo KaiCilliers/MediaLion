@@ -1,8 +1,7 @@
-package com.example.medialion
+package com.example.medialion.domain.components.search
 
 import com.example.medialion.flow.combineTuple
-import com.example.medialion.models.MovieUiModel
-import com.example.medialion.search.SearchState
+import com.example.medialion.domain.models.MovieUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -1,4 +1,4 @@
-package com.example.medialion.search
+package com.example.medialion.domain.components.search
 
 sealed class SearchAction {
     object ClearSearchText : SearchAction()

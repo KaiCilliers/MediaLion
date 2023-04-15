@@ -1,4 +1,4 @@
-package com.example.medialion.models
+package com.example.medialion.domain.models
 
 data class MovieUiModel(
     val id: Int,

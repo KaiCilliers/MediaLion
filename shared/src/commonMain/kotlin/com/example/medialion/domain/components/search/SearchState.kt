@@ -1,6 +1,6 @@
-package com.example.medialion.search
+package com.example.medialion.domain.components.search
 
-import com.example.medialion.models.MovieUiModel
+import com.example.medialion.domain.models.MovieUiModel
 
 sealed class SearchState {
     object Loading : SearchState()
