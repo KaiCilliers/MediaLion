@@ -67,4 +67,6 @@ dependencies {
     implementation("com.github.Zhuinden.simple-stack-extensions:navigator-ktx:2.3.0")
     implementation("com.github.Zhuinden.simple-stack-extensions:services:2.3.0")
     implementation("com.github.Zhuinden.simple-stack-extensions:services-ktx:2.3.0")
+
+    implementation("com.github.Zhuinden:flow-combinetuple-kt:1.1.1")
 }
