@@ -1,4 +1,4 @@
-package com.example.medialion.android
+package com.example.medialion.android.ui.search
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -44,6 +44,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import com.example.medialion.android.R
 import com.example.medialion.android.theme.MediaLionTheme
 
 class SearchFragment : Fragment() {
@@ -80,7 +81,7 @@ Row () {
                 .padding(start = 12.dp, top = 12.dp, bottom = 12.dp)
                 .size(24.dp))
     }
-    
+
     Spacer(modifier = Modifier.weight(1F))
 
     Box {
@@ -101,7 +102,7 @@ SearchView(
     )
 )
         Spacer(modifier = Modifier.height(20.dp))
-        
+
    Text(
        text = stringResource(id = com.example.medialion.R.string.top_suggestions),
        color = Color.White,
@@ -151,11 +152,13 @@ fun TopSuggestionsList() {
     var currentStep by remember { mutableStateOf(1) }
     var favorited by remember { mutableStateOf(2) }
     (1..100).forEach { movieNumber ->
-        list.add(MovieItem(
+        list.add(
+            MovieItem(
             image =  R.drawable.column_place_holder,
             title = stringResource(id = com.example.medialion.R.string.title),
             favorited = false
-        ))
+        )
+        )
     }
     LazyColumn{
         items(list) { singleMovie ->
