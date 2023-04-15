@@ -1,4 +1,4 @@
-package com.example.medialion.android
+package com.example.medialion.android.app
 
 import com.zhuinden.simplestack.ServiceBinder
 import com.zhuinden.simplestackextensions.fragments.DefaultFragmentKey

@@ -1,7 +1,7 @@
 package com.example.medialion.android
 
 import androidx.fragment.app.Fragment
-import com.zhuinden.simplestackextensions.fragments.DefaultFragmentKey
+import com.example.medialion.android.app.BaseKey
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

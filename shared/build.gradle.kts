@@ -76,7 +76,7 @@ kotlin {
 multiplatformResources {
     multiplatformResourcesPackage = "com.example.medialion" // required
     multiplatformResourcesClassName = "SharedRes" // optional, default MR
-    multiplatformResourcesVisibility = dev.icerock.gradle.MRVisibility.Public // optional, default Public
+    multiplatformResourcesVisibility = dev.icerock.gradle.MRVisibility.Internal // optional, default Public
     iosBaseLocalizationRegion = "en" // optional, default "en"
     multiplatformResourcesSourceSet = "commonMain"  // optional, default "commonMain"
 }

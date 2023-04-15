@@ -1,26 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!--    format: #RRGGBB[AA] or 0xRRGGBB[AA] or RRGGBB[AA] where [AA] - optional-->
-
-<!--    If you want use one color without light/dark theme selection:-->
-    <color name="valueColor">#B02743FF</color>
-
-<!--    If you want use value of other color - use references:-->
-    <color name="referenceColor">@color/valueColor</color>
-
-<!--    If you want different colors in light/dark themes:-->
-    <color name="primary">
-        <light>0xFF6200EE</light>
-        <dark>0xFFBB86FC</dark>
-    </color>
-
     <color name="background">0xFF0d2028</color>
-
     <color name="secondary">0xFFFFFFFF</color>
-
-<!--    Themed colors can be referenced too:-->
-    <color name="themedReferenceColor">
-        <light>@color/valueColor</light>
-        <dark>@color/referenceColor</dark>
-    </color>
 </resources>

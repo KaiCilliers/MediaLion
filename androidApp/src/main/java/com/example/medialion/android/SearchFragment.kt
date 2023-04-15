@@ -58,7 +58,7 @@ class SearchFragment : Fragment() {
                        modifier = Modifier.fillMaxSize(),
                        color = MaterialTheme.colors.background
                    ){
-
+                        InitialSearch()
                    }
                 }
             }

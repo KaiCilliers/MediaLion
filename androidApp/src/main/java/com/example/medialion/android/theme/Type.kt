@@ -1,20 +1,20 @@
 package com.example.medialion.android.theme
 
-import androidx.compose.ui.text.font.Font
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.example.medialion.SharedRes
+import com.example.medialion.FontRes
 
 val Merriweather = FontFamily(
-    Font(SharedRes.fonts.Merriweather.regular.fontResourceId, FontWeight.Normal),
-    Font(SharedRes.fonts.Merriweather.boldItalic.fontResourceId, FontWeight.Bold, FontStyle.Italic),
-    Font(SharedRes.fonts.Merriweather.italic.fontResourceId, FontWeight.Normal, FontStyle.Italic),
-    Font(SharedRes.fonts.Merriweather.light.fontResourceId, FontWeight.Light, FontStyle.Normal),
-    Font(SharedRes.fonts.Merriweather.lightItalic.fontResourceId, FontWeight.Light, FontStyle.Italic),
+    Font(FontRes.primaryRegular.fontResourceId, FontWeight.Normal),
+    Font(FontRes.primaryBoldItalic.fontResourceId, FontWeight.Bold, FontStyle.Italic),
+    Font(FontRes.primaryItalic.fontResourceId, FontWeight.Normal, FontStyle.Italic),
+    Font(FontRes.primaryLight.fontResourceId, FontWeight.Light, FontStyle.Normal),
+    Font(FontRes.primaryLightItalic.fontResourceId, FontWeight.Light, FontStyle.Italic),
 )
 
 val typography = Typography(
