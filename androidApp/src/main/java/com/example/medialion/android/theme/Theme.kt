@@ -15,15 +15,15 @@ fun MediaLionTheme(
 ) {
     val colors = if (darkTheme) {
         darkColors(
-            primary = Color(0xFFBB86FC),
-            primaryVariant = Color(0xFF3700B3),
-            secondary = Color(0xFF03DAC5)
+            background = Color(0xFF0d2028),
+            primary = Color(0xFF003658),
+            secondary = Color(0xFFFFFFFF)
         )
     } else {
         lightColors(
-            primary = Color(0xFF6200EE),
-            primaryVariant = Color(0xFF3700B3),
-            secondary = Color(0xFF03DAC5)
+            background = Color(0xFF0d2028),
+            primary = Color(0xFF003658),
+            secondary = Color(0xFFFFFFFF)
         )
     }
     CompositionLocalProvider(LocalSpacing provides Spacing()) {

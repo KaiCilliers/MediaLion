@@ -14,15 +14,9 @@
         <dark>0xFFBB86FC</dark>
     </color>
 
-    <color name="primaryVariant">
-        <light>0xFF3700B3</light>
-        <dark>0xFF3700B3</dark>
-    </color>
+    <color name="background">0xFF0d2028</color>
 
-    <color name="secondary">
-        <light>0xFF03DAC5</light>
-        <dark>0xFF03DAC5</dark>
-    </color>
+    <color name="secondary">0xFFFFFFFF</color>
 
 <!--    Themed colors can be referenced too:-->
     <color name="themedReferenceColor">
