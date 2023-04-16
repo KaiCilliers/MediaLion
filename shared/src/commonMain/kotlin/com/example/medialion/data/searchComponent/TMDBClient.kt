@@ -5,19 +5,16 @@ import com.example.medialion.domain.models.ResultOf
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
-import io.ktor.http.appendPathSegments
-import io.ktor.http.path
 import io.ktor.utils.io.errors.IOException
 
-// 9b3b6234bb46dbbd68fedc64b4d46e63
 interface TMDBClient {
-    suspend fun multiSearch(query: String): ResultOf<PagedMediaResults>
+    suspend fun searchMovies(query: String): ResultOf<PagedMediaResults>
     class Default(
         private val httpClient: HttpClient
     ) : TMDBClient {
-        override suspend fun multiSearch(query: String): ResultOf<PagedMediaResults> {
+        override suspend fun searchMovies(query: String): ResultOf<PagedMediaResults> {
             return try {
-                val response: PagedMediaResults = httpClient.get(NetworkConstants.BASE_URL_TMDB + "/search/multi") {
+                val response: PagedMediaResults = httpClient.get(NetworkConstants.BASE_URL_TMDB + "/search/movie") {
                     url {
                         parameters.apply {
                             append(
@@ -45,8 +42,12 @@ interface TMDBClient {
                 }.body()
 
                 ResultOf.Success(response)
-            } catch (e: IOException) {
-                ResultOf.Failure("[IO] exception", e.cause)
+            } catch (ioe: IOException) {
+                println("deadpool - ${ioe.cause}")
+                ResultOf.Failure("[IO] error please retry", ioe)
+            } catch (ex: Exception) {
+                println("deadpool - ${ex.cause}")
+                ResultOf.Failure("[Exception] error please retry", ex)
             }
         }
     }
