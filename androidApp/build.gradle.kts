@@ -69,4 +69,6 @@ dependencies {
     implementation("com.github.Zhuinden.simple-stack-extensions:services-ktx:2.3.0")
 
     implementation("com.github.Zhuinden:flow-combinetuple-kt:1.1.1")
+
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 }
