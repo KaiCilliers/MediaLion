@@ -41,7 +41,7 @@ class MainActivity : FragmentActivity(), SimpleStateChanger.NavigationHandler {
             .setBackHandlingModel(BackHandlingModel.AHEAD_OF_TIME)
             .setStateChanger(SimpleStateChanger(this))
             .setScopedServices(DefaultServiceProvider())
-            .install(this, findViewById(R.id.container_fragment), History.single(DetailPreviewKey))
+            .install(this, findViewById(R.id.container_fragment), History.single(SearchKey))
 
         backPressedCallback.isEnabled = backstack.willHandleAheadOfTimeBack()
         backstack.addAheadOfTimeWillHandleBackChangedListener(updateBackPressedCallback)

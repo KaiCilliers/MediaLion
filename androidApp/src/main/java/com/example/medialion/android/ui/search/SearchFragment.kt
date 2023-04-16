@@ -26,6 +26,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,11 +44,17 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.example.medialion.android.R
 import com.example.medialion.android.theme.MediaLionTheme
+import com.example.medialion.domain.components.search.SearchAction
+import com.zhuinden.simplestackextensions.fragmentsktx.lookup
 
 class SearchFragment : Fragment() {
+
+    private val viewModel by lazy { lookup<SearchViewModel>() }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -59,7 +66,20 @@ class SearchFragment : Fragment() {
                        modifier = Modifier.fillMaxSize(),
                        color = MaterialTheme.colors.background
                    ){
-//                        SearchScreen()
+                        val state by viewModel.state.collectAsState()
+
+                       Text(
+                           text = state.toString(),
+                           fontSize = 42.sp,
+                           color = Color.White,
+                           modifier = Modifier.clickable {
+                           when((1..4).random()) {
+                               1 -> viewModel.submitAction(SearchAction.ClearSearchText)
+                               2 -> viewModel.submitAction(SearchAction.SubmitSearchQuery("quey"))
+                               3 -> viewModel.submitAction(SearchAction.AddToFavorites(1))
+                               4 -> viewModel.submitAction(SearchAction.RemoveFromFavorites(2))
+                           }
+                       })
                    }
                 }
             }
