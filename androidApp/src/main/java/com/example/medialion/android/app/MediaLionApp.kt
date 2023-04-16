@@ -6,6 +6,8 @@ import com.example.medialion.data.searchComponent.TMDBClient
 import com.zhuinden.simplestack.GlobalServices
 import com.zhuinden.simplestackextensions.servicesktx.add
 import com.zhuinden.simplestackextensions.servicesktx.rebind
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
 class MediaLionApp : Application() {
     lateinit var globalServices: GlobalServices
@@ -22,3 +24,5 @@ class MediaLionApp : Application() {
             .build()
     }
 }
+
+interface IODispatcher

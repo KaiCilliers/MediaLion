@@ -4,20 +4,22 @@ import com.example.medialion.data.searchComponent.TMDBClient
 import com.example.medialion.domain.components.search.MLSearchViewModel
 import com.example.medialion.domain.components.search.SearchAction
 import com.example.medialion.domain.components.search.SearchState
+import com.zhuinden.simplestack.Backstack
+import com.zhuinden.simplestackextensions.servicesktx.lookup
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.StateFlow
 
 class SearchViewModel(
-    private val client: TMDBClient
+    backstack: Backstack
 ) {
     private val viewModelScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-    private val viewModel by lazy { MLSearchViewModel(client, viewModelScope) }
+    private val sharedViewModel by lazy { MLSearchViewModel(backstack.lookup(), backstack.lookup(), viewModelScope) }
 
-    val state: StateFlow<SearchState> = viewModel.state
+    val state: StateFlow<SearchState> = sharedViewModel.state
 
     fun submitAction(action: SearchAction) {
-        viewModel.submitAction(action)
+        sharedViewModel.submitAction(action)
     }
 }

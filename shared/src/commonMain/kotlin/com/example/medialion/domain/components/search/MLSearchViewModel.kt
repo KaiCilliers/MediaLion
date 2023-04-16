@@ -2,7 +2,8 @@ package com.example.medialion.domain.components.search
 
 import com.example.medialion.data.extensions.doIfFailure
 import com.example.medialion.data.extensions.doIfSuccess
-import com.example.medialion.data.searchComponent.TMDBClient
+import com.example.medialion.domain.mappers.ListMapper
+import com.example.medialion.domain.models.Movie
 import com.example.medialion.domain.models.MovieUiModel
 import com.example.medialion.flow.CStateFlow
 import com.example.medialion.flow.cStateFlow
@@ -13,34 +14,25 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class MLSearchViewModel(
-    private val client: TMDBClient,
+    private val searchMoviesByTitle: SearchMoviesUseCase,
+    private val movieMapper: ListMapper<Movie, MovieUiModel>,
     coroutineScope: CoroutineScope?,
 ) {
-    private val viewModelScope =
-        coroutineScope ?: CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private val viewModelScope = coroutineScope ?: CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private var _state: MutableStateFlow<SearchState> = MutableStateFlow(SearchState.Loading)
     val state: CStateFlow<SearchState>
         get() = _state.cStateFlow()
 
     init {
         viewModelScope.launch {
-            client.searchMovies("shrek").also { result ->
-                result.doIfSuccess {
+            searchMoviesByTitle.searchMovies("shrek").also {
+                it.doIfSuccess { movies ->
                     _state.value = SearchState.Results(
-                        searchResults = it.results.map { mediaItem ->
-                            MovieUiModel(
-                                id = mediaItem.id,
-                                title = mediaItem.title,
-                                isFavorited = false,
-                                posterUrl = mediaItem.posterPath.orEmpty()
-                            )
-                        },
+                        searchResults = movieMapper.map(movies),
                         relatedTitles = emptyList()
                     )
                 }
-                result.doIfFailure { _, _ ->
-                    _state.value = SearchState.Empty
-                }
+                it.doIfFailure { _, _ ->  _state.value = SearchState.Empty}
             }
         }
     }
@@ -49,3 +41,4 @@ class MLSearchViewModel(
         println("deadpool - $action")
     }
 }
+
