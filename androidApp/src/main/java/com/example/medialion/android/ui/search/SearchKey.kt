@@ -3,6 +3,7 @@ package com.example.medialion.android.ui.search
 import androidx.fragment.app.Fragment
 import com.example.medialion.android.app.BaseKey
 import com.example.medialion.data.searchComponent.MediaResponse
+import com.example.medialion.domain.components.search.RelatedMoviesUseCase
 import com.example.medialion.domain.components.search.SearchMoviesUseCase
 import com.example.medialion.domain.mappers.ListMapper
 import com.example.medialion.domain.mappers.Mapper
@@ -26,6 +27,9 @@ data object SearchKey : BaseKey() {
 
             add(SearchMoviesUseCase.Default(lookup(), Dispatchers.IO, lookup()))
             rebind<SearchMoviesUseCase>(get<SearchMoviesUseCase.Default>())
+
+            add(RelatedMoviesUseCase.Default(lookup(), Dispatchers.IO, lookup()))
+            rebind<RelatedMoviesUseCase>(get<RelatedMoviesUseCase.Default>())
 
             add(Mapper.MovieUiMapper())
             rebind<Mapper<Movie, MovieUiModel>>(get<Mapper.MovieUiMapper>())

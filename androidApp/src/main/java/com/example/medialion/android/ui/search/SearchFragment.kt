@@ -49,6 +49,7 @@ import androidx.fragment.app.Fragment
 import com.example.medialion.android.R
 import com.example.medialion.android.theme.MediaLionTheme
 import com.example.medialion.domain.components.search.SearchAction
+import com.example.medialion.domain.components.search.SearchState
 import com.zhuinden.simplestackextensions.fragmentsktx.lookup
 
 class SearchFragment : Fragment() {
@@ -68,9 +69,20 @@ class SearchFragment : Fragment() {
                    ){
                         val state by viewModel.state.collectAsState()
 
+                       val textToShow = when(val s = state) {
+                           SearchState.Empty -> state.toString()
+                           is SearchState.Idle -> state.toString()
+                           SearchState.Loading -> state.toString()
+                           is SearchState.Results -> {
+                               val searchResults = s.searchResults.map { "[${it.id}] ${it.title}" }
+                               val relatedTitles = s.relatedTitles.flatten().map { "[${it.id}] ${it.title}" }
+                               "Search Results:\n $searchResults\n\n Related:\n$relatedTitles"
+                           }
+                       }
+
                        Text(
-                           text = state.toString(),
-                           fontSize = 42.sp,
+                           text = textToShow,
+                           fontSize = 24.sp,
                            color = Color.White,
                            modifier = Modifier.clickable {
                            when((1..4).random()) {

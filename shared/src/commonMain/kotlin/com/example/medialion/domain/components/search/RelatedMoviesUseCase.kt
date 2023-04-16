@@ -9,21 +9,19 @@ import com.example.medialion.domain.models.ResultOf
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
-interface SearchMoviesUseCase {
+interface RelatedMoviesUseCase {
+    suspend fun relateMovies(movieId: Int): ResultOf<List<Movie>>
 
-    suspend fun searchMovies(query: String): ResultOf<List<Movie>>
     class Default(
         private val client: TMDBClient,
         private val dispatcher: CoroutineDispatcher,
         private val movieMapper: Mapper<MediaResponse, Movie>,
-    ) : SearchMoviesUseCase {
-        override suspend fun searchMovies(query: String) = withContext(dispatcher) {
-            return@withContext when (val response = client.searchMovies(query)) {
+    ) : RelatedMoviesUseCase {
+        override suspend fun relateMovies(movieId: Int) = withContext(dispatcher) {
+            return@withContext when (val response = client.relatedMovies(movieId)) {
                 is ResultOf.Success -> response.map { it.results.map { item -> movieMapper.map(item) } }
                 is ResultOf.Failure -> response
             }
         }
     }
-
 }
-

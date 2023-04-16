@@ -1,6 +1,5 @@
 package com.example.medialion.android.ui.search
 
-import com.example.medialion.data.searchComponent.TMDBClient
 import com.example.medialion.domain.components.search.MLSearchViewModel
 import com.example.medialion.domain.components.search.SearchAction
 import com.example.medialion.domain.components.search.SearchState
@@ -15,7 +14,7 @@ class SearchViewModel(
     backstack: Backstack
 ) {
     private val viewModelScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-    private val sharedViewModel by lazy { MLSearchViewModel(backstack.lookup(), backstack.lookup(), viewModelScope) }
+    private val sharedViewModel by lazy { MLSearchViewModel(backstack.lookup(), backstack.lookup(), backstack.lookup(), viewModelScope) }
 
     val state: StateFlow<SearchState> = sharedViewModel.state
 
