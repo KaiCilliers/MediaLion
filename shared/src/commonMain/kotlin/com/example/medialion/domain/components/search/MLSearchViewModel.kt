@@ -35,16 +35,16 @@ class MLSearchViewModel(
     private val movieMapper: ListMapper<Movie, MovieUiModel>,
     coroutineScope: CoroutineScope?,
 ) {
-    private val viewModelScope = coroutineScope ?: CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private val viewModelScope =
+        coroutineScope ?: CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
-    private val suggestedMovies = MutableStateFlow(SuggestedMovies.list)
+    private var suggestedMovies = MutableStateFlow(SuggestedMovies.list.toList())
     private val currentQuery = MutableStateFlow("")
     private val isLoading = MutableStateFlow(false)
     private val searchResults: Flow<List<MovieUiModel>> = currentQuery
         .debounce(125L)
         .onEach {
-            println("deadpool - loading true")
-            isLoading.value = true
+            if (it.isNotEmpty()) isLoading.value = true
         }
         .flatMapLatest { query ->
             println("deadpool - query changed -> $query")
@@ -56,9 +56,10 @@ class MLSearchViewModel(
                             println("deadpool - failed")
                             emptyFlow()
                         }
+
                         is ResultOf.Success -> {
                             println("deadpool - success")
-                            listOf(movieMapper.map(response.value)).asFlow()
+                            flow { emit(movieMapper.map(response.value)) }
                         }
                     }
                 }
@@ -89,14 +90,30 @@ class MLSearchViewModel(
     ).map { (query, isLoading, results, related, suggestedMovies) ->
         println("deadpool - tuple $query, $isLoading, ${results.size}, ${related.size}, ${suggestedMovies.size}")
         when {
-            isLoading -> SearchState.Loading(query)
-            results.isNotEmpty() -> SearchState.Results(searchResults = results, relatedTitles = listOf(related), searchQuery = query)
             query.isEmpty() -> SearchState.Idle(searchQuery = query, suggestedMovies)
+            isLoading -> SearchState.Loading(query)
+            results.isNotEmpty() -> SearchState.Results(
+                searchResults = results,
+                relatedTitles = listOf(related),
+                searchQuery = query
+            )
+
             query.isNotEmpty() && results.isEmpty() -> SearchState.Empty(query)
             // TODO error state for search screen
-            else -> SearchState.Idle(searchQuery = query,suggestedMovies)
+            else -> SearchState.Idle(searchQuery = query, SuggestedMovies.list.take(2))
         }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000L), SearchState.Loading(""))
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000L),
+        SearchState.Idle("", SuggestedMovies.list)
+    )
+
+    init {
+        // TODO fix issue where this whole class starts kicking into gear when the search query changes for the first time
+        //  until then, toggling favorited movies won't show in the UI
+        //  currentQuery.value = "" does not fix the issue (passing it a value does)
+        currentQuery.value = ""
+    }
     val state: CStateFlow<SearchState>
         get() = _state.cStateFlow()
 
@@ -110,22 +127,28 @@ class MLSearchViewModel(
     }
 
     private fun addToFavorites(movieId: Int) {
-        SuggestedMovies.list.map {
+        suggestedMovies.value = SuggestedMovies.list.map {
             if (it.id == movieId) {
                 it.copy(isFavorited = true)
             } else {
                 it
             }
+        }.also {
+            SuggestedMovies.list.clear()
+            SuggestedMovies.list.addAll(it)
         }
     }
 
     private fun removeFromFavorites(movieId: Int) {
-        SuggestedMovies.list.map {
+        suggestedMovies.value = SuggestedMovies.list.map {
             if (it.id == movieId) {
                 it.copy(isFavorited = false)
             } else {
                 it
             }
+        }.also {
+            SuggestedMovies.list.clear()
+            SuggestedMovies.list.addAll(it)
         }
     }
 }
@@ -133,31 +156,31 @@ class MLSearchViewModel(
 private object SuggestedMovies {
     val list = mutableListOf(
         MovieUiModel(
-            id = 9755,
+            id = 97551,
             title = "Movie #1",
             isFavorited = false,
             posterUrl = "https://www.google.com/#q=petentium"
         ),
         MovieUiModel(
-            id = 9755,
+            id = 97553,
             title = "Movie #1",
             isFavorited = false,
             posterUrl = "https://www.google.com/#q=petentium"
         ),
         MovieUiModel(
-            id = 9755,
+            id = 975544,
             title = "Movie #1",
             isFavorited = false,
             posterUrl = "https://www.google.com/#q=petentium"
         ),
         MovieUiModel(
-            id = 9755,
+            id = 97155,
             title = "Movie #1",
             isFavorited = false,
             posterUrl = "https://www.google.com/#q=petentium"
         ),
         MovieUiModel(
-            id = 9755,
+            id = 971355,
             title = "Movie #1",
             isFavorited = false,
             posterUrl = "https://www.google.com/#q=petentium"

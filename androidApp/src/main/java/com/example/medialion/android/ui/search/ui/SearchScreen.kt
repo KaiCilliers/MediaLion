@@ -1,8 +1,10 @@
 package com.example.medialion.android.ui.search.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -20,10 +22,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.medialion.ColorRes
+import com.example.medialion.android.R
+import com.example.medialion.android.R.*
 import com.example.medialion.android.theme.MediaLionTheme
 import com.example.medialion.domain.models.MovieUiModel
 import com.example.medialion.domain.components.search.SearchAction
@@ -34,11 +39,13 @@ fun SearchScreen(
     state: SearchState,
     submitAction: (SearchAction) -> Unit,
 ) {
+    println("deadpool - UI state is $state")
     Column(
         Modifier.background(Color.White)
     ) {
+
         var text by remember {
-            mutableStateOf("")
+            mutableStateOf(state.searchQuery)
         }
 
         TextField(
@@ -49,11 +56,12 @@ fun SearchScreen(
             },
             textStyle = TextStyle.Default.copy(fontSize = 16.sp),
 
-        )
+            )
         when (state) {
             is SearchState.Empty -> {
                 Text(text = "Empty Results")
             }
+
             is SearchState.Idle -> {
                 Column {
                     Text(
@@ -61,18 +69,37 @@ fun SearchScreen(
                         fontSize = 30.sp
                     )
                     LazyColumn {
-                        items(state.suggestedMedia) {
-                            Text(
-                                text = it.title,
-                                fontSize = 24.sp
-                            )
+                        items(state.suggestedMedia) { suggestedMovie ->
+                            Row {
+                                Text(
+                                    text = suggestedMovie.title,
+                                    fontSize = 24.sp
+                                )
+                                Image(
+                                    painter = if (suggestedMovie.isFavorited) {
+                                        painterResource(id = R.drawable.heart_filled_icon)
+                                    } else {
+                                        painterResource(R.drawable.heart_outline_icon)
+                                    },
+                                    contentDescription = null,
+                                    modifier = Modifier.clickable {
+                                        if (suggestedMovie.isFavorited) {
+                                            submitAction(SearchAction.RemoveFromFavorites(suggestedMovie.id))
+                                        } else {
+                                            submitAction(SearchAction.AddToFavorites(suggestedMovie.id))
+                                        }
+                                    }
+                                )
+                            }
                         }
                     }
                 }
             }
+
             is SearchState.Loading -> {
                 CircularProgressIndicator()
             }
+
             is SearchState.Results -> {
                 Column {
                     Text(
@@ -86,7 +113,7 @@ fun SearchScreen(
                                 fontSize = 24.sp
                             )
                         }
-                        itemsIndexed(state.relatedTitles) {index, movies ->
+                        itemsIndexed(state.relatedTitles) { index, movies ->
                             Text(
                                 text = "Related Media #$index",
                                 fontSize = 30.sp
@@ -135,6 +162,7 @@ fun SearchScreenPreview() {
                                 )
                             )
                         }
+
                         is SearchAction.RemoveFromFavorites -> TODO()
                         is SearchAction.SubmitSearchQuery -> TODO()
                     }
