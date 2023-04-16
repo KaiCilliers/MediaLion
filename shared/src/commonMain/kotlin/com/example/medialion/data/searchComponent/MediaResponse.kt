@@ -5,54 +5,44 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MediaResponse(
-    val adult: Boolean?,
+    val adult: Boolean,
 
     @SerialName("backdrop_path")
     val backdropPath: String?,
 
-    @SerialName("first_air_date")
-    val firstAirDate: String?,
-
     @SerialName("genre_ids")
-    val genreIds: List<Int>?,
+    val genreIds: List<Int>,
 
+    @SerialName("id")
     val id: Int,
 
-    @SerialName("media_type")
-    val mediaType: String?,
-
-    val name: String?,
-
-    @SerialName("origin_country")
-    val originCountry: List<String>?,
-
     @SerialName("original_language")
-    val originalLanguage: String?,
-
-    @SerialName("original_name")
-    val originalName: String?,
+    val originalLanguage: String,
 
     @SerialName("original_title")
-    val originalTitle: String?,
+    val originalTitle: String,
 
-    val overview: String?,
+    @SerialName("overview")
+    val overview: String,
 
-    val popularity: Double?,
+    @SerialName("popularity")
+    val popularity: Double,
 
     @SerialName("poster_path")
     val posterPath: String?,
 
     @SerialName("release_date")
-    val releaseDate: String?,
+    val releaseDate: String,
 
-    val title: String?,
+    @SerialName("title")
+    val title: String,
 
     @SerialName("video")
-    val hasVideo: Boolean?,
+    val hasVideo: Boolean,
 
     @SerialName("vote_average")
-    val voteAverage: Double?,
+    val voteAverage: Double,
 
     @SerialName("vote_count")
-    val voteCount: Int?,
+    val voteCount: Int,
 )

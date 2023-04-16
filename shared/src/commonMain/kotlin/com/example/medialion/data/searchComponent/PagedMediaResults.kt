@@ -5,13 +5,15 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PagedMediaResults(
-    val page: Int?,
+    @SerialName("page")
+    val page: Int,
 
-    val results: List<MediaResponse>?,
+    @SerialName("results")
+    val results: List<MediaResponse>,
 
     @SerialName("total_pages")
-    val totalPages: Int?,
+    val totalPages: Int,
 
     @SerialName("total_results")
-    val totalResults: Int?
+    val totalResults: Int,
 )
