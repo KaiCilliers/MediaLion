@@ -1,5 +1,6 @@
 package com.example.medialion.android.ui.search.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,14 +11,19 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import com.example.medialion.ColorRes
 import com.example.medialion.android.theme.MediaLionTheme
 import com.example.medialion.domain.models.MovieUiModel
 import com.example.medialion.domain.components.search.SearchAction
@@ -28,16 +34,24 @@ fun SearchScreen(
     state: SearchState,
     submitAction: (SearchAction) -> Unit,
 ) {
-    Column {
-        Text(
-            text = "Search Bar goes here",
-            fontSize = 60.sp,
-            modifier = Modifier.clickable {
-                submitAction(SearchAction.ClearSearchText)
-            }
+    Column(
+        Modifier.background(Color.White)
+    ) {
+        var text by remember {
+            mutableStateOf("")
+        }
+
+        TextField(
+            value = text,
+            onValueChange = {
+                text = it
+                submitAction(SearchAction.SubmitSearchQuery(it))
+            },
+            textStyle = TextStyle.Default.copy(fontSize = 16.sp),
+
         )
         when (state) {
-            SearchState.Empty -> {
+            is SearchState.Empty -> {
                 Text(text = "Empty Results")
             }
             is SearchState.Idle -> {
@@ -56,7 +70,7 @@ fun SearchScreen(
                     }
                 }
             }
-            SearchState.Loading -> {
+            is SearchState.Loading -> {
                 CircularProgressIndicator()
             }
             is SearchState.Results -> {
@@ -100,7 +114,7 @@ fun SearchScreenPreview() {
         Surface(modifier = Modifier.fillMaxSize()) {
 
             var screenState: SearchState by remember {
-                mutableStateOf(SearchState.Loading)
+                mutableStateOf(SearchState.Loading(""))
             }
 
             SearchScreen(
@@ -110,6 +124,7 @@ fun SearchScreenPreview() {
                         is SearchAction.AddToFavorites -> TODO()
                         SearchAction.ClearSearchText -> {
                             screenState = SearchState.Idle(
+                                "",
                                 listOf(
                                     MovieUiModel(1, "Title", true),
                                     MovieUiModel(1, "Title", true),
