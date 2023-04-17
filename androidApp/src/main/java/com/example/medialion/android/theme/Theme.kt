@@ -7,6 +7,8 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import com.example.medialion.ColorRes
 
 @Composable
 fun MediaLionTheme(
@@ -15,15 +17,15 @@ fun MediaLionTheme(
 ) {
     val colors = if (darkTheme) {
         darkColors(
-            background = Color(0xFF0d2028),
-            primary = Color(0xFF003658),
-            secondary = Color(0xFFFFFFFF)
+            background = colorResource(id = ColorRes.background.resourceId),
+            primary = colorResource(id = ColorRes.primary.resourceId),
+            secondary = colorResource(id = ColorRes.secondary.resourceId)
         )
     } else {
         lightColors(
-            background = Color(0xFF0d2028),
-            primary = Color(0xFF003658),
-            secondary = Color(0xFFFFFFFF)
+            background = colorResource(id = ColorRes.background.resourceId),
+            primary = colorResource(id = ColorRes.primary.resourceId),
+            secondary = colorResource(id = ColorRes.secondary.resourceId),
         )
     }
     CompositionLocalProvider(LocalSpacing provides Spacing()) {

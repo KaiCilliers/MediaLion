@@ -22,7 +22,7 @@ val typography = Typography(
     h1 = TextStyle(
         fontFamily = Merriweather,
         fontWeight = FontWeight.Normal,
-        fontSize = 14.sp
+        fontSize = 12.sp
     ),
 
     h2 = TextStyle(

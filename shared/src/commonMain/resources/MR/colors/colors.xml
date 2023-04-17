@@ -2,6 +2,6 @@
 <resources>
     <color name="primary">#003658</color>
     <color name="primaryVariant">#0d2028</color>
-    <color name="background">0xFF0d2028</color>
-    <color name="secondary">cf5408</color>
+    <color name="background">#0d2028</color>
+    <color name="secondary">#FFFFFF</color>
 </resources>
