@@ -19,12 +19,14 @@ fun MediaLionTheme(
         darkColors(
             background = colorResource(id = ColorRes.background.resourceId),
             primary = colorResource(id = ColorRes.primary.resourceId),
+            primaryVariant = colorResource(id = ColorRes.primaryVariant.resourceId),
             secondary = colorResource(id = ColorRes.secondary.resourceId)
         )
     } else {
         lightColors(
             background = colorResource(id = ColorRes.background.resourceId),
             primary = colorResource(id = ColorRes.primary.resourceId),
+            primaryVariant = colorResource(id = ColorRes.primaryVariant.resourceId),
             secondary = colorResource(id = ColorRes.secondary.resourceId),
         )
     }

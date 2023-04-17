@@ -62,7 +62,7 @@ private fun PosterPlaceholder(
             .gradientBackground(
                 colors = listOf(
                     colorResource(id = ColorRes.primary.resourceId),
-                    colorResource(id = ColorRes.secondary.resourceId)
+                    colorResource(id = ColorRes.primaryVariant.resourceId)
                 ),
                 angle = 60f
             )
