@@ -3,4 +3,6 @@
     <string name="empty_search">Search for a show, movie or documentary</string>
     <string name="top_suggestions">Top Suggestions</string>
     <string name="title">Title</string>
+    <string name="empty_result_state_title">We could not find what you are looking for.</string>
+    <string name="empty_result_state_body">Try searching for another movie, show, actor, director, or genre.</string>
 </resources>

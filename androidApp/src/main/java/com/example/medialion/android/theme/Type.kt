@@ -40,7 +40,7 @@ val typography = Typography(
     subtitle1 = TextStyle(
         fontFamily = Merriweather,
         fontWeight = FontWeight.Bold,
-        fontSize = 22.sp,
+        fontSize = 20.sp,
     ),
 
     subtitle2 = TextStyle(

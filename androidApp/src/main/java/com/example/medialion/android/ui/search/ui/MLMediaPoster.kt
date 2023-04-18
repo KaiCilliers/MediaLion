@@ -42,7 +42,7 @@ fun MLMediaPoster(
                 .build(),
             contentScale = ContentScale.FillHeight,
             modifier = Modifier
-                .clip(RoundedCornerShape(10.dp))
+                .clip(RoundedCornerShape(4.dp))
                 .fillMaxSize(),
             contentDescription = null,
             loading = { PosterPlaceholder(mediaTitle = mediaItem.title)},

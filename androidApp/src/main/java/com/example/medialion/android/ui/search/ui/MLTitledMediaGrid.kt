@@ -1,6 +1,8 @@
 package com.example.medialion.android.ui.search.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -31,13 +33,18 @@ fun MLTitledMediaGrid(
         columns = GridCells.Fixed(3),
         modifier = modifier
             .background(MaterialTheme.colors.background)
+            .fillMaxSize(),
+        contentPadding = PaddingValues(22.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
+        horizontalArrangement = Arrangement.spacedBy(24.dp)
+
     ) {
         item(span = { GridItemSpan(3) }) {
             Text(
                 text = gridTitle,
                 style = MaterialTheme.typography.h2,
                 color = Color.White,
-                modifier = modifier.padding(16.dp)
+                modifier = modifier.padding(top = 16.dp, bottom = 4.dp)
             )
         }
         items(movies) { singleMovie ->
@@ -48,8 +55,7 @@ fun MLTitledMediaGrid(
                     posterUrl = singleMovie.posterUrl
                 ),
                 modifier = modifier
-                    .padding(vertical = 18.dp, horizontal = 16.dp)
-                    .size(height = 150.dp, width = 50.dp)
+                    .size(height = 130.dp, width = 50.dp)
             )
         }
     }
