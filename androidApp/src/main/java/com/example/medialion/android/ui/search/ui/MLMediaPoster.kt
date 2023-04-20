@@ -1,8 +1,10 @@
 package com.example.medialion.android.ui.search.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.example.medialion.ColorRes
+import com.example.medialion.R
 import com.example.medialion.android.theme.MediaLionTheme
 import com.example.medialion.android.ui.extensions.gradientBackground
 import com.example.medialion.domain.models.SimpleMediaItem
@@ -56,17 +60,11 @@ private fun PosterPlaceholder(
     mediaTitle: String,
     modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .gradientBackground(
-                colors = listOf(
-                    colorResource(id = ColorRes.primary.resourceId),
-                    colorResource(id = ColorRes.primaryVariant.resourceId)
-                ),
-                angle = 60f
+    Box{
+        Image(
+            painter = painterResource(id = com.example.medialion.android.R.drawable.grid_placeholder),
+            contentDescription = "",
             )
-    ) {
         Text(
             text = mediaTitle,
             modifier = Modifier.align(Alignment.Center),

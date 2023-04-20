@@ -4,4 +4,5 @@
     <color name="primaryVariant">#cf5408</color>
     <color name="background">#0d2028</color>
     <color name="secondary">#FFFFFF</color>
+    <color name="primaryVariantBlue">#0d2028</color>
 </resources>
