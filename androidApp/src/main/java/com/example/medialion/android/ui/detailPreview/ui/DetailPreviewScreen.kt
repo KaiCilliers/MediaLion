@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,6 +17,8 @@ import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.BottomSheetValue
@@ -43,6 +46,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.example.medialion.ColorRes
 import com.example.medialion.R
 import com.example.medialion.android.theme.MediaLionTheme
@@ -67,8 +71,9 @@ fun DetailPreviewScreen(modifier: Modifier = Modifier) {
     )
     val scope = rememberCoroutineScope()
     BottomSheetScaffold(
+        modifier = modifier.height(500.dp),
         scaffoldState = scaffholdState,
-        sheetContent = {BottomSheet()},
+        sheetContent = { BottomSheetNew()},
         sheetPeekHeight = 0.dp,
         sheetShape = RoundedCornerShape(12.dp),
 
@@ -76,7 +81,7 @@ fun DetailPreviewScreen(modifier: Modifier = Modifier) {
     )
     {
         Box (
-            modifier = modifier.fillMaxWidth(),
+            modifier = modifier.fillMaxWidth().height(300.dp),
             contentAlignment = Alignment.Center
         ){
             Button(onClick = {
@@ -89,6 +94,100 @@ fun DetailPreviewScreen(modifier: Modifier = Modifier) {
                     color = Color.White
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun BottomSheetNew(modifier: Modifier = Modifier) {
+    Surface (color = Color.Black){
+        ConstraintLayout (
+            modifier = modifier.fillMaxWidth().height(500.dp),
+        ){
+            val (
+                poster, name, description, date, addToListButton, listText, closeImage
+            ) = createRefs()
+
+            val rightGuideline = createGuidelineFromStart(0.4f)
+
+            MLMediaPoster(
+                mediaItem = SimpleMediaItem(
+                    id = "",
+                    title = "HP",
+                    posterUrl = ""
+                ),
+                modifier = modifier
+                    .size(150.dp)
+                    .padding(8.dp)
+                    .constrainAs(poster) {
+                        start.linkTo(parent.start, 16.dp)
+                        top.linkTo(parent.top, 50.dp)
+                    }
+                    .aspectRatio(2f / 3f)
+            )
+
+            Text(
+                text = "Harry Potter",
+                color = Color.White,
+                style = MaterialTheme.typography.h2,
+                modifier = modifier.constrainAs(name) {
+                    top.linkTo(parent.top, 16.dp)
+                    start.linkTo(poster.end, 16.dp)
+                }
+            )
+            Text(
+                text = "2001",
+                color = Color.White,
+                style = MaterialTheme.typography.subtitle2,
+                modifier = modifier.constrainAs(date) {
+                    top.linkTo(name.bottom, 6.dp)
+                    start.linkTo(poster.end, 16.dp)
+                }
+            )
+            Text(
+                text = "It is a story about Harry Potter, an orphan brought up by his aunt and " +
+                    "uncle because his parents were killed when he was a baby. Harry is unloved by" +
+                    " his uncle and aunt but everything changes when he is invited to join Hogwarts" +
+                    " School of Witchcraft and Wizardry and he finds out he's a wizard.",
+                color = Color.White,
+                style = MaterialTheme.typography.subtitle2,
+                modifier = modifier.constrainAs(description) {
+                    top.linkTo(date.bottom, 6.dp)
+                    start.linkTo(poster.end, 16.dp)
+                    end.linkTo(parent.end, 16.dp)
+                }
+                )
+            Image(
+                painter = painterResource(id = com.example.medialion.android.R.drawable.add_to_list_icon),
+                contentDescription = "",
+                modifier = modifier
+                    .size(80.dp)
+                    .constrainAs(addToListButton) {
+                        top.linkTo(description.bottom, 12.dp)
+                        start.linkTo(poster.end, 16.dp)
+                    }
+            )
+            Text(
+                text = "My List",
+                color = Color.White,
+                style = MaterialTheme.typography.body1,
+                modifier = modifier
+                    .constrainAs(listText) {
+                        top.linkTo(addToListButton.bottom, 6.dp)
+                        start.linkTo(poster.end, 42.dp)
+                    }
+            )
+            Image(
+                painter = painterResource(id = com.example.medialion.android.R.drawable.close_icon),
+                contentDescription = "",
+                modifier = modifier
+                    .size(30.dp)
+                    .constrainAs(closeImage) {
+                        top.linkTo(parent.top, 16.dp)
+                        start.linkTo(name.end, 20.dp)
+                        end.linkTo(parent.end, 16.dp)
+                    }
+            )
         }
     }
 }
