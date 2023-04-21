@@ -35,7 +35,7 @@ fun SearchIdleState(
         item {
             Text(
                 text = rowTitle,
-                style = MaterialTheme.typography.h2,
+                style = MaterialTheme.typography.h3,
                 color = MaterialTheme.colors.secondary,
                 modifier = modifier
                     .padding(start = 16.dp, bottom = 16.dp)

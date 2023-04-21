@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.MaterialTheme
@@ -42,9 +43,10 @@ fun MLTitledMediaGrid(
         item(span = { GridItemSpan(3) }) {
             Text(
                 text = gridTitle,
-                style = MaterialTheme.typography.h2,
+                style = MaterialTheme.typography.h3,
                 color = Color.White,
-                modifier = modifier.padding(top = 16.dp, bottom = 4.dp)
+                modifier = modifier.padding(top = 16.dp, bottom = 4.dp),
+
             )
         }
         items(movies) { singleMovie ->
@@ -58,6 +60,15 @@ fun MLTitledMediaGrid(
                     .size(height = 130.dp, width = 50.dp)
             )
         }
+        item(span = { GridItemSpan(3) }) {
+            MLTitledMediaRow(rowTitle = "Related Movies Titles", movies = movies)
+        }
+        item(span = { GridItemSpan(3) }) {
+            MLTitledMediaRow(rowTitle = "Related Series Titles", movies = movies)
+        }
+        item(span = { GridItemSpan(3) }) {
+            MLTitledMediaRow(rowTitle = "Related Documentary Titles", movies = movies)
+        }
     }
 }
 
@@ -69,6 +80,21 @@ fun MLTitledMediaGridPreview() {
             MLTitledMediaGrid(
                 gridTitle = "Top Results",
                 movies = listOf(
+                    MovieUiModel(1, "HP", true),
+                    MovieUiModel(1, "HP", true),
+                    MovieUiModel(1, "HP", true),
+                    MovieUiModel(1, "HP", true),
+                    MovieUiModel(1, "HP", true),
+                    MovieUiModel(1, "HP", true),
+                    MovieUiModel(1, "HP", true),
+                    MovieUiModel(1, "HP", true),
+                    MovieUiModel(1, "HP", true),
+                    MovieUiModel(1, "HP", true),
+                    MovieUiModel(1, "HP", true),
+                    MovieUiModel(1, "HP", true),
+                    MovieUiModel(1, "HP", true),
+                    MovieUiModel(1, "HP", true),
+                    MovieUiModel(1, "HP", true),
                     MovieUiModel(1, "HP", true),
                     MovieUiModel(1, "HP", true),
                     MovieUiModel(1, "HP", true),

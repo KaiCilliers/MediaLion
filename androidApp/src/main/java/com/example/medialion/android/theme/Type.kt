@@ -55,5 +55,24 @@ val typography = Typography(
         fontSize = 8.sp
     ),
 
+    h4 = TextStyle(
+        fontFamily = Merriweather,
+        fontWeight = FontWeight.ExtraBold,
+        fontSize = 16.sp
+
+    ),
+
+    body2 = TextStyle(
+        fontFamily = Merriweather,
+        fontWeight = FontWeight.Normal,
+        fontSize = 10.sp
+    ),
+    h5 = TextStyle(
+        fontFamily = Merriweather,
+        fontWeight = FontWeight.ExtraBold,
+        fontSize = 14.sp
+
+    )
+
 
     )

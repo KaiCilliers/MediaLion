@@ -35,13 +35,12 @@ fun MLTitledMediaRow(
         modifier = modifier
             .background(MaterialTheme.colors.background)
             .fillMaxSize()
-            .padding(22.dp)
     ) {
             Text(
                 text = rowTitle,
-                style = MaterialTheme.typography.h2,
+                style = MaterialTheme.typography.subtitle1,
                 color = Color.White,
-                modifier = modifier.padding(top = 16.dp, bottom = 20.dp)
+                modifier = modifier.padding(bottom = 20.dp)
             )
         LazyRow(
             modifier = modifier
@@ -58,7 +57,7 @@ fun MLTitledMediaRow(
                     posterUrl = singleMovie.posterUrl
                 ),
                     modifier = modifier
-                        .size(height = 130.dp, width = 80.dp)
+                        .size(height = 143.dp, width = 92.dp)
                 )
         }
             }
