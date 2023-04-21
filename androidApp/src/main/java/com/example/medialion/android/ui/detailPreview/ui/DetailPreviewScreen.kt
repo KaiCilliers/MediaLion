@@ -55,6 +55,7 @@ import com.example.medialion.android.ui.search.ui.MLMediaPoster
 import com.example.medialion.domain.components.detailPreview.DetailPreviewState
 import com.example.medialion.domain.models.MovieUiModel
 import com.example.medialion.domain.models.SimpleMediaItem
+import kotlinx.coroutines.NonDisposableHandle.parent
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -81,7 +82,9 @@ fun DetailPreviewScreen(modifier: Modifier = Modifier) {
     )
     {
         Box (
-            modifier = modifier.fillMaxWidth().height(300.dp),
+            modifier = modifier
+                .fillMaxWidth()
+                .height(300.dp),
             contentAlignment = Alignment.Center
         ){
             Button(onClick = {
@@ -102,13 +105,13 @@ fun DetailPreviewScreen(modifier: Modifier = Modifier) {
 fun BottomSheetNew(modifier: Modifier = Modifier) {
     Surface (color = Color.Black){
         ConstraintLayout (
-            modifier = modifier.fillMaxWidth().height(500.dp),
+            modifier = modifier.fillMaxSize(),
         ){
             val (
                 poster, name, description, date, addToListButton, listText, closeImage
             ) = createRefs()
 
-            val rightGuideline = createGuidelineFromStart(0.4f)
+            val rightGuideLine = createGuidelineFromStart(0.4f)
 
             MLMediaPoster(
                 mediaItem = SimpleMediaItem(
@@ -117,33 +120,16 @@ fun BottomSheetNew(modifier: Modifier = Modifier) {
                     posterUrl = ""
                 ),
                 modifier = modifier
-                    .size(150.dp)
-                    .padding(8.dp)
                     .constrainAs(poster) {
                         start.linkTo(parent.start, 16.dp)
-                        top.linkTo(parent.top, 50.dp)
+                        top.linkTo(parent.top, 16.dp)
+                        end.linkTo(rightGuideLine, 16.dp)
+                        width = Dimension.fillToConstraints
                     }
-                    .aspectRatio(2f / 3f)
             )
 
-            Text(
-                text = "Harry Potter",
-                color = Color.White,
-                style = MaterialTheme.typography.h2,
-                modifier = modifier.constrainAs(name) {
-                    top.linkTo(parent.top, 16.dp)
-                    start.linkTo(poster.end, 16.dp)
-                }
-            )
-            Text(
-                text = "2001",
-                color = Color.White,
-                style = MaterialTheme.typography.subtitle2,
-                modifier = modifier.constrainAs(date) {
-                    top.linkTo(name.bottom, 6.dp)
-                    start.linkTo(poster.end, 16.dp)
-                }
-            )
+
+
             Text(
                 text = "It is a story about Harry Potter, an orphan brought up by his aunt and " +
                     "uncle because his parents were killed when he was a baby. Harry is unloved by" +
@@ -151,43 +137,14 @@ fun BottomSheetNew(modifier: Modifier = Modifier) {
                     " School of Witchcraft and Wizardry and he finds out he's a wizard.",
                 color = Color.White,
                 style = MaterialTheme.typography.subtitle2,
-                modifier = modifier.constrainAs(description) {
-                    top.linkTo(date.bottom, 6.dp)
-                    start.linkTo(poster.end, 16.dp)
-                    end.linkTo(parent.end, 16.dp)
-                }
+                modifier = modifier
+                    .constrainAs(description) {
+                        top.linkTo(parent.top, 50.dp)
+                        start.linkTo(poster.end, 20.dp)
+                        end.linkTo(parent.end, 50.dp)
+                    }
                 )
-            Image(
-                painter = painterResource(id = com.example.medialion.android.R.drawable.add_to_list_icon),
-                contentDescription = "",
-                modifier = modifier
-                    .size(80.dp)
-                    .constrainAs(addToListButton) {
-                        top.linkTo(description.bottom, 12.dp)
-                        start.linkTo(poster.end, 16.dp)
-                    }
-            )
-            Text(
-                text = "My List",
-                color = Color.White,
-                style = MaterialTheme.typography.body1,
-                modifier = modifier
-                    .constrainAs(listText) {
-                        top.linkTo(addToListButton.bottom, 6.dp)
-                        start.linkTo(poster.end, 42.dp)
-                    }
-            )
-            Image(
-                painter = painterResource(id = com.example.medialion.android.R.drawable.close_icon),
-                contentDescription = "",
-                modifier = modifier
-                    .size(30.dp)
-                    .constrainAs(closeImage) {
-                        top.linkTo(parent.top, 16.dp)
-                        start.linkTo(name.end, 20.dp)
-                        end.linkTo(parent.end, 16.dp)
-                    }
-            )
+
         }
     }
 }
@@ -287,7 +244,7 @@ Box (
 fun DetailPreviewScreenPreview() {
     MediaLionTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-           DetailPreviewScreen()
+          BottomSheetNew()
         }
     }
 }
