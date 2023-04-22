@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,14 +20,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import com.example.medialion.ColorRes
+import com.example.medialion.StringRes
 import com.example.medialion.android.R
-import com.example.medialion.android.R.*
 import com.example.medialion.android.theme.MediaLionTheme
 import com.example.medialion.domain.models.MovieUiModel
 import com.example.medialion.domain.components.search.SearchAction
@@ -43,22 +40,17 @@ fun SearchScreen(
         Modifier.background(Color.White)
     ) {
 
-        var text by remember {
-            mutableStateOf(state.searchQuery)
-        }
-
-        TextField(
-            value = text,
-            onValueChange = {
-                text = it
+        MLSearchBar(
+            searchQuery = state.searchQuery,
+            labelText = stringResource(id = StringRes.emptySearch.resourceId),
+            onSearchQueryTextChange = {
                 submitAction(SearchAction.SubmitSearchQuery(it))
             },
-            textStyle = TextStyle.Default.copy(fontSize = 16.sp),
-
-            )
+            onClearSearchText = { submitAction(SearchAction.ClearSearchText) },
+        )
         when (state) {
             is SearchState.Empty -> {
-                Text(text = "Empty Results")
+                SearchEmptyState()
             }
 
             is SearchState.Idle -> {
@@ -83,7 +75,11 @@ fun SearchScreen(
                                     contentDescription = null,
                                     modifier = Modifier.clickable {
                                         if (suggestedMovie.isFavorited) {
-                                            submitAction(SearchAction.RemoveFromFavorites(suggestedMovie.id))
+                                            submitAction(
+                                                SearchAction.RemoveFromFavorites(
+                                                    suggestedMovie.id
+                                                )
+                                            )
                                         } else {
                                             submitAction(SearchAction.AddToFavorites(suggestedMovie.id))
                                         }
