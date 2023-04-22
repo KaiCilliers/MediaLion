@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import com.example.medialion.ColorRes
 import com.example.medialion.android.R
 import com.example.medialion.android.theme.MediaLionTheme
+import com.example.medialion.android.ui.extensions.brandGradient
 import com.example.medialion.android.ui.extensions.gradientBackground
 
 @Composable
@@ -56,13 +57,7 @@ fun MLSearchBar(
         textStyle = MaterialTheme.typography.h1,
         modifier = modifier
             .fillMaxWidth()
-            .gradientBackground(
-                colors = listOf(
-                    colorResource(id = ColorRes.primary.resourceId),
-                    colorResource(id = ColorRes.primaryVariant.resourceId)
-                ),
-                angle = 60f
-            ),
+            .brandGradient(),
         placeholder = { Text(
             text = stringResource(id = label),
             color = Color.White.copy(alpha = 0.5f),
