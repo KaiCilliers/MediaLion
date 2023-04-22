@@ -1,15 +1,26 @@
 package com.example.medialion.android.ui.search.ui
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -22,11 +33,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medialion.ColorRes
 import com.example.medialion.StringRes
+import com.example.medialion.android.R
 import com.example.medialion.android.theme.MediaLionTheme
 import com.example.medialion.domain.components.search.SearchAction
 import com.example.medialion.domain.components.search.SearchState
@@ -41,8 +55,35 @@ fun SearchScreen(
     val context = LocalContext.current
 
     Column(
-        Modifier.background(Color.White)
+        Modifier.background(MaterialTheme.colors.background)
     ) {
+
+        Row(
+            modifier = Modifier
+                .padding(15.dp)
+                .wrapContentHeight()
+                .fillMaxWidth()
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.back_arrow_icon),
+                contentDescription = "",
+                modifier = Modifier
+                    .size(20.dp)
+                    .clickable {
+                               Toast.makeText(context, "Navigate back functionality...", Toast.LENGTH_SHORT).show()
+                    },
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Image(
+                painter = painterResource(id = R.drawable.about_icon),
+                contentDescription = "",
+                modifier = Modifier
+                    .size(20.dp)
+                    .clickable {
+                        Toast.makeText(context, "Show About Dialog", Toast.LENGTH_SHORT).show()
+                    }
+            )
+        }
 
         MLSearchBar(
             searchQuery = state.searchQuery,
