@@ -1,7 +1,6 @@
 package com.example.medialion.android.ui.search.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,13 +21,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.medialion.ColorRes
 import com.example.medialion.android.R
 import com.example.medialion.android.theme.MediaLionTheme
 import com.example.medialion.android.ui.extensions.gradientOrange
@@ -44,9 +41,13 @@ fun MLSearchBar(
         keyboardType = KeyboardType.Text
     ),
 ) {
-    TextField(value = searchQuery,
+    TextField(
+        value = searchQuery,
         onValueChange = { onSearchQueryTextChange(it) },
-        colors = TextFieldDefaults.textFieldColors(textColor = MaterialTheme.colors.secondary),
+        colors = TextFieldDefaults.textFieldColors(
+            textColor = MaterialTheme.colors.secondary,
+            cursorColor = Color.White
+        ),
         textStyle = MaterialTheme.typography.h1,
         modifier = modifier
             .fillMaxWidth()

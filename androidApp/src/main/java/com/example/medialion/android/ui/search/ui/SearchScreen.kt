@@ -1,5 +1,6 @@
 package com.example.medialion.android.ui.search.ui
 
+import android.view.MotionEvent
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,9 +23,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -34,11 +39,13 @@ import com.example.medialion.ColorRes
 import com.example.medialion.StringRes
 import com.example.medialion.android.R
 import com.example.medialion.android.theme.MediaLionTheme
+import com.example.medialion.android.ui.about.ui.AboutScreen
 import com.example.medialion.domain.components.search.SearchAction
 import com.example.medialion.domain.components.search.SearchState
 import com.example.medialion.domain.models.MovieUiModel
 import com.zhuinden.simplestack.Backstack
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchScreen(
     state: SearchState,
@@ -47,11 +54,29 @@ fun SearchScreen(
 ) {
 
     val context = LocalContext.current
+    var showAboutDialog by remember { mutableStateOf(false) }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    if (showAboutDialog) {
+        AboutScreen { showAboutDialog = false }
+    }
 
     Column(
-        Modifier.background(MaterialTheme.colors.background)
+        Modifier
+            .background(MaterialTheme.colors.background)
+            .blur(radius = if (showAboutDialog) 10.dp else 0.dp)
+            .pointerInteropFilter {
+                when(it.action) {
+                    MotionEvent.ACTION_DOWN,
+                    MotionEvent.ACTION_MOVE,
+                    MotionEvent.ACTION_UP -> {
+                        keyboardController?.hide()
+                    }
+                    else -> {}
+                }
+                false
+            }
     ) {
-
         Row(
             modifier = Modifier
                 .padding(15.dp)
@@ -64,7 +89,9 @@ fun SearchScreen(
                 modifier = Modifier
                     .size(20.dp)
                     .clickable {
-                               Toast.makeText(context, "Navigate back functionality...", Toast.LENGTH_SHORT).show()
+                        Toast
+                            .makeText(context, "Navigate back functionality...", Toast.LENGTH_SHORT)
+                            .show()
                     },
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -73,9 +100,7 @@ fun SearchScreen(
                 contentDescription = "",
                 modifier = Modifier
                     .size(20.dp)
-                    .clickable {
-                        Toast.makeText(context, "Show About Dialog", Toast.LENGTH_SHORT).show()
-                    }
+                    .clickable { showAboutDialog = true }
             )
         }
 
