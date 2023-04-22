@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -41,35 +43,32 @@ fun MLMediaFavoriteListItem(
         modifier = modifier
             .background(MaterialTheme.colors.background)
             .fillMaxWidth()
-            .padding(16.dp)
-            .sizeIn(minHeight = 100.dp),
+            .wrapContentHeight()
+            .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Box (
-            modifier = modifier
-            .size(width = 180.dp, height = 100.dp)
-        )
-        {
-            MLMediaBanner(mediaItem = SimpleMediaItem(
+        MLMediaBanner(
+            mediaItem = SimpleMediaItem(
                 id = movie.id.toString(),
                 title = movie.title,
-                posterUrl = movie.posterUrl,
-            ))
-        }
+                posterUrl = movie.bannerUrl,
+            ),
+            modifier = modifier.width(180.dp),
+        )
         Text(
             text = movie.title,
             color = Color.White,
             modifier = Modifier
-                .padding(start = 12.dp),
-            style = MaterialTheme.typography.h3,
+                .padding(start = 12.dp)
+                .weight(1f),
+            style = MaterialTheme.typography.subtitle1,
         )
-
-        Spacer(modifier = modifier.weight(1F))
 
         Image(
             painter = painterResource(id = if (movie.isFavorited) R.drawable.heart_filled_icon else R.drawable.heart_outline_icon),
             contentDescription = "",
             modifier = modifier
+                .padding(start = 8.dp)
                 .size(24.dp)
                 .clickable {
                     if (movie.isFavorited) {
@@ -87,7 +86,7 @@ fun MLMediaFavoriteListItem(
 private fun MLMediaFavoriteListItemPreview() {
     MediaLionTheme {
         var movie: MovieUiModel by remember {
-            mutableStateOf(MovieUiModel(1, "Kai", false))
+            mutableStateOf(MovieUiModel(1, "This is a long movie title", false))
         }
 
         Surface(modifier = Modifier.fillMaxSize()) {
@@ -95,7 +94,7 @@ private fun MLMediaFavoriteListItemPreview() {
                 movie = movie,
                 onFavoriteClick = {
                     movie = movie.copy(isFavorited = it)
-                }
+                },
             )
         }
     }

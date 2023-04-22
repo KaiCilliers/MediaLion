@@ -34,13 +34,17 @@ import kotlinx.coroutines.launch
 class MLSearchViewModel(
     private val searchMoviesByTitleUseCase: SearchMoviesUseCase,
     private val relatedMoviesUseCase: RelatedMoviesUseCase,
+    private val topRatedMoviesUseCase: TopRatedMoviesUseCase,
     private val movieMapper: ListMapper<Movie, MovieUiModel>,
     coroutineScope: CoroutineScope?,
 ) {
+
+    val suggestedMovieCache = mutableListOf<MovieUiModel>()
+
     private val viewModelScope =
         coroutineScope ?: CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
-    private val suggestedMovies = MutableStateFlow(SuggestedMovies.list.toList())
+    private val suggestedMovies = MutableStateFlow(emptyList<MovieUiModel>())
     private val currentQuery = MutableStateFlow("")
     private val isLoading = MutableStateFlow(false)
     private val searchResults: StateFlow<List<MovieUiModel>> = currentQuery
@@ -103,19 +107,26 @@ class MLSearchViewModel(
 
             query.isNotEmpty() && results.isEmpty() -> SearchState.Empty(query)
             // TODO error state for search screen
-            else -> SearchState.Idle(searchQuery = query, SuggestedMovies.list.take(2))
+            else -> SearchState.Idle(searchQuery = query, suggestedMovieCache.take(2))
         }
     }.stateIn(
         viewModelScope,
         SharingStarted.Eagerly,
-        SearchState.Idle("", SuggestedMovies.list.toList())
+        SearchState.Idle("", suggestedMovieCache.toList())
     )
 
     init {
-        // TODO fix issue where this whole class starts kicking into gear when the search query changes for the first time
-        //  until then, toggling favorited movies won't show in the UI
-        //  currentQuery.value = "" does not fix the issue (passing it a value does)
-        currentQuery.value = ""
+        viewModelScope.launch {
+            val suggestedMedia = when(val result = topRatedMoviesUseCase.topRatedMovies()) {
+                is ResultOf.Failure -> emptyList()
+                is ResultOf.Success -> {
+                    suggestedMovieCache.clear()
+                    suggestedMovieCache.addAll(movieMapper.map(result.value))
+                    movieMapper.map(result.value)
+                }
+            }
+            suggestedMovies.value = suggestedMedia
+        }
     }
     val state: CStateFlow<SearchState>
         get() = _state.cStateFlow()
@@ -130,87 +141,28 @@ class MLSearchViewModel(
     }
 
     private fun addToFavorites(movieId: Int) {
-        suggestedMovies.value = SuggestedMovies.list.map {
+        suggestedMovies.value = suggestedMovieCache.map {
             if (it.id == movieId) {
                 it.copy(isFavorited = true)
             } else {
                 it
             }
         }.also {
-            SuggestedMovies.list.clear()
-            SuggestedMovies.list.addAll(it)
+            suggestedMovieCache.clear()
+            suggestedMovieCache.addAll(it)
         }
     }
 
     private fun removeFromFavorites(movieId: Int) {
-        suggestedMovies.value = SuggestedMovies.list.map {
+        suggestedMovies.value = suggestedMovieCache.map {
             if (it.id == movieId) {
                 it.copy(isFavorited = false)
             } else {
                 it
             }
         }.also {
-            SuggestedMovies.list.clear()
-            SuggestedMovies.list.addAll(it)
+            suggestedMovieCache.clear()
+            suggestedMovieCache.addAll(it)
         }
     }
-}
-
-private object SuggestedMovies {
-    val list = mutableListOf(
-        MovieUiModel(
-            id = 97551,
-            title = "Movie #1",
-            isFavorited = false,
-            posterUrl = "https://image.tmdb.org/t/p/original/hziiv14OpD73u9gAak4XDDfBKa2.jpg"
-        ),
-        MovieUiModel(
-            id = 97553,
-            title = "Movie #2",
-            isFavorited = false,
-            posterUrl = "xx"
-        ),
-        MovieUiModel(
-            id = 975544,
-            title = "Movie #3",
-            isFavorited = false,
-            posterUrl = "https://image.tmdb.org/t/p/original/hziiv14OpD73u9gAak4XDDfBKa2.jpg"
-        ),
-        MovieUiModel(
-            id = 971551,
-            title = "Movie #4",
-            isFavorited = false,
-            posterUrl = "https://image.tmdb.org/t/p/original/hziiv14OpD73u9gAak4XDDfBKa2.jpg"
-        ),
-        MovieUiModel(
-            id = 9713552,
-            title = "Movie #5",
-            isFavorited = false,
-            posterUrl = "xx"
-        ),
-        MovieUiModel(
-            id = 9713553,
-            title = "Movie #7",
-            isFavorited = false,
-            posterUrl = "https://image.tmdb.org/t/p/original/hziiv14OpD73u9gAak4XDDfBKa2.jpg"
-        ),
-        MovieUiModel(
-            id = 9713554,
-            title = "Movie #8",
-            isFavorited = false,
-            posterUrl = "https://image.tmdb.org/t/p/original/hziiv14OpD73u9gAak4XDDfBKa2.jpg"
-        ),
-        MovieUiModel(
-            id = 9713555,
-            title = "Movie #9",
-            isFavorited = false,
-            posterUrl = "xx"
-        ),
-        MovieUiModel(
-            id = 9713556,
-            title = "Movie #10",
-            isFavorited = false,
-            posterUrl = "https://image.tmdb.org/t/p/original/hziiv14OpD73u9gAak4XDDfBKa2.jpg"
-        ),
-    )
 }

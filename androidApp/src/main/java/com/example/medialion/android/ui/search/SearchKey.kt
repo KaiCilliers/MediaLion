@@ -5,6 +5,7 @@ import com.example.medialion.android.app.BaseKey
 import com.example.medialion.data.searchComponent.MediaResponse
 import com.example.medialion.domain.components.search.RelatedMoviesUseCase
 import com.example.medialion.domain.components.search.SearchMoviesUseCase
+import com.example.medialion.domain.components.search.TopRatedMoviesUseCase
 import com.example.medialion.domain.mappers.ListMapper
 import com.example.medialion.domain.mappers.Mapper
 import com.example.medialion.domain.models.Movie
@@ -30,6 +31,9 @@ data object SearchKey : BaseKey() {
 
             add(RelatedMoviesUseCase.Default(lookup(), Dispatchers.IO, lookup()))
             rebind<RelatedMoviesUseCase>(get<RelatedMoviesUseCase.Default>())
+
+            add(TopRatedMoviesUseCase.Default(lookup(), Dispatchers.IO, lookup()))
+            rebind<TopRatedMoviesUseCase>(get<TopRatedMoviesUseCase.Default>())
 
             add(Mapper.MovieUiMapper())
             rebind<Mapper<Movie, MovieUiModel>>(get<Mapper.MovieUiMapper>())

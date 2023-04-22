@@ -25,3 +25,20 @@ interface RelatedMoviesUseCase {
         }
     }
 }
+
+interface TopRatedMoviesUseCase {
+    suspend fun topRatedMovies(): ResultOf<List<Movie>>
+
+    class Default(
+        private val client: TMDBClient,
+        private val dispatcher: CoroutineDispatcher,
+        private val movieMapper: Mapper<MediaResponse, Movie>,
+    ) : TopRatedMoviesUseCase {
+        override suspend fun topRatedMovies(): ResultOf<List<Movie>> = withContext(dispatcher) {
+            return@withContext when (val response = client.topRatedMovies()) {
+                is ResultOf.Success -> response.map { it.results.map { item -> movieMapper.map(item) } }
+                is ResultOf.Failure -> response
+            }
+        }
+    }
+}
