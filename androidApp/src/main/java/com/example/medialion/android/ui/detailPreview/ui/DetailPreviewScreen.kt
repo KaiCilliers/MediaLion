@@ -62,7 +62,8 @@ fun DetailPreviewScreen(
         sheetContent = {
             BottomSheetContent(
                 mediaItem = mediaItem,
-                onAddToListClick = {}
+                onAddToListClick = {},
+                onCloseClick = { scope.launch { sheetState.collapse() } }
             )
         },
         sheetPeekHeight = 0.dp,
@@ -97,6 +98,7 @@ fun DetailPreviewScreen(
 @Composable
 private fun BottomSheetContent(
     mediaItem: SimpleMediaItem,
+    onCloseClick: () -> Unit,
     onAddToListClick: (movieId: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -168,6 +170,7 @@ private fun BottomSheetContent(
                         top.linkTo(parent.top, 20.dp)
                         end.linkTo(parent.end, 20.dp)
                     }
+                    .clickable { onCloseClick() }
             )
 
         }
