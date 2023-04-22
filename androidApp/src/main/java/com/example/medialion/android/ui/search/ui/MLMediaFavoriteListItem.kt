@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,16 +23,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.medialion.ColorRes
 import com.example.medialion.android.R
 import com.example.medialion.android.theme.MediaLionTheme
 import com.example.medialion.domain.models.MovieUiModel
-import java.nio.file.WatchEvent
+import com.example.medialion.domain.models.SimpleMediaItem
 
 @Composable
 fun MLMediaFavoriteListItem(
@@ -54,12 +50,11 @@ fun MLMediaFavoriteListItem(
             .size(width = 180.dp, height = 100.dp)
         )
         {
-            Image(painter = painterResource(
-                id = R.drawable.column_place_holder),
-                contentDescription = "",
-                alignment = Alignment.TopCenter,
-                contentScale = ContentScale.FillWidth
-            )
+            MLMediaBanner(mediaItem = SimpleMediaItem(
+                id = movie.id.toString(),
+                title = movie.title,
+                posterUrl = movie.posterUrl,
+            ))
         }
         Text(
             text = movie.title,
@@ -77,12 +72,12 @@ fun MLMediaFavoriteListItem(
             modifier = modifier
                 .size(24.dp)
                 .clickable {
-                if (movie.isFavorited) {
-                    onFavoriteClick(false)
-                } else {
-                    onFavoriteClick(true)
+                    if (movie.isFavorited) {
+                        onFavoriteClick(false)
+                    } else {
+                        onFavoriteClick(true)
+                    }
                 }
-            }
         )
     }
 }

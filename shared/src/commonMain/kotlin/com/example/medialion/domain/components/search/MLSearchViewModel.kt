@@ -162,31 +162,55 @@ private object SuggestedMovies {
             id = 97551,
             title = "Movie #1",
             isFavorited = false,
-            posterUrl = "https://www.google.com/#q=petentium"
+            posterUrl = "https://image.tmdb.org/t/p/original/hziiv14OpD73u9gAak4XDDfBKa2.jpg"
         ),
         MovieUiModel(
             id = 97553,
-            title = "Movie #1",
+            title = "Movie #2",
             isFavorited = false,
-            posterUrl = "https://www.google.com/#q=petentium"
+            posterUrl = "xx"
         ),
         MovieUiModel(
             id = 975544,
-            title = "Movie #1",
+            title = "Movie #3",
             isFavorited = false,
-            posterUrl = "https://www.google.com/#q=petentium"
+            posterUrl = "https://image.tmdb.org/t/p/original/hziiv14OpD73u9gAak4XDDfBKa2.jpg"
         ),
         MovieUiModel(
-            id = 97155,
-            title = "Movie #1",
+            id = 971551,
+            title = "Movie #4",
             isFavorited = false,
-            posterUrl = "https://www.google.com/#q=petentium"
+            posterUrl = "https://image.tmdb.org/t/p/original/hziiv14OpD73u9gAak4XDDfBKa2.jpg"
         ),
         MovieUiModel(
-            id = 971355,
-            title = "Movie #1",
+            id = 9713552,
+            title = "Movie #5",
             isFavorited = false,
-            posterUrl = "https://www.google.com/#q=petentium"
+            posterUrl = "xx"
+        ),
+        MovieUiModel(
+            id = 9713553,
+            title = "Movie #7",
+            isFavorited = false,
+            posterUrl = "https://image.tmdb.org/t/p/original/hziiv14OpD73u9gAak4XDDfBKa2.jpg"
+        ),
+        MovieUiModel(
+            id = 9713554,
+            title = "Movie #8",
+            isFavorited = false,
+            posterUrl = "https://image.tmdb.org/t/p/original/hziiv14OpD73u9gAak4XDDfBKa2.jpg"
+        ),
+        MovieUiModel(
+            id = 9713555,
+            title = "Movie #9",
+            isFavorited = false,
+            posterUrl = "xx"
+        ),
+        MovieUiModel(
+            id = 9713556,
+            title = "Movie #10",
+            isFavorited = false,
+            posterUrl = "https://image.tmdb.org/t/p/original/hziiv14OpD73u9gAak4XDDfBKa2.jpg"
         ),
     )
 }

@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -26,25 +26,25 @@ import com.example.medialion.android.ui.extensions.gradientOrange
 import com.example.medialion.domain.models.SimpleMediaItem
 
 @Composable
-fun MLMediaPoster(
+fun MLMediaBanner(
     mediaItem: SimpleMediaItem,
     modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
-            .aspectRatio(0.6f)
+            .aspectRatio(1.8f)
     ) {
-        PosterPlaceholder(mediaTitle = mediaItem.title)
         SubcomposeAsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(mediaItem.posterUrl)
                 .crossfade(true)
                 .build(),
-            contentScale = ContentScale.FillHeight,
+            contentScale = ContentScale.FillWidth,
             modifier = Modifier
-                .clip(RoundedCornerShape(4.dp)),
+                .clip(RoundedCornerShape(4.dp))
+                .fillMaxSize(),
             contentDescription = null,
-            loading = { PosterPlaceholder(mediaTitle = mediaItem.title) },
+            loading = { PosterPlaceholder(mediaTitle = mediaItem.title)},
             error = { PosterPlaceholder(mediaTitle = mediaItem.title) },
         )
     }
@@ -73,20 +73,20 @@ private fun PosterPlaceholder(
 
 @Preview
 @Composable
-private fun MLMediaPosterPreview() {
+private fun MLMediaBannerPreview() {
     MediaLionTheme {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize()
         ) {
-            MLMediaPoster(
+            MLMediaBanner(
                 mediaItem = SimpleMediaItem(
                     id = "1234",
                     title = "Harry Potter and the Philosopher's stone",
-                    posterUrl = "https://image.tmdb.org/t/p/original/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg"
+                    posterUrl = "https://image.tmdb.org/t/p/original/hziiv14OpD73u9gAak4XDDfBKa2.jpg"
                 ),
-                modifier = Modifier.height(200.dp),
+                modifier = Modifier.width(200.dp),
             )
         }
     }
