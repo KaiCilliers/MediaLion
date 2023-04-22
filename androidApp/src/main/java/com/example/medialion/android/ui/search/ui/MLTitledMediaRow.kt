@@ -68,7 +68,7 @@ fun MLTitledMediaRow(
 
 @Preview
 @Composable
-fun MLTitledMediaRowPreview() {
+private fun MLTitledMediaRowPreview() {
     MediaLionTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             MLTitledMediaRow(

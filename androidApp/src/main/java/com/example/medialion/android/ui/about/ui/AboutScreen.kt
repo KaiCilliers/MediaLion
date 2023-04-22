@@ -66,7 +66,7 @@ Box (
 }
 
 @Composable
-fun CustomDialog(
+private fun CustomDialog(
     onDismiss: () -> Unit
 ) {
 Dialog(onDismissRequest = {
@@ -167,7 +167,7 @@ var isDialogShown by mutableStateOf(false)
 
 @Preview
 @Composable
-fun AboutScreenPreview() {
+private fun AboutScreenPreview() {
     val viewModal = MainViewModal()
     MediaLionTheme {
         Surface(modifier = Modifier.fillMaxSize()) {

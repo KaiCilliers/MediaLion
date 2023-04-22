@@ -84,7 +84,7 @@ fun MLMediaFavoriteListItem(
 
 @Preview
 @Composable
-fun MLMediaFavoriteListItemPreview() {
+private fun MLMediaFavoriteListItemPreview() {
     MediaLionTheme {
         var movie: MovieUiModel by remember {
             mutableStateOf(MovieUiModel(1, "Kai", false))

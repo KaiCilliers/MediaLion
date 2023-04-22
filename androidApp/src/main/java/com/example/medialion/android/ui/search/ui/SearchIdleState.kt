@@ -55,7 +55,7 @@ fun SearchIdleState(
 
 @Preview
 @Composable
-fun SearchIdleStatePreview() {
+private fun SearchIdleStatePreview() {
     MediaLionTheme {
         var movies: List<MovieUiModel> by remember {
             mutableStateOf(

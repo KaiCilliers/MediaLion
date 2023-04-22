@@ -19,7 +19,7 @@ fun MLCollectionListItem() {
 
 @Preview
 @Composable
-fun MLCollectionListItemPreview() {
+private fun MLCollectionListItemPreview() {
     MediaLionTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             MLCollectionListItem()

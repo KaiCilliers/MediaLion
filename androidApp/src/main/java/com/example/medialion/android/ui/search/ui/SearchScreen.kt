@@ -106,7 +106,7 @@ fun SearchScreen(
 
 @Preview
 @Composable
-fun SearchScreenPreview() {
+private fun SearchScreenPreview() {
     MediaLionTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
 

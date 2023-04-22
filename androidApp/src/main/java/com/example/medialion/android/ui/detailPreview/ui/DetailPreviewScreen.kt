@@ -205,7 +205,7 @@ private fun BottomSheetContent(
 
 @Preview
 @Composable
-fun DetailPreviewScreenPreview() {
+private fun DetailPreviewScreenPreview() {
     MediaLionTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             DetailPreviewScreen(

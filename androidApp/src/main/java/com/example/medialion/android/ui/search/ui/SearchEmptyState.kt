@@ -41,7 +41,7 @@ fun SearchEmptyState(modifier: Modifier = Modifier) {
 
 @Preview
 @Composable
-fun SearchEmptyStatePreview() {
+private fun SearchEmptyStatePreview() {
     MediaLionTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             SearchEmptyState()

@@ -85,7 +85,7 @@ fun MLSearchBar(
 
 @Preview
 @Composable
-fun MLSearchBarPreview() {
+private fun MLSearchBarPreview() {
     MediaLionTheme {
         var text by remember {
             mutableStateOf("")
