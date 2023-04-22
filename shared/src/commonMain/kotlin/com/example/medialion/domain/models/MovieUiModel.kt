@@ -4,5 +4,6 @@ data class MovieUiModel(
     val id: Int,
     val title: String,
     val isFavorited: Boolean,
-    val posterUrl: String = ""
+    val posterUrl: String = "",
+    val bannerUrl: String = "",
 )

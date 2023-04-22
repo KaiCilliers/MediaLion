@@ -97,7 +97,7 @@ class MLSearchViewModel(
             isLoading -> SearchState.Loading(query)
             results.isNotEmpty() -> SearchState.Results(
                 searchResults = results,
-                relatedTitles = listOf(related),
+                relatedTitles = listOf(related.sortedBy { it.title }, related.sortedBy { it.posterUrl }, related.sortedBy { it.id }),
                 searchQuery = query
             )
 

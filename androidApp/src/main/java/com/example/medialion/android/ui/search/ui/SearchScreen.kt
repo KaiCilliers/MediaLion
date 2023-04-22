@@ -89,34 +89,16 @@ fun SearchScreen(
             }
 
             is SearchState.Results -> {
-                Column {
-                    Text(
-                        text = "Results",
-                        fontSize = 30.sp
+                println("deadpool - $state")
+                MLTitledMediaGrid(
+                    gridTitle = "Results",
+                    movies = state.searchResults,
+                    suggestedMedia = listOf(
+                        "Suggested Media #1" to state.relatedTitles[0],
+                        "Suggested Media #2" to state.relatedTitles[1],
+                        "Suggested Media #3" to state.relatedTitles[2],
                     )
-                    LazyColumn {
-                        items(state.searchResults) {
-                            Text(
-                                text = it.title,
-                                fontSize = 24.sp
-                            )
-                        }
-                        itemsIndexed(state.relatedTitles) { index, movies ->
-                            Text(
-                                text = "Related Media #$index",
-                                fontSize = 30.sp
-                            )
-                            LazyRow {
-                                items(movies) {
-                                    Text(
-                                        text = it.title,
-                                        fontSize = 24.sp
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
+                )
             }
         }
     }

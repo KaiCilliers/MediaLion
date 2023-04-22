@@ -28,7 +28,8 @@ import com.example.medialion.domain.models.SimpleMediaItem
 fun MLTitledMediaGrid(
     gridTitle: String,
     movies: List<MovieUiModel>,
-    modifier: Modifier = Modifier
+    suggestedMedia: List<Pair<String, List<MovieUiModel>>>,
+    modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
@@ -47,7 +48,7 @@ fun MLTitledMediaGrid(
                 color = Color.White,
                 modifier = modifier.padding(top = 16.dp, bottom = 4.dp),
 
-            )
+                )
         }
         items(movies) { singleMovie ->
             MLMediaPoster(
@@ -56,51 +57,28 @@ fun MLTitledMediaGrid(
                     title = singleMovie.title,
                     posterUrl = singleMovie.posterUrl
                 ),
-                modifier = modifier
-                    .size(height = 130.dp, width = 50.dp)
             )
         }
-        item(span = { GridItemSpan(3) }) {
-            MLTitledMediaRow(rowTitle = "Related Movies Titles", movies = movies)
-        }
-        item(span = { GridItemSpan(3) }) {
-            MLTitledMediaRow(rowTitle = "Related Series Titles", movies = movies)
-        }
-        item(span = { GridItemSpan(3) }) {
-            MLTitledMediaRow(rowTitle = "Related Documentary Titles", movies = movies)
+        items(suggestedMedia, span = { GridItemSpan(3) }) {
+            if (it.second.isNotEmpty()) {
+                MLTitledMediaRow(rowTitle = it.first, movies = it.second)
+            }
         }
     }
 }
 
 @Preview
 @Composable
-fun MLTitledMediaGridPreview() {
+private fun MLTitledMediaGridPreview() {
     MediaLionTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             MLTitledMediaGrid(
                 gridTitle = "Top Results",
-                movies = listOf(
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                )
+                movies = (1..20).map { MovieUiModel(1, "HP", true) }.toList(),
+                suggestedMedia = (1..3).map {
+                    "Suggested Heading #$it" to (1..20).map { MovieUiModel(1, "Movie #$it", true) }
+                        .toList()
+                }
             )
         }
     }
