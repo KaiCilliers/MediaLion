@@ -38,7 +38,7 @@ fun Modifier.gradientBackground(colors: List<Color>, angle: Float) = this.then(
     }
 )
 
-fun Modifier.brandGradient() = composed {
+fun Modifier.gradientOrange() = composed {
     this.then(
         Modifier.gradientBackground(
             colors = listOf(
@@ -46,6 +46,18 @@ fun Modifier.brandGradient() = composed {
                 colorResource(id = ColorRes.primaryVariant.resourceId)
             ),
             angle = 60f
+        )
+    )
+}
+
+fun Modifier.gradientBlue() = composed {
+    this.then(
+        Modifier.gradientBackground(
+            colors = listOf(
+                colorResource(id = ColorRes.primary.resourceId),
+                colorResource(id = ColorRes.primaryVariantBlue.resourceId)
+            ),
+            angle = -90f
         )
     )
 }
