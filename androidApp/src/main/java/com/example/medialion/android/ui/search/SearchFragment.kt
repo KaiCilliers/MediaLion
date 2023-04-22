@@ -29,18 +29,18 @@ class SearchFragment : Fragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 MediaLionTheme {
-                   Surface(
-                       modifier = Modifier.fillMaxSize(),
-                       color = MaterialTheme.colors.background
-                   ){
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colors.background
+                    ) {
                         val state by viewModel.state.collectAsState()
 
-                       SearchScreen(
-                           state = state,
-                           submitAction = { viewModel.submitAction(it) },
-                           backstack = backstack,
-                       )
-                   }
+                        SearchScreen(
+                            state = state,
+                            submitAction = { viewModel.submitAction(it) },
+                            backstack = backstack,
+                        )
+                    }
                 }
             }
         }

@@ -1,10 +1,8 @@
 package com.example.medialion.android.ui.detailPreview.ui
 
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,22 +10,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.BottomSheetScaffold
-import androidx.compose.material.BottomSheetValue
-import androidx.compose.material.Button
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.rememberBottomSheetScaffoldState
-import androidx.compose.material.rememberBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,70 +29,16 @@ import com.example.medialion.android.theme.MediaLionTheme
 import com.example.medialion.android.ui.extensions.gradientBlue
 import com.example.medialion.android.ui.search.ui.MLMediaPoster
 import com.example.medialion.domain.models.SimpleMediaItem
-import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DetailPreviewScreen(
     mediaItem: SimpleMediaItem,
-    modifier: Modifier = Modifier
-) {
-    val sheetState = rememberBottomSheetState(
-        initialValue = BottomSheetValue.Expanded,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-        )
-    )
-    val scaffholdState = rememberBottomSheetScaffoldState(
-        bottomSheetState = sheetState
-    )
-    val scope = rememberCoroutineScope()
-    BottomSheetScaffold(
-        modifier = modifier.height(500.dp),
-        scaffoldState = scaffholdState,
-        sheetContent = {
-            BottomSheetContent(
-                mediaItem = mediaItem,
-                onAddToListClick = {},
-                onCloseClick = { scope.launch { sheetState.collapse() } }
-            )
-        },
-        sheetPeekHeight = 0.dp,
-        sheetShape = RoundedCornerShape(12.dp),
-
-
-        )
-    {
-        Box(
-            modifier = modifier
-                .fillMaxWidth()
-                .height(300.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Button(onClick = {
-                scope.launch {
-                    if (sheetState.isCollapsed)
-                        sheetState.expand()
-                    else
-                        sheetState.collapse()
-                }
-            }) {
-                Text(
-                    text = "Toggle sheet",
-                    color = Color.White
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun BottomSheetContent(
-    mediaItem: SimpleMediaItem,
     onCloseClick: () -> Unit,
-    onAddToListClick: (movieId: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+
+    val context = LocalContext.current
+
     ConstraintLayout(
         modifier = modifier
             .fillMaxWidth()
@@ -129,6 +66,7 @@ private fun BottomSheetContent(
                     },
             )
 
+            // todo fix :: title can be overlapped by close icon
             Column(
                 modifier = Modifier.constrainAs(containerText) {
                     top.linkTo(poster.top)
@@ -140,7 +78,7 @@ private fun BottomSheetContent(
             ) {
 
                 Text(
-                    text = "Harry Potter",
+                    text = mediaItem.title,
                     color = Color.White,
                     style = MaterialTheme.typography.h3,
                 )
@@ -183,7 +121,9 @@ private fun BottomSheetContent(
                     end.linkTo(parent.end)
                     top.linkTo(containerTop.bottom)
                 }
-                .clickable { onAddToListClick(mediaItem.id) }
+                .clickable {
+                    Toast.makeText(context, "Add movie to a list functionality", Toast.LENGTH_SHORT).show()
+                }
         ) {
             Image(
                 painter = painterResource(id = com.example.medialion.android.R.drawable.add_to_list_icon),
@@ -213,7 +153,8 @@ private fun DetailPreviewScreenPreview() {
                     id = "duis",
                     title = "This is a two line movie title",
                     posterUrl = "https://m.media-amazon.com/images/I/71QMoH7mSLL._AC_SL1500_.jpg"
-                )
+                ),
+                onCloseClick = {},
             )
         }
     }

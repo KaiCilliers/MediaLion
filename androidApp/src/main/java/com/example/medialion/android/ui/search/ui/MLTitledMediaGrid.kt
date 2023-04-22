@@ -1,6 +1,7 @@
 package com.example.medialion.android.ui.search.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,6 +30,7 @@ fun MLTitledMediaGrid(
     gridTitle: String,
     movies: List<MovieUiModel>,
     suggestedMedia: List<Pair<String, List<MovieUiModel>>>,
+    onMediaClicked: (MovieUiModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
@@ -57,11 +59,16 @@ fun MLTitledMediaGrid(
                     title = singleMovie.title,
                     posterUrl = singleMovie.posterUrl
                 ),
+                modifier = Modifier.clickable { onMediaClicked(singleMovie) }
             )
         }
         items(suggestedMedia, span = { GridItemSpan(3) }) {
             if (it.second.isNotEmpty()) {
-                MLTitledMediaRow(rowTitle = it.first, movies = it.second)
+                MLTitledMediaRow(
+                    rowTitle = it.first,
+                    movies = it.second,
+                    onMediaItemClicked = { onMediaClicked(it) }
+                )
             }
         }
     }
@@ -78,7 +85,8 @@ private fun MLTitledMediaGridPreview() {
                 suggestedMedia = (1..3).map {
                     "Suggested Heading #$it" to (1..20).map { MovieUiModel(1, "Movie #$it", true) }
                         .toList()
-                }
+                },
+                onMediaClicked = {}
             )
         }
     }
