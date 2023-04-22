@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,13 +17,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.example.medialion.android.theme.MediaLionTheme
-import com.example.medialion.android.ui.extensions.brandGradient
+import com.example.medialion.android.ui.extensions.gradientOrange
 import com.example.medialion.domain.models.SimpleMediaItem
 
 @Composable
@@ -34,7 +32,7 @@ fun MLMediaPoster(
 ) {
     Box(
         modifier = modifier
-            .aspectRatio(0.75f, matchHeightConstraintsFirst = true)
+            .aspectRatio(0.75f)
     ) {
         SubcomposeAsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -59,7 +57,7 @@ private fun PosterPlaceholder(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .brandGradient()
+            .gradientOrange()
     ){
         Text(
             text = mediaTitle,
