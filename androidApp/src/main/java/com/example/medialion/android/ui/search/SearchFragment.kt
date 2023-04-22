@@ -52,6 +52,7 @@ import com.example.medialion.android.ui.search.ui.SearchScreen
 import com.example.medialion.domain.components.search.SearchAction
 import com.example.medialion.domain.components.search.SearchState
 import com.zhuinden.simplestackextensions.fragmentsktx.lookup
+import kotlinx.coroutines.flow.onEach
 
 class SearchFragment : Fragment() {
 
@@ -69,6 +70,7 @@ class SearchFragment : Fragment() {
                        color = MaterialTheme.colors.background
                    ){
                         val state by viewModel.state.collectAsState()
+                       println("deadpool -  FRAGMENT i got a state $state")
 
                        SearchScreen(state = state, submitAction = { viewModel.submitAction(it)} )
                    }

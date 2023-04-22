@@ -17,6 +17,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
@@ -25,6 +26,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -38,10 +40,10 @@ class MLSearchViewModel(
     private val viewModelScope =
         coroutineScope ?: CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
-    private var suggestedMovies = MutableStateFlow(SuggestedMovies.list.toList())
+    private val suggestedMovies = MutableStateFlow(SuggestedMovies.list.toList())
     private val currentQuery = MutableStateFlow("")
     private val isLoading = MutableStateFlow(false)
-    private val searchResults: Flow<List<MovieUiModel>> = currentQuery
+    private val searchResults: StateFlow<List<MovieUiModel>> = currentQuery
         .debounce(125L)
         .onEach {
             if (it.isNotEmpty()) isLoading.value = true
@@ -70,7 +72,7 @@ class MLSearchViewModel(
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000L), listOf())
 
     private val relatedMovies: Flow<List<MovieUiModel>> = searchResults
-        .flatMapLatest { movies ->
+        .flatMapLatest<List<MovieUiModel>, List<MovieUiModel>> { movies ->
             println("deadpool - inside related")
             flow {
                 if (movies.isNotEmpty()) {
@@ -80,6 +82,7 @@ class MLSearchViewModel(
                 }
             }
         }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     private val _state = combineTuple(
         currentQuery,
@@ -104,8 +107,8 @@ class MLSearchViewModel(
         }
     }.stateIn(
         viewModelScope,
-        SharingStarted.WhileSubscribed(5_000L),
-        SearchState.Idle("", SuggestedMovies.list)
+        SharingStarted.Eagerly,
+        SearchState.Idle("", SuggestedMovies.list.toList())
     )
 
     init {

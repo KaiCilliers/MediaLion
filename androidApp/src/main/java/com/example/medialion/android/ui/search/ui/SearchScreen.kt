@@ -39,7 +39,6 @@ fun SearchScreen(
     state: SearchState,
     submitAction: (SearchAction) -> Unit,
 ) {
-    println("deadpool - UI state is $state")
     Column(
         Modifier.background(Color.White)
     ) {
