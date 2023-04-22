@@ -10,19 +10,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,7 +30,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.medialion.ColorRes
 import com.example.medialion.StringRes
 import com.example.medialion.android.R
@@ -45,11 +37,13 @@ import com.example.medialion.android.theme.MediaLionTheme
 import com.example.medialion.domain.components.search.SearchAction
 import com.example.medialion.domain.components.search.SearchState
 import com.example.medialion.domain.models.MovieUiModel
+import com.zhuinden.simplestack.Backstack
 
 @Composable
 fun SearchScreen(
     state: SearchState,
     submitAction: (SearchAction) -> Unit,
+    backstack: Backstack,
 ) {
 
     val context = LocalContext.current
@@ -177,7 +171,8 @@ private fun SearchScreenPreview() {
                         is SearchAction.RemoveFromFavorites -> TODO()
                         is SearchAction.SubmitSearchQuery -> TODO()
                     }
-                }
+                },
+                backstack = Backstack()
             )
         }
     }
