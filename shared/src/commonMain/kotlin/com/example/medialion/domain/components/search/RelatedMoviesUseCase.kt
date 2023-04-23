@@ -24,6 +24,42 @@ interface RelatedMoviesUseCase {
             }
         }
     }
+
+    class Fake : RelatedMoviesUseCase {
+        var provideFailure: Boolean = false
+        override suspend fun relateMovies(movieId: Int): ResultOf<List<Movie>> {
+            return if (provideFailure) {
+                ResultOf.Failure("Forced failure...", null)
+            } else {
+                ResultOf.Success(listOf(
+                    Movie(
+                        backdropPath = null,
+                        genreIds = listOf(),
+                        id = 1965,
+                        language = "interesset",
+                        overview = "definitiones",
+                        popularity = 2.3,
+                        posterPath = null,
+                        releaseDate = "suscipiantur",
+                        title = "porta",
+                        favorited = false
+                    ),
+                    Movie(
+                        backdropPath = null,
+                        genreIds = listOf(),
+                        id = 5871,
+                        language = "usu",
+                        overview = "maiorum",
+                        popularity = 6.7,
+                        posterPath = null,
+                        releaseDate = "saepe",
+                        title = "habitasse",
+                        favorited = false
+                    )
+                ))
+            }
+        }
+    }
 }
 
 interface TopRatedMoviesUseCase {
@@ -38,6 +74,43 @@ interface TopRatedMoviesUseCase {
             return@withContext when (val response = client.topRatedMovies()) {
                 is ResultOf.Success -> response.map { it.results.map { item -> movieMapper.map(item) } }
                 is ResultOf.Failure -> response
+            }
+        }
+    }
+
+    class Fake : TopRatedMoviesUseCase {
+        var provideFailure: Boolean = false
+        val movies = mutableListOf(
+            Movie(
+                backdropPath = null,
+                genreIds = listOf(),
+                id = 1965,
+                language = "interesset",
+                overview = "definitiones",
+                popularity = 2.3,
+                posterPath = null,
+                releaseDate = "suscipiantur",
+                title = "porta",
+                favorited = false
+            ),
+            Movie(
+                backdropPath = null,
+                genreIds = listOf(),
+                id = 5871,
+                language = "usu",
+                overview = "maiorum",
+                popularity = 6.7,
+                posterPath = null,
+                releaseDate = "saepe",
+                title = "habitasse",
+                favorited = false
+            )
+        )
+        override suspend fun topRatedMovies(): ResultOf<List<Movie>> {
+            return if (provideFailure) {
+                ResultOf.Failure("Forced failure...", null)
+            } else {
+                ResultOf.Success(movies)
             }
         }
     }

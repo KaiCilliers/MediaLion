@@ -39,7 +39,7 @@ class MLSearchViewModel(
     coroutineScope: CoroutineScope?,
 ) {
 
-    val suggestedMovieCache = mutableListOf<MovieUiModel>()
+    private val suggestedMovieCache = mutableListOf<MovieUiModel>()
 
     private val viewModelScope =
         coroutineScope ?: CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
@@ -48,36 +48,31 @@ class MLSearchViewModel(
     private val currentQuery = MutableStateFlow("")
     private val isLoading = MutableStateFlow(false)
     private val searchResults: StateFlow<List<MovieUiModel>> = currentQuery
-        .debounce(125L)
+        .debounce(400L)
         .onEach {
             if (it.isNotEmpty()) isLoading.value = true
         }
         .flatMapLatest { query ->
-            println("deadpool - query changed -> $query")
             when {
                 query.isEmpty() -> emptyFlow<List<MovieUiModel>>()
                 else -> {
                     when (val response = searchMoviesByTitleUseCase.searchMovies(query)) {
                         is ResultOf.Failure -> {
-                            println("deadpool - failed")
                             emptyFlow()
                         }
 
                         is ResultOf.Success -> {
-                            println("deadpool - success")
                             flow { emit(movieMapper.map(response.value)) }
                         }
                     }
                 }
             }
         }.onEach {
-            println("deadpool - loasing false")
             isLoading.value = false
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000L), listOf())
 
     private val relatedMovies: Flow<List<MovieUiModel>> = searchResults
         .flatMapLatest<List<MovieUiModel>, List<MovieUiModel>> { movies ->
-            println("deadpool - inside related")
             flow {
                 if (movies.isNotEmpty()) {
                     val response = relatedMoviesUseCase.relateMovies(movies.first().id)
@@ -95,7 +90,7 @@ class MLSearchViewModel(
         relatedMovies,
         suggestedMovies,
     ).map { (query, isLoading, results, related, suggestedMovies) ->
-        println("deadpool - tuple $query, $isLoading, ${results.size}, ${related.size}, ${suggestedMovies.size}")
+        println("deadpool - tuple $query, $isLoading, ${results.size}, ${related.size}, ${suggestedMovies}")
         when {
             query.isEmpty() -> SearchState.Idle(searchQuery = query, suggestedMovies)
             isLoading -> SearchState.Loading(query)
