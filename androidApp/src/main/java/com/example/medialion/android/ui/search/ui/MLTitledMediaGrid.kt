@@ -1,6 +1,7 @@
 package com.example.medialion.android.ui.search.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,7 +29,9 @@ import com.example.medialion.domain.models.SimpleMediaItem
 fun MLTitledMediaGrid(
     gridTitle: String,
     movies: List<MovieUiModel>,
-    modifier: Modifier = Modifier
+    suggestedMedia: List<Pair<String, List<MovieUiModel>>>,
+    onMediaClicked: (MovieUiModel) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
@@ -44,10 +47,10 @@ fun MLTitledMediaGrid(
             Text(
                 text = gridTitle,
                 style = MaterialTheme.typography.h3,
-                color = Color.White,
+                color = MaterialTheme.colors.secondary,
                 modifier = modifier.padding(top = 16.dp, bottom = 4.dp),
 
-            )
+                )
         }
         items(movies) { singleMovie ->
             MLMediaPoster(
@@ -56,51 +59,34 @@ fun MLTitledMediaGrid(
                     title = singleMovie.title,
                     posterUrl = singleMovie.posterUrl
                 ),
-                modifier = modifier
-                    .size(height = 130.dp, width = 50.dp)
+                modifier = Modifier.clickable { onMediaClicked(singleMovie) }
             )
         }
-        item(span = { GridItemSpan(3) }) {
-            MLTitledMediaRow(rowTitle = "Related Movies Titles", movies = movies)
-        }
-        item(span = { GridItemSpan(3) }) {
-            MLTitledMediaRow(rowTitle = "Related Series Titles", movies = movies)
-        }
-        item(span = { GridItemSpan(3) }) {
-            MLTitledMediaRow(rowTitle = "Related Documentary Titles", movies = movies)
+        items(suggestedMedia, span = { GridItemSpan(3) }) {
+            if (it.second.isNotEmpty()) {
+                MLTitledMediaRow(
+                    rowTitle = it.first,
+                    movies = it.second,
+                    onMediaItemClicked = { onMediaClicked(it) }
+                )
+            }
         }
     }
 }
 
 @Preview
 @Composable
-fun MLTitledMediaGridPreview() {
+private fun MLTitledMediaGridPreview() {
     MediaLionTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             MLTitledMediaGrid(
                 gridTitle = "Top Results",
-                movies = listOf(
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                )
+                movies = (1..20).map { MovieUiModel(1, "HP", true) }.toList(),
+                suggestedMedia = (1..3).map {
+                    "Suggested Heading #$it" to (1..20).map { MovieUiModel(1, "Movie #$it", true) }
+                        .toList()
+                },
+                onMediaClicked = {}
             )
         }
     }

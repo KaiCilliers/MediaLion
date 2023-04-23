@@ -1,10 +1,13 @@
 package com.example.medialion.android.ui.extensions
 
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import com.example.medialion.ColorRes
 import kotlin.math.cos
 import kotlin.math.pow
 import kotlin.math.sin
@@ -34,3 +37,27 @@ fun Modifier.gradientBackground(colors: List<Color>, angle: Float) = this.then(
         )
     }
 )
+
+fun Modifier.gradientOrange() = composed {
+    this.then(
+        Modifier.gradientBackground(
+            colors = listOf(
+                colorResource(id = ColorRes.primary.resourceId),
+                colorResource(id = ColorRes.primaryVariant.resourceId)
+            ),
+            angle = 60f
+        )
+    )
+}
+
+fun Modifier.gradientBlue() = composed {
+    this.then(
+        Modifier.gradientBackground(
+            colors = listOf(
+                colorResource(id = ColorRes.primary.resourceId),
+                colorResource(id = ColorRes.primaryVariantBlue.resourceId)
+            ),
+            angle = -90f
+        )
+    )
+}

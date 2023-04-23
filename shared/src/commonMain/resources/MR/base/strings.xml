@@ -5,4 +5,21 @@
     <string name="title">Title</string>
     <string name="empty_result_state_title">We could not find what you are looking for.</string>
     <string name="empty_result_state_body">Try searching for another movie, show, actor, director, or genre.</string>
+    <string name="my_list">My List</string>
+    <string name="top_results">Top Results</string>
+    <string name="related_movies">Related Movie Titles</string>
+    <string name="related_series">Related Series Titles</string>
+    <string name="related_documentaries">Related Documentary Titles</string>
+    <string name="about">About</string>
+    <string name="app_description">This App is a media organiser, which allows users to save and store their favorite movies, series and documentaries in custom lists.</string>
+    <string name="about_heading">MediaLion Information</string>
+    <string name="app_developers">App Developers:</string>
+    <string name="app_developer_names">Kai Cilliers &amp; Nadine Cilliers</string>
+    <string name="graphic_designer">Graphic Designer:</string>
+    <string name="graphic_designer_name">Roxie Nemes</string>
+    <string name="favorites_list">Favorites</string>
+    <string name="empty_add_to_list_text">Add new list</string>
+    <string name="must_watch_list">Must watch</string>
+    <string name="watch_again_list">Watch again</string>
+    <string name="save_to_list_title">Save to list</string>
 </resources>

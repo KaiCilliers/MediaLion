@@ -44,6 +44,9 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
+                implementation("com.willowtreeapps.assertk:assertk:0.25")
+                implementation("app.cash.turbine:turbine:0.7.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
             }
         }
         val androidMain by getting {

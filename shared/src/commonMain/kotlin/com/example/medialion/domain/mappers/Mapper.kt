@@ -1,5 +1,6 @@
 package com.example.medialion.domain.mappers
 
+import com.example.medialion.data.NetworkConstants
 import com.example.medialion.data.searchComponent.MediaResponse
 import com.example.medialion.domain.models.Movie
 import com.example.medialion.domain.models.MovieUiModel
@@ -10,13 +11,13 @@ interface Mapper<I, O> {
     class MovieDataMapper : Mapper<MediaResponse, Movie> {
         override fun map(input: MediaResponse): Movie {
             return Movie(
-                backdropPath = input.backdropPath.orEmpty(),
+                backdropPath = NetworkConstants.BASE_IMAGE_URL_TMDB + input.backdropPath.orEmpty(),
                 genreIds = input.genreIds,
                 id = input.id,
                 language = input.originalLanguage,
                 overview = input.overview,
                 popularity = input.popularity,
-                posterPath = input.posterPath,
+                posterPath = NetworkConstants.BASE_IMAGE_URL_TMDB + input.posterPath,
                 releaseDate = input.releaseDate,
                 title = input.title
             )
@@ -29,7 +30,8 @@ interface Mapper<I, O> {
                 id = input.id,
                 title = input.title,
                 isFavorited = false,
-                posterUrl = input.posterPath.orEmpty()
+                posterUrl = input.posterPath.orEmpty(),
+                bannerUrl = input.backdropPath.orEmpty(),
             )
         }
     }

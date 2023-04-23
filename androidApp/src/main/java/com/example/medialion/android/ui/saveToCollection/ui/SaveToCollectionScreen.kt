@@ -19,7 +19,7 @@ fun SaveToCollectionScreen() {
 
 @Preview
 @Composable
-fun SaveToCollectionScreenPreview() {
+private fun SaveToCollectionScreenPreview() {
     MediaLionTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             SaveToCollectionScreen()

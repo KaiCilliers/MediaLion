@@ -17,6 +17,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
@@ -25,6 +26,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -32,46 +34,45 @@ import kotlinx.coroutines.launch
 class MLSearchViewModel(
     private val searchMoviesByTitleUseCase: SearchMoviesUseCase,
     private val relatedMoviesUseCase: RelatedMoviesUseCase,
+    private val topRatedMoviesUseCase: TopRatedMoviesUseCase,
     private val movieMapper: ListMapper<Movie, MovieUiModel>,
     coroutineScope: CoroutineScope?,
 ) {
+
+    private val suggestedMovieCache = mutableListOf<MovieUiModel>()
+
     private val viewModelScope =
         coroutineScope ?: CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
-    private var suggestedMovies = MutableStateFlow(SuggestedMovies.list.toList())
+    private val suggestedMovies = MutableStateFlow(emptyList<MovieUiModel>())
     private val currentQuery = MutableStateFlow("")
     private val isLoading = MutableStateFlow(false)
-    private val searchResults: Flow<List<MovieUiModel>> = currentQuery
-        .debounce(125L)
+    private val searchResults: StateFlow<List<MovieUiModel>> = currentQuery
+        .debounce(400L)
         .onEach {
             if (it.isNotEmpty()) isLoading.value = true
         }
         .flatMapLatest { query ->
-            println("deadpool - query changed -> $query")
             when {
                 query.isEmpty() -> emptyFlow<List<MovieUiModel>>()
                 else -> {
                     when (val response = searchMoviesByTitleUseCase.searchMovies(query)) {
                         is ResultOf.Failure -> {
-                            println("deadpool - failed")
                             emptyFlow()
                         }
 
                         is ResultOf.Success -> {
-                            println("deadpool - success")
                             flow { emit(movieMapper.map(response.value)) }
                         }
                     }
                 }
             }
         }.onEach {
-            println("deadpool - loasing false")
             isLoading.value = false
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000L), listOf())
 
     private val relatedMovies: Flow<List<MovieUiModel>> = searchResults
-        .flatMapLatest { movies ->
-            println("deadpool - inside related")
+        .flatMapLatest<List<MovieUiModel>, List<MovieUiModel>> { movies ->
             flow {
                 if (movies.isNotEmpty()) {
                     val response = relatedMoviesUseCase.relateMovies(movies.first().id)
@@ -80,6 +81,7 @@ class MLSearchViewModel(
                 }
             }
         }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     private val _state = combineTuple(
         currentQuery,
@@ -88,31 +90,38 @@ class MLSearchViewModel(
         relatedMovies,
         suggestedMovies,
     ).map { (query, isLoading, results, related, suggestedMovies) ->
-        println("deadpool - tuple $query, $isLoading, ${results.size}, ${related.size}, ${suggestedMovies.size}")
+        println("deadpool - tuple $query, $isLoading, ${results.size}, ${related.size}, ${suggestedMovies}")
         when {
             query.isEmpty() -> SearchState.Idle(searchQuery = query, suggestedMovies)
             isLoading -> SearchState.Loading(query)
             results.isNotEmpty() -> SearchState.Results(
                 searchResults = results,
-                relatedTitles = listOf(related),
+                relatedTitles = listOf(related.sortedBy { it.title }, related.sortedBy { it.posterUrl }, related.sortedBy { it.id }),
                 searchQuery = query
             )
 
             query.isNotEmpty() && results.isEmpty() -> SearchState.Empty(query)
             // TODO error state for search screen
-            else -> SearchState.Idle(searchQuery = query, SuggestedMovies.list.take(2))
+            else -> SearchState.Idle(searchQuery = query, suggestedMovieCache.take(2))
         }
     }.stateIn(
         viewModelScope,
-        SharingStarted.WhileSubscribed(5_000L),
-        SearchState.Idle("", SuggestedMovies.list)
+        SharingStarted.Eagerly,
+        SearchState.Idle("", suggestedMovieCache.toList())
     )
 
     init {
-        // TODO fix issue where this whole class starts kicking into gear when the search query changes for the first time
-        //  until then, toggling favorited movies won't show in the UI
-        //  currentQuery.value = "" does not fix the issue (passing it a value does)
-        currentQuery.value = ""
+        viewModelScope.launch {
+            val suggestedMedia = when(val result = topRatedMoviesUseCase.topRatedMovies()) {
+                is ResultOf.Failure -> emptyList()
+                is ResultOf.Success -> {
+                    suggestedMovieCache.clear()
+                    suggestedMovieCache.addAll(movieMapper.map(result.value))
+                    movieMapper.map(result.value)
+                }
+            }
+            suggestedMovies.value = suggestedMedia
+        }
     }
     val state: CStateFlow<SearchState>
         get() = _state.cStateFlow()
@@ -127,63 +136,28 @@ class MLSearchViewModel(
     }
 
     private fun addToFavorites(movieId: Int) {
-        suggestedMovies.value = SuggestedMovies.list.map {
+        suggestedMovies.value = suggestedMovieCache.map {
             if (it.id == movieId) {
                 it.copy(isFavorited = true)
             } else {
                 it
             }
         }.also {
-            SuggestedMovies.list.clear()
-            SuggestedMovies.list.addAll(it)
+            suggestedMovieCache.clear()
+            suggestedMovieCache.addAll(it)
         }
     }
 
     private fun removeFromFavorites(movieId: Int) {
-        suggestedMovies.value = SuggestedMovies.list.map {
+        suggestedMovies.value = suggestedMovieCache.map {
             if (it.id == movieId) {
                 it.copy(isFavorited = false)
             } else {
                 it
             }
         }.also {
-            SuggestedMovies.list.clear()
-            SuggestedMovies.list.addAll(it)
+            suggestedMovieCache.clear()
+            suggestedMovieCache.addAll(it)
         }
     }
-}
-
-private object SuggestedMovies {
-    val list = mutableListOf(
-        MovieUiModel(
-            id = 97551,
-            title = "Movie #1",
-            isFavorited = false,
-            posterUrl = "https://www.google.com/#q=petentium"
-        ),
-        MovieUiModel(
-            id = 97553,
-            title = "Movie #1",
-            isFavorited = false,
-            posterUrl = "https://www.google.com/#q=petentium"
-        ),
-        MovieUiModel(
-            id = 975544,
-            title = "Movie #1",
-            isFavorited = false,
-            posterUrl = "https://www.google.com/#q=petentium"
-        ),
-        MovieUiModel(
-            id = 97155,
-            title = "Movie #1",
-            isFavorited = false,
-            posterUrl = "https://www.google.com/#q=petentium"
-        ),
-        MovieUiModel(
-            id = 971355,
-            title = "Movie #1",
-            isFavorited = false,
-            posterUrl = "https://www.google.com/#q=petentium"
-        ),
-    )
 }

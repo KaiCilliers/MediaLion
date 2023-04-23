@@ -1,15 +1,13 @@
 package com.example.medialion.android.ui.search.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
@@ -20,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.medialion.android.theme.MediaLionTheme
 import com.example.medialion.domain.models.MovieUiModel
 import com.example.medialion.domain.models.SimpleMediaItem
@@ -29,6 +26,7 @@ import com.example.medialion.domain.models.SimpleMediaItem
 fun MLTitledMediaRow(
     rowTitle: String,
     movies: List<MovieUiModel>,
+    onMediaItemClicked: (MovieUiModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -39,7 +37,7 @@ fun MLTitledMediaRow(
             Text(
                 text = rowTitle,
                 style = MaterialTheme.typography.subtitle1,
-                color = Color.White,
+                color = MaterialTheme.colors.secondary,
                 modifier = modifier.padding(bottom = 20.dp)
             )
         LazyRow(
@@ -57,7 +55,9 @@ fun MLTitledMediaRow(
                     posterUrl = singleMovie.posterUrl
                 ),
                     modifier = modifier
+                        // todo replace hardcoded size
                         .size(height = 143.dp, width = 92.dp)
+                        .clickable { onMediaItemClicked(singleMovie) }
                 )
         }
             }
@@ -68,7 +68,7 @@ fun MLTitledMediaRow(
 
 @Preview
 @Composable
-fun MLTitledMediaRowPreview() {
+private fun MLTitledMediaRowPreview() {
     MediaLionTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             MLTitledMediaRow(
@@ -79,7 +79,8 @@ fun MLTitledMediaRowPreview() {
                     MovieUiModel(1, "HP", true),
                     MovieUiModel(1, "HP", true),
                     MovieUiModel(1, "HP", true),
-                ))
+                ),
+                onMediaItemClicked = {})
         }
     }
 }
