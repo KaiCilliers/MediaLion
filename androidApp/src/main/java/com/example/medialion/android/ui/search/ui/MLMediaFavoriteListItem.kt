@@ -57,7 +57,7 @@ fun MLMediaFavoriteListItem(
         )
         Text(
             text = movie.title,
-            color = Color.White,
+            color = MaterialTheme.colors.secondary,
             modifier = Modifier
                 .padding(start = 12.dp)
                 .weight(1f),

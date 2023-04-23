@@ -25,7 +25,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -70,9 +69,10 @@ fun AboutScreen(
                     Text(
                         text = "About",
                         style = MaterialTheme.typography.h5,
-                        color = Color.Black,
+                        color = MaterialTheme.colors.secondaryVariant,
                     )
 
+                    // todo replace hardcoded spacing width
                     Spacer(modifier = Modifier.width(90.dp))
 
                     Image(
@@ -89,32 +89,32 @@ fun AboutScreen(
                     text = "MediaLion Information",
                     modifier = Modifier.padding(bottom = 5.dp),
                     style = MaterialTheme.typography.h4,
-                    color = Color.Black
+                    color = MaterialTheme.colors.secondaryVariant
                 )
                 Text(
                     text = "This App is a media organiser, which allows users to save and store their favorite movies, series and documentaries in custom lists.",
                     style = MaterialTheme.typography.body2,
-                    color = Color.Black
+                    color = MaterialTheme.colors.secondaryVariant
                 )
                 Text(
                     text = "App Developers:",
                     style = MaterialTheme.typography.body2,
-                    color = Color.Black
+                    color = MaterialTheme.colors.secondaryVariant
                 )
                 Text(
                     text = "Kai Cilliers & Nadine Cilliers",
                     style = MaterialTheme.typography.body2,
-                    color = Color.Black
+                    color = MaterialTheme.colors.secondaryVariant
                 )
                 Text(
                     text = "Graphics Designer:",
                     style = MaterialTheme.typography.body2,
-                    color = Color.Black
+                    color = MaterialTheme.colors.secondaryVariant
                 )
                 Text(
                     text = "Roxie Nemes",
                     style = MaterialTheme.typography.body2,
-                    color = Color.Black
+                    color = MaterialTheme.colors.secondaryVariant
                 )
             }
         }

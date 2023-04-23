@@ -47,7 +47,7 @@ fun MLTitledMediaGrid(
             Text(
                 text = gridTitle,
                 style = MaterialTheme.typography.h3,
-                color = Color.White,
+                color = MaterialTheme.colors.secondary,
                 modifier = modifier.padding(top = 16.dp, bottom = 4.dp),
 
                 )

@@ -37,7 +37,7 @@ fun MLTitledMediaRow(
             Text(
                 text = rowTitle,
                 style = MaterialTheme.typography.subtitle1,
-                color = Color.White,
+                color = MaterialTheme.colors.secondary,
                 modifier = modifier.padding(bottom = 20.dp)
             )
         LazyRow(

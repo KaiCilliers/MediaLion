@@ -46,7 +46,7 @@ fun MLSearchBar(
         onValueChange = { onSearchQueryTextChange(it) },
         colors = TextFieldDefaults.textFieldColors(
             textColor = MaterialTheme.colors.secondary,
-            cursorColor = Color.White
+            cursorColor = MaterialTheme.colors.secondary
         ),
         textStyle = MaterialTheme.typography.h1,
         modifier = modifier
@@ -56,7 +56,7 @@ fun MLSearchBar(
         placeholder = {
             Text(
                 text = labelText,
-                color = Color.White.copy(alpha = 0.5f),
+                color = MaterialTheme.colors.secondary.copy(alpha = 0.5f),
                 style = MaterialTheme.typography.h1
             )
         },

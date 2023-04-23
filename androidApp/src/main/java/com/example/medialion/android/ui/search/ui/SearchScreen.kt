@@ -190,7 +190,7 @@ fun SearchScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         CircularProgressIndicator(
-                            color = Color.White
+                            color = MaterialTheme.colors.secondary
                         )
                     }
                 }
