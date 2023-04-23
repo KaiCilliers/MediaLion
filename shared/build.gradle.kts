@@ -3,6 +3,7 @@ plugins {
     id("com.android.library")
     id("dev.icerock.mobile.multiplatform-resources")
     kotlin("plugin.serialization").version("1.8.20")
+    id("com.squareup.sqldelight").version("1.5.5")
 }
 
 kotlin {
@@ -28,6 +29,7 @@ kotlin {
 
     sourceSets {
         val ktorVersion = "2.2.4"
+        val sqlDelightVersion = "1.5.5"
 
         val commonMain by getting {
             dependencies {
@@ -37,6 +39,10 @@ kotlin {
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+
+                implementation("com.squareup.sqldelight:runtime:$sqlDelightVersion")
+                implementation("com.squareup.sqldelight:coroutines-extensions:$sqlDelightVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
 //                implementation("com.github.Zhuinden:flow-combinetuple-kt:1.1.1")
             }
@@ -53,6 +59,7 @@ kotlin {
             dependencies {
                 implementation("io.ktor:ktor-client-android:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging:$ktorVersion")
+                implementation("com.squareup.sqldelight:android-driver:$sqlDelightVersion")
             }
         }
         val androidUnitTest by getting
@@ -67,6 +74,7 @@ kotlin {
             dependencies {
                 implementation("io.ktor:ktor-client-darwin:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging:$ktorVersion")
+                implementation("com.squareup.sqldelight:native-driver:$sqlDelightVersion")
             }
         }
         val iosX64Test by getting
@@ -96,5 +104,12 @@ android {
     defaultConfig {
         minSdk = 28
         targetSdk = 33
+    }
+}
+
+sqldelight {
+    database("MediaLionDatabase") {
+        packageName = "com.example.medialion.database"
+        sourceFolders = listOf("sqldelight")
     }
 }
