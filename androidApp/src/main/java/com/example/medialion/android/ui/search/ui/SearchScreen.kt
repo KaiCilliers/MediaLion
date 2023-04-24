@@ -66,6 +66,20 @@ fun SearchScreen(
     backstack: Backstack,
 ) {
 
+    var collections: List<CollectionItem> by remember {
+        mutableStateOf(
+            listOf(
+                CollectionItem(name = "Favorites List", checked = false),
+                CollectionItem(name = "Must Watch", checked = false),
+                CollectionItem(name = "Watch Again", checked = false),
+                CollectionItem(name = "Horror", checked = false),
+                CollectionItem(name = "Comedies", checked = false),
+                CollectionItem(name = "Best of Robbin Williams", checked = false),
+                CollectionItem(name = "Harry Potter", checked = false),
+            )
+        )
+    }
+
     val context = LocalContext.current
     var showAboutDialog by remember { mutableStateOf(false) }
     var showCollectionDialog by remember { mutableStateOf(false) }
@@ -89,16 +103,20 @@ fun SearchScreen(
     if (showCollectionDialog) {
         SaveToCollectionScreen(
             onDismiss = { showCollectionDialog = false },
-            collections = listOf(
-                CollectionItem(name = "Favorites List", checked = false),
-                CollectionItem(name = "Must Watch", checked = false),
-                CollectionItem(name = "Watch Again", checked = false),
-                CollectionItem(name = "Horror", checked = false),
-                CollectionItem(name = "Comedies", checked = false),
-                CollectionItem(name = "Best of Robbin Williams", checked = false),
-                CollectionItem(name = "Harry Potter", checked = false),
-            ),
-            onCollectionItemClicked = {}
+            collections = collections,
+            onCollectionItemClicked = { collectionName ->
+                val listCopy = collections.toMutableList()
+                val mediaIndex = listCopy.indexOfFirst { it.name == collectionName }
+                listCopy[mediaIndex] =
+                    listCopy[mediaIndex].copy(checked = !listCopy[mediaIndex].checked)
+
+                collections = listCopy
+            },
+            onSaveList = {
+                val listCopy = collections.toMutableList()
+                listCopy.add(CollectionItem(it, true))
+                collections = listCopy
+            }
         )
     }
 

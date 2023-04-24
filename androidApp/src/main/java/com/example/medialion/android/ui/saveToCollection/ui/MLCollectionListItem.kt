@@ -108,7 +108,8 @@ fun MLCollectionTextField(
                 modifier = modifier
                     .weight(1f)
                     .wrapContentHeight()
-                    .background(MaterialTheme.colors.onBackground),
+                    .background(MaterialTheme.colors.onBackground)
+                    .size(height = 50.dp, width = 180.dp),
                 placeholder = {
                     Text(
                         text = labelText,

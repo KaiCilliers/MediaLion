@@ -41,6 +41,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -60,6 +61,7 @@ fun SaveToCollectionScreen(
     onDismiss: () -> Unit,
     collections: List<CollectionItem>,
     onCollectionItemClicked: (String) -> Unit,
+    onSaveList: (String) -> Unit,
 ) {
     var text by remember {
         mutableStateOf("")
@@ -118,7 +120,7 @@ fun SaveToCollectionScreen(
                     textQuery = text,
                     labelText = stringResource(id = R.string.empty_add_to_list_text),
                     onTextQueryTextChange = { text = it },
-                    onSaveList = { text = "" })
+                    onSaveList = { onSaveList(text); text = "" })
 
                 Row {
                     Spacer(modifier = Modifier.weight(1f))
@@ -127,7 +129,7 @@ fun SaveToCollectionScreen(
                         onClick = { onDismiss() },
                         modifier = Modifier
                             .background(MaterialTheme.colors.primaryVariant)
-                            .size(width = 80.dp, height = 30.dp),
+                            .size(width = 80.dp, height = 40.dp),
                         shape = RoundedCornerShape(8.dp),
                         elevation = ButtonDefaults.elevation(
                             defaultElevation = 6.dp,
@@ -137,7 +139,8 @@ fun SaveToCollectionScreen(
                         Text(
                             text = "Done",
                             color = MaterialTheme.colors.secondary,
-                            style = MaterialTheme.typography.body1
+                            style = MaterialTheme.typography.h5,
+                            textAlign = TextAlign.Center
                         )
                     }
 
@@ -185,6 +188,11 @@ private fun SaveToCollectionScreenPreview() {
                         listCopy[mediaIndex] =
                             listCopy[mediaIndex].copy(checked = !listCopy[mediaIndex].checked)
 
+                        collections = listCopy
+                    },
+                    onSaveList = {
+                        val listCopy = collections.toMutableList()
+                        listCopy.add(CollectionItem(it, true))
                         collections = listCopy
                     }
                 )
