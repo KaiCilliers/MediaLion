@@ -42,8 +42,6 @@ fun DetailPreviewScreen(
     modifier: Modifier = Modifier,
 ) {
 
-    val context = LocalContext.current
-
     ConstraintLayout(
         modifier = modifier
             .fillMaxWidth()
@@ -84,7 +82,7 @@ fun DetailPreviewScreen(
                     }
             )
             Text(
-                text = "2001",
+                text = mediaItem.year.take(4),
                 color = MaterialTheme.colors.secondary,
                 style = MaterialTheme.typography.h1,
                 modifier = modifier
@@ -94,10 +92,7 @@ fun DetailPreviewScreen(
                     }
             )
             Text(
-                text = "It is a story about Harry Potter, an orphan brought up by his aunt and uncle " +
-                        "because his parents were killed when he was a baby. Harry is unloved by his " +
-                        "uncle and aunt but everything changes when he is invited to join Hogwarts " +
-                        "School of Witchcraft and Wizardry and he finds out he's a wizard.",
+                text = mediaItem.description,
                 color = MaterialTheme.colors.secondary,
                 style = MaterialTheme.typography.body2,
                 modifier = modifier

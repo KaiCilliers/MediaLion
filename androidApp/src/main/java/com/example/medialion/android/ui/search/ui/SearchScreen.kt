@@ -108,11 +108,12 @@ fun SearchScreen(
         sheetContent = {
             Surface {
                 DetailPreviewScreen(
-                    mediaItem = selectedMediaItem ?: SimpleMediaItem("", "", ""),
+                    mediaItem = selectedMediaItem ?: SimpleMediaItem("", "", "", "", ""),
                     onCloseClick = {
                         selectedMediaItem = null; coroutineScope.launch { modalSheetState.hide() }
                     },
-                    onMyListClick = { showCollectionDialog = true }
+                    onMyListClick = { showCollectionDialog = true },
+                    modifier = Modifier.blur(radius = if (showCollectionDialog) 10.dp else 0.dp)
                 )
             }
         }) {
@@ -189,7 +190,9 @@ fun SearchScreen(
                             selectedMediaItem = SimpleMediaItem(
                                 id = it.id.toString(),
                                 title = it.title,
-                                posterUrl = it.posterUrl
+                                posterUrl = it.posterUrl,
+                                description = it.description,
+                                year = it.year,
                             )
                             coroutineScope.launch { modalSheetState.show() }
                         },
@@ -230,7 +233,9 @@ fun SearchScreen(
                             selectedMediaItem = SimpleMediaItem(
                                 id = it.id.toString(),
                                 title = it.title,
-                                posterUrl = it.posterUrl
+                                posterUrl = it.posterUrl,
+                                description = it.description,
+                                year = it.year,
                             )
                             coroutineScope.launch { modalSheetState.show() }
                         },

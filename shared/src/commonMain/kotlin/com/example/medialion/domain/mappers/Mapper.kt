@@ -30,6 +30,8 @@ interface Mapper<I, O> {
                 id = input.id,
                 title = input.title,
                 isFavorited = false,
+                description = input.overview,
+                year = input.releaseDate,
                 posterUrl = input.posterPath.orEmpty(),
                 bannerUrl = input.backdropPath.orEmpty(),
             )
