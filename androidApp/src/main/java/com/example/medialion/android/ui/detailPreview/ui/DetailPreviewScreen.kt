@@ -20,14 +20,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.example.medialion.android.R
 import com.example.medialion.android.theme.MediaLionTheme
 import com.example.medialion.android.ui.extensions.gradientBlue
+import com.example.medialion.android.ui.saveToCollection.ui.SaveToCollectionScreen
 import com.example.medialion.android.ui.search.ui.MLMediaPoster
 import com.example.medialion.domain.models.SimpleMediaItem
 
@@ -35,6 +38,7 @@ import com.example.medialion.domain.models.SimpleMediaItem
 fun DetailPreviewScreen(
     mediaItem: SimpleMediaItem,
     onCloseClick: () -> Unit,
+    onMyListClick: (SimpleMediaItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
@@ -131,11 +135,7 @@ fun DetailPreviewScreen(
                     top.linkTo(containerTop.bottom, 20.dp)
                     bottom.linkTo(parent.bottom, 20.dp)
                 }
-                .clickable {
-                    Toast
-                        .makeText(context, "Add movie to a list functionality", Toast.LENGTH_SHORT)
-                        .show()
-                }
+                .clickable { onMyListClick(mediaItem) }
         ) {
             Image(
                 painter = painterResource(id = com.example.medialion.android.R.drawable.add_to_list_icon),
@@ -144,7 +144,7 @@ fun DetailPreviewScreen(
             )
             Spacer(modifier = modifier.height(6.dp))
             Text(
-                text = "My List",
+                text = stringResource(id = com.example.medialion.R.string.my_list),
                 color = MaterialTheme.colors.secondary,
                 style = MaterialTheme.typography.body2,
                 textAlign = TextAlign.Center
@@ -167,6 +167,7 @@ private fun DetailPreviewScreenPreview() {
                     posterUrl = "https://image.tmdb.org/t/p/original/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg"
                 ),
                 onCloseClick = {},
+                onMyListClick = {},
             )
         }
     }

@@ -61,7 +61,7 @@ fun MLMediaFavoriteListItem(
             modifier = Modifier
                 .padding(start = 12.dp)
                 .weight(1f),
-            style = MaterialTheme.typography.subtitle1,
+            style = MaterialTheme.typography.h4,
         )
 
         Image(

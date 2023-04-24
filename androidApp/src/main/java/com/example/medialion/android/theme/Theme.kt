@@ -23,7 +23,8 @@ fun MediaLionTheme(
             secondary = colorResource(id = ColorRes.secondary.resourceId),
             onPrimary = colorResource(id = ColorRes.primaryVariantBlue.resourceId),
             onSecondary = colorResource(id = ColorRes.dialogorange.resourceId),
-            secondaryVariant = colorResource(id = ColorRes.textBlack.resourceId)
+            secondaryVariant = colorResource(id = ColorRes.textBlack.resourceId),
+            onBackground = colorResource(id = ColorRes.newListTextField.resourceId)
         )
     } else {
         lightColors(
@@ -33,7 +34,8 @@ fun MediaLionTheme(
             secondary = colorResource(id = ColorRes.secondary.resourceId),
             onPrimary = colorResource(id = ColorRes.primaryVariantBlue.resourceId),
             onSecondary = colorResource(id = ColorRes.dialogorange.resourceId),
-            secondaryVariant = colorResource(id = ColorRes.textBlack.resourceId)
+            secondaryVariant = colorResource(id = ColorRes.textBlack.resourceId),
+            onBackground = colorResource(id = ColorRes.newListTextField.resourceId)
         )
     }
     CompositionLocalProvider(LocalSpacing provides Spacing()) {

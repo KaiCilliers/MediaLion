@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.medialion.android.R
 import com.example.medialion.android.theme.MediaLionTheme
 import com.example.medialion.domain.models.MovieUiModel
 import com.example.medialion.domain.models.SimpleMediaItem
@@ -48,7 +49,7 @@ fun MLTitledMediaGrid(
                 text = gridTitle,
                 style = MaterialTheme.typography.h3,
                 color = MaterialTheme.colors.secondary,
-                modifier = modifier.padding(top = 16.dp, bottom = 4.dp),
+                modifier = modifier.padding(top = 8.dp, bottom = 6.dp),
 
                 )
         }
@@ -80,7 +81,7 @@ private fun MLTitledMediaGridPreview() {
     MediaLionTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             MLTitledMediaGrid(
-                gridTitle = "Top Results",
+                gridTitle = stringResource(id = com.example.medialion.R.string.top_results),
                 movies = (1..20).map { MovieUiModel(1, "HP", true) }.toList(),
                 suggestedMedia = (1..3).map {
                     "Suggested Heading #$it" to (1..20).map { MovieUiModel(1, "Movie #$it", true) }

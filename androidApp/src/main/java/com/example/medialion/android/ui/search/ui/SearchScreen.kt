@@ -49,6 +49,8 @@ import com.example.medialion.android.R
 import com.example.medialion.android.theme.MediaLionTheme
 import com.example.medialion.android.ui.about.ui.AboutScreen
 import com.example.medialion.android.ui.detailPreview.ui.DetailPreviewScreen
+import com.example.medialion.android.ui.saveToCollection.ui.CollectionItem
+import com.example.medialion.android.ui.saveToCollection.ui.SaveToCollectionScreen
 import com.example.medialion.domain.components.search.SearchAction
 import com.example.medialion.domain.components.search.SearchState
 import com.example.medialion.domain.models.MovieUiModel
@@ -66,6 +68,7 @@ fun SearchScreen(
 
     val context = LocalContext.current
     var showAboutDialog by remember { mutableStateOf(false) }
+    var showCollectionDialog by remember { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
     var selectedMediaItem by remember { mutableStateOf<SimpleMediaItem?>(null) }
@@ -75,12 +78,28 @@ fun SearchScreen(
         confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded },
         skipHalfExpanded = true,
         animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
+            2.5f
         ),
     )
 
     if (showAboutDialog) {
         AboutScreen { showAboutDialog = false }
+    }
+
+    if (showCollectionDialog) {
+        SaveToCollectionScreen(
+            onDismiss = { showCollectionDialog = false },
+            collections = listOf(
+                CollectionItem(name = "Favorites List", checked = false),
+                CollectionItem(name = "Must Watch", checked = false),
+                CollectionItem(name = "Watch Again", checked = false),
+                CollectionItem(name = "Horror", checked = false),
+                CollectionItem(name = "Comedies", checked = false),
+                CollectionItem(name = "Best of Robbin Williams", checked = false),
+                CollectionItem(name = "Harry Potter", checked = false),
+            ),
+            onCollectionItemClicked = {}
+        )
     }
 
     ModalBottomSheetLayout(
@@ -93,6 +112,7 @@ fun SearchScreen(
                     onCloseClick = {
                         selectedMediaItem = null; coroutineScope.launch { modalSheetState.hide() }
                     },
+                    onMyListClick = { showCollectionDialog = true }
                 )
             }
         }) {
@@ -100,7 +120,7 @@ fun SearchScreen(
         Column(
             Modifier
                 .background(MaterialTheme.colors.background)
-                .blur(radius = if (showAboutDialog) 10.dp else 0.dp)
+                .blur(radius = if (showAboutDialog || showCollectionDialog) 10.dp else 0.dp)
                 // todo fix tapping away keyboard also interacts with UI successfully
                 .pointerInteropFilter {
                     when (it.action) {
@@ -110,6 +130,7 @@ fun SearchScreen(
                             keyboardController?.hide()
                             false
                         }
+
                         else -> {
                             false
                         }
@@ -126,7 +147,7 @@ fun SearchScreen(
                     painter = painterResource(id = R.drawable.back_arrow_icon),
                     contentDescription = "",
                     modifier = Modifier
-                        .size(20.dp)
+                        .size(25.dp)
                         .clickable {
                             Toast
                                 .makeText(
@@ -142,7 +163,7 @@ fun SearchScreen(
                     painter = painterResource(id = R.drawable.about_icon),
                     contentDescription = "",
                     modifier = Modifier
-                        .size(20.dp)
+                        .size(25.dp)
                         .clickable { showAboutDialog = true }
                 )
             }
@@ -162,7 +183,7 @@ fun SearchScreen(
 
                 is SearchState.Idle -> {
                     SearchIdleState(
-                        rowTitle = "Suggested Media",
+                        rowTitle = stringResource(id = com.example.medialion.R.string.top_suggestions),
                         movies = state.suggestedMedia,
                         onMediaClicked = {
                             selectedMediaItem = SimpleMediaItem(
@@ -198,12 +219,12 @@ fun SearchScreen(
                 is SearchState.Results -> {
                     println("deadpool - $state")
                     MLTitledMediaGrid(
-                        gridTitle = "Results",
+                        gridTitle = stringResource(id = com.example.medialion.R.string.top_results),
                         movies = state.searchResults,
                         suggestedMedia = listOf(
-                            "Suggested Media #1" to state.relatedTitles[0],
-                            "Suggested Media #2" to state.relatedTitles[1],
-                            "Suggested Media #3" to state.relatedTitles[2],
+                            stringResource(id = com.example.medialion.R.string.related_movies) to state.relatedTitles[0],
+                            stringResource(id = com.example.medialion.R.string.related_series) to state.relatedTitles[1],
+                            stringResource(id = com.example.medialion.R.string.related_documentaries) to state.relatedTitles[2],
                         ),
                         onMediaClicked = {
                             selectedMediaItem = SimpleMediaItem(
