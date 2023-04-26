@@ -16,7 +16,7 @@ class MediaLionApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        val tmdbClient = TMDBClient.Default(HttpClientFactory().create())
+        val tmdbClient = TMDBClient.Default(HttpClientFactory().create(), Dispatchers.IO)
 
         globalServices = GlobalServices.builder()
             .add(tmdbClient)

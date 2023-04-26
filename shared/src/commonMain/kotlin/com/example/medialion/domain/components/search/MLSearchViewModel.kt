@@ -48,7 +48,7 @@ class MLSearchViewModel(
     private val currentQuery = MutableStateFlow("")
     private val isLoading = MutableStateFlow(false)
     private val searchResults: StateFlow<List<MovieUiModel>> = currentQuery
-        .debounce(400L)
+        .debounce(800L)
         .onEach {
             if (it.isNotEmpty()) isLoading.value = true
         }
