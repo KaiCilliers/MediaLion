@@ -52,7 +52,8 @@ fun MLSearchBar(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .gradientOrange(),
+            .gradientOrange()
+            .padding(top = 10.dp),
         placeholder = {
             Text(
                 text = labelText,

@@ -35,10 +35,6 @@ interface TMDBClient {
                                 NetworkConstants.FIELD_PAGE,
                                 "1"
                             )
-                            append(
-                                NetworkConstants.FIELD_INCLUDE_ADULT,
-                                "false"
-                            )
                         }
                     }
                 }.body()

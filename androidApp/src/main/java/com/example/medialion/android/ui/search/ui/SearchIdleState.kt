@@ -38,7 +38,7 @@ fun SearchIdleState(
                 style = MaterialTheme.typography.h3,
                 color = MaterialTheme.colors.secondary,
                 modifier = modifier
-                    .padding(start = 16.dp, bottom = 16.dp)
+                    .padding(start = 16.dp, bottom = 10.dp, top = 16.dp)
             )
         }
         items(movies) { singleMovie ->

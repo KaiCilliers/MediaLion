@@ -26,10 +26,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.example.medialion.StringRes
 import com.example.medialion.android.R
 import com.example.medialion.android.theme.MediaLionTheme
 import kotlinx.coroutines.delay
@@ -67,7 +69,7 @@ fun AboutScreen(
                     verticalAlignment = Alignment.Top
                 ) {
                     Text(
-                        text = "About",
+                        text = stringResource(id = com.example.medialion.R.string.about),
                         style = MaterialTheme.typography.h5,
                         color = MaterialTheme.colors.secondaryVariant,
                     )
@@ -86,33 +88,33 @@ fun AboutScreen(
                     )
                 }
                 Text(
-                    text = "MediaLion Information",
+                    text = stringResource(id = com.example.medialion.R.string.about_heading),
                     modifier = Modifier.padding(bottom = 5.dp),
                     style = MaterialTheme.typography.h4,
                     color = MaterialTheme.colors.secondaryVariant
                 )
                 Text(
-                    text = "This App is a media organiser, which allows users to save and store their favorite movies, series and documentaries in custom lists.",
+                    text = stringResource(id = com.example.medialion.R.string.app_description),
                     style = MaterialTheme.typography.body2,
                     color = MaterialTheme.colors.secondaryVariant
                 )
                 Text(
-                    text = "App Developers:",
+                    text = stringResource(id = com.example.medialion.R.string.app_developers),
                     style = MaterialTheme.typography.body2,
                     color = MaterialTheme.colors.secondaryVariant
                 )
                 Text(
-                    text = "Kai Cilliers & Nadine Cilliers",
+                    text = stringResource(id = com.example.medialion.R.string.app_developer_names),
                     style = MaterialTheme.typography.body2,
                     color = MaterialTheme.colors.secondaryVariant
                 )
                 Text(
-                    text = "Graphics Designer:",
+                    text = stringResource(id = com.example.medialion.R.string.graphic_designer),
                     style = MaterialTheme.typography.body2,
                     color = MaterialTheme.colors.secondaryVariant
                 )
                 Text(
-                    text = "Roxie Nemes",
+                    text = stringResource(id = com.example.medialion.R.string.graphic_designer_name),
                     style = MaterialTheme.typography.body2,
                     color = MaterialTheme.colors.secondaryVariant
                 )
