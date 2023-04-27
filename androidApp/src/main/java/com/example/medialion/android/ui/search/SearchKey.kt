@@ -2,7 +2,8 @@ package com.example.medialion.android.ui.search
 
 import androidx.fragment.app.Fragment
 import com.example.medialion.android.app.BaseKey
-import com.example.medialion.data.searchComponent.MediaResponse
+import com.example.medialion.data.models.MovieListResponse
+import com.example.medialion.data.models.MultiTypeResponse
 import com.example.medialion.domain.components.search.RelatedMoviesUseCase
 import com.example.medialion.domain.components.search.SearchMoviesUseCase
 import com.example.medialion.domain.components.search.TopRatedMoviesUseCase
@@ -24,7 +25,7 @@ data object SearchKey : BaseKey() {
     override fun bindServices(serviceBinder: ServiceBinder) {
         with(serviceBinder) {
             add(Mapper.MovieDataMapper())
-            rebind<Mapper<MediaResponse, Movie>>(get<Mapper.MovieDataMapper>())
+            rebind<Mapper<MovieListResponse, Movie>>(get<Mapper.MovieDataMapper>())
 
             add(SearchMoviesUseCase.Default(lookup(), Dispatchers.IO, lookup()))
             rebind<SearchMoviesUseCase>(get<SearchMoviesUseCase.Default>())
