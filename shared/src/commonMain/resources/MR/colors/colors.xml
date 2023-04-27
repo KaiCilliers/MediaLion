@@ -5,7 +5,7 @@
     <color name="background">#0d2028</color>
     <color name="secondary">#FFFFFF</color>
     <color name="primaryVariantBlue">#0d2028</color>
-    <color name="dialogorange">#e3caad</color>
+    <color name="dialogOrange">#e3caad</color>
     <color name="textBlack">#000000</color>
     <color name="newListTextField">#c4ae99</color>
 </resources>

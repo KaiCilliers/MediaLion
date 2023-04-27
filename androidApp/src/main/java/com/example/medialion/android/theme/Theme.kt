@@ -6,7 +6,6 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import com.example.medialion.ColorRes
 
@@ -22,7 +21,7 @@ fun MediaLionTheme(
             primaryVariant = colorResource(id = ColorRes.primaryVariant.resourceId),
             secondary = colorResource(id = ColorRes.secondary.resourceId),
             onPrimary = colorResource(id = ColorRes.primaryVariantBlue.resourceId),
-            onSecondary = colorResource(id = ColorRes.dialogorange.resourceId),
+            onSecondary = colorResource(id = ColorRes.dialogOrange.resourceId),
             secondaryVariant = colorResource(id = ColorRes.textBlack.resourceId),
             onBackground = colorResource(id = ColorRes.newListTextField.resourceId)
         )
@@ -33,7 +32,7 @@ fun MediaLionTheme(
             primaryVariant = colorResource(id = ColorRes.primaryVariant.resourceId),
             secondary = colorResource(id = ColorRes.secondary.resourceId),
             onPrimary = colorResource(id = ColorRes.primaryVariantBlue.resourceId),
-            onSecondary = colorResource(id = ColorRes.dialogorange.resourceId),
+            onSecondary = colorResource(id = ColorRes.dialogOrange.resourceId),
             secondaryVariant = colorResource(id = ColorRes.textBlack.resourceId),
             onBackground = colorResource(id = ColorRes.newListTextField.resourceId)
         )

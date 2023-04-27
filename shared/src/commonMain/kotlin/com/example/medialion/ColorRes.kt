@@ -6,7 +6,7 @@ object ColorRes {
     val secondary by lazy { SharedRes.colors.secondary }
     val background by lazy { SharedRes.colors.background }
     val primaryVariantBlue by lazy { SharedRes.colors.primaryVariantBlue }
-    val dialogorange by lazy { SharedRes.colors.dialogorange }
+    val dialogOrange by lazy { SharedRes.colors.dialogOrange }
     val textBlack by lazy { SharedRes.colors.textBlack }
     val newListTextField by lazy { SharedRes.colors.newListTextField }
 }

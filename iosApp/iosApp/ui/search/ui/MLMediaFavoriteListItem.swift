@@ -7,10 +7,30 @@
 //
 
 import SwiftUI
+import shared
 
 struct MLMediaFavoriteListItem: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        HStack(spacing: 0.0) {
+            Image("placeholderIdle")
+                .resizable()
+                .cornerRadius(4)
+                .frame(width: 130.0, height: 90.0)
+                .padding(.horizontal, 16.0)
+                .padding(.vertical, 16.0)
+            Text("Title")
+                .multilineTextAlignment(.leading)
+                .customFont(.h4)
+                .foregroundColor(.white)
+            Spacer()
+            Image("heartOutlineIcon")
+                .resizable()
+                .frame(width: 35.0, height: 30.0)
+                .padding(.horizontal, 16.0)
+        }
+        
+        .background(Color.background)
+        
     }
 }
 

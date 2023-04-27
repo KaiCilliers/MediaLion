@@ -10,12 +10,23 @@ import SwiftUI
 
 struct MLMediaPoster: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            LinearGradient(gradient: Gradient(colors: [.primaryVariant, .mlPrimary]), startPoint: .topTrailing, endPoint: .bottomLeading)
+            Text("HP")
+                .customFont(.h2)
+                .foregroundColor(Color.white)
+        
+        }
+        
+       
+        .cornerRadius(6)
+        
     }
 }
 
 struct MLMediaPoster_Previews: PreviewProvider {
     static var previews: some View {
         MLMediaPoster()
+            .frame(width: 100, height: 150)
     }
 }

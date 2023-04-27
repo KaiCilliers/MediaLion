@@ -50,5 +50,10 @@
 	</array>
 	<key>UILaunchScreen</key>
 	<dict/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Merriweather-Regular.ttf</string>
+		<string>Merriweather-Bold.ttf</string>
+	</array>
 </dict>
 </plist>
