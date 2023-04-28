@@ -19,7 +19,7 @@ interface RelatedMoviesUseCase {
         private val movieMapper: Mapper<MovieListResponse, Movie>,
     ) : RelatedMoviesUseCase {
         override suspend fun relateMovies(movieId: Int) = withContext(dispatcher) {
-            return@withContext when (val response = client.relatedMovies(movieId)) {
+            return@withContext when (val response = client.recommendationsForMovie(movieId)) {
                 is ResultOf.Success -> response.map { it.results.map { item -> movieMapper.map(item) } }
                 is ResultOf.Failure -> response
             }

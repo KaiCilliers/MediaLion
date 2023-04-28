@@ -10,18 +10,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
 fun ParametersBuilder.standardParameters() {
-    append(
-        NetworkConstants.FIELD_API_KEY,
-        "9b3b6234bb46dbbd68fedc64b4d46e63"
-    )
-    append(
-        NetworkConstants.FIELD_LANGUAGE,
-        "en-US"
-    )
-    append(
-        NetworkConstants.FIELD_INCLUDE_ADULT,
-        "false"
-    )
+    append(NetworkConstants.FIELD_API_KEY, "9b3b6234bb46dbbd68fedc64b4d46e63")
+    append(NetworkConstants.FIELD_LANGUAGE, "en-US")
+    append(NetworkConstants.FIELD_INCLUDE_ADULT, "false")
 }
 
 suspend inline fun <reified T> CoroutineDispatcher.safeApiCall(crossinline request: suspend () -> HttpResponse): ResultOf<T> =

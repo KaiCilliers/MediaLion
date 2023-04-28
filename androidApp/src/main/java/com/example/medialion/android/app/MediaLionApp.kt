@@ -2,6 +2,7 @@ package com.example.medialion.android.app
 
 import android.app.Application
 import com.example.medialion.data.HttpClientFactory
+import com.example.medialion.data.searchComponent.DiscoverClient
 import com.example.medialion.data.searchComponent.TMDBClient
 import com.zhuinden.simplestack.GlobalServices
 import com.zhuinden.simplestackextensions.servicesktx.add
@@ -17,10 +18,13 @@ class MediaLionApp : Application() {
         super.onCreate()
 
         val tmdbClient = TMDBClient.Default(HttpClientFactory().create(), Dispatchers.IO)
+        val discoverClient = DiscoverClient.Default(HttpClientFactory().create(), Dispatchers.IO)
 
         globalServices = GlobalServices.builder()
             .add(tmdbClient)
             .rebind<TMDBClient>(tmdbClient)
+            .add(discoverClient)
+            .rebind<DiscoverClient>(discoverClient)
             .build()
     }
 }

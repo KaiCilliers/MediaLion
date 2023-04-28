@@ -2,6 +2,7 @@ package com.example.medialion.domain.components.search
 
 import com.example.medialion.data.extensions.doIfFailure
 import com.example.medialion.data.extensions.doIfSuccess
+import com.example.medialion.data.searchComponent.DiscoverClient
 import com.example.medialion.data.searchComponent.TMDBClient
 import com.example.medialion.domain.mappers.ListMapper
 import com.example.medialion.domain.models.Movie
@@ -38,6 +39,7 @@ class MLSearchViewModel(
     private val topRatedMoviesUseCase: TopRatedMoviesUseCase,
     private val movieMapper: ListMapper<Movie, MovieUiModel>,
     private val client: TMDBClient,
+    private val discoverClient: DiscoverClient,
     coroutineScope: CoroutineScope?,
 ) {
 
@@ -58,10 +60,13 @@ class MLSearchViewModel(
             when {
                 query.isEmpty() -> emptyFlow<List<MovieUiModel>>()
                 else -> {
-                    println("deadpool MULTI RESULT - ${client.multiSearch(query)}")
-                    println("deadpool MOVIE RESULT - ${client.searchMovies(query)}")
-                    println("deadpool TV SHOW RESULT - ${client.searchTvShows(query)}")
-                    println("deadpool PERSON RESULT - ${client.searchPersons(query)}")
+//                    println("deadpool MULTI RESULT - ${client.multiSearch(query)}")
+//                    println("deadpool MOVIE RESULT - ${client.searchMovies(query)}")
+//                    println("deadpool TV SHOW RESULT - ${client.searchTvShows(query)}")
+//                    println("deadpool PERSON RESULT - ${client.searchPersons(query)}")
+
+                    println("deadpool discover movie - ${client.keywordNameForId(131)}")
+
                     when (val response = searchMoviesByTitleUseCase.searchMovies(query)) {
                         is ResultOf.Failure -> {
                             emptyFlow()

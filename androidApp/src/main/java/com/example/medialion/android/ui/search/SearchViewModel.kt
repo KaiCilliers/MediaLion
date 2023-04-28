@@ -17,7 +17,7 @@ class SearchViewModel(
     backstack: Backstack
 ) {
     private val viewModelScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-    private val sharedViewModel by lazy { MLSearchViewModel(backstack.lookup(), backstack.lookup(), backstack.lookup(), backstack.lookup(), backstack.lookup(), viewModelScope) }
+    private val sharedViewModel by lazy { MLSearchViewModel(backstack.lookup(), backstack.lookup(), backstack.lookup(), backstack.lookup(), backstack.lookup(), backstack.lookup(), viewModelScope) }
 
     val state: StateFlow<SearchState> = sharedViewModel.state
 
