@@ -12,12 +12,10 @@ import shared
 struct MLMediaFavoriteListItem: View {
     var body: some View {
         HStack(spacing: 0.0) {
-            Image("placeholderIdle")
-                .resizable()
-                .cornerRadius(4)
+            MLMediaPoster()
                 .frame(width: 130.0, height: 90.0)
-                .padding(.horizontal, 16.0)
-                .padding(.vertical, 16.0)
+                .padding(.trailing, 16.0)
+                
             Text("Title")
                 .multilineTextAlignment(.leading)
                 .customFont(.h4)

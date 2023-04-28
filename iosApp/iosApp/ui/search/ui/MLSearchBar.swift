@@ -9,39 +9,72 @@
 import SwiftUI
 
 struct MLSearchBar: View {
-    @Binding var text: String
+    @State private var text: String = ""
     
-    @State private var isEditing = false
+    
     
     var body: some View {
+        
         HStack{
-            TextField("Search", text: $text)
-                .padding(7)
-                .padding(.horizontal, 25)
-                .background(Color.background)
-                .onTapGesture {
-                    self.isEditing = true
-                }
-                .foregroundColor(.white)
-            if isEditing {
-                Button(action: {
-                    self.isEditing = false
-                    self.text = ""
-                }){
-                    Text("Cancel")
-                        .foregroundColor(.red)
-                }
-            }
+            Image("searchIcon")
+                .resizable()
+                .frame(width: 30, height: 35)
+                .padding(20)
+            TextField(
+                "", text: $text
+            ).foregroundColor(.white).customFont(.h1)
+            .modifier(
+                PlaceholderStyle(
+                    showPlaceHolder: text.isEmpty,
+                    placeholder: "Search")
+            )
+            if !text.isEmpty {
+                      Button(
+                          action: { self.text = "" },
+                          label: {
+                              Image("cancelText")
+                                  .resizable()
+                                  .frame(width: 30, height: 30)
+                                  .padding(20)
+                               
+                          }
+                      )
+                  }
            
+            
+           
+
         }
-        .padding(.trailing, 10)
-        .transition(.move(edge: .trailing))
-        .animation(.default)
+        .background(LinearGradient(gradient: Gradient(colors: [.primaryVariant, .mlPrimary]), startPoint: .topTrailing, endPoint: .bottomLeading))
+           
+            
+               
+        
+      
+        
+       
     }
 }
 
 struct MLSearchBar_Previews: PreviewProvider {
     static var previews: some View {
-        MLSearchBar(text: .constant(""))
+        MLSearchBar()
+    }
+}
+
+
+public struct PlaceholderStyle: ViewModifier {
+    var showPlaceHolder: Bool
+    var placeholder: String
+
+    public func body(content: Content) -> some View {
+        ZStack(alignment: .leading) {
+            if showPlaceHolder {
+                Text(placeholder)
+                    .foregroundColor(Color.white)
+                    .opacity(0.7)
+            }
+            content
+        }
     }
 }

@@ -10,7 +10,28 @@ import SwiftUI
 
 struct SearchIdleState: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack{
+            MLSearchBar()
+            
+            ScrollView(.vertical) {
+                Text("Top Suggestions")
+                    .foregroundColor(.white)
+                    .customFont(.h2)
+                    .padding(.top, 10)
+                    .frame(maxWidth: .infinity,alignment: .leading)
+                VStack(spacing: 30) {
+                    ForEach(0...20, id: \.self) {value in
+                        MLMediaFavoriteListItem()
+                            
+                            
+                    }
+                }
+            }
+            .padding(.leading, 16)
+        }
+        
+        .background(Color.background)
+        
     }
 }
 

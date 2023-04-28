@@ -9,8 +9,34 @@
 import SwiftUI
 
 struct MLTitledMediaGrid: View {
+    let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        
+       
+            ScrollView{
+                Text("Top Results").foregroundColor(.white).customFont(.h2).padding(.leading, 16).padding(.top, 16).frame(maxWidth: .infinity, alignment: .leading)
+                LazyVGrid(columns: columns, spacing: 16) {
+                   
+                    ForEach(0...20, id: \.self) {value in
+                        MLMediaPoster()
+                            .frame(width: 100,height: 170)
+                        
+                    }
+                }
+            }
+            .background(Color.background)
+            .ignoresSafeArea()
+        
+        
+            
+            
+        
+        
+            
+        
+       
+    
+        
     }
 }
 
