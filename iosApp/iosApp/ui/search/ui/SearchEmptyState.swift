@@ -10,14 +10,29 @@ import SwiftUI
 
 struct SearchEmptyState: View {
     var body: some View {
-        VStack{
-            Text("We could not find what you are looking for.")
-            Text("Try searching for another movie, show, actor, director, or genre")
-            
+        ZStack{
+            VStack{
+                Text("We could not find what you are looking for.")
+                    .frame(maxWidth: .infinity, alignment: .topLeading)
+                    .customFont(.subtitle1)
+                    .padding(.bottom, 1)
+                
+               
+                
+                Text("Try searching for another movie, show, actor, director, or genre")
+                    .frame(maxWidth: .infinity, alignment: .topLeading)
+                    .customFont(.h1)
+                Spacer()
+                
+            }
+            .foregroundColor(.white)
+            .padding(.leading)
+            .padding(.top)
+          
         }
-        
-        .foregroundColor(.white)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.background)
+        
         
     }
 }
