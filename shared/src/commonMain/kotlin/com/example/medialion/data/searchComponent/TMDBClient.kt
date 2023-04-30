@@ -165,10 +165,10 @@ interface TMDBClient {
         // endregion
 
         // region movie
-        override suspend fun movieDetails(id: Int): MovieDetailResponse = safeApiCall {
-            httpClient.get(NetworkConstants.BASE_URL_TMDB + "/movie/$id"){
+        override suspend fun movieDetails(id: Int): MovieDetailResponse {
+            return httpClient.get(NetworkConstants.BASE_URL_TMDB + "/movie/$id"){
                 url { parameters.standardParameters() }
-            }
+            }.body()
         }
 
         override suspend fun movieKeywords(id: Int): KeywordResponse = safeApiCall {
@@ -177,13 +177,14 @@ interface TMDBClient {
             }
         }
 
-        override suspend fun recommendationsForMovie(id: Int, page: Int): PagedMovieResults = safeApiCall {
-            httpClient.get(NetworkConstants.BASE_URL_TMDB + "/movie/$id/recommendations"){
+        override suspend fun recommendationsForMovie(id: Int, page: Int): PagedMovieResults {
+            return httpClient.get(NetworkConstants.BASE_URL_TMDB + "/movie/$id/recommendations"){
                 url { parameters.apply {
                     standardParameters()
                     append(NetworkConstants.FIELD_PAGE, page.toString())
                 } }
             }
+                .body()
         }
 
         override suspend fun similarForMovie(id: Int, page: Int): PagedMovieResults = safeApiCall {

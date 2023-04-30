@@ -15,9 +15,9 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 
 interface MovieRemoteDataSource {
-    suspend fun movieDetails(id: Int): ResultOf<MovieDetail>
+    suspend fun movieDetails(id: Int): MovieDetail
     suspend fun movieKeywords(id: Int): ResultOf<Keyword>
-    suspend fun recommendationsForMovie(id: Int): Flow<Movie>
+    fun recommendationsForMovie(id: Int): Flow<Movie>
     suspend fun similarForMovie(id: Int): Flow<Movie>
     suspend fun moviesNowInTheatres(): Flow<Movie>
     suspend fun topRatedMovies(): Flow<Movie>
@@ -30,13 +30,9 @@ interface MovieRemoteDataSource {
         private val movieMapper: Mapper<MovieListResponse, Movie>,
         private val movieListMapper: ListMapper<MovieListResponse, Movie>,
     ) : MovieRemoteDataSource {
-        override suspend fun movieDetails(id: Int): ResultOf<MovieDetail> {
-            return try {
-                val response = apiClient.movieDetails(id)
-                ResultOf.Success(movieDetailMapper.map(response))
-            } catch (e: Exception) {
-                ResultOf.Failure(e.message, e.cause)
-            }
+        override suspend fun movieDetails(id: Int): MovieDetail {
+            val response = apiClient.movieDetails(id)
+            return movieDetailMapper.map(response)
         }
 
         // todo add initial page parameter?
@@ -49,7 +45,7 @@ interface MovieRemoteDataSource {
             TODO("")
         }
 
-        override suspend fun recommendationsForMovie(id: Int): Flow<Movie> = flow {
+        override fun recommendationsForMovie(id: Int): Flow<Movie> = flow {
             var page = 1
             do {
                 val response = apiClient.recommendationsForMovie(id, page++)

@@ -5,6 +5,7 @@ import com.example.medialion.data.extensions.doIfSuccess
 import com.example.medialion.data.searchComponent.DiscoverClient
 import com.example.medialion.data.searchComponent.TMDBClient
 import com.example.medialion.domain.components.search.wip.MovieRemoteDataSource
+import com.example.medialion.domain.components.search.wip.SuggestedMediaUseCase
 import com.example.medialion.domain.mappers.ListMapper
 import com.example.medialion.domain.models.Movie
 import com.example.medialion.domain.models.MovieUiModel
@@ -25,6 +26,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
@@ -43,6 +45,7 @@ class MLSearchViewModel(
     private val movieMapper: ListMapper<Movie, MovieUiModel>,
     private val client: TMDBClient,
     private val movieRemoteDataSource: MovieRemoteDataSource,
+    private val suggestedMediaUseCase: SuggestedMediaUseCase,
     coroutineScope: CoroutineScope?,
 ) {
 
@@ -89,9 +92,11 @@ class MLSearchViewModel(
         .flatMapLatest<List<MovieUiModel>, List<MovieUiModel>> { movies ->
             flow {
                 if (movies.isNotEmpty()) {
-                    val response = relatedMoviesUseCase.relateMovies(movies.first().id)
-                    response.doIfSuccess { emit(movieMapper.map(it)) }
-                    response.doIfFailure { _, _ -> emit(emptyList()) }
+                    suggestedMediaUseCase(movies.first().id)
+                        .onEach { println("MOVIE NADINE - ${it.title}") }
+                        .collect()
+//                    response.doIfSuccess { emit(movieMapper.map(it)) }
+//                    response.doIfFailure { _, _ -> emit(emptyList()) }
                 }
             }
         }

@@ -4,6 +4,8 @@ import com.example.medialion.domain.components.search.MLSearchViewModel
 import com.example.medialion.domain.components.search.SearchAction
 import com.example.medialion.domain.components.search.SearchState
 import com.example.medialion.domain.components.search.wip.MovieRemoteDataSource
+import com.example.medialion.domain.components.search.wip.MovieRepository
+import com.example.medialion.domain.components.search.wip.SuggestedMediaUseCase
 import com.example.medialion.domain.mappers.ListMapper
 import com.example.medialion.domain.mappers.Mapper
 import com.zhuinden.simplestack.Backstack
@@ -31,6 +33,16 @@ class SearchViewModel(
             movieDetailMapper = Mapper.MovieDetailResponseToDomain(),
             movieMapper = Mapper.MovieResponseToDomain(),
             movieListMapper = ListMapper.Impl(Mapper.MovieResponseToDomain())
+        ),
+        suggestedMediaUseCase = SuggestedMediaUseCase.Default(
+            movieRepo = MovieRepository.Default(
+                remoteDataSource = MovieRemoteDataSource.MovieRemoteDataSourceTMDB(
+                    apiClient = backstack.lookup(),
+                    movieDetailMapper = Mapper.MovieDetailResponseToDomain(),
+                    movieMapper = Mapper.MovieResponseToDomain(),
+                    movieListMapper = ListMapper.Impl(Mapper.MovieResponseToDomain())
+                )
+            )
         ),
         coroutineScope = viewModelScope
     ) }
