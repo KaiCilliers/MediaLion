@@ -18,8 +18,8 @@ data class TVDetailResponse(
     @SerialName("backdrop_path")
     val backdrop_path: String?,
 
-    @SerialName("created_by")
-    val createdBy: List<CreatedBy>?,
+//    @SerialName("created_by")
+//    val createdBy: List<CreatedBy>?,
 
     @SerialName("episode_run_time")
     val episodeRunTime: List<Int>?,

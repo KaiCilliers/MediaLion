@@ -19,10 +19,11 @@ interface RelatedMoviesUseCase {
         private val movieMapper: Mapper<MovieListResponse, Movie>,
     ) : RelatedMoviesUseCase {
         override suspend fun relateMovies(movieId: Int) = withContext(dispatcher) {
-            return@withContext when (val response = client.recommendationsForMovie(movieId)) {
-                is ResultOf.Success -> response.map { it.results.map { item -> movieMapper.map(item) } }
-                is ResultOf.Failure -> response
-            }
+//            return@withContext when (val response = client.recommendationsForMovie(movieId)) {
+//                is ResultOf.Success -> response.map { it.results.map { item -> movieMapper.map(item) } }
+//                is ResultOf.Failure -> response
+//            }
+            TODO("")
         }
     }
 
@@ -72,10 +73,11 @@ interface TopRatedMoviesUseCase {
         private val movieMapper: Mapper<MovieListResponse, Movie>,
     ) : TopRatedMoviesUseCase {
         override suspend fun topRatedMovies(): ResultOf<List<Movie>> = withContext(dispatcher) {
-            return@withContext when (val response = client.topRatedMovies()) {
-                is ResultOf.Success -> response.map { it.results.map { item -> movieMapper.map(item) } }
-                is ResultOf.Failure -> response
-            }
+//            return@withContext when (val response = client.topRatedMovies()) {
+//                is ResultOf.Success -> response.map { it.results.map { item -> movieMapper.map(item) } }
+//                is ResultOf.Failure -> response
+//            }
+            TODO("")
         }
     }
 

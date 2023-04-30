@@ -11,6 +11,7 @@ import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.client.request.HttpSendPipeline
 import io.ktor.http.URLProtocol
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 

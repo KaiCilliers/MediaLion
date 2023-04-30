@@ -4,6 +4,7 @@ import com.example.medialion.data.extensions.doIfFailure
 import com.example.medialion.data.extensions.doIfSuccess
 import com.example.medialion.data.searchComponent.DiscoverClient
 import com.example.medialion.data.searchComponent.TMDBClient
+import com.example.medialion.domain.components.search.wip.MovieRemoteDataSource
 import com.example.medialion.domain.mappers.ListMapper
 import com.example.medialion.domain.models.Movie
 import com.example.medialion.domain.models.MovieUiModel
@@ -16,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -30,6 +32,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
@@ -39,7 +42,7 @@ class MLSearchViewModel(
     private val topRatedMoviesUseCase: TopRatedMoviesUseCase,
     private val movieMapper: ListMapper<Movie, MovieUiModel>,
     private val client: TMDBClient,
-    private val discoverClient: DiscoverClient,
+    private val movieRemoteDataSource: MovieRemoteDataSource,
     coroutineScope: CoroutineScope?,
 ) {
 
@@ -65,7 +68,7 @@ class MLSearchViewModel(
 //                    println("deadpool TV SHOW RESULT - ${client.searchTvShows(query)}")
 //                    println("deadpool PERSON RESULT - ${client.searchPersons(query)}")
 
-                    println("deadpool discover movie - ${client.keywordNameForId(131)}")
+//                    println("deadpool discover movie - ${client.keywordNameForId(131)}")
 
                     when (val response = searchMoviesByTitleUseCase.searchMovies(query)) {
                         is ResultOf.Failure -> {
@@ -123,15 +126,28 @@ class MLSearchViewModel(
 
     init {
         viewModelScope.launch {
-            val suggestedMedia = when(val result = topRatedMoviesUseCase.topRatedMovies()) {
-                is ResultOf.Failure -> emptyList()
-                is ResultOf.Success -> {
-                    suggestedMovieCache.clear()
-                    suggestedMovieCache.addAll(movieMapper.map(result.value))
-                    movieMapper.map(result.value)
+//            val suggestedMedia = when(val result = topRatedMoviesUseCase.topRatedMovies()) {
+//                is ResultOf.Failure -> emptyList()
+//                is ResultOf.Success -> {
+//                    suggestedMovieCache.clear()
+//                    suggestedMovieCache.addAll(movieMapper.map(result.value))
+//                    movieMapper.map(result.value)
+//                }
+//            }
+//            suggestedMovies.value = suggestedMedia
+            delay(4_000)
+            println("deadpool - GO")
+            println("deadpool movie details - ${movieRemoteDataSource.movieDetails(142)}")
+
+            var movieCount = 1
+
+            movieRemoteDataSource.recommendationsForMovie(142)
+                .onEach {
+                    println("deadpool - I got a movie [${movieCount++}] ${it.title}")
                 }
-            }
-            suggestedMovies.value = suggestedMedia
+                .take(50)
+                .collect()
+            println("deadpool - DONE")
         }
     }
     val state: CStateFlow<SearchState>

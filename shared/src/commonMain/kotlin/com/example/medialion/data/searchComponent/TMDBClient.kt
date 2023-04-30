@@ -41,14 +41,14 @@ interface TMDBClient {
     // endregion
 
     // region movie
-    suspend fun movieDetails(id: Int): ResultOf<MovieDetailResponse>
-    suspend fun movieKeywords(id: Int): ResultOf<KeywordResponse>
-    suspend fun recommendationsForMovie(id: Int): ResultOf<PagedMovieResults>
-    suspend fun similarForMovie(id: Int): ResultOf<PagedMovieResults>
-    suspend fun moviesNowInTheatres(): ResultOf<PagedMovieResults>
-    suspend fun topRatedMovies(): ResultOf<PagedMovieResults>
-    suspend fun popularMovies(): ResultOf<PagedMovieResults>
-    suspend fun moviesComingToTheatres(): ResultOf<PagedMovieResults>
+    suspend fun movieDetails(id: Int): MovieDetailResponse
+    suspend fun movieKeywords(id: Int): KeywordResponse
+    suspend fun recommendationsForMovie(id: Int, page: Int): PagedMovieResults
+    suspend fun similarForMovie(id: Int, page: Int): PagedMovieResults
+    suspend fun moviesNowInTheatres(page: Int): PagedMovieResults
+    suspend fun topRatedMovies(page: Int): PagedMovieResults
+    suspend fun popularMovies(page: Int): PagedMovieResults
+    suspend fun moviesComingToTheatres(page: Int): PagedMovieResults
     // endregion
 
     // region trending
@@ -165,52 +165,70 @@ interface TMDBClient {
         // endregion
 
         // region movie
-        override suspend fun movieDetails(id: Int): ResultOf<MovieDetailResponse> = dispatcher.safeApiCall {
+        override suspend fun movieDetails(id: Int): MovieDetailResponse = safeApiCall {
             httpClient.get(NetworkConstants.BASE_URL_TMDB + "/movie/$id"){
-              url { parameters.standardParameters() }
-            }.body()
+                url { parameters.standardParameters() }
+            }
         }
 
-        override suspend fun movieKeywords(id: Int): ResultOf<KeywordResponse> = dispatcher.safeApiCall {
+        override suspend fun movieKeywords(id: Int): KeywordResponse = safeApiCall {
             httpClient.get(NetworkConstants.BASE_URL_TMDB + "/movie/$id/keywords"){
                 url { parameters.standardParameters() }
-            }.body()
+            }
         }
 
-        override suspend fun recommendationsForMovie(id: Int): ResultOf<PagedMovieResults> = dispatcher.safeApiCall {
+        override suspend fun recommendationsForMovie(id: Int, page: Int): PagedMovieResults = safeApiCall {
             httpClient.get(NetworkConstants.BASE_URL_TMDB + "/movie/$id/recommendations"){
-                url { parameters.standardParameters() }
-            }.body()
+                url { parameters.apply {
+                    standardParameters()
+                    append(NetworkConstants.FIELD_PAGE, page.toString())
+                } }
+            }
         }
 
-        override suspend fun similarForMovie(id: Int): ResultOf<PagedMovieResults> = dispatcher.safeApiCall {
+        override suspend fun similarForMovie(id: Int, page: Int): PagedMovieResults = safeApiCall {
             httpClient.get(NetworkConstants.BASE_URL_TMDB + "/movie/$id/similar"){
-                url { parameters.standardParameters() }
-            }.body()
+                url { parameters.apply {
+                    standardParameters()
+                    append(NetworkConstants.FIELD_PAGE, page.toString())
+                } }
+            }
         }
 
-        override suspend fun moviesNowInTheatres(): ResultOf<PagedMovieResults> = dispatcher.safeApiCall {
+        override suspend fun moviesNowInTheatres(page: Int): PagedMovieResults = safeApiCall {
             httpClient.get(NetworkConstants.BASE_URL_TMDB + "/movie/now_playing"){
-                url { parameters.standardParameters() }
-            }.body()
+                url { parameters.apply {
+                    standardParameters()
+                    append(NetworkConstants.FIELD_PAGE, page.toString())
+                } }
+            }
         }
 
-        override suspend fun topRatedMovies(): ResultOf<PagedMovieResults> = dispatcher.safeApiCall {
+        override suspend fun topRatedMovies(page: Int): PagedMovieResults = safeApiCall {
             httpClient.get(NetworkConstants.BASE_URL_TMDB + "/movie/top_rated"){
-                url { parameters.standardParameters() }
-            }.body()
+                url { parameters.apply {
+                    standardParameters()
+                    append(NetworkConstants.FIELD_PAGE, page.toString())
+                } }
+            }
         }
 
-        override suspend fun popularMovies(): ResultOf<PagedMovieResults> = dispatcher.safeApiCall {
+        override suspend fun popularMovies(page: Int): PagedMovieResults = safeApiCall {
             httpClient.get(NetworkConstants.BASE_URL_TMDB + "/movie/popular"){
-                url { parameters.standardParameters() }
-            }.body()
+                url { parameters.apply {
+                    standardParameters()
+                    append(NetworkConstants.FIELD_PAGE, page.toString())
+                } }
+            }
         }
 
-        override suspend fun moviesComingToTheatres(): ResultOf<PagedMovieResults> = dispatcher.safeApiCall {
+        override suspend fun moviesComingToTheatres(page: Int): PagedMovieResults = safeApiCall {
             httpClient.get(NetworkConstants.BASE_URL_TMDB + "/movie/upcoming"){
-                url { parameters.standardParameters() }
-            }.body()
+                url { parameters.apply {
+                    standardParameters()
+                    append(NetworkConstants.FIELD_PAGE, page.toString())
+                } }
+            }
         }
         // endregion
 

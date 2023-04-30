@@ -28,3 +28,9 @@ suspend inline fun <reified T> CoroutineDispatcher.safeApiCall(crossinline reque
             ResultOf.Failure("[Exception] error please retry", ex)
         }
     }
+
+suspend inline fun <reified T> safeApiCall(crossinline request: suspend () -> HttpResponse): T {
+    // todo perform general error wrapping?
+    return request().body()
+}
+

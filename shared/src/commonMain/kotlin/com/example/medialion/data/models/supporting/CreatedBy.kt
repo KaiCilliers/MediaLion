@@ -3,8 +3,9 @@ package com.example.medialion.data.models.supporting
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+// todo adjust visibility modifiers of models
 @Serializable
-data class CreatedBy(
+internal data class CreatedBy(
 
     @SerialName("credit_id")
     val creditId: String?,
