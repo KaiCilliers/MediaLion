@@ -8,12 +8,31 @@
 
 import SwiftUI
 
+@available(iOS 15.0, *)
 struct SaveToCollectionScreen: View {
+    
+    @State var isActive: Bool = false
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack{
+            VStack{
+                Button{
+                    isActive = true
+                    
+                } label: {
+                    Image("addToListIcon")
+                }
+            }
+            .padding()
+            
+            if isActive {
+                CustomCollectionDialog(isActive: .constant(true), title: "Save to Collection", action: {}, buttoTitle: "Done")
+            }
+        }
     }
 }
 
+@available(iOS 15.0, *)
 struct SaveToCollectionScreen_Previews: PreviewProvider {
     static var previews: some View {
         SaveToCollectionScreen()

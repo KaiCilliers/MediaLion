@@ -10,7 +10,23 @@ import SwiftUI
 
 struct MLCollectionListItem: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        HStack{
+            Image("placeholderReel")
+                .resizable()
+                .frame(width: 40, height: 40)
+                .padding(.horizontal)
+               
+            Spacer()
+                .frame(width: 10)
+            Text("Title")
+                .customFont(.h4)
+            Spacer()
+            Image(systemName: "checkmark")
+                .resizable()
+                .frame(width: 20, height: 20)
+                .padding(.horizontal)
+                
+        }
     }
 }
 
