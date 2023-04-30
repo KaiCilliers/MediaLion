@@ -1,4 +1,4 @@
-package com.example.medialion.data.searchComponent
+package com.example.medialion.data.clients
 
 import com.example.medialion.data.NetworkConstants
 import com.example.medialion.data.extensions.safeApiCall
@@ -27,7 +27,7 @@ interface TMDBClient {
     suspend fun multiSearch(query: String): ResultOf<PagedMultiResults>
     suspend fun searchTvShows(query: String): ResultOf<PagedTVShowResults>
     suspend fun searchPersons(query: String): ResultOf<PagedPersonResults>
-    suspend fun searchMovies(query: String): ResultOf<PagedMovieResults>
+    suspend fun searchMovies(query: String, page: Int): PagedMovieResults
     suspend fun searchKeywords(query: String): ResultOf<PagedKeywordResults>
     //endregion
 
@@ -58,7 +58,7 @@ interface TMDBClient {
     // region tv
     suspend fun tvDetails(id: Int): ResultOf<TVDetailResponse>
     suspend fun tvKeywords(id: Int): ResultOf<KeywordResponse>
-    suspend fun recommendationsForTv(id: Int): ResultOf<PagedTVShowResults>
+    suspend fun recommendationsForTv(id: Int, page: Int): PagedTVShowResults
     suspend fun similarForTv(id: Int): ResultOf<PagedTVShowResults>
     suspend fun tvAiringToday(): ResultOf<PagedTVShowResults>
     suspend fun topRatedTv(): ResultOf<PagedTVShowResults>
@@ -79,19 +79,23 @@ interface TMDBClient {
     suspend fun latestTvChanges(): ResultOf<PagedMediaIdResponse>
     // endregion
 
+    // region discover
+    suspend fun discoverTv(genreId: Int, page: Int): PagedTVShowResults
+    // endregion
+
     class Default(
         private val httpClient: HttpClient,
         private val dispatcher: CoroutineDispatcher,
     ) : TMDBClient {
 
         // region search
-        override suspend fun searchMovies(query: String): ResultOf<PagedMovieResults> = dispatcher.safeApiCall {
-            httpClient.get(NetworkConstants.BASE_URL_TMDB + "/search/movie") {
+        override suspend fun searchMovies(query: String, page: Int): PagedMovieResults {
+            return httpClient.get(NetworkConstants.BASE_URL_TMDB + "/search/movie") {
                     url {
                         parameters.apply {
                             standardParameters()
                             append(NetworkConstants.FIELD_QUERY, query)
-                            append(NetworkConstants.FIELD_PAGE, "1")
+                            append(NetworkConstants.FIELD_PAGE, page.toString())
                         }
                     }
         }.body()
@@ -253,8 +257,15 @@ interface TMDBClient {
             httpClient.get(NetworkConstants.BASE_URL_TMDB + "/tv/$id/keywords").body()
         }
 
-        override suspend fun recommendationsForTv(id: Int): ResultOf<PagedTVShowResults> = dispatcher.safeApiCall {
-            httpClient.get(NetworkConstants.BASE_URL_TMDB + "/tv/$id/recommendations").body()
+        override suspend fun recommendationsForTv(id: Int, page: Int): PagedTVShowResults {
+            return httpClient.get(NetworkConstants.BASE_URL_TMDB + "/tv/$id/recommendations") {
+                url {
+                    parameters.apply {
+                        standardParameters()
+                        append(NetworkConstants.FIELD_PAGE, page.toString())
+                    }
+                }
+            }.body()
         }
 
         override suspend fun similarForTv(id: Int): ResultOf<PagedTVShowResults> = dispatcher.safeApiCall {
@@ -304,6 +315,18 @@ interface TMDBClient {
         override suspend fun latestTvChanges(): ResultOf<PagedMediaIdResponse> = dispatcher.safeApiCall {
             httpClient.get(NetworkConstants.BASE_URL_TMDB + "/tv/changes"){
                 url { parameters.standardParameters() }
+            }.body()
+        }
+        // endregion
+
+        // region discover
+        override suspend fun discoverTv(genreId: Int, page: Int): PagedTVShowResults {
+            return httpClient.get(NetworkConstants.BASE_URL_TMDB + "/discover/tv") {
+                url { parameters.apply {
+                    standardParameters()
+                    append(NetworkConstants.FIELD_WITH_GENRES, genreId.toString())
+                    append(NetworkConstants.FIELD_PAGE, page.toString())
+                } }
             }.body()
         }
         // endregion

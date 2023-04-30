@@ -1,17 +1,14 @@
-package com.example.medialion.domain.components.search.wip.domain
+package com.example.medialion.domain.models
 
-import kotlinx.serialization.SerialName
-
-data class Movie (
-    val adult: Boolean,
+data class TVShow (
     val backdropPath: String,
     val genreIds: List<Int>,
     val id: Int,
     val overview: String,
     val popularity: Double,
     val posterPath: String,
-    val releaseDate: String?,
-    val title: String,
+    val name: String,
     val voteAverage: Double,
     val voteCount: Int,
+    val firstAirDate: String,
 )

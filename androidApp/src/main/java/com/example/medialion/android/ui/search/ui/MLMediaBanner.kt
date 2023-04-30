@@ -45,7 +45,9 @@ fun MLMediaBanner(
                 .fillMaxSize(),
             contentDescription = null,
             loading = { PosterPlaceholder(mediaTitle = mediaItem.title)},
-            error = { PosterPlaceholder(mediaTitle = mediaItem.title) },
+            error = {
+                // todo log logs here about posters not loading
+                PosterPlaceholder(mediaTitle = mediaItem.title) },
         )
     }
 }

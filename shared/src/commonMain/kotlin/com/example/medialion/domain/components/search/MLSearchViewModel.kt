@@ -1,15 +1,9 @@
 package com.example.medialion.domain.components.search
 
-import com.example.medialion.data.extensions.doIfFailure
-import com.example.medialion.data.extensions.doIfSuccess
-import com.example.medialion.data.searchComponent.DiscoverClient
-import com.example.medialion.data.searchComponent.TMDBClient
-import com.example.medialion.domain.components.search.wip.MovieRemoteDataSource
-import com.example.medialion.domain.components.search.wip.SuggestedMediaUseCase
 import com.example.medialion.domain.mappers.ListMapper
+import com.example.medialion.domain.mappers.Mapper
 import com.example.medialion.domain.models.Movie
 import com.example.medialion.domain.models.MovieUiModel
-import com.example.medialion.domain.models.ResultOf
 import com.example.medialion.flow.CStateFlow
 import com.example.medialion.flow.cStateFlow
 import com.example.medialion.flow.combineTuple
@@ -18,34 +12,26 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class MLSearchViewModel(
-    private val searchMoviesByTitleUseCase: SearchMoviesUseCase,
-    private val relatedMoviesUseCase: RelatedMoviesUseCase,
-    private val topRatedMoviesUseCase: TopRatedMoviesUseCase,
-    private val movieMapper: ListMapper<Movie, MovieUiModel>,
-    private val client: TMDBClient,
-    private val movieRemoteDataSource: MovieRemoteDataSource,
-    private val suggestedMediaUseCase: SuggestedMediaUseCase,
+    private val searchComponent: SearchComponent,
+    private val movieMapper: Mapper<Movie, MovieUiModel>,
+    private val movieListMapper: ListMapper<Movie, MovieUiModel>,
     coroutineScope: CoroutineScope?,
 ) {
 
@@ -66,37 +52,28 @@ class MLSearchViewModel(
             when {
                 query.isEmpty() -> emptyFlow<List<MovieUiModel>>()
                 else -> {
-//                    println("deadpool MULTI RESULT - ${client.multiSearch(query)}")
-//                    println("deadpool MOVIE RESULT - ${client.searchMovies(query)}")
-//                    println("deadpool TV SHOW RESULT - ${client.searchTvShows(query)}")
-//                    println("deadpool PERSON RESULT - ${client.searchPersons(query)}")
-
-//                    println("deadpool discover movie - ${client.keywordNameForId(131)}")
-
-                    when (val response = searchMoviesByTitleUseCase.searchMovies(query)) {
-                        is ResultOf.Failure -> {
-                            emptyFlow()
-                        }
-
-                        is ResultOf.Success -> {
-                            flow { emit(movieMapper.map(response.value)) }
-                        }
+                    flow {
+                        emit(
+                            searchComponent.searchMovies(query)
+                                .map { movieMapper.map(it) }
+                                .toList()
+                        )
                     }
                 }
             }
-        }.onEach {
+        }
+        .onEach {
             isLoading.value = false
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000L), listOf())
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000L), listOf())
 
     private val relatedMovies: Flow<List<MovieUiModel>> = searchResults
         .flatMapLatest<List<MovieUiModel>, List<MovieUiModel>> { movies ->
             flow {
                 if (movies.isNotEmpty()) {
-                    suggestedMediaUseCase(movies.first().id)
-                        .onEach { println("MOVIE NADINE - ${it.title}") }
-                        .collect()
-//                    response.doIfSuccess { emit(movieMapper.map(it)) }
-//                    response.doIfFailure { _, _ -> emit(emptyList()) }
+                    searchComponent.relatedMovies(movies.first().id)
+                        .toList()
+                        .also { emit(movieListMapper.map(it)) }
                 }
             }
         }
@@ -109,13 +86,16 @@ class MLSearchViewModel(
         relatedMovies,
         suggestedMovies,
     ).map { (query, isLoading, results, related, suggestedMovies) ->
-        println("deadpool - tuple $query, $isLoading, ${results.size}, ${related.size}, ${suggestedMovies}")
+        println("deadpool - tuple $query, $isLoading, ${results.size}, ${related.size}, ${suggestedMovies.size}")
         when {
             query.isEmpty() -> SearchState.Idle(searchQuery = query, suggestedMovies)
             isLoading -> SearchState.Loading(query)
             results.isNotEmpty() -> SearchState.Results(
                 searchResults = results,
-                relatedTitles = listOf(related.sortedBy { it.title }, related.sortedBy { it.posterUrl }, related.sortedBy { it.id }),
+                relatedTitles = listOf(
+                    related.sortedBy { it.title },
+                    related.sortedBy { it.posterUrl },
+                    related.sortedBy { it.id }),
                 searchQuery = query
             )
 
@@ -131,30 +111,16 @@ class MLSearchViewModel(
 
     init {
         viewModelScope.launch {
-//            val suggestedMedia = when(val result = topRatedMoviesUseCase.topRatedMovies()) {
-//                is ResultOf.Failure -> emptyList()
-//                is ResultOf.Success -> {
-//                    suggestedMovieCache.clear()
-//                    suggestedMovieCache.addAll(movieMapper.map(result.value))
-//                    movieMapper.map(result.value)
-//                }
-//            }
-//            suggestedMovies.value = suggestedMedia
-            delay(4_000)
-            println("deadpool - GO")
-            println("deadpool movie details - ${movieRemoteDataSource.movieDetails(142)}")
+            val suggestedMedia = searchComponent.suggestedMedia()
+                .take(30)
+                .toList()
 
-            var movieCount = 1
-
-            movieRemoteDataSource.recommendationsForMovie(142)
-                .onEach {
-                    println("deadpool - I got a movie [${movieCount++}] ${it.title}")
-                }
-                .take(50)
-                .collect()
-            println("deadpool - DONE")
+            suggestedMovieCache.clear()
+            suggestedMovieCache.addAll(movieListMapper.map(suggestedMedia))
+            suggestedMovies.value = suggestedMovieCache
         }
     }
+
     val state: CStateFlow<SearchState>
         get() = _state.cStateFlow()
 

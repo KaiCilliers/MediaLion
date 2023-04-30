@@ -42,5 +42,5 @@ data class TVShowListResponse (
     val originCountry: List<String>?,
 
     @SerialName("original_name")
-    val originalName: String,
+    val originalName: String?,
 )

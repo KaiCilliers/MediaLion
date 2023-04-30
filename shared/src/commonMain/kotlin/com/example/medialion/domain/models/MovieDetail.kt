@@ -1,10 +1,6 @@
-package com.example.medialion.domain.components.search.wip.domain
+package com.example.medialion.domain.models
 
 import com.example.medialion.data.models.supporting.Genre
-import com.example.medialion.data.models.supporting.ProductionCompany
-import com.example.medialion.data.models.supporting.ProductionCountry
-import com.example.medialion.data.models.supporting.SpokenLanguage
-import kotlinx.serialization.SerialName
 
 data class MovieDetail(
     val adult: Boolean,
