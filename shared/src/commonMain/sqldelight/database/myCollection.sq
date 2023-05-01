@@ -1,0 +1,12 @@
+CREATE TABLE myCollectionEntity (
+    name TEXT PRIMARY KEY NOT NULL
+);
+
+insert:
+INSERT OR REPLACE
+INTO myCollectionEntity
+VALUES (?);
+
+allCollections:
+SELECT *
+FROM myCollectionEntity;
