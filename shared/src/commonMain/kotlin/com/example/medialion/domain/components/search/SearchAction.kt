@@ -14,4 +14,15 @@ sealed class SearchAction {
     data class GetMovieDetails(
         val movieId: Int
     ): SearchAction()
+    data class RemoveFromCollection(
+        val collectionName: String,
+        val movieId: Int,
+    ): SearchAction()
+    data class AddToCollection(
+        val collectionName: String,
+        val movieId: Int
+    ): SearchAction()
+    data class CreateCollection(
+        val collectionName: String
+    ) : SearchAction()
 }

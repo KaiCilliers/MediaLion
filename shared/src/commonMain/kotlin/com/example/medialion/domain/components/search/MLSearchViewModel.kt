@@ -82,6 +82,14 @@ class MLSearchViewModel(
         }
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
+    private val _collectionsState = myCollectionComponent.allCollections()
+    val allCollectionsState = _collectionsState
+        .stateIn(
+            viewModelScope,
+            SharingStarted.Eagerly,
+            emptyList()
+        ).cStateFlow()
+
     private val _state = combineTuple(
         currentQuery,
         isLoading,
@@ -144,6 +152,18 @@ class MLSearchViewModel(
                 viewModelScope.launch {
                     searchComponent.detailsForMovie(action.movieId)
                 }
+            }
+
+            is SearchAction.AddToCollection -> {
+                viewModelScope.launch { myCollectionComponent.addMovieToCollection(action.collectionName, action.movieId) }
+            }
+            is SearchAction.CreateCollection -> {
+                viewModelScope.launch {
+                    myCollectionComponent.createCollection(action.collectionName)
+                }
+            }
+            is SearchAction.RemoveFromCollection -> {
+                viewModelScope.launch { myCollectionComponent.removeMovieFromCollection(action.collectionName, action.movieId) }
             }
         }
     }

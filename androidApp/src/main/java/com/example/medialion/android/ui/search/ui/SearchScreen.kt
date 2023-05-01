@@ -64,11 +64,12 @@ import kotlinx.coroutines.launch
 @Composable
 fun SearchScreen(
     state: SearchState,
+    collectionState: List<Pair<String, List<Int>>>,
     submitAction: (SearchAction) -> Unit,
     backstack: Backstack,
 ) {
 
-    var collections: List<CollectionItem> by remember {
+    var collectionsOld: List<CollectionItem> by remember {
         mutableStateOf(
             listOf(
                 CollectionItem(name = "Favorites List", checked = false),
@@ -105,19 +106,29 @@ fun SearchScreen(
     if (showCollectionDialog) {
         SaveToCollectionScreen(
             onDismiss = { showCollectionDialog = false },
-            collections = collections,
-            onCollectionItemClicked = { collectionName ->
-                val listCopy = collections.toMutableList()
-                val mediaIndex = listCopy.indexOfFirst { it.name == collectionName }
-                listCopy[mediaIndex] =
-                    listCopy[mediaIndex].copy(checked = !listCopy[mediaIndex].checked)
-
-                collections = listCopy
+            collections = collectionState
+                .map {
+                    val selectedMedia = selectedMediaItem
+                    val checked = if (selectedMedia != null) {
+                        it.second.contains(selectedMedia.id.toInt())
+                    } else false
+                    CollectionItem(it.first, checked)
+                },
+            onCollectionItemClicked = { collectionName -> },
+            onAddToCollection = { collectionName ->
+                val selectedMedia = selectedMediaItem
+                if (selectedMedia != null) {
+                    submitAction(SearchAction.AddToCollection(collectionName, selectedMedia.id.toInt()))
+                }
+            },
+            onRemoveFromCollection = { collectionName ->
+                val selectedMedia = selectedMediaItem
+                if (selectedMedia != null) {
+                    submitAction(SearchAction.RemoveFromCollection(collectionName, selectedMedia.id.toInt()))
+                }
             },
             onSaveList = {
-                val listCopy = collections.toMutableList()
-                listCopy.add(CollectionItem(it, true))
-                collections = listCopy
+                submitAction(SearchAction.CreateCollection(it))
             }
         )
     }
@@ -278,7 +289,12 @@ private fun SearchScreenPreview() {
                 mutableStateOf(SearchState.Loading(""))
             }
 
+            var collectionState: List<Pair<String, List<Int>>> by remember {
+                mutableStateOf(emptyList())
+            }
+
             SearchScreen(
+                collectionState = collectionState,
                 state = screenState,
                 submitAction = { action ->
                     when (action) {
@@ -300,6 +316,9 @@ private fun SearchScreenPreview() {
                         is SearchAction.RemoveFromFavorites -> TODO()
                         is SearchAction.SubmitSearchQuery -> TODO()
                         is SearchAction.GetMovieDetails -> TODO()
+                        is SearchAction.AddToCollection -> TODO()
+                        is SearchAction.CreateCollection -> TODO()
+                        is SearchAction.RemoveFromCollection -> TODO()
                     }
                 },
                 backstack = Backstack()

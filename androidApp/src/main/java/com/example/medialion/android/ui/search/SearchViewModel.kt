@@ -46,6 +46,7 @@ class SearchViewModel(
     ) }
 
     val state: StateFlow<SearchState> = sharedViewModel.state
+    val collectionState: StateFlow<List<Pair<String, List<Int>>>> = sharedViewModel.allCollectionsState
 
     fun submitAction(action: SearchAction) {
         sharedViewModel.submitAction(action)

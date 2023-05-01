@@ -27,4 +27,5 @@ WHERE movie_id = ?;
 
 removeMovieFromCollection:
 DELETE FROM collectionMoviesXREF
-WHERE movie_id = ?;
+WHERE collection_name = ?
+AND movie_id = ?;
