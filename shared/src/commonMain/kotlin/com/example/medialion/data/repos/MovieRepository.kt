@@ -1,9 +1,22 @@
 package com.example.medialion.data.repos
 
 import com.example.medialion.data.datasource.MovieRemoteDataSource
+import com.example.medialion.data.models.MovieDetailResponse
+import com.example.medialion.data.models.MovieListResponse
+import com.example.medialion.domain.mappers.Mapper
 import com.example.medialion.domain.models.Movie
 import com.example.medialion.domain.models.MovieDetail
+import com.example.medialion.local.MovieLocalDataSource
+import database.MovieDetailEntity
+import database.MovieEntity
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.toList
 
 interface MovieRepository {
     suspend fun movieDetails(id: Int): MovieDetail
@@ -13,11 +26,19 @@ interface MovieRepository {
     fun moviesRelatedTo(id: Int): Flow<Movie>
 
     class Default(
-        private val remoteDataSource: MovieRemoteDataSource
+        private val remoteDataSource: MovieRemoteDataSource,
+        private val localDataSource: MovieLocalDataSource,
+        private val mapper: Mapper<MovieDetail, MovieDetailEntity>,
+        private val movieDomainToEntityMapper: Mapper<Movie, MovieEntity>,
     ) : MovieRepository {
         override suspend fun movieDetails(id: Int): MovieDetail {
-            throw Exception("HA")
-            return remoteDataSource.movieDetails(id)
+            val entity = localDataSource.movieDetails(id)
+            if(entity == null) {
+                val response = remoteDataSource.movieDetails(id)
+                localDataSource.addDetailedMovie(mapper.map(response))
+            }
+            val ent = localDataSource.movieDetails(id)
+            return ent!!
         }
 
         override fun recommendationsForMovie(id: Int): Flow<Movie> {
@@ -26,10 +47,11 @@ interface MovieRepository {
 
         override fun popularMovies(): Flow<Movie> {
             return remoteDataSource.popularMovies()
+                .onEach { localDataSource.addMovieToList("popular", movieDomainToEntityMapper.map(it)) }
+                .catch { emitAll(localDataSource.moviesForList("popular")) }
         }
 
         override fun search(query: String): Flow<Movie> {
-            throw Exception("FLOW MAN")
             return remoteDataSource.search(query)
         }
 

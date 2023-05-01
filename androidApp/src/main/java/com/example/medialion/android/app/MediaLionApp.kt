@@ -9,6 +9,9 @@ import com.example.medialion.data.repos.MovieRepository
 import com.example.medialion.data.repos.TVRepository
 import com.example.medialion.domain.mappers.ListMapper
 import com.example.medialion.domain.mappers.Mapper
+import com.example.medialion.local.DatabaseDriverFactory
+import com.example.medialion.local.MediaLionDatabaseFactory
+import com.example.medialion.local.MovieLocalDataSource
 import com.zhuinden.simplestack.GlobalServices
 import com.zhuinden.simplestackextensions.servicesktx.add
 import com.zhuinden.simplestackextensions.servicesktx.rebind
@@ -31,7 +34,19 @@ class MediaLionApp : Application() {
             api = tmdbClient,
             tvListMapper = ListMapper.Impl(Mapper.TVResponseToDomain())
         )
-        val movieRepository = MovieRepository.Default(movieRemoteDataSource)
+        val movieLocalDataSource = MovieLocalDataSource.Default(
+           mediaLionDb = MediaLionDatabaseFactory(
+               driver = DatabaseDriverFactory(this)
+           ).create(),
+            movieDetailMapper = Mapper.MovieDetailEntityToDomain(),
+            movieMapper = Mapper.MovieEntityToDomain(),
+        )
+        val movieRepository = MovieRepository.Default(
+            movieRemoteDataSource,
+            movieLocalDataSource,
+            Mapper.MovieDetailDomainToEntity(),
+            Mapper.MovieDomainToEntity(),
+        )
         val strictMovieRepo = MovieRepository.Strict(movieRepository)
         val tvRepository = TVRepository.Default(tvRemoteDataSource)
 

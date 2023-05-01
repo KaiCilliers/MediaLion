@@ -2,7 +2,7 @@ package com.example.medialion.domain.models
 
 import com.example.medialion.data.models.supporting.Genre
 
-data class MovieDetail(
+data class  MovieDetail(
     val adult: Boolean,
     val backdropPath: String,
     val budget: Int,
@@ -12,7 +12,7 @@ data class MovieDetail(
     val popularity: Double,
     val posterPath: String,
     val releaseDate: String?,
-    val revenue: Int,
+    val revenue: Long,
     val runtime: Int,
     val tagline: String,
     val title: String,

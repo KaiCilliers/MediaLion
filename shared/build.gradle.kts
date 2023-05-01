@@ -108,6 +108,7 @@ android {
 }
 
 sqldelight {
+    // todo rename app package before placing it on the appstore
     database("MediaLionDatabase") {
         packageName = "com.example.medialion.database"
         sourceFolders = listOf("sqldelight")

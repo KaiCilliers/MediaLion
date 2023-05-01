@@ -9,6 +9,8 @@ import com.example.medialion.domain.models.Movie
 import com.example.medialion.domain.models.OldMovie
 import com.example.medialion.domain.models.MovieUiModel
 import com.example.medialion.domain.models.TVShow
+import database.MovieDetailEntity
+import database.MovieEntity
 
 interface Mapper<I, O> {
     fun map(input: I): O
@@ -55,7 +57,7 @@ interface Mapper<I, O> {
                 popularity = input.popularity!!,
                 posterPath = input.posterPath.orEmpty(),
                 releaseDate = input.releaseDate,
-                revenue = input.revenue ?: 0,
+                revenue = input.revenue ?: 0L,
                 runtime = input.runtime!!,
                 tagline = input.tagline ?: "",
                 title = input.title ?: input.originalTitle!!,
@@ -110,6 +112,86 @@ interface Mapper<I, O> {
                 year = input.releaseDate?.take(4) ?: "Unreleased",
                 posterUrl = NetworkConstants.BASE_IMAGE_URL_TMDB + input.posterPath,
                 bannerUrl = NetworkConstants.BASE_IMAGE_URL_TMDB + input.backdropPath,
+            )
+        }
+    }
+
+    class MovieEntityToDomain : Mapper<MovieEntity, Movie> {
+        override fun map(input: MovieEntity): Movie {
+            return Movie(
+                adult = input.adult,
+                backdropPath = input.backdrop_path,
+                genreIds = input.genre_ids,
+                id = input.id,
+                overview = input.overview,
+                popularity = input.popularity,
+                posterPath = input.poster_path,
+                releaseDate = input.release_date,
+                title = input.title,
+                voteAverage = input.vote_average,
+                voteCount = input.vote_count,
+            )
+        }
+    }
+
+    class MovieDetailEntityToDomain : Mapper<MovieDetailEntity, MovieDetail> {
+        override fun map(input: MovieDetailEntity): MovieDetail {
+            return MovieDetail(
+                adult = input.adult,
+                backdropPath = input.backdrop_path,
+                budget = input.budget,
+                genres = emptyList(), // todo genre entity table to be able to return genres
+                id = input.id,
+                overview = input.overview,
+                popularity = input.popularity,
+                posterPath = input.poster_path,
+                releaseDate = input.release_date,
+                revenue = input.revenue,
+                runtime = input.run_time,
+                tagline = input.tagline,
+                title = input.title,
+                voteAverage = input.vote_average,
+                voteCount = input.vote_count,
+            )
+        }
+    }
+
+    class MovieDetailDomainToEntity : Mapper<MovieDetail, MovieDetailEntity> {
+        override fun map(input: MovieDetail): MovieDetailEntity {
+            return MovieDetailEntity(
+                adult = input.adult,
+                backdrop_path = input.backdropPath,
+                budget = input.budget,
+                genre_ids = input.genres.map { it.id },
+                id = input.id,
+                overview = input.overview,
+                popularity = input.popularity,
+                poster_path = input.posterPath,
+                release_date = input.releaseDate,
+                revenue = input.revenue,
+                run_time = input.runtime,
+                tagline = input.tagline,
+                title = input.title,
+                vote_average = input.voteAverage,
+                vote_count = input.voteCount,
+            )
+        }
+    }
+
+    class MovieDomainToEntity : Mapper<Movie, MovieEntity> {
+        override fun map(input: Movie): MovieEntity {
+            return MovieEntity(
+                adult = input.adult,
+                backdrop_path = input.backdropPath,
+                genre_ids = input.genreIds,
+                id = input.id,
+                overview = input.overview,
+                popularity = input.popularity,
+                poster_path = input.posterPath,
+                release_date = input.releaseDate,
+                title = input.title,
+                vote_average = input.voteAverage,
+                vote_count = input.voteCount,
             )
         }
     }
