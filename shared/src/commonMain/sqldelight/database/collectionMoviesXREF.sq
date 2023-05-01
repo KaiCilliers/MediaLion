@@ -2,7 +2,7 @@ CREATE TABLE collectionMoviesXREF (
     collection_name TEXT NOT NULL,
     movie_id INTEGER AS Int NOT NULL,
     FOREIGN KEY (collection_name) REFERENCES myCollectionEntity(name),
-    FOREIGN KEY (movie_id) REFERENCES movieDetailEntity(id),
+    FOREIGN KEY (movie_id) REFERENCES movieEntity(id),
     UNIQUE (collection_name, movie_id)
 );
 
@@ -14,9 +14,9 @@ INTO collectionMoviesXREF(
 ) VALUES (?, ?);
 
 moviesFromList:
-SELECT movieDetailEntity.*
+SELECT movieEntity.*
 FROM collectionMoviesXREF
-INNER JOIN movieDetailEntity ON collectionMoviesXREF.movie_id = movieDetailEntity.id
+INNER JOIN movieEntity ON collectionMoviesXREF.movie_id = movieEntity.id
 WHERE collection_name = ?;
 
 listsWithMovie:

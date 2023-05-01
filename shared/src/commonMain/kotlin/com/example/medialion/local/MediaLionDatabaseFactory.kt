@@ -1,11 +1,8 @@
 package com.example.medialion.local
 
 import com.example.medialion.database.MediaLionDatabase
-import com.example.medialion.domain.models.TVShowDetail
 import com.squareup.sqldelight.ColumnAdapter
-import database.MovieDetailEntity
 import database.MovieEntity
-import database.TvShowDetailEntity
 import database.TvShowEntity
 
 class MediaLionDatabaseFactory(
@@ -15,9 +12,7 @@ class MediaLionDatabaseFactory(
         return MediaLionDatabase(
             driver = driver.create(),
             movieEntityAdapter = MovieEntity.Adapter(listOfStringsAdapter),
-            movieDetailEntityAdapter = MovieDetailEntity.Adapter(listOfStringsAdapter),
             tvShowEntityAdapter = TvShowEntity.Adapter(listOfStringsAdapter),
-            tvShowDetailEntityAdapter = TvShowDetailEntity.Adapter(listOfStringsAdapter)
         )
     }
 }

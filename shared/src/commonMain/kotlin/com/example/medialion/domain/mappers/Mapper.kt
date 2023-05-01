@@ -9,7 +9,6 @@ import com.example.medialion.domain.models.Movie
 import com.example.medialion.domain.models.OldMovie
 import com.example.medialion.domain.models.MovieUiModel
 import com.example.medialion.domain.models.TVShow
-import database.MovieDetailEntity
 import database.MovieEntity
 
 interface Mapper<I, O> {
@@ -134,21 +133,21 @@ interface Mapper<I, O> {
         }
     }
 
-    class MovieDetailEntityToDomain : Mapper<MovieDetailEntity, MovieDetail> {
-        override fun map(input: MovieDetailEntity): MovieDetail {
+    class MovieDetailEntityToDomain : Mapper<MovieEntity, MovieDetail> {
+        override fun map(input: MovieEntity): MovieDetail {
             return MovieDetail(
                 adult = input.adult,
                 backdropPath = input.backdrop_path,
-                budget = input.budget,
+                budget = input.budget ?: 0,
                 genres = emptyList(), // todo genre entity table to be able to return genres
                 id = input.id,
                 overview = input.overview,
                 popularity = input.popularity,
                 posterPath = input.poster_path,
                 releaseDate = input.release_date,
-                revenue = input.revenue,
-                runtime = input.run_time,
-                tagline = input.tagline,
+                revenue = input.revenue ?: 0,
+                runtime = input.runtime ?: 0,
+                tagline = input.tagline.orEmpty(),
                 title = input.title,
                 voteAverage = input.vote_average,
                 voteCount = input.vote_count,
@@ -156,9 +155,9 @@ interface Mapper<I, O> {
         }
     }
 
-    class MovieDetailDomainToEntity : Mapper<MovieDetail, MovieDetailEntity> {
-        override fun map(input: MovieDetail): MovieDetailEntity {
-            return MovieDetailEntity(
+    class MovieDetailDomainToEntity : Mapper<MovieDetail, MovieEntity> {
+        override fun map(input: MovieDetail): MovieEntity {
+            return MovieEntity(
                 adult = input.adult,
                 backdrop_path = input.backdropPath,
                 budget = input.budget,
@@ -169,7 +168,7 @@ interface Mapper<I, O> {
                 poster_path = input.posterPath,
                 release_date = input.releaseDate,
                 revenue = input.revenue,
-                run_time = input.runtime,
+                runtime = input.runtime,
                 tagline = input.tagline,
                 title = input.title,
                 vote_average = input.voteAverage,
@@ -192,6 +191,10 @@ interface Mapper<I, O> {
                 title = input.title,
                 vote_average = input.voteAverage,
                 vote_count = input.voteCount,
+                budget = null,
+                revenue = null,
+                runtime = null,
+                tagline = null,
             )
         }
     }

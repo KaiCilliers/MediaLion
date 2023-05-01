@@ -1,22 +1,15 @@
 package com.example.medialion.data.repos
 
 import com.example.medialion.data.datasource.MovieRemoteDataSource
-import com.example.medialion.data.models.MovieDetailResponse
-import com.example.medialion.data.models.MovieListResponse
 import com.example.medialion.domain.mappers.Mapper
 import com.example.medialion.domain.models.Movie
 import com.example.medialion.domain.models.MovieDetail
 import com.example.medialion.local.MovieLocalDataSource
-import database.MovieDetailEntity
 import database.MovieEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.flow.toList
 
 interface MovieRepository {
     suspend fun movieDetails(id: Int): MovieDetail
@@ -28,7 +21,7 @@ interface MovieRepository {
     class Default(
         private val remoteDataSource: MovieRemoteDataSource,
         private val localDataSource: MovieLocalDataSource,
-        private val mapper: Mapper<MovieDetail, MovieDetailEntity>,
+        private val mapper: Mapper<MovieDetail, MovieEntity>,
         private val movieDomainToEntityMapper: Mapper<Movie, MovieEntity>,
     ) : MovieRepository {
         override suspend fun movieDetails(id: Int): MovieDetail {

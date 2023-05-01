@@ -4,29 +4,26 @@ import com.example.medialion.database.MediaLionDatabase
 import com.example.medialion.domain.mappers.Mapper
 import com.example.medialion.domain.models.Movie
 import com.example.medialion.domain.models.MovieDetail
-import com.squareup.sqldelight.runtime.coroutines.asFlow
-import database.MovieDetailEntity
 import database.MovieEntity
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 interface MovieLocalDataSource {
     suspend fun movieDetails(id: Int): MovieDetail?
-    suspend fun addDetailedMovie(entity: MovieDetailEntity)
+    suspend fun addDetailedMovie(entity: MovieEntity)
     fun moviesForList(listName: String): Flow<Movie>
     suspend fun addMovieToList(listName: String, movie: MovieEntity)
     class Default(
         private val mediaLionDb: MediaLionDatabase,
-        private val movieDetailMapper: Mapper<MovieDetailEntity, MovieDetail>,
+        private val movieDetailMapper: Mapper<MovieEntity, MovieDetail>,
         private val movieMapper: Mapper<MovieEntity, Movie>,
     ) : MovieLocalDataSource {
         override suspend fun movieDetails(id: Int): MovieDetail? {
-            val entity = mediaLionDb.movieDetailQueries.movie(id).executeAsOneOrNull()
+            val entity = mediaLionDb.movieQueries.findMovie(id).executeAsOneOrNull()
             return if (entity != null) movieDetailMapper.map(entity) else null
         }
 
-        override suspend fun addDetailedMovie(entity: MovieDetailEntity) {
-            mediaLionDb.movieDetailQueries.insert(entity)
+        override suspend fun addDetailedMovie(entity: MovieEntity) {
+            mediaLionDb.movieQueries.insert(entity)
         }
 
         override suspend fun addMovieToList(listName: String, movie: MovieEntity) {
