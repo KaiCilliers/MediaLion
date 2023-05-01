@@ -20,23 +20,7 @@ CREATE TABLE movieDetailEntity (
 
 insert:
 INSERT OR REPLACE
-INTO movieDetailEntity(
-        id,
-        adult,
-        backdrop_path,
-        genre_ids,
-        overview,
-        popularity,
-        poster_path,
-        release_date,
-        title,
-        vote_average,
-        vote_count,
-        budget,
-        revenue,
-        run_time,
-        tagline
-)
+INTO movieDetailEntity
 VALUES ?;
 
 movie:

@@ -1,5 +1,6 @@
 package com.example.medialion.android.ui.search
 
+import com.example.medialion.domain.components.saveToCollection.CollectionComponent
 import com.example.medialion.domain.components.search.MLSearchViewModel
 import com.example.medialion.domain.components.search.SearchAction
 import com.example.medialion.domain.components.search.SearchComponent
@@ -12,6 +13,8 @@ import com.example.medialion.domain.components.search.usecases.TVRelatedToUseCas
 import com.example.medialion.domain.components.search.usecases.TopMediaResultsUseCase
 import com.example.medialion.domain.mappers.ListMapper
 import com.example.medialion.domain.mappers.Mapper
+import com.example.medialion.local.DatabaseDriverFactory
+import com.example.medialion.local.MediaLionDatabaseFactory
 import com.zhuinden.simplestack.Backstack
 import com.zhuinden.simplestackextensions.servicesktx.lookup
 import kotlinx.coroutines.CoroutineScope
@@ -31,6 +34,11 @@ class SearchViewModel(
             suggestedMediaUseCase = SuggestedMediaUseCase.Default(backstack.lookup()),
             topMediaResultsUseCase = TopMediaResultsUseCase.Default(backstack.lookup()),
             tvRelatedToUseCase = TVRelatedToUseCase.Default(backstack.lookup())
+        ),
+        myCollectionComponent = CollectionComponent.Default(
+            database = MediaLionDatabaseFactory(DatabaseDriverFactory(backstack.lookup())).create(),
+            movieRemoteDataSource = backstack.lookup(),
+            movieEntityMapper = Mapper.MovieDetailDomainToEntity(),
         ),
         movieMapper = Mapper.MovieDomainToUi(),
         movieListMapper = ListMapper.Impl(Mapper.MovieDomainToUi()),

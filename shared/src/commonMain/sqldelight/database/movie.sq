@@ -16,21 +16,14 @@ CREATE TABLE movieEntity (
 
 insert:
 INSERT OR REPLACE
-INTO movieEntity(
-    id,
-    adult,
-    backdrop_path,
-    genre_ids,
-    overview,
-    popularity,
-    poster_path,
-    release_date,
-    title,
-    vote_average,
-    vote_count
-)
+INTO movieEntity
 VALUES ?;
 
 allMovies:
 SELECT *
 FROM movieEntity;
+
+findMovie:
+SELECT *
+FROM movieEntity
+WHERE id = ?;

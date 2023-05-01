@@ -1,5 +1,6 @@
 package com.example.medialion.domain.components.search
 
+import com.example.medialion.domain.components.saveToCollection.CollectionComponent
 import com.example.medialion.domain.mappers.ListMapper
 import com.example.medialion.domain.mappers.Mapper
 import com.example.medialion.domain.models.Movie
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
@@ -30,15 +32,16 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class MLSearchViewModel(
     private val searchComponent: SearchComponent,
+    private val myCollectionComponent: CollectionComponent,
     private val movieMapper: Mapper<Movie, MovieUiModel>,
     private val movieListMapper: ListMapper<Movie, MovieUiModel>,
     coroutineScope: CoroutineScope?,
 ) {
-
-    private val suggestedMovieCache = mutableListOf<MovieUiModel>()
-
     private val viewModelScope =
         coroutineScope ?: CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+
+    private val favoriteMovies = myCollectionComponent.favoriteMovieIds()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000L), emptyList())
 
     private val suggestedMovies = MutableStateFlow(emptyList<MovieUiModel>())
     private val currentQuery = MutableStateFlow("")
@@ -85,10 +88,20 @@ class MLSearchViewModel(
         searchResults,
         relatedMovies,
         suggestedMovies,
-    ).map { (query, isLoading, results, related, suggestedMovies) ->
-        println("deadpool - tuple $query, $isLoading, ${results.size}, ${related.size}, ${suggestedMovies.size}")
+        favoriteMovies,
+    ).map { (query, isLoading, results, related, suggestedMovies, favMovies) ->
+        println("deadpool - tuple $query, $isLoading, ${results.size}, ${related.size}, ${suggestedMovies.size}, ${favMovies.size}")
+
+        println("spiderman - ${favMovies}")
+
+        val mergedFavorites = suggestedMovies.map { suggestedMovie ->
+            if (favMovies.contains(suggestedMovie.id)) {
+                suggestedMovie.copy(isFavorited = true)
+            } else suggestedMovie
+        }
+
         when {
-            query.isEmpty() -> SearchState.Idle(searchQuery = query, suggestedMovies)
+            query.isEmpty() -> SearchState.Idle(searchQuery = query, mergedFavorites)
             isLoading -> SearchState.Loading(query)
             results.isNotEmpty() -> SearchState.Results(
                 searchResults = results,
@@ -101,12 +114,12 @@ class MLSearchViewModel(
 
             query.isNotEmpty() && results.isEmpty() -> SearchState.Empty(query)
             // TODO error state for search screen
-            else -> SearchState.Idle(searchQuery = query, suggestedMovieCache.take(2))
+            else -> SearchState.Idle(searchQuery = query, suggestedMovies)
         }
     }.stateIn(
         viewModelScope,
         SharingStarted.Eagerly,
-        SearchState.Idle("", suggestedMovieCache.toList())
+        SearchState.Idle("", suggestedMovies.value)
     )
 
     init {
@@ -114,10 +127,7 @@ class MLSearchViewModel(
             val suggestedMedia = searchComponent.suggestedMedia()
                 .take(30)
                 .toList()
-
-            suggestedMovieCache.clear()
-            suggestedMovieCache.addAll(movieListMapper.map(suggestedMedia))
-            suggestedMovies.value = suggestedMovieCache
+            suggestedMovies.value = movieListMapper.map(suggestedMedia)
         }
     }
 
@@ -138,29 +148,11 @@ class MLSearchViewModel(
         }
     }
 
-    private fun addToFavorites(movieId: Int) {
-        suggestedMovies.value = suggestedMovieCache.map {
-            if (it.id == movieId) {
-                it.copy(isFavorited = true)
-            } else {
-                it
-            }
-        }.also {
-            suggestedMovieCache.clear()
-            suggestedMovieCache.addAll(it)
-        }
+    private  fun addToFavorites(movieId: Int) = viewModelScope.launch {
+        myCollectionComponent.addMovieToFavorites(movieId)
     }
 
-    private fun removeFromFavorites(movieId: Int) {
-        suggestedMovies.value = suggestedMovieCache.map {
-            if (it.id == movieId) {
-                it.copy(isFavorited = false)
-            } else {
-                it
-            }
-        }.also {
-            suggestedMovieCache.clear()
-            suggestedMovieCache.addAll(it)
-        }
+    private fun removeFromFavorites(movieId: Int) = viewModelScope.launch {
+        myCollectionComponent.removeMovieFromFavorites(movieId)
     }
 }

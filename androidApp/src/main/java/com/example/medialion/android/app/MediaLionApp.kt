@@ -1,6 +1,7 @@
 package com.example.medialion.android.app
 
 import android.app.Application
+import android.content.Context
 import com.example.medialion.data.HttpClientFactory
 import com.example.medialion.data.clients.TMDBClient
 import com.example.medialion.data.datasource.MovieRemoteDataSource
@@ -51,6 +52,10 @@ class MediaLionApp : Application() {
         val tvRepository = TVRepository.Default(tvRemoteDataSource)
 
         globalServices = GlobalServices.builder()
+            .add(this)
+            .rebind<Context>(this)
+            .add(movieRemoteDataSource)
+            .rebind<MovieRemoteDataSource>(movieRemoteDataSource)
             .add(tmdbClient)
             .rebind<TMDBClient>(tmdbClient)
             .add(strictMovieRepo)

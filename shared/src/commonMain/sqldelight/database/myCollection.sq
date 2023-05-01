@@ -10,3 +10,8 @@ VALUES (?);
 allCollections:
 SELECT *
 FROM myCollectionEntity;
+
+findCollection:
+SELECT *
+FROM myCollectionEntity
+WHERE name = ?;
