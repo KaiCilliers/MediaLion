@@ -11,4 +11,7 @@ sealed class SearchAction {
     data class AddToFavorites(
         val movieId: Int
     ): SearchAction()
+    data class GetMovieDetails(
+        val movieId: Int
+    ): SearchAction()
 }

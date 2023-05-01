@@ -130,6 +130,11 @@ class MLSearchViewModel(
             SearchAction.ClearSearchText -> currentQuery.value = ""
             is SearchAction.RemoveFromFavorites -> removeFromFavorites(action.movieId)
             is SearchAction.SubmitSearchQuery -> currentQuery.value = action.query
+            is SearchAction.GetMovieDetails -> {
+                viewModelScope.launch {
+                    searchComponent.detailsForMovie(action.movieId)
+                }
+            }
         }
     }
 
