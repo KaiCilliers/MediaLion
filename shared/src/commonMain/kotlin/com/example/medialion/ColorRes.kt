@@ -9,4 +9,5 @@ object ColorRes {
     val dialogOrange by lazy { SharedRes.colors.dialogOrange }
     val textBlack by lazy { SharedRes.colors.textBlack }
     val newListTextField by lazy { SharedRes.colors.newListTextField }
+    val mlLightBlue by lazy { SharedRes.colors.mlLightBlue }
 }

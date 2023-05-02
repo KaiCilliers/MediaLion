@@ -10,11 +10,13 @@ import SwiftUI
 
 struct MLTitledMediaGrid: View {
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
+    let title : String
+    
     var body: some View {
         
        
             ScrollView{
-                Text("Top Results").foregroundColor(.white).customFont(.h2).padding(.leading, 16).padding(.top, 16).frame(maxWidth: .infinity, alignment: .leading)
+                Text(title).foregroundColor(.white).customFont(.h2).padding(.leading, 16).padding(.top, 8).frame(maxWidth: .infinity, alignment: .leading)
                 LazyVGrid(columns: columns, spacing: 16) {
                    
                     ForEach(0...20, id: \.self) {value in
@@ -25,7 +27,7 @@ struct MLTitledMediaGrid: View {
                 }
             }
             .background(Color.background)
-            .ignoresSafeArea()
+            .edgesIgnoringSafeArea(.all)
         
         
             
@@ -42,6 +44,10 @@ struct MLTitledMediaGrid: View {
 
 struct MLTitledMediaGrid_Previews: PreviewProvider {
     static var previews: some View {
-        MLTitledMediaGrid()
+        VStack {
+            MLTitledMediaGrid(title: "Top Results")
+            
+           
+        }
     }
 }
