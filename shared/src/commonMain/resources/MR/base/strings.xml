@@ -5,7 +5,7 @@
     <string name="title">Title</string>
     <string name="empty_result_state_title">We could not find what you are looking for.</string>
     <string name="empty_result_state_body">Try searching for another movie, show, actor, director, or genre.</string>
-    <string name="my_list">My List</string>
+    <string name="my_list">My Collections</string>
     <string name="top_results">Top Results</string>
     <string name="related_movies">Related Movie Titles</string>
     <string name="related_series">Related Series Titles</string>
@@ -22,4 +22,11 @@
     <string name="must_watch_list">Must watch</string>
     <string name="watch_again_list">Watch again</string>
     <string name="save_to_list_title">Save to Collection</string>
+    <string name="bottom_bar_collection">Home</string>
+    <string name="bottom_bar_home">My Collection</string>
+    <string name="categories">Categories</string>
+    <string name="filter_movies">Movies</string>
+    <string name="filter_all">All</string>
+    <string name="filter_series">Series</string>
+    <string name="filter_categories">Categories</string>
 </resources>

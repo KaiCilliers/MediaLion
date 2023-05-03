@@ -23,4 +23,11 @@ object StringRes {
     val mustWatchList by lazy { SharedRes.strings.must_watch_list }
     val watchAgainList by lazy { SharedRes.strings.watch_again_list }
     val saveToListTitle by lazy { SharedRes.strings.save_to_list_title }
+    val bottomBarCollection by lazy { SharedRes.strings.bottom_bar_collection }
+    val bottomBarHome by lazy { SharedRes.strings.bottom_bar_home }
+    val categories by lazy { SharedRes.strings.categories }
+    val filterMovies by lazy { SharedRes.strings.filter_movies }
+    val filterAll by lazy { SharedRes.strings.filter_all }
+    val filterSeries by lazy { SharedRes.strings.filter_series }
+    val filterCategories by lazy { SharedRes.strings.filter_categories }
 }
