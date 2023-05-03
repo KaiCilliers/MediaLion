@@ -13,7 +13,7 @@ import SwiftUI
 struct discoveryScreen: View {
     
     @State var selectedTab : Tabs = .home
-    @Binding var isActive : Bool 
+    @State var isActive : Bool = false
     
     var body: some View {
         ZStack{
@@ -36,7 +36,13 @@ struct discoveryScreen: View {
                 .padding()
                 .background(Color.background)
                 
-                discoveryFilterItems()
+                discoveryFilterItems( action: {filter in
+                    if filter == .categories {
+                        isActive = true
+                    }
+                       
+                }
+                )
                 
                 ScrollView {
                     VStack (alignment: .center, spacing: 0){
@@ -63,6 +69,6 @@ struct discoveryScreen: View {
 @available(iOS 16.0, *)
 struct discoveryScreen_Previews: PreviewProvider {
     static var previews: some View {
-        discoveryScreen( isActive: .constant(true))
+        discoveryScreen()
     }
 }

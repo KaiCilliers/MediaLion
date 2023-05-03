@@ -11,7 +11,7 @@ import SwiftUI
 struct MLTitledMediaRow: View {
     var body: some View {
         VStack{
-            Text("Related Movie Title").foregroundColor(.white).customFont(.h2).frame(maxWidth: .infinity, alignment: .leading)
+            Text("Related Movie Title").foregroundColor(.white).customFont(.subtitle1).frame(maxWidth: .infinity, alignment: .leading)
             ScrollView(.horizontal) {
                 HStack(spacing: 20) {
                     ForEach(0...20, id: \.self) {value in
@@ -23,7 +23,7 @@ struct MLTitledMediaRow: View {
             }
             
         }
-        .padding()
+        .padding(12)
         .background(Color.background)
         
     }

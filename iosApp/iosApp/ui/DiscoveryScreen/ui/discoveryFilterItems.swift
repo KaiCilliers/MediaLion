@@ -18,13 +18,15 @@ enum Filter: Int {
 struct discoveryFilterItems: View {
     
     @State var selectedFilter : Filter = .all
-    @State var isActive : Bool = false
+    let action: (Filter) -> ()
+    
     
     var body: some View {
         ZStack{
             HStack {
                 Button {
                     selectedFilter = .all
+                    action(selectedFilter)
                 } label: {
                     
                     if selectedFilter == .all {
@@ -42,6 +44,7 @@ struct discoveryFilterItems: View {
                 Button {
                     
                     selectedFilter = .movies
+                    action(selectedFilter)
                     
                 } label: {
                     
@@ -60,6 +63,7 @@ struct discoveryFilterItems: View {
                 Button {
                     
                     selectedFilter = .series
+                    action(selectedFilter)
                     
                 } label: {
                     
@@ -78,7 +82,8 @@ struct discoveryFilterItems: View {
                 Button {
                     
                     selectedFilter = .categories
-                    isActive = true
+                    action(selectedFilter)
+                    
                     
                 } label: {
                     
@@ -95,7 +100,8 @@ struct discoveryFilterItems: View {
                 
                 
             }
-            .padding(20)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 10)
             .background(Color.background)
             
          
@@ -110,6 +116,6 @@ struct discoveryFilterItems: View {
 @available(iOS 15.0, *)
 struct discoveryFilterItems_Previews: PreviewProvider {
     static var previews: some View {
-        discoveryFilterItems()
+        discoveryFilterItems( action: {_ in })
     }
 }
