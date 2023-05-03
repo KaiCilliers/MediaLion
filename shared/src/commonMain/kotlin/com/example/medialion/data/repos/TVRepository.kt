@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface TVRepository {
     fun withGenre(id: Int): Flow<TVShow>
     fun relatedTo(id: Int): Flow<TVShow>
+    fun search(query: String): Flow<TVShow>
     class Default(
         private val tvRemoteDataSource: TVRemoteDataSource
     ) : TVRepository {
@@ -16,6 +17,10 @@ interface TVRepository {
 
         override fun relatedTo(id: Int): Flow<TVShow> {
             return tvRemoteDataSource.relatedTo(id)
+        }
+
+        override fun search(query: String): Flow<TVShow> {
+            return tvRemoteDataSource.search(query)
         }
     }
 }

@@ -32,7 +32,12 @@ class SearchViewModel(
             relatedDocumentariesUseCase = DocumentariesRelatedToUseCase.Default(backstack.lookup()),
             relatedMoviesUseCase = MoviesRelatedToUseCase.Default(backstack.lookup()),
             suggestedMediaUseCase = SuggestedMediaUseCase.Default(backstack.lookup()),
-            topMediaResultsUseCase = TopMediaResultsUseCase.Default(backstack.lookup()),
+            topMediaResultsUseCase = TopMediaResultsUseCase.Default(
+                movieRepo = backstack.lookup(),
+                tvRepo = backstack.lookup(),
+                tvMapper = Mapper.TVDomainToMediaDomain(),
+                movieMapper = Mapper.MovieDomainToMediaDomain(),
+            ),
             tvRelatedToUseCase = TVRelatedToUseCase.Default(backstack.lookup())
         ),
         myCollectionComponent = CollectionComponent.Default(
@@ -40,8 +45,8 @@ class SearchViewModel(
             movieRemoteDataSource = backstack.lookup(),
             movieEntityMapper = Mapper.MovieDetailDomainToEntity(),
         ),
-        movieMapper = Mapper.MovieDomainToUi(),
-        movieListMapper = ListMapper.Impl(Mapper.MovieDomainToUi()),
+        movieListMapper = ListMapper.Impl(Mapper.MovieDomainToMediaUI()),
+        mediaItemMapper = Mapper.MediaDomainToMediaUI(),
         coroutineScope = viewModelScope
     ) }
 

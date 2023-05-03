@@ -6,10 +6,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.MaterialTheme
@@ -17,21 +15,21 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.medialion.android.R
+import com.example.medialion.R
 import com.example.medialion.android.theme.MediaLionTheme
-import com.example.medialion.domain.models.MovieUiModel
+import com.example.medialion.domain.models.MediaItemUI
+import com.example.medialion.domain.models.MediaType
 import com.example.medialion.domain.models.SimpleMediaItem
 
 @Composable
 fun MLTitledMediaGrid(
     gridTitle: String,
-    movies: List<MovieUiModel>,
-    suggestedMedia: List<Pair<String, List<MovieUiModel>>>,
-    onMediaClicked: (MovieUiModel) -> Unit,
+    media: List<MediaItemUI>,
+    suggestedMedia: List<Pair<String, List<MediaItemUI>>>,
+    onMediaClicked: (MediaItemUI) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
@@ -53,12 +51,13 @@ fun MLTitledMediaGrid(
 
                 )
         }
-        items(movies) { singleMovie ->
+        items(media) { singleMovie ->
             MLMediaPoster(
                 mediaItem = SimpleMediaItem(
                     id = singleMovie.id.toString(),
                     title = singleMovie.title,
-                    posterUrl = singleMovie.posterUrl
+                    posterUrl = singleMovie.posterUrl,
+                    mediaType = singleMovie.mediaType,
                 ),
                 modifier = Modifier.clickable { onMediaClicked(singleMovie) }
             )
@@ -67,7 +66,7 @@ fun MLTitledMediaGrid(
             if (it.second.isNotEmpty()) {
                 MLTitledMediaRow(
                     rowTitle = it.first,
-                    movies = it.second,
+                    media = it.second,
                     onMediaItemClicked = { onMediaClicked(it) }
                 )
             }
@@ -81,13 +80,41 @@ private fun MLTitledMediaGridPreview() {
     MediaLionTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             MLTitledMediaGrid(
-                gridTitle = stringResource(id = com.example.medialion.R.string.top_results),
-                movies = (1..20).map { MovieUiModel(1, "HP", true) }.toList(),
+                gridTitle = stringResource(id = R.string.top_results),
+                media = (1..20).map { MediaItemUI(
+                    id = 9201,
+                    title = "luptatum",
+                    isFavorited = false,
+                    posterUrl = "http://www.bing.com/search?q=nonumes",
+                    bannerUrl = "https://duckduckgo.com/?q=donec",
+                    genreIds = listOf(),
+                    overview = "maximus",
+                    popularity = 28.29,
+                    voteAverage = 30.31,
+                    voteCount = 3879,
+                    releaseYear = "pretium",
+                    mediaType = MediaType.MOVIE,
+                ) }.toList(),
                 suggestedMedia = (1..3).map {
-                    "Suggested Heading #$it" to (1..20).map { MovieUiModel(1, "Movie #$it", true) }
+                    "Suggested Heading #$it" to (1..20).map {
+                        MediaItemUI(
+                            id = 7969,
+                            title = "errem",
+                            isFavorited = false,
+                            posterUrl = "https://duckduckgo.com/?q=per",
+                            bannerUrl = "http://www.bing.com/search?q=viderer",
+                            genreIds = listOf(),
+                            overview = "oratio",
+                            popularity = 36.37,
+                            voteAverage = 38.39,
+                            voteCount = 2534,
+                            releaseYear = "vel",
+                            mediaType = MediaType.MOVIE,
+                        )
+                    }
                         .toList()
                 },
-                onMediaClicked = {}
+                onMediaClicked = {},
             )
         }
     }

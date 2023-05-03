@@ -23,6 +23,7 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.example.medialion.android.theme.MediaLionTheme
 import com.example.medialion.android.ui.extensions.gradientOrange
+import com.example.medialion.domain.models.MediaType
 import com.example.medialion.domain.models.SimpleMediaItem
 
 @Composable
@@ -86,7 +87,8 @@ private fun MLMediaBannerPreview() {
                 mediaItem = SimpleMediaItem(
                     id = "1234",
                     title = "Harry Potter and the Philosopher's stone",
-                    posterUrl = "https://image.tmdb.org/t/p/original/hziiv14OpD73u9gAak4XDDfBKa2.jpg"
+                    posterUrl = "https://image.tmdb.org/t/p/original/hziiv14OpD73u9gAak4XDDfBKa2.jpg",
+                    mediaType = MediaType.MOVIE,
                 ),
                 modifier = Modifier.width(200.dp),
             )

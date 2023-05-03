@@ -3,8 +3,9 @@ package com.example.medialion.domain.components.search
 import com.example.medialion.domain.components.saveToCollection.CollectionComponent
 import com.example.medialion.domain.mappers.ListMapper
 import com.example.medialion.domain.mappers.Mapper
+import com.example.medialion.domain.models.MediaItem
+import com.example.medialion.domain.models.MediaItemUI
 import com.example.medialion.domain.models.Movie
-import com.example.medialion.domain.models.MovieUiModel
 import com.example.medialion.flow.CStateFlow
 import com.example.medialion.flow.cStateFlow
 import com.example.medialion.flow.combineTuple
@@ -17,7 +18,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
@@ -33,8 +33,8 @@ import kotlinx.coroutines.launch
 class MLSearchViewModel(
     private val searchComponent: SearchComponent,
     private val myCollectionComponent: CollectionComponent,
-    private val movieMapper: Mapper<Movie, MovieUiModel>,
-    private val movieListMapper: ListMapper<Movie, MovieUiModel>,
+    private val mediaItemMapper: Mapper<MediaItem, MediaItemUI>,
+    private val movieListMapper: ListMapper<Movie, MediaItemUI>,
     coroutineScope: CoroutineScope?,
 ) {
     private val viewModelScope =
@@ -43,22 +43,22 @@ class MLSearchViewModel(
     private val favoriteMovies = myCollectionComponent.favoriteMovieIds()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000L), emptyList())
 
-    private val suggestedMovies = MutableStateFlow(emptyList<MovieUiModel>())
+    private val suggestedMovies = MutableStateFlow(emptyList<MediaItemUI>())
     private val currentQuery = MutableStateFlow("")
     private val isLoading = MutableStateFlow(false)
-    private val searchResults: StateFlow<List<MovieUiModel>> = currentQuery
+    private val searchResults: StateFlow<List<MediaItemUI>> = currentQuery
         .debounce(800L)
         .onEach {
             if (it.isNotEmpty()) isLoading.value = true
         }
         .flatMapLatest { query ->
             when {
-                query.isEmpty() -> emptyFlow<List<MovieUiModel>>()
+                query.isEmpty() -> emptyFlow<List<MediaItemUI>>()
                 else -> {
                     flow {
                         emit(
-                            searchComponent.searchMovies(query)
-                                .map { movieMapper.map(it) }
+                            searchComponent.searchResults(query)
+                                .map { mediaItemMapper.map(it) }
                                 .toList()
                         )
                     }
@@ -70,8 +70,8 @@ class MLSearchViewModel(
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000L), listOf())
 
-    private val relatedMovies: Flow<List<MovieUiModel>> = searchResults
-        .flatMapLatest<List<MovieUiModel>, List<MovieUiModel>> { movies ->
+    private val relatedMovies: Flow<List<MediaItemUI>> = searchResults
+        .flatMapLatest<List<MediaItemUI>, List<MediaItemUI>> { movies ->
             flow {
                 if (movies.isNotEmpty()) {
                     searchComponent.relatedMovies(movies.first().id)

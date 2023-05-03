@@ -25,7 +25,7 @@ interface TMDBClient {
 
     // region search
     suspend fun multiSearch(query: String): ResultOf<PagedMultiResults>
-    suspend fun searchTvShows(query: String): ResultOf<PagedTVShowResults>
+    suspend fun searchTvShows(query: String, page: Int): PagedTVShowResults
     suspend fun searchPersons(query: String): ResultOf<PagedPersonResults>
     suspend fun searchMovies(query: String, page: Int): PagedMovieResults
     suspend fun searchKeywords(query: String): ResultOf<PagedKeywordResults>
@@ -114,12 +114,12 @@ interface TMDBClient {
         }
 
         // todo refer to tvshows as TV
-        override suspend fun searchTvShows(query: String): ResultOf<PagedTVShowResults> = dispatcher.safeApiCall {
-            httpClient.get(NetworkConstants.BASE_URL_TMDB + "/search/tv") {
+        override suspend fun searchTvShows(query: String, page: Int): PagedTVShowResults {
+            return httpClient.get(NetworkConstants.BASE_URL_TMDB + "/search/tv") {
                 url {
                     parameters.apply {
                         standardParameters()
-                        append(NetworkConstants.FIELD_PAGE, "1")
+                        append(NetworkConstants.FIELD_PAGE, page.toString())
                         append(NetworkConstants.FIELD_QUERY, query)
                     }
                 }

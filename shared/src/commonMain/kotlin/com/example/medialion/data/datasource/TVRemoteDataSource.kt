@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.flow
 interface TVRemoteDataSource {
     fun discoverWithGenre(id: Int): Flow<TVShow>
     fun relatedTo(id: Int): Flow<TVShow>
+    fun search(query: String): Flow<TVShow>
+
     class Default(
         private val api: TMDBClient,
         private val tvListMapper: ListMapper<TVShowListResponse, TVShow>,
@@ -28,6 +30,14 @@ interface TVRemoteDataSource {
             var page = 1
             do {
                 val response = api.recommendationsForTv(id, page++)
+                emitAll(tvListMapper.map(response.results).asFlow())
+            } while (page <= response.totalPages)
+        }
+
+        override fun search(query: String): Flow<TVShow> = flow {
+            var page = 1
+            do {
+                val response = api.searchTvShows(query, page++)
                 emitAll(tvListMapper.map(response.results).asFlow())
             } while (page <= response.totalPages)
         }

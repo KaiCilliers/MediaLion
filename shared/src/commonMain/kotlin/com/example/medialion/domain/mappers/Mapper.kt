@@ -4,10 +4,12 @@ import com.example.medialion.data.NetworkConstants
 import com.example.medialion.data.models.MovieDetailResponse
 import com.example.medialion.data.models.MovieListResponse
 import com.example.medialion.data.models.TVShowListResponse
+import com.example.medialion.domain.models.MediaItem
+import com.example.medialion.domain.models.MediaItemUI
+import com.example.medialion.domain.models.MediaType
 import com.example.medialion.domain.models.MovieDetail
 import com.example.medialion.domain.models.Movie
 import com.example.medialion.domain.models.OldMovie
-import com.example.medialion.domain.models.MovieUiModel
 import com.example.medialion.domain.models.TVShow
 import database.MovieEntity
 
@@ -26,20 +28,6 @@ interface Mapper<I, O> {
                 posterPath = NetworkConstants.BASE_IMAGE_URL_TMDB + input.posterPath,
                 releaseDate = input.releaseDate!!,
                 title = input.title!!
-            )
-        }
-    }
-
-    class MovieUiMapper : Mapper<OldMovie, MovieUiModel> {
-        override fun map(input: OldMovie): MovieUiModel {
-            return MovieUiModel(
-                id = input.id,
-                title = input.title,
-                isFavorited = false,
-                description = input.overview,
-                year = input.releaseDate,
-                posterUrl = input.posterPath.orEmpty(),
-                bannerUrl = input.backdropPath.orEmpty(),
             )
         }
     }
@@ -97,20 +85,6 @@ interface Mapper<I, O> {
                 voteAverage = input.voteAverage ?: 0.0,
                 voteCount = input.voteCount ?: 0,
                 firstAirDate = input.firstAirDate.orEmpty()
-            )
-        }
-    }
-
-    class MovieDomainToUi : Mapper<Movie, MovieUiModel> {
-        override fun map(input: Movie): MovieUiModel {
-            return MovieUiModel(
-                id = input.id,
-                title = input.title,
-                isFavorited = false,
-                description = input.overview,
-                year = input.releaseDate?.take(4) ?: "Unreleased",
-                posterUrl = NetworkConstants.BASE_IMAGE_URL_TMDB + input.posterPath,
-                bannerUrl = NetworkConstants.BASE_IMAGE_URL_TMDB + input.backdropPath,
             )
         }
     }
@@ -195,6 +169,100 @@ interface Mapper<I, O> {
                 revenue = null,
                 runtime = null,
                 tagline = null,
+            )
+        }
+    }
+
+    class TVDomainToMediaUI : Mapper<TVShow, MediaItemUI> {
+        override fun map(input: TVShow): MediaItemUI {
+            return MediaItemUI(
+                id = input.id,
+                title = input.name,
+                isFavorited = false,
+                posterUrl = input.posterPath,
+                bannerUrl = input.backdropPath,
+                genreIds = input.genreIds,
+                overview = input.overview,
+                popularity = input.popularity,
+                voteAverage = input.voteAverage,
+                voteCount = input.voteCount,
+                releaseYear = input.firstAirDate,
+                mediaType = MediaType.TV,
+            )
+        }
+    }
+
+    class TVDomainToMediaDomain : Mapper<TVShow, MediaItem> {
+        override fun map(input: TVShow): MediaItem {
+            return MediaItem(
+                id = input.id,
+                title = input.name,
+                genreIds = input.genreIds,
+                overview = input.overview,
+                popularity = input.popularity,
+                voteAverage = input.voteAverage,
+                voteCount = input.voteCount,
+                releaseYear = input.firstAirDate,
+                posterPath = input.posterPath,
+                backdropPath = input.backdropPath,
+                mediaType = MediaType.TV,
+            )
+        }
+    }
+
+    class MovieDomainToMediaUI : Mapper<Movie, MediaItemUI> {
+        override fun map(input: Movie): MediaItemUI {
+            return MediaItemUI(
+                id = input.id,
+                title = input.title,
+                isFavorited = false,
+                posterUrl = NetworkConstants.BASE_IMAGE_URL_TMDB + input.posterPath,
+                bannerUrl = NetworkConstants.BASE_IMAGE_URL_TMDB + input.backdropPath,
+                genreIds = input.genreIds,
+                overview = input.overview,
+                popularity = input.popularity,
+                voteAverage = input.voteAverage,
+                voteCount = input.voteCount,
+                releaseYear = input.releaseDate.orEmpty(),
+                mediaType = MediaType.MOVIE,
+
+                )
+        }
+    }
+
+    class MovieDomainToMediaDomain : Mapper<Movie, MediaItem> {
+        override fun map(input: Movie): MediaItem {
+            return MediaItem(
+                id = input.id,
+                title = input.title,
+                genreIds = input.genreIds,
+                overview = input.overview,
+                popularity = input.popularity,
+                voteAverage = input.voteAverage,
+                voteCount = input.voteCount,
+                releaseYear = input.releaseDate.orEmpty(),
+                posterPath = input.posterPath,
+                backdropPath = input.backdropPath,
+                mediaType = MediaType.MOVIE,
+            )
+        }
+    }
+
+    class MediaDomainToMediaUI : Mapper<MediaItem, MediaItemUI> {
+        override fun map(input: MediaItem): MediaItemUI {
+            return MediaItemUI(
+                id = input.id,
+                title = input.title,
+                isFavorited = false,
+                posterUrl = NetworkConstants.BASE_IMAGE_URL_TMDB + input.posterPath,
+                bannerUrl = NetworkConstants.BASE_IMAGE_URL_TMDB + input.backdropPath,
+                genreIds = input.genreIds,
+                overview = input.overview,
+                popularity = input.popularity,
+                voteAverage = input.voteAverage,
+                voteCount = input.voteCount,
+                releaseYear = input.releaseYear,
+                mediaType = input.mediaType
             )
         }
     }

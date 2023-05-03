@@ -2,7 +2,6 @@ package com.example.medialion.android.ui.search.ui
 
 import android.view.MotionEvent
 import android.widget.Toast
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -35,7 +34,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -44,7 +42,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.medialion.ColorRes
 import com.example.medialion.StringRes
 import com.example.medialion.android.R
@@ -55,7 +52,8 @@ import com.example.medialion.android.ui.saveToCollection.ui.CollectionItem
 import com.example.medialion.android.ui.saveToCollection.ui.SaveToCollectionScreen
 import com.example.medialion.domain.components.search.SearchAction
 import com.example.medialion.domain.components.search.SearchState
-import com.example.medialion.domain.models.MovieUiModel
+import com.example.medialion.domain.models.MediaItemUI
+import com.example.medialion.domain.models.MediaType
 import com.example.medialion.domain.models.SimpleMediaItem
 import com.zhuinden.simplestack.Backstack
 import kotlinx.coroutines.launch
@@ -68,21 +66,6 @@ fun SearchScreen(
     submitAction: (SearchAction) -> Unit,
     backstack: Backstack,
 ) {
-
-    var collectionsOld: List<CollectionItem> by remember {
-        mutableStateOf(
-            listOf(
-                CollectionItem(name = "Favorites List", checked = false),
-                CollectionItem(name = "Must Watch", checked = false),
-                CollectionItem(name = "Watch Again", checked = false),
-                CollectionItem(name = "Horror", checked = false),
-                CollectionItem(name = "Comedies", checked = false),
-                CollectionItem(name = "Best of Robbin Williams", checked = false),
-                CollectionItem(name = "Harry Potter", checked = false),
-            )
-        )
-    }
-
     val context = LocalContext.current
     var showAboutDialog by remember { mutableStateOf(false) }
     var showCollectionDialog by remember { mutableStateOf(false) }
@@ -139,7 +122,7 @@ fun SearchScreen(
         sheetContent = {
             Surface {
                 DetailPreviewScreen(
-                    mediaItem = selectedMediaItem ?: SimpleMediaItem("", "", "", "", ""),
+                    mediaItem = selectedMediaItem ?: SimpleMediaItem("", "", "", "", "", MediaType.MOVIE),
                     onCloseClick = {
                         selectedMediaItem = null; coroutineScope.launch { modalSheetState.hide() }
                     },
@@ -217,15 +200,16 @@ fun SearchScreen(
                 is SearchState.Idle -> {
                     SearchIdleState(
                         rowTitle = stringResource(id = com.example.medialion.R.string.top_suggestions),
-                        movies = state.suggestedMedia,
+                        media = state.suggestedMedia,
                         onMediaClicked = {
                             submitAction(SearchAction.GetMovieDetails(it.id))
                             selectedMediaItem = SimpleMediaItem(
                                 id = it.id.toString(),
                                 title = it.title,
                                 posterUrl = it.posterUrl,
-                                description = it.description,
-                                year = it.year,
+                                description = it.overview,
+                                year = it.releaseYear,
+                                mediaType = it.mediaType,
                             )
                             coroutineScope.launch { modalSheetState.show() }
                         },
@@ -256,7 +240,7 @@ fun SearchScreen(
                     println("deadpool - $state")
                     MLTitledMediaGrid(
                         gridTitle = stringResource(id = com.example.medialion.R.string.top_results),
-                        movies = state.searchResults,
+                        media = state.searchResults,
                         suggestedMedia = listOf(
                             stringResource(id = com.example.medialion.R.string.related_movies) to state.relatedTitles[0],
                             stringResource(id = com.example.medialion.R.string.related_series) to state.relatedTitles[1],
@@ -267,8 +251,9 @@ fun SearchScreen(
                                 id = it.id.toString(),
                                 title = it.title,
                                 posterUrl = it.posterUrl,
-                                description = it.description,
-                                year = it.year,
+                                description = it.overview,
+                                year = it.releaseYear,
+                                mediaType = it.mediaType,
                             )
                             coroutineScope.launch { modalSheetState.show() }
                         },
@@ -303,12 +288,7 @@ private fun SearchScreenPreview() {
                             screenState = SearchState.Idle(
                                 "",
                                 listOf(
-                                    MovieUiModel(1, "Title", true),
-                                    MovieUiModel(1, "Title", true),
-                                    MovieUiModel(1, "Title", true),
-                                    MovieUiModel(1, "Title", true),
-                                    MovieUiModel(1, "Title", true),
-                                    MovieUiModel(1, "Title", true),
+                                    MediaItemUI(id = 6370, title = "posse", isFavorited = false, posterUrl = "http://www.bing.com/search?q=suscipit", bannerUrl = "https://www.google.com/#q=posidonium", genreIds = listOf(), overview = "audire", popularity = 52.53, voteAverage = 54.55, voteCount = 3509, releaseYear = "volutpat", mediaType = MediaType.MOVIE)
                                 )
                             )
                         }

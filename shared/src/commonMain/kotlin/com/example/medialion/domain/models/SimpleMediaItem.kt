@@ -6,4 +6,5 @@ data class SimpleMediaItem(
     val description: String = "",
     val year: String = "",
     val posterUrl: String,
+    val mediaType: MediaType,
 )

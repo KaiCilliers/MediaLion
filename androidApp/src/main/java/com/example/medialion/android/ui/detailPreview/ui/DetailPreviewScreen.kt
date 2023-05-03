@@ -32,6 +32,7 @@ import com.example.medialion.android.theme.MediaLionTheme
 import com.example.medialion.android.ui.extensions.gradientBlue
 import com.example.medialion.android.ui.saveToCollection.ui.SaveToCollectionScreen
 import com.example.medialion.android.ui.search.ui.MLMediaPoster
+import com.example.medialion.domain.models.MediaType
 import com.example.medialion.domain.models.SimpleMediaItem
 
 @Composable
@@ -159,7 +160,8 @@ private fun DetailPreviewScreenPreview() {
                 mediaItem = SimpleMediaItem(
                     id = "duis",
                     title = "This is a two line movie title",
-                    posterUrl = "https://image.tmdb.org/t/p/original/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg"
+                    posterUrl = "https://image.tmdb.org/t/p/original/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg",
+                    mediaType = MediaType.MOVIE,
                 ),
                 onCloseClick = {},
                 onMyListClick = {},

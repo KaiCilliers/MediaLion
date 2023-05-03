@@ -3,14 +3,11 @@ package com.example.medialion.android.ui.search.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.MaterialTheme
@@ -23,19 +20,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.medialion.android.R
 import com.example.medialion.android.theme.MediaLionTheme
-import com.example.medialion.domain.models.MovieUiModel
+import com.example.medialion.domain.models.MediaItemUI
+import com.example.medialion.domain.models.MediaType
 import com.example.medialion.domain.models.SimpleMediaItem
 
 @Composable
 fun MLMediaFavoriteListItem(
-    movie: MovieUiModel,
+    mediaItem: MediaItemUI,
     onFavoriteClick: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -49,14 +45,15 @@ fun MLMediaFavoriteListItem(
     ) {
         MLMediaBanner(
             mediaItem = SimpleMediaItem(
-                id = movie.id.toString(),
-                title = movie.title,
-                posterUrl = movie.bannerUrl,
+                id = mediaItem.id.toString(),
+                title = mediaItem.title,
+                posterUrl = mediaItem.bannerUrl,
+                mediaType = mediaItem.mediaType,
             ),
             modifier = modifier.width(180.dp),
         )
         Text(
-            text = movie.title,
+            text = mediaItem.title,
             color = MaterialTheme.colors.secondary,
             modifier = Modifier
                 .padding(start = 12.dp)
@@ -65,13 +62,13 @@ fun MLMediaFavoriteListItem(
         )
 
         Image(
-            painter = painterResource(id = if (movie.isFavorited) R.drawable.heart_filled_icon else R.drawable.heart_outline_icon),
+            painter = painterResource(id = if (mediaItem.isFavorited) R.drawable.heart_filled_icon else R.drawable.heart_outline_icon),
             contentDescription = "",
             modifier = modifier
                 .padding(start = 8.dp)
                 .size(24.dp)
                 .clickable {
-                    if (movie.isFavorited) {
+                    if (mediaItem.isFavorited) {
                         onFavoriteClick(false)
                     } else {
                         onFavoriteClick(true)
@@ -85,15 +82,30 @@ fun MLMediaFavoriteListItem(
 @Composable
 private fun MLMediaFavoriteListItemPreview() {
     MediaLionTheme {
-        var movie: MovieUiModel by remember {
-            mutableStateOf(MovieUiModel(1, "This is a long movie title", false))
+        var mediaItem: MediaItemUI by remember {
+            mutableStateOf(
+                MediaItemUI(
+                    id = 1,
+                    title = "",
+                    isFavorited = false,
+                    posterUrl = "",
+                    bannerUrl = "",
+                    genreIds = listOf(),
+                    overview = "",
+                    popularity = 0.0,
+                    voteAverage = 0.0,
+                    voteCount = 0,
+                    releaseYear = "",
+                    mediaType = MediaType.MOVIE
+                )
+            )
         }
 
         Surface(modifier = Modifier.fillMaxSize()) {
             MLMediaFavoriteListItem(
-                movie = movie,
+                mediaItem = mediaItem,
                 onFavoriteClick = {
-                    movie = movie.copy(isFavorited = it)
+                    mediaItem = mediaItem.copy(isFavorited = it)
                 },
             )
         }
