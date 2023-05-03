@@ -1,5 +1,7 @@
 package com.example.medialion.domain.components.search
 
+import com.example.medialion.domain.models.MediaType
+
 sealed class SearchAction {
     object ClearSearchText : SearchAction()
     data class SubmitSearchQuery(
@@ -7,20 +9,25 @@ sealed class SearchAction {
     ) : SearchAction()
     data class RemoveFromFavorites(
         val movieId: Int,
+        val mediaType: MediaType,
     ): SearchAction()
     data class AddToFavorites(
-        val movieId: Int
+        val mediaId: Int,
+        val mediaType: MediaType,
     ): SearchAction()
-    data class GetMovieDetails(
-        val movieId: Int
+    data class GetMediaDetails(
+        val mediaId: Int,
+        val mediaType: MediaType,
     ): SearchAction()
     data class RemoveFromCollection(
         val collectionName: String,
-        val movieId: Int,
+        val mediaId: Int,
+        val mediaType: MediaType,
     ): SearchAction()
     data class AddToCollection(
         val collectionName: String,
-        val movieId: Int
+        val mediaId: Int,
+        val mediaType: MediaType,
     ): SearchAction()
     data class CreateCollection(
         val collectionName: String

@@ -24,3 +24,8 @@ SELECT myCollectionEntity.*
 FROM collectionTVShowsXREF
 INNER JOIN myCollectionEntity ON collectionTVShowsXREF.collection_name = myCollectionEntity.name
 WHERE tv_id = ?;
+
+removeTVFromCollection:
+DELETE FROM collectionTVShowsXREF
+WHERE collection_name = ?
+AND tv_id = ?;

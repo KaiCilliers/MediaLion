@@ -3,6 +3,7 @@ package com.example.medialion.domain.mappers
 import com.example.medialion.data.NetworkConstants
 import com.example.medialion.data.models.MovieDetailResponse
 import com.example.medialion.data.models.MovieListResponse
+import com.example.medialion.data.models.TVDetailResponse
 import com.example.medialion.data.models.TVShowListResponse
 import com.example.medialion.domain.models.MediaItem
 import com.example.medialion.domain.models.MediaItemUI
@@ -11,7 +12,9 @@ import com.example.medialion.domain.models.MovieDetail
 import com.example.medialion.domain.models.Movie
 import com.example.medialion.domain.models.OldMovie
 import com.example.medialion.domain.models.TVShow
+import com.example.medialion.domain.models.TVShowDetail
 import database.MovieEntity
+import database.TvShowEntity
 
 interface Mapper<I, O> {
     fun map(input: I): O
@@ -263,6 +266,102 @@ interface Mapper<I, O> {
                 voteCount = input.voteCount,
                 releaseYear = input.releaseYear,
                 mediaType = input.mediaType
+            )
+        }
+    }
+
+    class TVDetailResponseToDomain : Mapper<TVDetailResponse, TVShowDetail> {
+        override fun map(input: TVDetailResponse): TVShowDetail {
+            return TVShowDetail(
+                adult = input.adult ?: true,
+                backdropPath = input.backdrop_path.orEmpty(),
+                episodeRunTime = input.episodeRunTime!!,
+                firstAirDate = input.firstAirDate.orEmpty(),
+                genres = input.genres.orEmpty(),
+                id = input.id!!,
+                inProduction = input.inProduction!!,
+                languages = input.languages.orEmpty(),
+                lastAirDate = input.lastAirDate,
+                lastEpisodeToAir = input.lastEpisodeToAir,
+                name = input.name!!,
+                nextEpisodeToAir = input.nextEpisodeToAir,
+                numberOfEpisodes = input.numberOfEpisodes!!,
+                numberOfSeasons = input.numberOfSeasons!!,
+                overview = input.overview!!,
+                popularity = input.popularity!!,
+                posterPath = input.posterPath.orEmpty(),
+                seasons = input.seasons.orEmpty(),
+                spokenLanguages = listOf(),
+                status = input.status.orEmpty(),
+                tagline = input.tagline.orEmpty(),
+                type = input.type.orEmpty(),
+                voteAverage = input.voteAverage ?: 0.0,
+                voteCount = input.voteCount ?: 0,
+            )
+        }
+    }
+
+    class TVShowDetailDomainToTVShowEntity : Mapper<TVShowDetail, TvShowEntity> {
+        override fun map(input: TVShowDetail): TvShowEntity {
+            return TvShowEntity(
+                id = input.id,
+                name = input.name,
+                backdropPath = input.backdropPath,
+                genre_ids = input.genres.map { it.id },
+                overview = input.overview,
+                popularity = input.popularity,
+                poster_path = input.posterPath,
+                vote_average = input.voteAverage,
+                vote_count = input.voteCount,
+                first_air_date = input.firstAirDate,
+            )
+        }
+    }
+
+    class TVShowEntityToTVDetailDomain : Mapper<TvShowEntity, TVShowDetail> {
+        override fun map(input: TvShowEntity): TVShowDetail {
+            return TVShowDetail(
+                adult = false,
+                backdropPath = input.backdropPath,
+                episodeRunTime = listOf(),
+                firstAirDate = input.first_air_date,
+                genres = listOf(),
+                id = input.id,
+                inProduction = false,
+                languages = listOf(),
+                lastAirDate = null,
+                lastEpisodeToAir = null,
+                name = input.name,
+                nextEpisodeToAir = null,
+                numberOfEpisodes = 0,
+                numberOfSeasons = 0,
+                overview = input.overview,
+                popularity = input.popularity,
+                posterPath = input.poster_path,
+                seasons = listOf(),
+                spokenLanguages = listOf(),
+                status = "",
+                tagline = "",
+                type = "",
+                voteAverage = input.vote_average,
+                voteCount =input.vote_count,
+            )
+        }
+    }
+
+    class TVShowDetailDomainToEntity : Mapper<TVShowDetail, TvShowEntity> {
+        override fun map(input: TVShowDetail): TvShowEntity {
+            return TvShowEntity(
+                id = input.id,
+                name = input.name,
+                backdropPath = input.backdropPath,
+                genre_ids = input.genres.map { it.id },
+                overview = input.overview,
+                popularity = input.popularity,
+                poster_path = input.posterPath,
+                vote_average = input.voteAverage,
+                vote_count = input.voteCount,
+                first_air_date = input.firstAirDate,
             )
         }
     }

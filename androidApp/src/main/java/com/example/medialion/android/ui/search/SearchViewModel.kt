@@ -9,6 +9,7 @@ import com.example.medialion.domain.components.search.usecases.DocumentariesRela
 import com.example.medialion.domain.components.search.usecases.MovieDetailsUseCase
 import com.example.medialion.domain.components.search.usecases.MoviesRelatedToUseCase
 import com.example.medialion.domain.components.search.usecases.SuggestedMediaUseCase
+import com.example.medialion.domain.components.search.usecases.TVDetailsUseCase
 import com.example.medialion.domain.components.search.usecases.TVRelatedToUseCase
 import com.example.medialion.domain.components.search.usecases.TopMediaResultsUseCase
 import com.example.medialion.domain.mappers.ListMapper
@@ -29,6 +30,7 @@ class SearchViewModel(
     private val sharedViewModel by lazy { MLSearchViewModel(
         searchComponent = SearchComponent.Default(
             movieDetails = MovieDetailsUseCase.Default(backstack.lookup()),
+            tvDetails = TVDetailsUseCase.Default(backstack.lookup()),
             relatedDocumentariesUseCase = DocumentariesRelatedToUseCase.Default(backstack.lookup()),
             relatedMoviesUseCase = MoviesRelatedToUseCase.Default(backstack.lookup()),
             suggestedMediaUseCase = SuggestedMediaUseCase.Default(backstack.lookup()),
@@ -43,7 +45,9 @@ class SearchViewModel(
         myCollectionComponent = CollectionComponent.Default(
             database = MediaLionDatabaseFactory(DatabaseDriverFactory(backstack.lookup())).create(),
             movieRemoteDataSource = backstack.lookup(),
+            tvRemoteDataSource = backstack.lookup(),
             movieEntityMapper = Mapper.MovieDetailDomainToEntity(),
+            tvEntityMapper = Mapper.TVShowDetailDomainToTVShowEntity(),
         ),
         movieListMapper = ListMapper.Impl(Mapper.MovieDomainToMediaUI()),
         mediaItemMapper = Mapper.MediaDomainToMediaUI(),

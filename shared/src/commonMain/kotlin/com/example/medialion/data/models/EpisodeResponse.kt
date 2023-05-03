@@ -46,5 +46,5 @@ data class EpisodeResponse(
 //    val crew: List<Any>,
 
     @SerialName("guest_stars")
-    val guestStars: List<PersonResponse>,
+    val guestStars: List<PersonResponse>?,
 )

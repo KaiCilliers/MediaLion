@@ -5,6 +5,7 @@ import com.example.medialion.domain.mappers.ListMapper
 import com.example.medialion.domain.mappers.Mapper
 import com.example.medialion.domain.models.MediaItem
 import com.example.medialion.domain.models.MediaItemUI
+import com.example.medialion.domain.models.MediaType
 import com.example.medialion.domain.models.Movie
 import com.example.medialion.flow.CStateFlow
 import com.example.medialion.flow.cStateFlow
@@ -144,18 +145,25 @@ class MLSearchViewModel(
 
     fun submitAction(action: SearchAction) {
         when (action) {
-            is SearchAction.AddToFavorites -> addToFavorites(action.movieId)
+            is SearchAction.AddToFavorites -> addToFavorites(action.mediaId, action.mediaType)
             SearchAction.ClearSearchText -> currentQuery.value = ""
-            is SearchAction.RemoveFromFavorites -> removeFromFavorites(action.movieId)
+            is SearchAction.RemoveFromFavorites -> removeFromFavorites(action.movieId, action.mediaType)
             is SearchAction.SubmitSearchQuery -> currentQuery.value = action.query
-            is SearchAction.GetMovieDetails -> {
+            is SearchAction.GetMediaDetails -> {
                 viewModelScope.launch {
-                    searchComponent.detailsForMovie(action.movieId)
+                    when (action.mediaType) {
+                        MediaType.MOVIE -> {
+                            searchComponent.detailsForMovie(action.mediaId)
+                        }
+                        MediaType.TV -> {
+                            searchComponent.detailsForTV(action.mediaId)
+                        }
+                    }
                 }
             }
 
             is SearchAction.AddToCollection -> {
-                viewModelScope.launch { myCollectionComponent.addMovieToCollection(action.collectionName, action.movieId) }
+                viewModelScope.launch { myCollectionComponent.addMediaToCollection(action.collectionName, action.mediaId, action.mediaType) }
             }
             is SearchAction.CreateCollection -> {
                 viewModelScope.launch {
@@ -163,16 +171,16 @@ class MLSearchViewModel(
                 }
             }
             is SearchAction.RemoveFromCollection -> {
-                viewModelScope.launch { myCollectionComponent.removeMovieFromCollection(action.collectionName, action.movieId) }
+                viewModelScope.launch { myCollectionComponent.removeMediaFromCollection(action.collectionName, action.mediaId, action.mediaType) }
             }
         }
     }
 
-    private  fun addToFavorites(movieId: Int) = viewModelScope.launch {
-        myCollectionComponent.addMovieToFavorites(movieId)
+    private  fun addToFavorites(movieId: Int, mediaType: MediaType) = viewModelScope.launch {
+        myCollectionComponent.addMediaToFavorites(movieId, mediaType)
     }
 
-    private fun removeFromFavorites(movieId: Int) = viewModelScope.launch {
-        myCollectionComponent.removeMovieFromFavorites(movieId)
+    private fun removeFromFavorites(movieId: Int, mediaType: MediaType) = viewModelScope.launch {
+        myCollectionComponent.removeMediaFromFavorites(movieId, mediaType)
     }
 }

@@ -21,3 +21,8 @@ VALUES ?;
 allTVShows:
 SELECT *
 FROM tvShowEntity;
+
+findTVShow:
+SELECT *
+FROM tvShowEntity
+WHERE id = ?;

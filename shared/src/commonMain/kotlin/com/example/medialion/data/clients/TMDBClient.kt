@@ -56,7 +56,7 @@ interface TMDBClient {
     // endregion
 
     // region tv
-    suspend fun tvDetails(id: Int): ResultOf<TVDetailResponse>
+    suspend fun tvDetails(id: Int): TVDetailResponse
     suspend fun tvKeywords(id: Int): ResultOf<KeywordResponse>
     suspend fun recommendationsForTv(id: Int, page: Int): PagedTVShowResults
     suspend fun similarForTv(id: Int): ResultOf<PagedTVShowResults>
@@ -247,8 +247,8 @@ interface TMDBClient {
         // endregion
 
         // region tv
-        override suspend fun tvDetails(id: Int): ResultOf<TVDetailResponse> = dispatcher.safeApiCall {
-            httpClient.get(NetworkConstants.BASE_URL_TMDB + "/tv/$id"){
+        override suspend fun tvDetails(id: Int): TVDetailResponse {
+            return httpClient.get(NetworkConstants.BASE_URL_TMDB + "/tv/$id"){
                 url { parameters.standardParameters() }
             }.body()
         }

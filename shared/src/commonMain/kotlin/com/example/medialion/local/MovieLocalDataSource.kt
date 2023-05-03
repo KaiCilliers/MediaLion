@@ -4,7 +4,10 @@ import com.example.medialion.database.MediaLionDatabase
 import com.example.medialion.domain.mappers.Mapper
 import com.example.medialion.domain.models.Movie
 import com.example.medialion.domain.models.MovieDetail
+import com.example.medialion.domain.models.TVShow
+import com.example.medialion.domain.models.TVShowDetail
 import database.MovieEntity
+import database.TvShowEntity
 import kotlinx.coroutines.flow.Flow
 
 interface MovieLocalDataSource {
@@ -44,3 +47,21 @@ interface MovieLocalDataSource {
     }
 }
 
+interface TVLocalDataSource {
+    suspend fun tvDetails(id: Int): TVShowDetail?
+    suspend fun addDetailedTV(entity: TvShowEntity)
+
+    class Default(
+        private val mediaLionDb: MediaLionDatabase,
+        private val tvDetailMapper: Mapper<TvShowEntity, TVShowDetail>,
+    ) : TVLocalDataSource {
+        override suspend fun tvDetails(id: Int): TVShowDetail? {
+            val entity = mediaLionDb.tvShowQueries.findTVShow(id).executeAsOneOrNull()
+            return if (entity != null) tvDetailMapper.map(entity) else null
+        }
+
+        override suspend fun addDetailedTV(entity: TvShowEntity) {
+            mediaLionDb.tvShowQueries.insert(entity)
+        }
+    }
+}

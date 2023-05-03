@@ -13,6 +13,7 @@ import com.example.medialion.domain.mappers.Mapper
 import com.example.medialion.local.DatabaseDriverFactory
 import com.example.medialion.local.MediaLionDatabaseFactory
 import com.example.medialion.local.MovieLocalDataSource
+import com.example.medialion.local.TVLocalDataSource
 import com.zhuinden.simplestack.GlobalServices
 import com.zhuinden.simplestackextensions.servicesktx.add
 import com.zhuinden.simplestackextensions.servicesktx.rebind
@@ -33,7 +34,8 @@ class MediaLionApp : Application() {
         )
         val tvRemoteDataSource = TVRemoteDataSource.Default(
             api = tmdbClient,
-            tvListMapper = ListMapper.Impl(Mapper.TVResponseToDomain())
+            tvListMapper = ListMapper.Impl(Mapper.TVResponseToDomain()),
+            tvMapper = Mapper.TVDetailResponseToDomain(),
         )
         val movieLocalDataSource = MovieLocalDataSource.Default(
            mediaLionDb = MediaLionDatabaseFactory(
@@ -49,11 +51,22 @@ class MediaLionApp : Application() {
             Mapper.MovieDomainToEntity(),
         )
         val strictMovieRepo = MovieRepository.Strict(movieRepository)
-        val tvRepository = TVRepository.Default(tvRemoteDataSource)
+        val tvRepository = TVRepository.Default(
+            tvRemoteDataSource,
+            localDataSource = TVLocalDataSource.Default(
+                mediaLionDb = MediaLionDatabaseFactory(
+                    driver = DatabaseDriverFactory(this)
+                ).create(),
+                tvDetailMapper = Mapper.TVShowEntityToTVDetailDomain(),
+
+            ), mapper = Mapper.TVShowDetailDomainToTVShowEntity()
+        )
 
         globalServices = GlobalServices.builder()
             .add(this)
             .rebind<Context>(this)
+            .add(tvRemoteDataSource)
+            .rebind<TVRemoteDataSource>(tvRemoteDataSource)
             .add(movieRemoteDataSource)
             .rebind<MovieRemoteDataSource>(movieRemoteDataSource)
             .add(tmdbClient)

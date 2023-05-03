@@ -1,37 +1,41 @@
 package com.example.medialion.domain.components.saveToCollection
 
 import com.example.medialion.data.datasource.MovieRemoteDataSource
+import com.example.medialion.data.datasource.TVRemoteDataSource
 import com.example.medialion.database.MediaLionDatabase
 import com.example.medialion.domain.mappers.Mapper
+import com.example.medialion.domain.models.MediaType
 import com.example.medialion.domain.models.MovieDetail
+import com.example.medialion.domain.models.TVShowDetail
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import database.MovieEntity
+import database.TvShowEntity
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 
 interface CollectionComponent {
-    suspend fun addMovieToFavorites(movieId: Int)
-    suspend fun removeMovieFromFavorites(movieId: Int)
+    suspend fun addMediaToFavorites(mediaId: Int, mediaType: MediaType)
+    suspend fun removeMediaFromFavorites(mediaId: Int, mediaType: MediaType)
     fun favoriteMovieIds(): Flow<List<Int>>
     fun allCollections(): Flow<List<Pair<String, List<Int>>>>
-    suspend fun addMovieToCollection(collectionName: String, movieId: Int)
-    suspend fun removeMovieFromCollection(collectionName: String, movieId: Int)
+    suspend fun addMediaToCollection(collectionName: String, mediaId: Int, mediaType: MediaType)
+    suspend fun removeMediaFromCollection(collectionName: String, mediaId: Int, mediaType: MediaType)
     suspend fun createCollection(collectionName: String)
 
     class Default(
         private val database: MediaLionDatabase,
         private val movieRemoteDataSource: MovieRemoteDataSource,
+        private val tvRemoteDataSource: TVRemoteDataSource,
         private val movieEntityMapper: Mapper<MovieDetail, MovieEntity>,
+        private val tvEntityMapper: Mapper<TVShowDetail, TvShowEntity>,
     ) : CollectionComponent {
-        override suspend fun addMovieToFavorites(movieId: Int) {
-            addMovieToCollection("favorite", movieId)
+        override suspend fun addMediaToFavorites(mediaId: Int, mediaType: MediaType) {
+            addMediaToCollection("favorite", mediaId, mediaType)
         }
 
-        override suspend fun removeMovieFromFavorites(movieId: Int) {
-            removeMovieFromCollection("favorite", movieId)
+        override suspend fun removeMediaFromFavorites(mediaId: Int, mediaType: MediaType) {
+            removeMediaFromCollection("favorite", mediaId, mediaType)
         }
 
         override fun favoriteMovieIds(): Flow<List<Int>> {
@@ -52,30 +56,51 @@ interface CollectionComponent {
                 }
         }
 
-        override suspend fun addMovieToCollection(collectionName: String, movieId: Int) {
+        override suspend fun addMediaToCollection(collectionName: String, mediaId: Int, mediaType: MediaType) {
             if (database.myCollectionQueries.findCollection(collectionName).executeAsOneOrNull() == null) {
                 database.myCollectionQueries.insert(collectionName)
             }
 
-            if (database.movieQueries.findMovie(movieId).executeAsOneOrNull() == null) {
-                val response = movieRemoteDataSource.movieDetails(movieId)
-                database.movieQueries.insert(movieEntityMapper.map(response))
-            }
+            when(mediaType) {
+                MediaType.MOVIE -> {
+                    if (database.movieQueries.findMovie(mediaId).executeAsOneOrNull() == null) {
+                        val response = movieRemoteDataSource.movieDetails(mediaId)
+                        database.movieQueries.insert(movieEntityMapper.map(response))
+                    }
 
-            database.collectionMoviesXREFQueries.insert(collectionName, movieId)
+                    database.collectionMoviesXREFQueries.insert(collectionName, mediaId)
+                }
+                MediaType.TV -> {
+                    if (database.tvShowQueries.findTVShow(mediaId).executeAsOneOrNull() == null) {
+                        val response = tvRemoteDataSource.tvShowDetails(mediaId)
+                        database.tvShowQueries.insert(tvEntityMapper.map(response))
+                    }
+                    database.collectionTVShowsXREFQueries.insert(collectionName, mediaId)
+                }
+            }
         }
 
-        override suspend fun removeMovieFromCollection(collectionName: String, movieId: Int) {
+        override suspend fun removeMediaFromCollection(collectionName: String, mediaId: Int, mediaType: MediaType) {
             if (database.myCollectionQueries.findCollection(collectionName).executeAsOneOrNull() == null) {
                 database.myCollectionQueries.insert(collectionName)
             }
 
-            if (database.movieQueries.findMovie(movieId).executeAsOneOrNull() == null) {
-                val response = movieRemoteDataSource.movieDetails(movieId)
-                database.movieQueries.insert(movieEntityMapper.map(response))
+            when (mediaType) {
+                MediaType.MOVIE -> {
+                    if (database.movieQueries.findMovie(mediaId).executeAsOneOrNull() == null) {
+                        val response = movieRemoteDataSource.movieDetails(mediaId)
+                        database.movieQueries.insert(movieEntityMapper.map(response))
+                    }
+                    database.collectionMoviesXREFQueries.removeMovieFromCollection(collectionName, mediaId)
+                }
+                MediaType.TV -> {
+                    if (database.tvShowQueries.findTVShow(mediaId).executeAsOneOrNull() == null) {
+                        val response = tvRemoteDataSource.tvShowDetails(mediaId)
+                        database.tvShowQueries.insert(tvEntityMapper.map(response))
+                    }
+                    database.collectionTVShowsXREFQueries.removeTVFromCollection(collectionName, mediaId)
+                }
             }
-
-            database.collectionMoviesXREFQueries.removeMovieFromCollection(collectionName, movieId)
         }
 
         override suspend fun createCollection(collectionName: String) {

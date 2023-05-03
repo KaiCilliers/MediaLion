@@ -26,7 +26,7 @@ fun SearchIdleState(
     rowTitle: String,
     media: List<MediaItemUI>,
     onMediaClicked: (MediaItemUI) -> Unit,
-    onFavoriteToggle: (mediaId: String, favorited: Boolean) -> Unit,
+    onFavoriteToggle: (mediaItem: MediaItemUI, favorited: Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -47,7 +47,7 @@ fun SearchIdleState(
             MLMediaFavoriteListItem(
                 mediaItem = singleMovie,
                 onFavoriteClick = {
-                    onFavoriteToggle(singleMovie.id.toString(), it)
+                    onFavoriteToggle(singleMovie, it)
                 },
                 modifier = Modifier.clickable { onMediaClicked(singleMovie) }
             )
@@ -82,10 +82,10 @@ private fun SearchIdleStatePreview() {
                 rowTitle = "Top Suggestions",
                 media = movies,
                 onMediaClicked = {},
-                onFavoriteToggle = { mediaId: String, favorited: Boolean ->
+                onFavoriteToggle = { mediaItem: MediaItemUI, favorited: Boolean ->
 
                     val listCopy = movies.toMutableList()
-                    val mediaIndex = listCopy.indexOfFirst { it.id.toString() == mediaId }
+                    val mediaIndex = listCopy.indexOfFirst { it.id.toString() == mediaItem.id.toString() }
                     listCopy[mediaIndex] = listCopy[mediaIndex].copy(isFavorited = favorited)
                     listCopy.sortBy { it.id }
 

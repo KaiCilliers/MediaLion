@@ -101,13 +101,13 @@ fun SearchScreen(
             onAddToCollection = { collectionName ->
                 val selectedMedia = selectedMediaItem
                 if (selectedMedia != null) {
-                    submitAction(SearchAction.AddToCollection(collectionName, selectedMedia.id.toInt()))
+                    submitAction(SearchAction.AddToCollection(collectionName, selectedMedia.id.toInt(), selectedMedia.mediaType))
                 }
             },
             onRemoveFromCollection = { collectionName ->
                 val selectedMedia = selectedMediaItem
                 if (selectedMedia != null) {
-                    submitAction(SearchAction.RemoveFromCollection(collectionName, selectedMedia.id.toInt()))
+                    submitAction(SearchAction.RemoveFromCollection(collectionName, selectedMedia.id.toInt(), selectedMedia.mediaType))
                 }
             },
             onSaveList = {
@@ -202,7 +202,7 @@ fun SearchScreen(
                         rowTitle = stringResource(id = com.example.medialion.R.string.top_suggestions),
                         media = state.suggestedMedia,
                         onMediaClicked = {
-                            submitAction(SearchAction.GetMovieDetails(it.id))
+                            submitAction(SearchAction.GetMediaDetails(it.id, it.mediaType))
                             selectedMediaItem = SimpleMediaItem(
                                 id = it.id.toString(),
                                 title = it.title,
@@ -213,10 +213,10 @@ fun SearchScreen(
                             )
                             coroutineScope.launch { modalSheetState.show() }
                         },
-                        onFavoriteToggle = { mediaId: String, favorited: Boolean ->
+                        onFavoriteToggle = { mediaItem: MediaItemUI, favorited: Boolean ->
                             when (favorited) {
-                                true -> submitAction(SearchAction.AddToFavorites(mediaId.toInt()))
-                                false -> submitAction(SearchAction.RemoveFromFavorites(mediaId.toInt()))
+                                true -> submitAction(SearchAction.AddToFavorites(mediaItem.id, mediaItem.mediaType))
+                                false -> submitAction(SearchAction.RemoveFromFavorites(mediaItem.id, mediaItem.mediaType))
                             }
                         },
                     )
@@ -295,7 +295,7 @@ private fun SearchScreenPreview() {
 
                         is SearchAction.RemoveFromFavorites -> TODO()
                         is SearchAction.SubmitSearchQuery -> TODO()
-                        is SearchAction.GetMovieDetails -> TODO()
+                        is SearchAction.GetMediaDetails -> TODO()
                         is SearchAction.AddToCollection -> TODO()
                         is SearchAction.CreateCollection -> TODO()
                         is SearchAction.RemoveFromCollection -> TODO()

@@ -4,12 +4,14 @@ import com.example.medialion.domain.components.search.usecases.DocumentariesRela
 import com.example.medialion.domain.components.search.usecases.MovieDetailsUseCase
 import com.example.medialion.domain.components.search.usecases.MoviesRelatedToUseCase
 import com.example.medialion.domain.components.search.usecases.SuggestedMediaUseCase
+import com.example.medialion.domain.components.search.usecases.TVDetailsUseCase
 import com.example.medialion.domain.components.search.usecases.TVRelatedToUseCase
 import com.example.medialion.domain.components.search.usecases.TopMediaResultsUseCase
 import com.example.medialion.domain.models.MediaItem
 import com.example.medialion.domain.models.Movie
 import com.example.medialion.domain.models.MovieDetail
 import com.example.medialion.domain.models.TVShow
+import com.example.medialion.domain.models.TVShowDetail
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
@@ -18,6 +20,7 @@ import kotlinx.coroutines.flow.take
 interface SearchComponent {
 
     suspend fun detailsForMovie(id: Int): MovieDetail
+    suspend fun detailsForTV(id: Int): TVShowDetail
     fun relatedDocumentaries(id: Int): Flow<TVShow>
     fun relatedMovies(id: Int): Flow<Movie>
     fun suggestedMedia(): Flow<Movie>
@@ -26,6 +29,7 @@ interface SearchComponent {
 
     class Default(
         private val movieDetails: MovieDetailsUseCase,
+        private val tvDetails: TVDetailsUseCase,
         private val relatedDocumentariesUseCase: DocumentariesRelatedToUseCase,
         private val relatedMoviesUseCase: MoviesRelatedToUseCase,
         private val suggestedMediaUseCase: SuggestedMediaUseCase,
@@ -34,6 +38,10 @@ interface SearchComponent {
     ) : SearchComponent {
         override suspend fun detailsForMovie(id: Int): MovieDetail {
             return movieDetails(id)
+        }
+
+        override suspend fun detailsForTV(id: Int): TVShowDetail {
+            return tvDetails(id)
         }
 
         override fun relatedDocumentaries(id: Int): Flow<TVShow> = flow {
