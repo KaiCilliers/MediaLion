@@ -50,7 +50,7 @@ fun DetailPreviewScreen(
             .gradientBlue()
     ) {
 
-        val (containerTop, poster, title, date, description, closeIcon, footer) = createRefs()
+        val (containerTop, poster, title, date, description, closeIcon, footer, heart) = createRefs()
 
         ConstraintLayout(
             modifier = Modifier.constrainAs(containerTop) {
@@ -70,6 +70,21 @@ fun DetailPreviewScreen(
                         start.linkTo(parent.start, 20.dp)
                     },
             )
+
+            Text(
+                text = when(mediaItem.mediaType) {
+                    MediaType.MOVIE -> "Movie"
+                    MediaType.TV -> "TV"
+                },
+                style = MaterialTheme.typography.h1,
+                modifier = Modifier
+                    .constrainAs(heart) {
+                        top.linkTo(poster.bottom)
+                        start.linkTo(poster.start)
+                        end.linkTo(poster.end)
+                    }
+            )
+
             Text(
                 text = mediaItem.title,
                 color = MaterialTheme.colors.secondary,
@@ -159,6 +174,7 @@ private fun DetailPreviewScreenPreview() {
             DetailPreviewScreen(
                 mediaItem = SimpleMediaItem(
                     id = "duis",
+                    description = "ad lakda lkdjakld jaldj asklç djlajdçasjdlkasjdla dlaj kldalkdalkdajdla jsdlkajsld aj",
                     title = "This is a two line movie title",
                     posterUrl = "https://image.tmdb.org/t/p/original/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg",
                     mediaType = MediaType.MOVIE,
