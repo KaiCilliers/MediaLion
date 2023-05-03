@@ -102,6 +102,7 @@ struct customCategoriesDialog: View {
     
     
     func close() {
+        action()
         withAnimation(.spring()) {
             offset = 1000
             isActive = false
