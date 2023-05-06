@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#003658</color>
+    <color name="primaryVariant">#cf5408</color>
+    <color name="background">#0d2028</color>
+    <color name="secondary">#FFFFFF</color>
+    <color name="primaryVariantBlue">#0d2028</color>
+    <color name="dialogOrange">#e3caad</color>
+    <color name="textBlack">#000000</color>
+    <color name="newListTextField">#c4ae99</color>
+    <color name="mlLightBlue">#94b3cd</color>
+</resources>

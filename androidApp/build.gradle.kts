@@ -18,7 +18,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.0"
+        kotlinCompilerExtensionVersion = "1.4.4"
     }
     packagingOptions {
         resources {
@@ -36,7 +36,12 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+        languageVersion = "1.9"
     }
+}
+
+kotlin.sourceSets.all {
+    languageSettings.enableLanguageFeature("DataObjects")
 }
 
 dependencies {
@@ -50,9 +55,10 @@ dependencies {
 
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.fragment:fragment-ktx:1.5.6")
+    implementation("androidx.fragment:fragment-ktx:1.5.7")
     implementation("androidx.activity:activity-ktx:1.7.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+    implementation("io.coil-kt:coil-compose:2.3.0")
 
     implementation("com.github.Zhuinden:simple-stack:2.7.0")
     implementation("com.github.Zhuinden.simple-stack-extensions:core-ktx:2.3.0")
@@ -61,4 +67,10 @@ dependencies {
     implementation("com.github.Zhuinden.simple-stack-extensions:navigator-ktx:2.3.0")
     implementation("com.github.Zhuinden.simple-stack-extensions:services:2.3.0")
     implementation("com.github.Zhuinden.simple-stack-extensions:services-ktx:2.3.0")
+
+    implementation("com.github.Zhuinden:flow-combinetuple-kt:1.1.1")
+
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+
+    implementation("io.ktor:ktor-client-android:2.2.4")
 }
