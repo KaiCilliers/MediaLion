@@ -17,15 +17,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.medialion.MediaItemUI
 import com.example.medialion.android.theme.MediaLionTheme
-import com.example.medialion.domain.models.MovieUiModel
+import com.example.medialion.domain.MediaType
 
 @Composable
 fun SearchIdleState(
     rowTitle: String,
-    movies: List<MovieUiModel>,
-    onMediaClicked: (MovieUiModel) -> Unit,
-    onFavoriteToggle: (mediaId: String, favorited: Boolean) -> Unit,
+    media: List<MediaItemUI>,
+    onMediaClicked: (MediaItemUI) -> Unit,
+    onFavoriteToggle: (mediaItem: MediaItemUI, favorited: Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -41,11 +42,12 @@ fun SearchIdleState(
                     .padding(start = 16.dp, bottom = 10.dp, top = 16.dp)
             )
         }
-        items(movies) { singleMovie ->
+        items(media) { singleMovie ->
+            println("wolverine - $singleMovie")
             MLMediaFavoriteListItem(
-                movie = singleMovie,
+                mediaItem = singleMovie,
                 onFavoriteClick = {
-                    onFavoriteToggle(singleMovie.id.toString(), it)
+                    onFavoriteToggle(singleMovie, it)
                 },
                 modifier = Modifier.clickable { onMediaClicked(singleMovie) }
             )
@@ -57,33 +59,33 @@ fun SearchIdleState(
 @Composable
 private fun SearchIdleStatePreview() {
     MediaLionTheme {
-        var movies: List<MovieUiModel> by remember {
+        var movies: List<MediaItemUI> by remember {
             mutableStateOf(
                 listOf(
-                    MovieUiModel(1, "HP", false),
-                    MovieUiModel(2, "HP", false),
-                    MovieUiModel(3, "HP", false),
-                    MovieUiModel(4, "HP", false),
-                    MovieUiModel(5, "HP", false),
-                    MovieUiModel(6, "HP", false),
-                    MovieUiModel(7, "HP", false),
-                    MovieUiModel(8, "HP", false),
-                    MovieUiModel(9, "HP", false),
-                    MovieUiModel(10, "HP", false),
-                    MovieUiModel(11, "HP", false),
-                    MovieUiModel(12, "HP", false),
+                    MediaItemUI(id = 6664, title = "detraxit", isFavorited = false, posterUrl = "https://search.yahoo.com/search?p=noster", bannerUrl = "http://www.bing.com/search?q=lacinia", genreIds = listOf(), overview = "electram", popularity = 20.21, voteAverage = 22.23, voteCount = 5474, releaseYear = "mentitum", mediaType = MediaType.MOVIE),
+                    MediaItemUI(id = 6664, title = "detraxit", isFavorited = false, posterUrl = "https://search.yahoo.com/search?p=noster", bannerUrl = "http://www.bing.com/search?q=lacinia", genreIds = listOf(), overview = "electram", popularity = 20.21, voteAverage = 22.23, voteCount = 5474, releaseYear = "mentitum", mediaType = MediaType.TV),
+                    MediaItemUI(id = 6664, title = "detraxit", isFavorited = false, posterUrl = "https://search.yahoo.com/search?p=noster", bannerUrl = "http://www.bing.com/search?q=lacinia", genreIds = listOf(), overview = "electram", popularity = 20.21, voteAverage = 22.23, voteCount = 5474, releaseYear = "mentitum", mediaType = MediaType.MOVIE),
+                    MediaItemUI(id = 6664, title = "detraxit", isFavorited = false, posterUrl = "https://search.yahoo.com/search?p=noster", bannerUrl = "http://www.bing.com/search?q=lacinia", genreIds = listOf(), overview = "electram", popularity = 20.21, voteAverage = 22.23, voteCount = 5474, releaseYear = "mentitum", mediaType = MediaType.MOVIE),
+                    MediaItemUI(id = 6664, title = "detraxit", isFavorited = false, posterUrl = "https://search.yahoo.com/search?p=noster", bannerUrl = "http://www.bing.com/search?q=lacinia", genreIds = listOf(), overview = "electram", popularity = 20.21, voteAverage = 22.23, voteCount = 5474, releaseYear = "mentitum", mediaType = MediaType.MOVIE),
+                    MediaItemUI(id = 6664, title = "detraxit", isFavorited = false, posterUrl = "https://search.yahoo.com/search?p=noster", bannerUrl = "http://www.bing.com/search?q=lacinia", genreIds = listOf(), overview = "electram", popularity = 20.21, voteAverage = 22.23, voteCount = 5474, releaseYear = "mentitum", mediaType = MediaType.MOVIE),
+                    MediaItemUI(id = 6664, title = "detraxit", isFavorited = false, posterUrl = "https://search.yahoo.com/search?p=noster", bannerUrl = "http://www.bing.com/search?q=lacinia", genreIds = listOf(), overview = "electram", popularity = 20.21, voteAverage = 22.23, voteCount = 5474, releaseYear = "mentitum", mediaType = MediaType.TV),
+                    MediaItemUI(id = 6664, title = "detraxit", isFavorited = false, posterUrl = "https://search.yahoo.com/search?p=noster", bannerUrl = "http://www.bing.com/search?q=lacinia", genreIds = listOf(), overview = "electram", popularity = 20.21, voteAverage = 22.23, voteCount = 5474, releaseYear = "mentitum", mediaType = MediaType.MOVIE),
+                    MediaItemUI(id = 6664, title = "detraxit", isFavorited = false, posterUrl = "https://search.yahoo.com/search?p=noster", bannerUrl = "http://www.bing.com/search?q=lacinia", genreIds = listOf(), overview = "electram", popularity = 20.21, voteAverage = 22.23, voteCount = 5474, releaseYear = "mentitum", mediaType = MediaType.MOVIE),
+                    MediaItemUI(id = 6664, title = "detraxit", isFavorited = false, posterUrl = "https://search.yahoo.com/search?p=noster", bannerUrl = "http://www.bing.com/search?q=lacinia", genreIds = listOf(), overview = "electram", popularity = 20.21, voteAverage = 22.23, voteCount = 5474, releaseYear = "mentitum", mediaType = MediaType.MOVIE),
+                    MediaItemUI(id = 6664, title = "detraxit", isFavorited = false, posterUrl = "https://search.yahoo.com/search?p=noster", bannerUrl = "http://www.bing.com/search?q=lacinia", genreIds = listOf(), overview = "electram", popularity = 20.21, voteAverage = 22.23, voteCount = 5474, releaseYear = "mentitum", mediaType = MediaType.MOVIE),
+                    MediaItemUI(id = 6664, title = "detraxit", isFavorited = false, posterUrl = "https://search.yahoo.com/search?p=noster", bannerUrl = "http://www.bing.com/search?q=lacinia", genreIds = listOf(), overview = "electram", popularity = 20.21, voteAverage = 22.23, voteCount = 5474, releaseYear = "mentitum", mediaType = MediaType.MOVIE),
                 )
             )
         }
         Surface(modifier = Modifier.fillMaxSize()) {
             SearchIdleState(
                 rowTitle = "Top Suggestions",
-                movies = movies,
+                media = movies,
                 onMediaClicked = {},
-                onFavoriteToggle = { mediaId: String, favorited: Boolean ->
+                onFavoriteToggle = { mediaItem: MediaItemUI, favorited: Boolean ->
 
                     val listCopy = movies.toMutableList()
-                    val mediaIndex = listCopy.indexOfFirst { it.id.toString() == mediaId }
+                    val mediaIndex = listCopy.indexOfFirst { it.id.toString() == mediaItem.id.toString() }
                     listCopy[mediaIndex] = listCopy[mediaIndex].copy(isFavorited = favorited)
                     listCopy.sortBy { it.id }
 

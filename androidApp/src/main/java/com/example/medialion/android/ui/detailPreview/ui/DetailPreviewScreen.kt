@@ -1,6 +1,5 @@
 package com.example.medialion.android.ui.detailPreview.ui
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -18,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -27,12 +25,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.example.medialion.android.R
+import com.example.medialion.SimpleMediaItem
 import com.example.medialion.android.theme.MediaLionTheme
 import com.example.medialion.android.ui.extensions.gradientBlue
-import com.example.medialion.android.ui.saveToCollection.ui.SaveToCollectionScreen
 import com.example.medialion.android.ui.search.ui.MLMediaPoster
-import com.example.medialion.domain.models.SimpleMediaItem
+import com.example.medialion.domain.MediaType
 
 @Composable
 fun DetailPreviewScreen(
@@ -49,7 +46,7 @@ fun DetailPreviewScreen(
             .gradientBlue()
     ) {
 
-        val (containerTop, poster, title, date, description, closeIcon, footer) = createRefs()
+        val (containerTop, poster, title, date, description, closeIcon, footer, heart) = createRefs()
 
         ConstraintLayout(
             modifier = Modifier.constrainAs(containerTop) {
@@ -69,6 +66,21 @@ fun DetailPreviewScreen(
                         start.linkTo(parent.start, 20.dp)
                     },
             )
+
+            Text(
+                text = when(mediaItem.mediaType) {
+                    MediaType.MOVIE -> "Movie"
+                    MediaType.TV -> "TV"
+                },
+                style = MaterialTheme.typography.h1,
+                modifier = Modifier
+                    .constrainAs(heart) {
+                        top.linkTo(poster.bottom)
+                        start.linkTo(poster.start)
+                        end.linkTo(poster.end)
+                    }
+            )
+
             Text(
                 text = mediaItem.title,
                 color = MaterialTheme.colors.secondary,
@@ -158,8 +170,10 @@ private fun DetailPreviewScreenPreview() {
             DetailPreviewScreen(
                 mediaItem = SimpleMediaItem(
                     id = "duis",
+                    description = "ad lakda lkdjakld jaldj asklç djlajdçasjdlkasjdla dlaj kldalkdalkdajdla jsdlkajsld aj",
                     title = "This is a two line movie title",
-                    posterUrl = "https://image.tmdb.org/t/p/original/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg"
+                    posterUrl = "https://image.tmdb.org/t/p/original/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg",
+                    mediaType = MediaType.MOVIE,
                 ),
                 onCloseClick = {},
                 onMyListClick = {},

@@ -15,18 +15,18 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.medialion.MediaItemUI
+import com.example.medialion.SimpleMediaItem
 import com.example.medialion.android.theme.MediaLionTheme
-import com.example.medialion.domain.models.MovieUiModel
-import com.example.medialion.domain.models.SimpleMediaItem
+import com.example.medialion.domain.MediaType
 
 @Composable
 fun MLTitledMediaRow(
     rowTitle: String,
-    movies: List<MovieUiModel>,
-    onMediaItemClicked: (MovieUiModel) -> Unit,
+    media: List<MediaItemUI>,
+    onMediaItemClicked: (MediaItemUI) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -48,11 +48,12 @@ fun MLTitledMediaRow(
             userScrollEnabled = true
         ) {
 
-            items(movies) {singleMovie ->
+            items(media) { singleMovie ->
                 MLMediaPoster(   mediaItem = SimpleMediaItem(
                     id = singleMovie.id.toString(),
                     title = singleMovie.title,
-                    posterUrl = singleMovie.posterUrl
+                    posterUrl = singleMovie.posterUrl,
+                    mediaType = singleMovie.mediaType,
                 ),
                     modifier = modifier
                         // todo replace hardcoded size
@@ -73,12 +74,11 @@ private fun MLTitledMediaRowPreview() {
         Surface(modifier = Modifier.fillMaxSize()) {
             MLTitledMediaRow(
                 rowTitle = "Related Movie Titles",
-                movies = listOf(
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
+                media = listOf(
+                    MediaItemUI(id = 6381, title = "ignota", isFavorited = false, posterUrl = "https://www.google.com/#q=aenean", bannerUrl = "https://duckduckgo.com/?q=lectus", genreIds = listOf(), overview = "quis", popularity = 44.45, voteAverage = 46.47, voteCount = 8908, releaseYear = "blandit", mediaType = MediaType.MOVIE),
+                    MediaItemUI(id = 6381, title = "ignota", isFavorited = false, posterUrl = "https://www.google.com/#q=aenean", bannerUrl = "https://duckduckgo.com/?q=lectus", genreIds = listOf(), overview = "quis", popularity = 44.45, voteAverage = 46.47, voteCount = 8908, releaseYear = "blandit", mediaType = MediaType.TV),
+                    MediaItemUI(id = 6381, title = "ignota", isFavorited = false, posterUrl = "https://www.google.com/#q=aenean", bannerUrl = "https://duckduckgo.com/?q=lectus", genreIds = listOf(), overview = "quis", popularity = 44.45, voteAverage = 46.47, voteCount = 8908, releaseYear = "blandit", mediaType = MediaType.MOVIE),
+                    MediaItemUI(id = 6381, title = "ignota", isFavorited = false, posterUrl = "https://www.google.com/#q=aenean", bannerUrl = "https://duckduckgo.com/?q=lectus", genreIds = listOf(), overview = "quis", popularity = 44.45, voteAverage = 46.47, voteCount = 8908, releaseYear = "blandit", mediaType = MediaType.MOVIE),
                 ),
                 onMediaItemClicked = {})
         }

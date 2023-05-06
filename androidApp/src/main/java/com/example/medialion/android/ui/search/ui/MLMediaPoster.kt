@@ -21,9 +21,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
+import com.example.medialion.SimpleMediaItem
 import com.example.medialion.android.theme.MediaLionTheme
 import com.example.medialion.android.ui.extensions.gradientOrange
-import com.example.medialion.domain.models.SimpleMediaItem
+import com.example.medialion.domain.MediaType
 
 @Composable
 fun MLMediaPoster(
@@ -84,7 +85,8 @@ private fun MLMediaPosterPreview() {
                 mediaItem = SimpleMediaItem(
                     id = "1234",
                     title = "Harry Potter and the Philosopher's stone",
-                    posterUrl = "https://image.tmdb.org/t/p/original/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg"
+                    posterUrl = "https://image.tmdb.org/t/p/original/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg",
+                    mediaType = MediaType.MOVIE,
                 ),
                 modifier = Modifier.height(200.dp),
             )

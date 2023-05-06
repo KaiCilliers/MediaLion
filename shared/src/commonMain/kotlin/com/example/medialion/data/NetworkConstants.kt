@@ -8,4 +8,5 @@ object NetworkConstants {
     const val FIELD_PAGE = "page"
     const val FIELD_INCLUDE_ADULT = "include_adult"
     const val FIELD_LANGUAGE = "language"
+    const val FIELD_WITH_GENRES = "with_genres"
 }

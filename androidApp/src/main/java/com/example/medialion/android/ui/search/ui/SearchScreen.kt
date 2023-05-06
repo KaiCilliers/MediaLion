@@ -2,7 +2,6 @@ package com.example.medialion.android.ui.search.ui
 
 import android.view.MotionEvent
 import android.widget.Toast
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,6 +22,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,7 +34,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -44,6 +43,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.medialion.ColorRes
+import com.example.medialion.MediaItemUI
+import com.example.medialion.SimpleMediaItem
 import com.example.medialion.StringRes
 import com.example.medialion.android.R
 import com.example.medialion.android.theme.MediaLionTheme
@@ -51,10 +52,12 @@ import com.example.medialion.android.ui.about.ui.AboutScreen
 import com.example.medialion.android.ui.detailPreview.ui.DetailPreviewScreen
 import com.example.medialion.android.ui.saveToCollection.ui.CollectionItem
 import com.example.medialion.android.ui.saveToCollection.ui.SaveToCollectionScreen
-import com.example.medialion.domain.components.search.SearchAction
-import com.example.medialion.domain.components.search.SearchState
-import com.example.medialion.domain.models.MovieUiModel
-import com.example.medialion.domain.models.SimpleMediaItem
+import com.example.medialion.domain.MediaType
+import com.example.medialion.domain.entities.Collection
+import com.example.medialion.domain.search.SearchAction
+import com.example.medialion.domain.search.SearchState
+import com.example.medialion.domain.value.ID
+import com.example.medialion.domain.value.Title
 import com.zhuinden.simplestack.Backstack
 import kotlinx.coroutines.launch
 
@@ -62,24 +65,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun SearchScreen(
     state: SearchState,
+    collectionState: List<Collection>,
     submitAction: (SearchAction) -> Unit,
     backstack: Backstack,
 ) {
-
-    var collections: List<CollectionItem> by remember {
-        mutableStateOf(
-            listOf(
-                CollectionItem(name = "Favorites List", checked = false),
-                CollectionItem(name = "Must Watch", checked = false),
-                CollectionItem(name = "Watch Again", checked = false),
-                CollectionItem(name = "Horror", checked = false),
-                CollectionItem(name = "Comedies", checked = false),
-                CollectionItem(name = "Best of Robbin Williams", checked = false),
-                CollectionItem(name = "Harry Potter", checked = false),
-            )
-        )
-    }
-
     val context = LocalContext.current
     var showAboutDialog by remember { mutableStateOf(false) }
     var showCollectionDialog by remember { mutableStateOf(false) }
@@ -103,19 +92,30 @@ fun SearchScreen(
     if (showCollectionDialog) {
         SaveToCollectionScreen(
             onDismiss = { showCollectionDialog = false },
-            collections = collections,
-            onCollectionItemClicked = { collectionName ->
-                val listCopy = collections.toMutableList()
-                val mediaIndex = listCopy.indexOfFirst { it.name == collectionName }
-                listCopy[mediaIndex] =
-                    listCopy[mediaIndex].copy(checked = !listCopy[mediaIndex].checked)
-
-                collections = listCopy
+            collections = collectionState
+                .map { it.name to it.contents.map { it.id.value } }
+                .map {
+                    val selectedMedia = selectedMediaItem
+                    val checked = if (selectedMedia != null) {
+                        it.second.contains(selectedMedia.id.toInt())
+                    } else false
+                    CollectionItem(it.first.value, checked)
+                },
+            onCollectionItemClicked = { collectionName -> },
+            onAddToCollection = { collectionName ->
+                val selectedMedia = selectedMediaItem
+                if (selectedMedia != null) {
+                    submitAction(SearchAction.AddToCollection(Title(collectionName), ID(selectedMedia.id.toInt()), selectedMedia.mediaType))
+                }
+            },
+            onRemoveFromCollection = { collectionName ->
+                val selectedMedia = selectedMediaItem
+                if (selectedMedia != null) {
+                    submitAction(SearchAction.RemoveFromCollection(Title(collectionName), ID(selectedMedia.id.toInt()), selectedMedia.mediaType))
+                }
             },
             onSaveList = {
-                val listCopy = collections.toMutableList()
-                listCopy.add(CollectionItem(it, true))
-                collections = listCopy
+                submitAction(SearchAction.CreateCollection(Title(it)))
             }
         )
     }
@@ -126,7 +126,7 @@ fun SearchScreen(
         sheetContent = {
             Surface {
                 DetailPreviewScreen(
-                    mediaItem = selectedMediaItem ?: SimpleMediaItem("", "", "", "", ""),
+                    mediaItem = selectedMediaItem ?: SimpleMediaItem("", "", "", "", "", MediaType.MOVIE),
                     onCloseClick = {
                         selectedMediaItem = null; coroutineScope.launch { modalSheetState.hide() }
                     },
@@ -187,6 +187,7 @@ fun SearchScreen(
                 )
             }
 
+            Text("Search Movie")
             MLSearchBar(
                 searchQuery = state.searchQuery,
                 labelText = stringResource(id = StringRes.emptySearch.resourceId),
@@ -203,21 +204,23 @@ fun SearchScreen(
                 is SearchState.Idle -> {
                     SearchIdleState(
                         rowTitle = stringResource(id = com.example.medialion.R.string.top_suggestions),
-                        movies = state.suggestedMedia,
+                        media = state.suggestedMedia,
                         onMediaClicked = {
+                            submitAction(SearchAction.GetMediaDetails(ID(it.id), it.mediaType))
                             selectedMediaItem = SimpleMediaItem(
                                 id = it.id.toString(),
                                 title = it.title,
                                 posterUrl = it.posterUrl,
-                                description = it.description,
-                                year = it.year,
+                                description = it.overview,
+                                year = it.releaseYear,
+                                mediaType = it.mediaType,
                             )
                             coroutineScope.launch { modalSheetState.show() }
                         },
-                        onFavoriteToggle = { mediaId: String, favorited: Boolean ->
+                        onFavoriteToggle = { mediaItem: MediaItemUI, favorited: Boolean ->
                             when (favorited) {
-                                true -> submitAction(SearchAction.AddToFavorites(mediaId.toInt()))
-                                false -> submitAction(SearchAction.RemoveFromFavorites(mediaId.toInt()))
+                                true -> submitAction(SearchAction.AddToFavorites(ID(mediaItem.id), mediaItem.mediaType))
+                                false -> submitAction(SearchAction.RemoveFromFavorites(ID(mediaItem.id), mediaItem.mediaType))
                             }
                         },
                     )
@@ -241,7 +244,7 @@ fun SearchScreen(
                     println("deadpool - $state")
                     MLTitledMediaGrid(
                         gridTitle = stringResource(id = com.example.medialion.R.string.top_results),
-                        movies = state.searchResults,
+                        media = state.searchResults,
                         suggestedMedia = listOf(
                             stringResource(id = com.example.medialion.R.string.related_movies) to state.relatedTitles[0],
                             stringResource(id = com.example.medialion.R.string.related_series) to state.relatedTitles[1],
@@ -252,8 +255,9 @@ fun SearchScreen(
                                 id = it.id.toString(),
                                 title = it.title,
                                 posterUrl = it.posterUrl,
-                                description = it.description,
-                                year = it.year,
+                                description = it.overview,
+                                year = it.releaseYear,
+                                mediaType = it.mediaType,
                             )
                             coroutineScope.launch { modalSheetState.show() }
                         },
@@ -274,7 +278,12 @@ private fun SearchScreenPreview() {
                 mutableStateOf(SearchState.Loading(""))
             }
 
+            val collectionState: List<Collection> by remember {
+                mutableStateOf(emptyList())
+            }
+
             SearchScreen(
+                collectionState = collectionState,
                 state = screenState,
                 submitAction = { action ->
                     when (action) {
@@ -283,18 +292,17 @@ private fun SearchScreenPreview() {
                             screenState = SearchState.Idle(
                                 "",
                                 listOf(
-                                    MovieUiModel(1, "Title", true),
-                                    MovieUiModel(1, "Title", true),
-                                    MovieUiModel(1, "Title", true),
-                                    MovieUiModel(1, "Title", true),
-                                    MovieUiModel(1, "Title", true),
-                                    MovieUiModel(1, "Title", true),
+                                    MediaItemUI(id = 6370, title = "posse", isFavorited = false, posterUrl = "http://www.bing.com/search?q=suscipit", bannerUrl = "https://www.google.com/#q=posidonium", genreIds = listOf(), overview = "audire", popularity = 52.53, voteAverage = 54.55, voteCount = 3509, releaseYear = "volutpat", mediaType = MediaType.MOVIE)
                                 )
                             )
                         }
 
                         is SearchAction.RemoveFromFavorites -> TODO()
                         is SearchAction.SubmitSearchQuery -> TODO()
+                        is SearchAction.GetMediaDetails -> TODO()
+                        is SearchAction.AddToCollection -> TODO()
+                        is SearchAction.CreateCollection -> TODO()
+                        is SearchAction.RemoveFromCollection -> TODO()
                     }
                 },
                 backstack = Backstack()

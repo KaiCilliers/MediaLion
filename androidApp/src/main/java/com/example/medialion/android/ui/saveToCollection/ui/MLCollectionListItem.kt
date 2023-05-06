@@ -44,13 +44,17 @@ import com.example.medialion.android.theme.MediaLionTheme
 fun MLCollectionListItem(
     modifier: Modifier = Modifier,
     collectionName: String,
-    checkMarkVisible: Boolean
+    checkMarkVisible: Boolean,
+    onItemClick: (isChecked: Boolean) -> Unit
 ) {
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
                 .padding(10.dp)
+                .clickable {
+                    onItemClick(!checkMarkVisible)
+                }
         ) {
             Image(
                 painter = painterResource(id = R.drawable.videoreelplaceholder),
@@ -148,7 +152,7 @@ private fun MLCollectionListItemPreview() {
             mutableStateOf("")
         }
         Surface(modifier = Modifier.fillMaxSize()) {
-         MLCollectionListItem(collectionName = "Favorite List", checkMarkVisible = true)
+         MLCollectionListItem(collectionName = "Favorite List", checkMarkVisible = true, onItemClick = {})
         }
     }
 }

@@ -34,9 +34,11 @@ class SearchFragment : Fragment() {
                         color = MaterialTheme.colors.background
                     ) {
                         val state by viewModel.state.collectAsState()
+                        val collectionState by viewModel.collectionState.collectAsState()
 
                         SearchScreen(
                             state = state,
+                            collectionState = collectionState,
                             submitAction = { viewModel.submitAction(it) },
                             backstack = backstack,
                         )
