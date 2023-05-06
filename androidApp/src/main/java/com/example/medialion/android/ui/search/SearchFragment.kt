@@ -14,7 +14,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.example.medialion.android.theme.MediaLionTheme
-import com.example.medialion.android.ui.search.ui.SearchScreen
 import com.zhuinden.simplestackextensions.fragmentsktx.lookup
 import com.zhuinden.simplestackextensions.navigatorktx.backstack
 

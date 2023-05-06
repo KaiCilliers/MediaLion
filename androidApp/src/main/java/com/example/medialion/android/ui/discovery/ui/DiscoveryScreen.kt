@@ -18,11 +18,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.example.medialion.MediaItemUI
 import com.example.medialion.android.R
 import com.example.medialion.android.theme.MediaLionTheme
 import com.example.medialion.android.ui.components.ui.BottomBar
 import com.example.medialion.android.ui.search.ui.MLTitledMediaRow
-import com.example.medialion.domain.models.MovieUiModel
+import com.example.medialion.domain.MediaType
 
 @Composable
 fun DiscoveryScreen(
@@ -87,17 +88,24 @@ fun DiscoveryScreen(
                 FilterCategories()
 
 
+                val media = (0..10).map {
+                    MediaItemUI(
+                        id = 9528 + it,
+                        title = "Title $it",
+                        isFavorited = false,
+                        posterUrl = "https://duckduckgo.com/?q=aperiri",
+                        bannerUrl = "http://www.bing.com/search?q=homero",
+                        genreIds = listOf(),
+                        overview = "sadipscing",
+                        popularity = 32.33,
+                        voteAverage = 34.35,
+                        voteCount = 7426,
+                        releaseYear = "auctor",
+                        mediaType = MediaType.MOVIE,
+                    )
+                }
 
-                MLTitledMediaRow(rowTitle = "Horror", movies = listOf(
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                    MovieUiModel(1, "HP", true),
-                ), onMediaItemClicked = {}
-                )
-
-
+                MLTitledMediaRow(rowTitle = "Horror", media = media, onMediaItemClicked = {})
 
             }
             BottomBar(

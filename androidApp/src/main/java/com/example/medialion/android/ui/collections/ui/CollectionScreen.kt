@@ -17,11 +17,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.example.medialion.MediaItemUI
 import com.example.medialion.android.R
 import com.example.medialion.android.theme.MediaLionTheme
 import com.example.medialion.android.ui.components.ui.BottomBar
 import com.example.medialion.android.ui.search.ui.MLTitledMediaRow
-import com.example.medialion.domain.models.MovieUiModel
+import com.example.medialion.domain.MediaType
 
 @Composable
 fun CollectionScreen(
@@ -75,12 +76,35 @@ fun CollectionScreen(
                 }
                 MLTitledMediaRow(
                     rowTitle = "Favorites",
-                    movies = listOf(
-                        MovieUiModel(1, "HP", true),
-                        MovieUiModel(1, "HP", true),
-                        MovieUiModel(1, "HP", true),
-                        MovieUiModel(1, "HP", true),
-                        MovieUiModel(1, "HP", true),
+                    media = listOf(
+                        MediaItemUI(
+                            id = 6102,
+                            title = "blandit",
+                            isFavorited = true,
+                            posterUrl = "https://www.google.com/#q=pertinacia",
+                            bannerUrl = "https://duckduckgo.com/?q=his",
+                            genreIds = listOf(),
+                            overview = "solet",
+                            popularity = 4.5,
+                            voteAverage = 6.7,
+                            voteCount = 8341,
+                            releaseYear = "sed",
+                            mediaType = MediaType.TV
+                        ),
+                        MediaItemUI(
+                            id = 1234,
+                            title = "TWO",
+                            isFavorited = true,
+                            posterUrl = "https://www.google.com/#q=pertinacia",
+                            bannerUrl = "https://duckduckgo.com/?q=his",
+                            genreIds = listOf(),
+                            overview = "solet",
+                            popularity = 4.5,
+                            voteAverage = 6.7,
+                            voteCount = 8341,
+                            releaseYear = "sed",
+                            mediaType = MediaType.MOVIE
+                        ),
                     ),
                     onMediaItemClicked = {})
             }

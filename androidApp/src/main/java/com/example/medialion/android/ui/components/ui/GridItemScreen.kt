@@ -18,21 +18,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.example.medialion.MediaItemUI
 import com.example.medialion.android.R
 import com.example.medialion.android.theme.MediaLionTheme
 import com.example.medialion.android.ui.search.ui.MLTitledMediaGrid
-import com.example.medialion.domain.models.MovieUiModel
+import com.example.medialion.domain.MediaType
 
 @Composable
 fun GridItemScreen(
     modifier: Modifier = Modifier
 
 ) {
-    ConstraintLayout (
+    ConstraintLayout(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
-    ){
+    ) {
 
         val (containerTop, column, bottomBar) = createRefs()
 
@@ -45,7 +46,7 @@ fun GridItemScreen(
             }
         ) {
 
-            Column (
+            Column(
                 modifier = modifier
                     .background(MaterialTheme.colors.background)
                     .constrainAs(column) {
@@ -53,13 +54,13 @@ fun GridItemScreen(
                             parent.top
                         )
                     }
-            ){
-                Row (
+            ) {
+                Row(
                     modifier = modifier
                         .background(MaterialTheme.colors.background)
                         .padding(horizontal = 16.dp)
                         .padding(top = 16.dp)
-                ){
+                ) {
                     Image(
                         painter = painterResource(id = R.drawable.back_arrow_icon),
                         contentDescription = "",
@@ -78,15 +79,45 @@ fun GridItemScreen(
                 }
                 MLTitledMediaGrid(
                     gridTitle = stringResource(id = com.example.medialion.R.string.top_results),
-                    movies = (1..20).map { MovieUiModel(1, "HP", true) }.toList(),
+                    media = (1..20).map {
+                        MediaItemUI(
+                            id = 7660,
+                            title = "delectus",
+                            isFavorited = false,
+                            posterUrl = "http://www.bing.com/search?q=mentitum",
+                            bannerUrl = "https://www.google.com/#q=tincidunt",
+                            genreIds = listOf(),
+                            overview = "has",
+                            popularity = 16.17,
+                            voteAverage = 18.19,
+                            voteCount = 5603,
+                            releaseYear = "curae",
+                            mediaType = MediaType.MOVIE
+                        )
+                    }.toList(),
                     suggestedMedia = (1..3).map {
-                        "Suggested Heading #$it" to (1..20).map { MovieUiModel(1, "Movie #$it", true) }
+                        "Suggested Heading #$it" to (1..20).map {
+                            MediaItemUI(
+                                id = it,
+                                title = "Movie #$it",
+                                isFavorited = true,
+                                posterUrl = "http://www.bing.com/search?q=ante",
+                                bannerUrl = "https://search.yahoo.com/search?p=justo",
+                                genreIds = listOf(),
+                                overview = "reprimique",
+                                popularity = 24.25,
+                                voteAverage = 26.27,
+                                voteCount = 2229,
+                                releaseYear = "graecis",
+                                mediaType = MediaType.MOVIE,
+                            )
+                        }
                             .toList()
                     },
-                    onMediaClicked ={}
+                    onMediaClicked = {},
                 )
 
-                    }
+            }
 
             BottomBar(
                 modifier = modifier
@@ -95,7 +126,7 @@ fun GridItemScreen(
                     }
             )
         }
-        }
+    }
 
 }
 

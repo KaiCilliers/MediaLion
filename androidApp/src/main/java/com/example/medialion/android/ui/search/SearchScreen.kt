@@ -1,4 +1,4 @@
-package com.example.medialion.android.ui.search.ui
+package com.example.medialion.android.ui.search
 
 import android.view.MotionEvent
 import android.widget.Toast
@@ -52,6 +52,10 @@ import com.example.medialion.android.ui.about.ui.AboutScreen
 import com.example.medialion.android.ui.detailPreview.ui.DetailPreviewScreen
 import com.example.medialion.android.ui.saveToCollection.ui.CollectionItem
 import com.example.medialion.android.ui.saveToCollection.ui.SaveToCollectionScreen
+import com.example.medialion.android.ui.search.ui.MLSearchBar
+import com.example.medialion.android.ui.search.ui.MLTitledMediaGrid
+import com.example.medialion.android.ui.search.ui.SearchEmptyState
+import com.example.medialion.android.ui.search.ui.SearchIdleState
 import com.example.medialion.domain.MediaType
 import com.example.medialion.domain.entities.Collection
 import com.example.medialion.domain.search.SearchAction
@@ -187,7 +191,6 @@ fun SearchScreen(
                 )
             }
 
-            Text("Search Movie")
             MLSearchBar(
                 searchQuery = state.searchQuery,
                 labelText = stringResource(id = StringRes.emptySearch.resourceId),
