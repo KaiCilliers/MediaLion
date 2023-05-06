@@ -11,7 +11,7 @@ import SwiftUI
 struct SearchIdleState: View {
     var body: some View {
         VStack{
-            MLSearchBar()
+            MLSearchBar(text: .constant(""))
             
             ScrollView(.vertical) {
                 Text("Top Suggestions")

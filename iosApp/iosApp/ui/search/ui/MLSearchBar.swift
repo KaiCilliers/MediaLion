@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct MLSearchBar: View {
-    @State private var text: String = ""
+    @Binding var text: String
     
     
     
@@ -58,7 +58,9 @@ struct MLSearchBar: View {
 
 struct MLSearchBar_Previews: PreviewProvider {
     static var previews: some View {
-        MLSearchBar()
+        StatefulPreviewWrapper("The Office") {
+            MLSearchBar(text: $0)
+        }
     }
 }
 
