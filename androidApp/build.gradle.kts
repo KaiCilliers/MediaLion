@@ -5,10 +5,10 @@ plugins {
 }
 
 android {
-    namespace = "com.example.medialion.android"
+    namespace = "com.sunrisekcdeveloper.medialion.android"
     compileSdk = 33
     defaultConfig {
-        applicationId = "com.example.medialion.android"
+        applicationId = "com.sunrisekcdeveloper.medialion.android"
         minSdk = 28
         targetSdk = 33
         versionCode = 1

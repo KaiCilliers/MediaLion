@@ -90,7 +90,7 @@ kotlin {
 }
 
 multiplatformResources {
-    multiplatformResourcesPackage = "com.example.medialion" // required
+    multiplatformResourcesPackage = "com.sunrisekcdeveloper.medialion" // required
     multiplatformResourcesClassName = "SharedRes" // optional, default MR
     multiplatformResourcesVisibility = dev.icerock.gradle.MRVisibility.Internal // optional, default Public
     iosBaseLocalizationRegion = "en" // optional, default "en"
@@ -98,7 +98,7 @@ multiplatformResources {
 }
 
 android {
-    namespace = "com.example.medialion"
+    namespace = "com.sunrisekcdeveloper.medialion"
     compileSdk = 33
 //    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
@@ -110,7 +110,7 @@ android {
 sqldelight {
     // todo rename app package before placing it on the appstore
     database("MediaLionDatabase") {
-        packageName = "com.example.medialion.database"
+        packageName = "com.sunrisekcdeveloper.medialion.database"
         sourceFolders = listOf("sqldelight")
     }
 }
