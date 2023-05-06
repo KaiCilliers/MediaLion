@@ -23,11 +23,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.medialion.MediaItemUI
+import com.example.medialion.SimpleMediaItem
 import com.example.medialion.android.R
 import com.example.medialion.android.theme.MediaLionTheme
-import com.example.medialion.domain.models.MediaItemUI
-import com.example.medialion.domain.models.MediaType
-import com.example.medialion.domain.models.SimpleMediaItem
+import com.example.medialion.domain.MediaType
 
 @Composable
 fun MLMediaFavoriteListItem(

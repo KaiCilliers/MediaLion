@@ -1,0 +1,16 @@
+CREATE TABLE DiscoveryCache (
+    name TEXT PRIMARY KEY NOT NULL
+);
+
+insert:
+INSERT OR REPLACE
+INTO DiscoveryCache
+VALUES ?;
+
+fetchAll:
+SELECT *
+FROM DiscoveryCache;
+
+remove:
+DELETE FROM DiscoveryCache
+WHERE name = ?;

@@ -1,0 +1,31 @@
+CREATE TABLE xref_tvshow_collection (
+    collection TEXT NOT NULL,
+    tvshow_id INTEGER AS Int NOT NULL,
+    FOREIGN KEY (collection) REFERENCES CollectionCache(name),
+    FOREIGN KEY (tvshow_id) REFERENCES TVShowCache(id),
+    UNIQUE (collection, tvshow_id)
+);
+
+addToCollection:
+INSERT OR REPLACE
+INTO xref_tvshow_collection(
+    collection,
+    tvshow_id
+) VALUES (?, ?);
+
+tvShowsFromCollection:
+SELECT TVShowCache.*
+FROM xref_tvshow_collection
+INNER JOIN TVShowCache ON xref_tvshow_collection.tvshow_id = TVShowCache.id
+WHERE collection = ?;
+
+collectionsWithTVShow:
+SELECT CollectionCache.*
+FROM xref_tvshow_collection
+INNER JOIN CollectionCache ON xref_tvshow_collection.collection = CollectionCache.name
+WHERE tvshow_id = ?;
+
+removeFromCollection:
+DELETE FROM xref_tvshow_collection
+WHERE collection = ?
+AND tvshow_id = ?;

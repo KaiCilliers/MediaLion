@@ -1,0 +1,31 @@
+CREATE TABLE xref_movie_collection (
+    collection TEXT NOT NULL,
+    movie_id INTEGER AS Int NOT NULL,
+    FOREIGN KEY (collection) REFERENCES CollectionCache(name),
+    FOREIGN KEY (movie_id) REFERENCES MovieCache(id),
+    UNIQUE (collection, movie_id)
+);
+
+addToCollection:
+INSERT OR REPLACE
+INTO xref_movie_collection(
+    collection,
+    movie_id
+) VALUES (?, ?);
+
+moviesFromCollection:
+SELECT MovieCache.*
+FROM xref_movie_collection
+INNER JOIN MovieCache ON xref_movie_collection.movie_id = MovieCache.id
+WHERE collection = ?;
+
+collectionsWithMovie:
+SELECT CollectionCache.*
+FROM xref_movie_collection
+INNER JOIN CollectionCache ON xref_movie_collection.collection = CollectionCache.name
+WHERE movie_id = ?;
+
+removeFromCollection:
+DELETE FROM xref_movie_collection
+WHERE collection = ?
+AND movie_id = ?;

@@ -43,6 +43,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.medialion.ColorRes
+import com.example.medialion.MediaItemUI
+import com.example.medialion.SimpleMediaItem
 import com.example.medialion.StringRes
 import com.example.medialion.android.R
 import com.example.medialion.android.theme.MediaLionTheme
@@ -50,11 +52,12 @@ import com.example.medialion.android.ui.about.ui.AboutScreen
 import com.example.medialion.android.ui.detailPreview.ui.DetailPreviewScreen
 import com.example.medialion.android.ui.saveToCollection.ui.CollectionItem
 import com.example.medialion.android.ui.saveToCollection.ui.SaveToCollectionScreen
-import com.example.medialion.domain.components.search.SearchAction
-import com.example.medialion.domain.components.search.SearchState
-import com.example.medialion.domain.models.MediaItemUI
-import com.example.medialion.domain.models.MediaType
-import com.example.medialion.domain.models.SimpleMediaItem
+import com.example.medialion.domain.MediaType
+import com.example.medialion.domain.entities.Collection
+import com.example.medialion.domain.search.SearchAction
+import com.example.medialion.domain.search.SearchState
+import com.example.medialion.domain.value.ID
+import com.example.medialion.domain.value.Title
 import com.zhuinden.simplestack.Backstack
 import kotlinx.coroutines.launch
 
@@ -62,7 +65,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun SearchScreen(
     state: SearchState,
-    collectionState: List<Pair<String, List<Int>>>,
+    collectionState: List<Collection>,
     submitAction: (SearchAction) -> Unit,
     backstack: Backstack,
 ) {
@@ -90,28 +93,29 @@ fun SearchScreen(
         SaveToCollectionScreen(
             onDismiss = { showCollectionDialog = false },
             collections = collectionState
+                .map { it.name to it.contents.map { it.id.value } }
                 .map {
                     val selectedMedia = selectedMediaItem
                     val checked = if (selectedMedia != null) {
                         it.second.contains(selectedMedia.id.toInt())
                     } else false
-                    CollectionItem(it.first, checked)
+                    CollectionItem(it.first.value, checked)
                 },
             onCollectionItemClicked = { collectionName -> },
             onAddToCollection = { collectionName ->
                 val selectedMedia = selectedMediaItem
                 if (selectedMedia != null) {
-                    submitAction(SearchAction.AddToCollection(collectionName, selectedMedia.id.toInt(), selectedMedia.mediaType))
+                    submitAction(SearchAction.AddToCollection(Title(collectionName), ID(selectedMedia.id.toInt()), selectedMedia.mediaType))
                 }
             },
             onRemoveFromCollection = { collectionName ->
                 val selectedMedia = selectedMediaItem
                 if (selectedMedia != null) {
-                    submitAction(SearchAction.RemoveFromCollection(collectionName, selectedMedia.id.toInt(), selectedMedia.mediaType))
+                    submitAction(SearchAction.RemoveFromCollection(Title(collectionName), ID(selectedMedia.id.toInt()), selectedMedia.mediaType))
                 }
             },
             onSaveList = {
-                submitAction(SearchAction.CreateCollection(it))
+                submitAction(SearchAction.CreateCollection(Title(it)))
             }
         )
     }
@@ -202,7 +206,7 @@ fun SearchScreen(
                         rowTitle = stringResource(id = com.example.medialion.R.string.top_suggestions),
                         media = state.suggestedMedia,
                         onMediaClicked = {
-                            submitAction(SearchAction.GetMediaDetails(it.id, it.mediaType))
+                            submitAction(SearchAction.GetMediaDetails(ID(it.id), it.mediaType))
                             selectedMediaItem = SimpleMediaItem(
                                 id = it.id.toString(),
                                 title = it.title,
@@ -215,8 +219,8 @@ fun SearchScreen(
                         },
                         onFavoriteToggle = { mediaItem: MediaItemUI, favorited: Boolean ->
                             when (favorited) {
-                                true -> submitAction(SearchAction.AddToFavorites(mediaItem.id, mediaItem.mediaType))
-                                false -> submitAction(SearchAction.RemoveFromFavorites(mediaItem.id, mediaItem.mediaType))
+                                true -> submitAction(SearchAction.AddToFavorites(ID(mediaItem.id), mediaItem.mediaType))
+                                false -> submitAction(SearchAction.RemoveFromFavorites(ID(mediaItem.id), mediaItem.mediaType))
                             }
                         },
                     )
@@ -274,7 +278,7 @@ private fun SearchScreenPreview() {
                 mutableStateOf(SearchState.Loading(""))
             }
 
-            var collectionState: List<Pair<String, List<Int>>> by remember {
+            val collectionState: List<Collection> by remember {
                 mutableStateOf(emptyList())
             }
 

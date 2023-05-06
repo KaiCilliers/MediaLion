@@ -1,0 +1,17 @@
+CREATE TABLE CollectionCache (
+    name TEXT PRIMARY KEY NOT NULL
+);
+
+insert:
+INSERT OR REPLACE
+INTO CollectionCache
+VALUES (?);
+
+fetchAll:
+SELECT *
+FROM CollectionCache;
+
+findCollection:
+SELECT *
+FROM CollectionCache
+WHERE name = ?;

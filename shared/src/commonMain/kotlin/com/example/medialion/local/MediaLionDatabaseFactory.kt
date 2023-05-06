@@ -2,8 +2,8 @@ package com.example.medialion.local
 
 import com.example.medialion.database.MediaLionDatabase
 import com.squareup.sqldelight.ColumnAdapter
-import database.MovieEntity
-import database.TvShowEntity
+import database.MovieCache
+import database.TVShowCache
 
 class MediaLionDatabaseFactory(
     private val driver: DatabaseDriverFactory
@@ -11,8 +11,9 @@ class MediaLionDatabaseFactory(
     fun create(): MediaLionDatabase {
         return MediaLionDatabase(
             driver = driver.create(),
-            movieEntityAdapter = MovieEntity.Adapter(listOfStringsAdapter),
-            tvShowEntityAdapter = TvShowEntity.Adapter(listOfStringsAdapter),
+            MovieCacheAdapter = MovieCache.Adapter(genre_idsAdapter = listOfStringsAdapter),
+            TVShowCacheAdapter = TVShowCache.Adapter(genre_idsAdapter = listOfStringsAdapter),
+
         )
     }
 }

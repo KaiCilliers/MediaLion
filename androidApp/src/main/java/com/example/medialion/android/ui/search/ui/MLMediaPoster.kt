@@ -21,10 +21,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
+import com.example.medialion.SimpleMediaItem
 import com.example.medialion.android.theme.MediaLionTheme
 import com.example.medialion.android.ui.extensions.gradientOrange
-import com.example.medialion.domain.models.MediaType
-import com.example.medialion.domain.models.SimpleMediaItem
+import com.example.medialion.domain.MediaType
 
 @Composable
 fun MLMediaPoster(
