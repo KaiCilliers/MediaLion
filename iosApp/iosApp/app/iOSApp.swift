@@ -6,7 +6,7 @@ struct iOSApp: App {
 	var body: some Scene {
 		WindowGroup {
             NavigationView {
-                ContentView()
+                SearchScreen()
             }
             .navigationTitle("ContentView")
 		}
