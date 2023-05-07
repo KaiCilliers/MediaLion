@@ -1,0 +1,9 @@
+package com.sunrisekcdeveloper.medialion.di
+
+val sharedModule = listOf(
+    platformModule,
+    mapperModule,
+    repositoryModule,
+    useCaseModule,
+    componentsModule,
+)

@@ -64,7 +64,7 @@ interface MovieRepository {
             do {
                 client.recommendationsForMovie(id.value, page++)
                     .onSuccess {
-                        totalPages = it.totalResults
+                        totalPages = it.totalPages
                         val res = it.results.mapNotNull {
                             suspendRunReThrowable("Unable to map response to domain model") {
                                 responseToDomain.map(it)
@@ -84,7 +84,7 @@ interface MovieRepository {
             do {
                 client.popularMovies(page++)
                     .onSuccess {
-                        totalPages = it.totalResults
+                        totalPages = it.totalPages
                         val res = it.results.mapNotNull {
                             suspendRunReThrowable("Unable to map response to domain model") {
                                 responseToDomain.map(it)
@@ -103,7 +103,7 @@ interface MovieRepository {
             do {
                 client.searchMovies(query, page++)
                     .onSuccess {
-                        totalPages = it.totalResults
+                        totalPages = it.totalPages
                         val res = it.results.mapNotNull {
                             suspendRunReThrowable("Unable to map response to domain model") {
                                 responseToDomain.map(it)
@@ -123,7 +123,7 @@ interface MovieRepository {
             do {
                 client.similarForMovie(id, page++)
                     .onSuccess {
-                        totalPages = it.totalResults
+                        totalPages = it.totalPages
                         val res = it.results.mapNotNull {
                             suspendRunReThrowable("Unable to map response to domain model") {
                                 responseToDomain.map(it)

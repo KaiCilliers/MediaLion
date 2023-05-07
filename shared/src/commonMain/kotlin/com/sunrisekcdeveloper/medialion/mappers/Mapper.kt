@@ -22,19 +22,23 @@ interface Mapper<I, O> {
     object MovieEntity {
         class ResponseToDomain : Mapper<MediaResponse, Movie> {
             override fun map(input: MediaResponse): Movie {
-                return Movie(
-                    adult = input.adult!!,
-                    backdropPath = ImageURL(value = NetworkConstants.BASE_IMAGE_URL_TMDB + input.backdropPath!!),
-                    genreIds = input.genreIds?.map { ID(it) } ?: emptyList(),
-                    id = ID(value = input.id!!),
-                    overview = Overview(value = input.overview!!),
-                    popularity = Rating(value = input.popularity!!),
-                    posterPath = ImageURL(value = NetworkConstants.BASE_IMAGE_URL_TMDB + input.posterPath!!),
-                    releaseDate = Date(value = input.releaseDate.orEmpty()),
-                    title = Title(value = input.title ?: input.originalTitle!!),
-                    voteAverage = Rating(value = input.voteAverage ?: 0.0),
-                    voteCount = input.voteCount ?: 0
-                )
+                return try {
+                    Movie(
+                        adult = input.adult!!,
+                        backdropPath = ImageURL(value = NetworkConstants.BASE_IMAGE_URL_TMDB + input.backdropPath!!),
+                        genreIds = input.genreIds?.map { ID(it) } ?: emptyList(),
+                        id = ID(value = input.id!!),
+                        overview = Overview(value = input.overview!!),
+                        popularity = Rating(value = input.popularity!!),
+                        posterPath = ImageURL(value = NetworkConstants.BASE_IMAGE_URL_TMDB + input.posterPath!!),
+                        releaseDate = Date(value = input.releaseDate.orEmpty()),
+                        title = Title(value = input.title ?: input.originalTitle!!),
+                        voteAverage = Rating(value = input.voteAverage ?: 0.0),
+                        voteCount = input.voteCount ?: 0
+                    )
+                } catch (e: Exception) {
+                    throw Exception("Failed to map $input to domain", e)
+                }
             }
         }
 

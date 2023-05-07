@@ -30,6 +30,7 @@ kotlin {
     sourceSets {
         val ktorVersion = "2.2.4"
         val sqlDelightVersion = "1.5.5"
+        val koinVersion = "3.4.0"
 
         val commonMain by getting {
             dependencies {
@@ -43,6 +44,9 @@ kotlin {
                 implementation("com.squareup.sqldelight:runtime:$sqlDelightVersion")
                 implementation("com.squareup.sqldelight:coroutines-extensions:$sqlDelightVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+
+                // see here for koin-ktor dep that might be useful
+                api("io.insert-koin:koin-core:3.4.0")
 
 //                implementation("com.github.Zhuinden:flow-combinetuple-kt:1.1.1")
             }

@@ -73,4 +73,6 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 
     implementation("io.ktor:ktor-client-android:2.2.4")
+
+    implementation("io.insert-koin:koin-android:3.4.0")
 }
