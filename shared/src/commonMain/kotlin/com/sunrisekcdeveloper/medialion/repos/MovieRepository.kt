@@ -101,14 +101,16 @@ interface MovieRepository {
             var page = 1
             var totalPages = Int.MAX_VALUE
             do {
-                client.searchMovies(query, page++)
+                val res = client.searchMovies(query, page++)
                     .onSuccess {
                         totalPages = it.totalPages
+                        println("pedro movie search page - ${it.page}")
                         val res = it.results.mapNotNull {
                             suspendRunReThrowable("Unable to map response to domain model") {
                                 responseToDomain.map(it)
                             }.getOrNull()
                         }
+                        println("pedro movie results size ${res.size}")
                         emitAll(res.asFlow())
                     }
                     .onFailure { throw Exception("Unable to fetch movies [query=$query, page=$page, totalPages=$totalPages]", it.cause) }

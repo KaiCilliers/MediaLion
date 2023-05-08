@@ -11,40 +11,26 @@ import shared
 
 @MainActor class SearchViewModel: ObservableObject {
     
+    private var handle: DisposableHandle?
+    
+    private let viewModel = WrapperMLSearchViewModel().instance()
+    @Published var state: SearchState? = nil
+    
+    func submitAction(action: SearchAction) {
+        self.viewModel.submitAction(action: action)
+    }
+    
+    func observe() {
+        handle = viewModel.state.subscribe(onCollect: { state in
+            // essentially a null check
+            if let state = state {
+                self.state = state
+            }
+        })
+    }
+    
+    func dispose() {
+        handle?.dispose()
+    }
+    
 }
-
-
-//val searchComponent = SearchComponent.Default(
-//    movieDetails = MovieDetailsUseCase.Default(lookup()),
-//    tvDetails = TVDetailsUseCase.Default(lookup()),
-//    relatedDocumentariesUseCase = DocumentariesRelatedToUseCase.Default(lookup()),
-//    relatedMoviesUseCase = MoviesRelatedToUseCase.Default(lookup()),
-//    suggestedMediaUseCase = SuggestedMediaUseCase.Default(lookup()),
-//    topMediaResultsUseCase = TopMediaResultsUseCase.Default(
-//        movieRepo = lookup(),
-//        tvRepo = lookup(),
-//        tvMapper = Mapper.TVShowEntity.DomainToMediaDomain(),
-//        movieMapper = Mapper.MovieEntity.DomainToMediaDomain()
-//    ),
-//    tvRelatedToUseCase = TVRelatedToUseCase.Default(lookup()),
-//)
-//
-//val collectionComponent = CollectionComponent.Default(
-//    saveMediaToCollection = SaveMediaToCollectionUseCase.Default(
-//        collectionRepo = lookup(),
-//        movieDetails = MovieDetailsUseCase.Default(lookup()),
-//        tvDetails = TVDetailsUseCase.Default(lookup())
-//    ),
-//    removeMediaFromCollection = RemoveMediaFromCollectionUseCase.Default(lookup()),
-//    createCollection = CreateCollectionUseCase.Default(lookup()),
-//    fetchAllCollections = FetchAllCollectionsUseCase.Default(lookup()),
-//    fetchCollection = FetchCollectionUseCase.Default(lookup()),
-//)
-//
-//return@lazy MLSearchViewModel(
-//    searchComponent = searchComponent,
-//    collectionComponent = collectionComponent,
-//    mediaItemMapper = Mapper.DomainToUI(),
-//    movieListMapper = ListMapper.Impl(Mapper.MovieEntity.DomainToUI()),
-//    coroutineScope = viewModelScope,
-//)

@@ -43,7 +43,6 @@ fun SearchIdleState(
             )
         }
         items(media) { singleMovie ->
-            println("wolverine - $singleMovie")
             MLMediaFavoriteListItem(
                 mediaItem = singleMovie,
                 onFavoriteClick = {

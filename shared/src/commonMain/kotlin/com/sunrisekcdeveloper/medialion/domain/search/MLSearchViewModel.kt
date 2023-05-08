@@ -103,9 +103,7 @@ class MLSearchViewModel(
         suggestedMovies,
         favoriteMovies,
     ).map { (query, isLoading, results, related, suggestedMovies, favMovies) ->
-        println("deadpool - tuple $query, $isLoading, ${results.size}, ${related.size}, ${suggestedMovies.size}, ${favMovies.size}")
-
-        println("spiderman - ${favMovies}")
+        println("wolverine - tuple query=$query, isLoading=$isLoading, results=${results.size}, related=${related.size}, suggested=${suggestedMovies.size}, fav=${favMovies.size}")
 
         val mergedFavorites = suggestedMovies.map { suggestedMovie ->
             if (favMovies.map { it.id.value }.contains(suggestedMovie.id)) {
@@ -148,6 +146,7 @@ class MLSearchViewModel(
         get() = _state.cStateFlow()
 
     fun submitAction(action: SearchAction) {
+        println("wolverine - submitted an action $action")
         when (action) {
             is SearchAction.AddToFavorites -> addToFavorites(action.mediaId, action.mediaType)
             SearchAction.ClearSearchText -> currentQuery.value = ""
