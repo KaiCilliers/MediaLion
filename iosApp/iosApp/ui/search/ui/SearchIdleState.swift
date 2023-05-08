@@ -7,25 +7,28 @@
 //
 
 import SwiftUI
+import shared
 
 struct SearchIdleState: View {
-    @State var selectedFavouriteItem : Bool = false
+
+    var rowTitle: String
+    var media: [MediaItemUI]
+    var onMediaClicked: (MediaItemUI) -> Void
+    var onFavoriteToggle: (MediaItemUI, Bool) -> Void
+
     var body: some View {
         VStack{
-            
-          
-            
             ScrollView(.vertical) {
-                Text("Top Suggestions")
+                Text(rowTitle)
                     .foregroundColor(.white)
                     .customFont(.h2)
                     .padding(.top, 10)
                     .frame(maxWidth: .infinity,alignment: .leading)
                 VStack(spacing: 30) {
-                    ForEach(0...20, id: \.self) {value in
-                        MLMediaFavoriteListItem(selectedFavouriteItem: $selectedFavouriteItem, onFavoritedClicked: { fav in selectedFavouriteItem = fav})
-                            
-                            
+                    ForEach(media, id: \.self) {value in
+                        MLMediaFavoriteListItem(
+                            mediaItem: value, onFavoriteClick: {_ in}
+                        )
                     }
                 }
             }
@@ -39,6 +42,16 @@ struct SearchIdleState: View {
 
 struct SearchIdleState_Previews: PreviewProvider {
     static var previews: some View {
-        SearchIdleState()
+        SearchIdleState(
+            rowTitle: "Top Suggestions",
+            media: [
+                MediaItemUI(id: 1113, title: "Movie One", isFavorited: false, posterUrl: "https://search.yahoo.com/search?p=noster", bannerUrl: "http://www.bing.com/search?q=lacinia", genreIds: [], overview: "electram", popularity: 20.21, voteAverage: 22.23, voteCount: 5474, releaseYear: "mentitum", mediaType: MediaType.movie),
+                MediaItemUI(id: 6664, title: "Movie Two", isFavorited: false, posterUrl: "https://search.yahoo.com/search?p=noster", bannerUrl: "http://www.bing.com/search?q=lacinia", genreIds: [], overview: "electram", popularity: 20.21, voteAverage: 22.23, voteCount: 5474, releaseYear: "mentitum", mediaType: MediaType.movie),
+                MediaItemUI(id: 264, title: "Movie Three", isFavorited: true, posterUrl: "https://search.yahoo.com/search?p=noster", bannerUrl: "http://www.bing.com/search?q=lacinia", genreIds: [], overview: "electram", popularity: 20.21, voteAverage: 22.23, voteCount: 5474, releaseYear: "mentitum", mediaType: MediaType.movie),
+
+            ],
+            onMediaClicked: {_ in},
+            onFavoriteToggle: {_,_ in}
+        )
     }
 }

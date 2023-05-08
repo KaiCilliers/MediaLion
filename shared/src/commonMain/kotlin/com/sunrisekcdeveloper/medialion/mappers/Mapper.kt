@@ -24,15 +24,15 @@ interface Mapper<I, O> {
             override fun map(input: MediaResponse): Movie {
                 return try {
                     Movie(
-                        adult = input.adult!!,
-                        backdropPath = ImageURL(value = NetworkConstants.BASE_IMAGE_URL_TMDB + input.backdropPath!!),
+                        adult = input.adult ?: false,
+                        backdropPath = ImageURL(value = NetworkConstants.BASE_IMAGE_URL_TMDB + input.backdropPath.orEmpty()),
                         genreIds = input.genreIds?.map { ID(it) } ?: emptyList(),
                         id = ID(value = input.id!!),
-                        overview = Overview(value = input.overview!!),
-                        popularity = Rating(value = input.popularity!!),
-                        posterPath = ImageURL(value = NetworkConstants.BASE_IMAGE_URL_TMDB + input.posterPath!!),
+                        overview = Overview(value = input.overview.orEmpty()),
+                        popularity = Rating(value = input.popularity ?: 0.0),
+                        posterPath = ImageURL(value = NetworkConstants.BASE_IMAGE_URL_TMDB + input.posterPath.orEmpty()),
                         releaseDate = Date(value = input.releaseDate.orEmpty()),
-                        title = Title(value = input.title ?: input.originalTitle!!),
+                        title = Title(value = input.title ?: input.originalTitle.orEmpty()),
                         voteAverage = Rating(value = input.voteAverage ?: 0.0),
                         voteCount = input.voteCount ?: 0
                     )
@@ -110,14 +110,14 @@ interface Mapper<I, O> {
                 println("I am going to map $input")
                 try {
                     return TVShow(
-                        adult = input.adult!!,
-                        backdropPath = ImageURL(value = NetworkConstants.BASE_IMAGE_URL_TMDB + input.backdropPath!!),
+                        adult = input.adult ?: false,
+                        backdropPath = ImageURL(value = NetworkConstants.BASE_IMAGE_URL_TMDB + input.backdropPath.orEmpty()),
                         genreIds = input.genreIds?.map { ID(it) } ?: emptyList(),
                         id = ID(value = input.id!!),
-                        overview = Overview(value = input.overview!!),
-                        popularity = Rating(value = input.popularity!!),
-                        posterPath = ImageURL(value = NetworkConstants.BASE_IMAGE_URL_TMDB + input.posterPath!!),
-                        name = Title(value = input.name ?: input.originalName!!),
+                        overview = Overview(value = input.overview.orEmpty()),
+                        popularity = Rating(value = input.popularity ?: 0.0),
+                        posterPath = ImageURL(value = NetworkConstants.BASE_IMAGE_URL_TMDB + input.posterPath.orEmpty()),
+                        name = Title(value = input.name ?: input.originalName.orEmpty()),
                         voteAverage = Rating(value = input.voteAverage ?: 0.0),
                         voteCount = input.voteCount ?: 0,
                         firstAirDate = Date(value = input.firstAirDate.orEmpty()),

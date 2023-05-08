@@ -1,13 +1,13 @@
 package com.sunrisekcdeveloper.medialion.domain.search.usecases
 
-import com.sunrisekcdeveloper.medialion.repos.MovieRepository
-import com.sunrisekcdeveloper.medialion.repos.TVRepository
-import com.sunrisekcdeveloper.medialion.mappers.Mapper
 import com.sunrisekcdeveloper.medialion.domain.entities.MediaItem
 import com.sunrisekcdeveloper.medialion.domain.entities.Movie
 import com.sunrisekcdeveloper.medialion.domain.entities.TVShow
+import com.sunrisekcdeveloper.medialion.mappers.Mapper
+import com.sunrisekcdeveloper.medialion.repos.MovieRepository
+import com.sunrisekcdeveloper.medialion.repos.TVRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.take
 
@@ -24,11 +24,21 @@ interface TopMediaResultsUseCase {
             val movieSearchResults = movieRepo.search(searchQuery)
 
             return merge(tvShowSearchResults, movieSearchResults)
-                .map {
+                .mapNotNull {
                     if (it is TVShow) {
-                        tvMapper.map(it)
+                        try {
+                            tvMapper.map(it)
+                        } catch (e: Exception) {
+                            println("deadpool - TVSHOW failed to map $it")
+                            null
+                        }
                     } else {
-                        movieMapper.map(it as Movie)
+                        try {
+                            movieMapper.map(it as Movie)
+                        } catch (e: Exception) {
+                            println("deadpool - MOIVE failed to map $it")
+                            null
+                        }
                     }
                 }.take(30)
         }

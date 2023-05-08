@@ -9,28 +9,48 @@
 import SwiftUI
 
 struct MLSearchBar: View {
-    @Binding var text: String
+    let text: String
+    let labelText: String
+    let onSearchQueryTextChanged: (String) -> Void
+    let onClearSearchText: () -> Void
     
+    @State private var textToShow: String
     
+    init(text: String, labelText: String, onSearchQueryTextChanged: @escaping (String) -> Void, onClearSearchText: @escaping () -> Void) {
+        self.text = text
+        self.labelText = labelText
+        self.onSearchQueryTextChanged = onSearchQueryTextChanged
+        self.onClearSearchText = onClearSearchText
+        self.textToShow = text
+    }
     
     var body: some View {
         
         HStack{
+            
             Image("searchIcon")
                 .resizable()
                 .frame(width: 30, height: 35)
                 .padding(20)
-            TextField(
-                "", text: $text
-            ).foregroundColor(.white).customFont(.h1)
+            
+            TextField("", text: $textToShow)
+            .onChange(of: textToShow) { newValue in
+                onSearchQueryTextChanged(newValue)
+                
+            }
+            .foregroundColor(.white).customFont(.h1)
             .modifier(
                 PlaceholderStyle(
-                    showPlaceHolder: text.isEmpty,
-                    placeholder: "Search")
+                    showPlaceHolder: textToShow.isEmpty,
+                    placeholder: labelText)
             )
-            if !text.isEmpty {
+            
+            if !textToShow.isEmpty {
                       Button(
-                          action: { self.text = "" },
+                          action: {
+                              onClearSearchText()
+                              self.textToShow = ""
+                          },
                           label: {
                               Image("cancelText")
                                   .resizable()
@@ -58,9 +78,12 @@ struct MLSearchBar: View {
 
 struct MLSearchBar_Previews: PreviewProvider {
     static var previews: some View {
-        StatefulPreviewWrapper("The Office") {
-            MLSearchBar(text: $0)
-        }
+        MLSearchBar(
+            text: "",
+            labelText: "Search for a show, movie or documentary",
+            onSearchQueryTextChanged: {_ in},
+            onClearSearchText: {}
+        )
     }
 }
 
