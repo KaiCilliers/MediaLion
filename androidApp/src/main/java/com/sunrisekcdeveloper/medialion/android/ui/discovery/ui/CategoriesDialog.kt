@@ -2,6 +2,7 @@ package com.sunrisekcdeveloper.medialion.android.ui.discovery.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,74 +21,89 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.sunrisekcdeveloper.medialion.android.R
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 
 @Composable
 fun CategoriesDialog(
-    modifier: Modifier = Modifier,
-    categories : List<CategoriesNames>
+    categories : List<CategoriesNames>,
+    onDismiss: () -> Unit = {},
 ) {
-    Card (
-        elevation = 5.dp,
-        shape = RoundedCornerShape(15.dp),
-        modifier = Modifier
-            .fillMaxWidth(0.75f),
-        backgroundColor = MaterialTheme.colors.onSecondary
-    ){
-       Column (
-           modifier = Modifier
-               .fillMaxWidth()
-               .padding(vertical = 20.dp, horizontal = 18.dp)
-               .background(MaterialTheme.colors.onSecondary),
-           verticalArrangement = Arrangement.spacedBy(2.dp)
-       ) {
-           Row (
-               modifier = Modifier
-                   .fillMaxWidth()
-                   .padding(bottom = 15.dp),
-               horizontalArrangement = Arrangement.End,
-               verticalAlignment = Alignment.Top
-           ){
-               Text(
-                   text = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.categories),
-                   style = MaterialTheme.typography.h5,
-                   color = MaterialTheme.colors.secondaryVariant,
-                   )
+    Dialog(
+        onDismissRequest = {onDismiss()},
+        properties = DialogProperties(usePlatformDefaultWidth = false),
+    ) {
+        Card (
+            elevation = 5.dp,
+            shape = RoundedCornerShape(15.dp),
+            modifier = Modifier
+                .fillMaxWidth(0.75f),
+            backgroundColor = MaterialTheme.colors.onSecondary
+        ){
+            Column (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 20.dp, horizontal = 18.dp)
+                    .background(MaterialTheme.colors.onSecondary),
+                verticalArrangement = Arrangement.spacedBy(1.dp)
+            ) {
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 15.dp),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.Top
+                ){
+                    Text(
+                        text = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.categories),
+                        style = MaterialTheme.typography.subtitle1,
+                        color = MaterialTheme.colors.secondaryVariant,
+                    )
 
-               Spacer(modifier = Modifier.width(90.dp))
+                    Spacer(modifier = Modifier.width(50.dp))
 
-               Image(
-                   painter = painterResource(id = R.drawable.close_icon),
-                   contentDescription = "",
-                    modifier = modifier
-                        .size(30.dp)
-                   )
-           }
-           LazyColumn(
-               modifier = Modifier
-                   .size(height = 160.dp, width = 500.dp),
-           ) {
-               items(categories) {
+                    Image(
+                        painter = painterResource(id = R.drawable.close_icon),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(30.dp)
+                            .clickable {
+                                onDismiss()
+                            }
+                    )
+                }
+                LazyColumn(
+                    modifier = Modifier
+                        .size(height = 160.dp, width = 500.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(categories) {
+                        Text(
+                            text = it.name,
+                            style = MaterialTheme.typography.h4,
+                            color = MaterialTheme.colors.secondaryVariant
+                        )
+                    }
 
-               }
-
-           }
-       }
+                }
+            }
+        }
     }
 }
 
 @Preview
 @Composable
 private fun CategoriesDialogPreview() {
-    var categories: List<CategoriesNames> by remember {
+    val categories: List<CategoriesNames> by remember {
         mutableStateOf(
             listOf(
                 CategoriesNames(name = "Horror"),
@@ -106,7 +122,7 @@ private fun CategoriesDialogPreview() {
         )
     }
     MediaLionTheme {
-    CategoriesDialog(categories = categories)
+        CategoriesDialog(categories = categories)
     }
 
 }
