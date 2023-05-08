@@ -9,7 +9,13 @@
 import SwiftUI
 import shared
 
+
+
 struct MLMediaFavoriteListItem: View {
+    
+    @Binding var selectedFavouriteItem : Bool
+    let onFavoritedClicked: (Bool) -> Void
+    
     var body: some View {
         HStack(spacing: 0.0) {
             MLMediaPoster()
@@ -21,10 +27,23 @@ struct MLMediaFavoriteListItem: View {
                 .customFont(.h4)
                 .foregroundColor(.white)
             Spacer()
-            Image("heartOutlineIcon")
-                .resizable()
-                .frame(width: 35.0, height: 30.0)
-                .padding(.horizontal, 16.0)
+            
+            Button {
+                selectedFavouriteItem = !selectedFavouriteItem
+            } label: {
+                if selectedFavouriteItem == true {
+                    Image("heartOutlineIcon")
+                        .resizable()
+                        .frame(width: 35.0, height: 30.0)
+                        .padding(.horizontal, 16.0)
+                } else {
+                    Image("heartFilledIcon")
+                        .resizable()
+                        .frame(width: 35.0, height: 30.0)
+                        .padding(.horizontal, 16.0)
+                }
+            }
+            
         }
         
         .background(Color.background)
@@ -34,6 +53,8 @@ struct MLMediaFavoriteListItem: View {
 
 struct MLMediaFavoriteListItem_Previews: PreviewProvider {
     static var previews: some View {
-        MLMediaFavoriteListItem()
+        StatefulPreviewWrapper(true) {
+            MLMediaFavoriteListItem(selectedFavouriteItem: $0, onFavoritedClicked: {_ in})
+        }
     }
 }

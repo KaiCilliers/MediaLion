@@ -9,9 +9,11 @@
 import SwiftUI
 
 struct SearchIdleState: View {
+    @State var selectedFavouriteItem : Bool = false
     var body: some View {
         VStack{
-            MLSearchBar(text: .constant(""))
+            
+          
             
             ScrollView(.vertical) {
                 Text("Top Suggestions")
@@ -21,7 +23,7 @@ struct SearchIdleState: View {
                     .frame(maxWidth: .infinity,alignment: .leading)
                 VStack(spacing: 30) {
                     ForEach(0...20, id: \.self) {value in
-                        MLMediaFavoriteListItem()
+                        MLMediaFavoriteListItem(selectedFavouriteItem: $selectedFavouriteItem, onFavoritedClicked: { fav in selectedFavouriteItem = fav})
                             
                             
                     }
