@@ -30,21 +30,34 @@ struct SearchScreen: View {
             )
             
             switch(viewModel.state) {
-                case let idle as SearchState.Idle:
+                
+                case let idleState as SearchState.Idle:
                     SearchIdleState(
                         rowTitle: "Top Suggestions",
-                        media: idle.suggestedMedia,
+                        media: idleState.suggestedMedia,
                         onMediaClicked: {_ in},
                         onFavoriteToggle: {_,_ in}
                     )
-                case _ as SearchState.Results:
-                    Text("results")
+                
+                case let resultState as SearchState.Results:
+                    MLTitledMediaGrid(
+                        gridTitle: "Top Results",
+                        media: resultState.searchResults,
+                        suggestedMedia: resultState.relatedTitles,
+                        onMediaItemClicked: { value in
+                            // show media detail sheet
+                        }
+                    )
+                
                 case _ as SearchState.Loading:
-                    Text("Loading...")
+                    ProgressView("Searching for media...")
+                    .scaleEffect(2)
+                
                 case _ as SearchState.Empty:
-                    Text("empty")
+                    SearchEmptyState()
+                
                 default:
-                Text("Default - \(viewModel.state.searchQuery ) ")
+                    Text("Placeholder - this state should not be reached")
             }
         }
         .onAppear {

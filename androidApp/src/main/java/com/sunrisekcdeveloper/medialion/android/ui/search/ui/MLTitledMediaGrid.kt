@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.sunrisekcdeveloper.medialion.MediaItemUI
 import com.sunrisekcdeveloper.medialion.R
 import com.sunrisekcdeveloper.medialion.SimpleMediaItem
+import com.sunrisekcdeveloper.medialion.TitledMedia
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.domain.MediaType
 
@@ -28,7 +29,7 @@ import com.sunrisekcdeveloper.medialion.domain.MediaType
 fun MLTitledMediaGrid(
     gridTitle: String,
     media: List<MediaItemUI>,
-    suggestedMedia: List<Pair<String, List<MediaItemUI>>>,
+    suggestedMedia: List<TitledMedia>,
     onMediaClicked: (MediaItemUI) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -63,10 +64,10 @@ fun MLTitledMediaGrid(
             )
         }
         items(suggestedMedia, span = { GridItemSpan(3) }) {
-            if (it.second.isNotEmpty()) {
+            if (it.content.isNotEmpty()) {
                 MLTitledMediaRow(
-                    rowTitle = it.first,
-                    media = it.second,
+                    rowTitle = it.title,
+                    media = it.content,
                     onMediaItemClicked = { onMediaClicked(it) }
                 )
             }
@@ -96,23 +97,26 @@ private fun MLTitledMediaGridPreview() {
                     mediaType = MediaType.MOVIE,
                 ) }.toList(),
                 suggestedMedia = (1..3).map {
-                    "Suggested Heading #$it" to (1..20).map {
-                        MediaItemUI(
-                            id = 7969,
-                            title = "errem",
-                            isFavorited = false,
-                            posterUrl = "https://duckduckgo.com/?q=per",
-                            bannerUrl = "http://www.bing.com/search?q=viderer",
-                            genreIds = listOf(),
-                            overview = "oratio",
-                            popularity = 36.37,
-                            voteAverage = 38.39,
-                            voteCount = 2534,
-                            releaseYear = "vel",
-                            mediaType = MediaType.MOVIE,
-                        )
-                    }
-                        .toList()
+                    TitledMedia(
+                        title = "Suggested Heading #$it",
+                        content = (1..20).map {
+                            MediaItemUI(
+                                id = 7969,
+                                title = "errem",
+                                isFavorited = false,
+                                posterUrl = "https://duckduckgo.com/?q=per",
+                                bannerUrl = "http://www.bing.com/search?q=viderer",
+                                genreIds = listOf(),
+                                overview = "oratio",
+                                popularity = 36.37,
+                                voteAverage = 38.39,
+                                voteCount = 2534,
+                                releaseYear = "vel",
+                                mediaType = MediaType.MOVIE,
+                            )
+                        }
+                            .toList()
+                    )
                 },
                 onMediaClicked = {},
             )

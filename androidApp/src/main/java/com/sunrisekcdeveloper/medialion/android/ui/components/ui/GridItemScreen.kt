@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.sunrisekcdeveloper.medialion.MediaItemUI
+import com.sunrisekcdeveloper.medialion.TitledMedia
 import com.sunrisekcdeveloper.medialion.android.R
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLTitledMediaGrid
@@ -96,23 +97,26 @@ fun GridItemScreen(
                         )
                     }.toList(),
                     suggestedMedia = (1..3).map {
-                        "Suggested Heading #$it" to (1..20).map {
-                            MediaItemUI(
-                                id = it,
-                                title = "Movie #$it",
-                                isFavorited = true,
-                                posterUrl = "http://www.bing.com/search?q=ante",
-                                bannerUrl = "https://search.yahoo.com/search?p=justo",
-                                genreIds = listOf(),
-                                overview = "reprimique",
-                                popularity = 24.25,
-                                voteAverage = 26.27,
-                                voteCount = 2229,
-                                releaseYear = "graecis",
-                                mediaType = MediaType.MOVIE,
-                            )
-                        }
-                            .toList()
+                        TitledMedia(
+                            title = "Suggested Heading #$it",
+                            content = (1..20).map {
+                                MediaItemUI(
+                                    id = 7969,
+                                    title = "errem",
+                                    isFavorited = false,
+                                    posterUrl = "https://duckduckgo.com/?q=per",
+                                    bannerUrl = "http://www.bing.com/search?q=viderer",
+                                    genreIds = listOf(),
+                                    overview = "oratio",
+                                    popularity = 36.37,
+                                    voteAverage = 38.39,
+                                    voteCount = 2534,
+                                    releaseYear = "vel",
+                                    mediaType = MediaType.MOVIE,
+                                )
+                            }
+                                .toList()
+                        )
                     },
                     onMediaClicked = {},
                 )

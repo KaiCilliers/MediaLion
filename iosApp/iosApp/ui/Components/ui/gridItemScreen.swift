@@ -27,7 +27,7 @@ struct gridItemScreen: View {
                         .frame(width: 30, height: 30)
                         .padding()
                 }.background(Color.background)
-                MLTitledMediaGrid(title: "Horror")
+//                MLTitledMediaGrid(title: "Horror")
                 
                 bottomBar(selectedTab: $selectedTab)
             }

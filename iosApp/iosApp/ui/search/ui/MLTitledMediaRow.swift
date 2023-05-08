@@ -7,14 +7,24 @@
 //
 
 import SwiftUI
+import shared
 
 struct MLTitledMediaRow: View {
+    
+    let rowTitle: String
+    let media: [MediaItemUI]
+    let onMediaItemClicked: (MediaItemUI) -> Void
+    
     var body: some View {
         VStack{
-            Text("Related Movie Title").foregroundColor(.white).customFont(.subtitle1).frame(maxWidth: .infinity, alignment: .leading)
+            Text(rowTitle)
+                .foregroundColor(.white)
+                .customFont(.subtitle1)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
             ScrollView(.horizontal) {
                 HStack(spacing: 20) {
-                    ForEach(0...20, id: \.self) {value in
+                    ForEach(media, id: \.self) {value in
                         MLMediaPoster()
                             .frame(width: 100, height: 170)
                             
@@ -31,6 +41,16 @@ struct MLTitledMediaRow: View {
 
 struct MLTitledMediaRow_Previews: PreviewProvider {
     static var previews: some View {
-        MLTitledMediaRow()
+        MLTitledMediaRow(
+            rowTitle: "Related Movie Titles",
+            media: [
+                MediaItemUI(id: 1113, title: "Movie One", isFavorited: false, posterUrl: "https://search.yahoo.com/search?p=noster", bannerUrl: "http://www.bing.com/search?q=lacinia", genreIds: [], overview: "electram", popularity: 20.21, voteAverage: 22.23, voteCount: 5474, releaseYear: "mentitum", mediaType: MediaType.movie),
+                MediaItemUI(id: 6664, title: "Movie Two", isFavorited: false, posterUrl: "https://search.yahoo.com/search?p=noster", bannerUrl: "http://www.bing.com/search?q=lacinia", genreIds: [], overview: "electram", popularity: 20.21, voteAverage: 22.23, voteCount: 5474, releaseYear: "mentitum", mediaType: MediaType.movie),
+                MediaItemUI(id: 3, title: "Movie Three", isFavorited: true, posterUrl: "https://search.yahoo.com/search?p=noster", bannerUrl: "http://www.bing.com/search?q=lacinia", genreIds: [], overview: "electram", popularity: 20.21, voteAverage: 22.23, voteCount: 5474, releaseYear: "mentitum", mediaType: MediaType.movie),
+                MediaItemUI(id: 2, title: "Movie Three", isFavorited: true, posterUrl: "https://search.yahoo.com/search?p=noster", bannerUrl: "http://www.bing.com/search?q=lacinia", genreIds: [], overview: "electram", popularity: 20.21, voteAverage: 22.23, voteCount: 5474, releaseYear: "mentitum", mediaType: MediaType.movie),
+                MediaItemUI(id: 1, title: "Movie Three", isFavorited: true, posterUrl: "https://search.yahoo.com/search?p=noster", bannerUrl: "http://www.bing.com/search?q=lacinia", genreIds: [], overview: "electram", popularity: 20.21, voteAverage: 22.23, voteCount: 5474, releaseYear: "mentitum", mediaType: MediaType.movie),
+            ],
+            onMediaItemClicked: {_ in}
+        )
     }
 }

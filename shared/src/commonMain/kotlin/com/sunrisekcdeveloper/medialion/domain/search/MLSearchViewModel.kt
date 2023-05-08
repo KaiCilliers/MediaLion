@@ -1,6 +1,7 @@
 package com.sunrisekcdeveloper.medialion.domain.search
 
 import com.sunrisekcdeveloper.medialion.MediaItemUI
+import com.sunrisekcdeveloper.medialion.TitledMedia
 import com.sunrisekcdeveloper.medialion.domain.MediaType
 import com.sunrisekcdeveloper.medialion.domain.entities.MediaItem
 import com.sunrisekcdeveloper.medialion.domain.entities.Movie
@@ -117,9 +118,9 @@ class MLSearchViewModel(
             results.isNotEmpty() -> SearchState.Results(
                 searchResults = results,
                 relatedTitles = listOf(
-                    related.sortedBy { it.title },
-                    related.sortedBy { it.posterUrl },
-                    related.sortedBy { it.id }),
+                    TitledMedia(title = "Suggested Media #1", content = related.sortedBy { it.title }),
+                    TitledMedia(title = "Suggested Media #2", content =related.sortedBy { it.posterUrl }),
+                    TitledMedia(title = "Suggested Media #3", content =related.sortedBy { it.id })),
                 searchQuery = query
             )
 

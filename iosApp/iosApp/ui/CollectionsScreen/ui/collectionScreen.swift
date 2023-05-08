@@ -31,12 +31,12 @@ struct collectionScreen: View {
                 
                 ScrollView {
                     VStack (alignment: .center, spacing: 0){
-                        MLTitledMediaRow()
-                        MLTitledMediaRow()
-                        MLTitledMediaRow()
-                        MLTitledMediaRow()
-                        MLTitledMediaRow()
-                        MLTitledMediaRow()
+//                        MLTitledMediaRow()
+//                        MLTitledMediaRow()
+//                        MLTitledMediaRow()
+//                        MLTitledMediaRow()
+//                        MLTitledMediaRow()
+//                        MLTitledMediaRow()
                     }
                 }
             

@@ -46,6 +46,7 @@ import com.sunrisekcdeveloper.medialion.ColorRes
 import com.sunrisekcdeveloper.medialion.MediaItemUI
 import com.sunrisekcdeveloper.medialion.SimpleMediaItem
 import com.sunrisekcdeveloper.medialion.StringRes
+import com.sunrisekcdeveloper.medialion.TitledMedia
 import com.sunrisekcdeveloper.medialion.android.R
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.about.ui.AboutScreen
@@ -249,9 +250,9 @@ fun SearchScreen(
                         gridTitle = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.top_results),
                         media = state.searchResults,
                         suggestedMedia = listOf(
-                            stringResource(id = com.sunrisekcdeveloper.medialion.R.string.related_movies) to state.relatedTitles[0],
-                            stringResource(id = com.sunrisekcdeveloper.medialion.R.string.related_series) to state.relatedTitles[1],
-                            stringResource(id = com.sunrisekcdeveloper.medialion.R.string.related_documentaries) to state.relatedTitles[2],
+                            state.relatedTitles[0],
+                            state.relatedTitles[1],
+                            state.relatedTitles[2],
                         ),
                         onMediaClicked = {
                             selectedMediaItem = SimpleMediaItem(
