@@ -14,7 +14,7 @@ import shared
     private var handle: DisposableHandle?
     
     private let viewModel = WrapperMLSearchViewModel().instance()
-    @Published var state: SearchState? = nil
+    @Published var state: SearchState = SearchState.Idle(searchQuery: "", suggestedMedia: [])
     
     func submitAction(action: SearchAction) {
         self.viewModel.submitAction(action: action)

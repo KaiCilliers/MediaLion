@@ -10,21 +10,39 @@ import SwiftUI
 import shared
 
 struct MLMediaFavoriteListItem: View {
+    
+    var mediaItem: MediaItemUI
+    var onFavoriteClick: (Bool) -> Void
+    
     var body: some View {
         HStack(spacing: 0.0) {
+            
             MLMediaPoster()
                 .frame(width: 130.0, height: 90.0)
                 .padding(.trailing, 16.0)
                 
-            Text("Title")
+            Text(mediaItem.title)
                 .multilineTextAlignment(.leading)
                 .customFont(.h4)
                 .foregroundColor(.white)
+            
             Spacer()
-            Image("heartOutlineIcon")
-                .resizable()
-                .frame(width: 35.0, height: 30.0)
-                .padding(.horizontal, 16.0)
+            
+            Button{
+                onFavoriteClick(!mediaItem.isFavorited)
+            } label: {
+                if (mediaItem.isFavorited) {
+                    Image("heartFilledIcon")
+                        .resizable()
+                        .frame(width: 35.0, height: 30.0)
+                        .padding(.horizontal, 16.0)
+                } else {
+                    Image("heartOutlineIcon")
+                        .resizable()
+                        .frame(width: 35.0, height: 30.0)
+                        .padding(.horizontal, 16.0)
+                }
+            }
         }
         
         .background(Color.background)
@@ -34,6 +52,9 @@ struct MLMediaFavoriteListItem: View {
 
 struct MLMediaFavoriteListItem_Previews: PreviewProvider {
     static var previews: some View {
-        MLMediaFavoriteListItem()
+        MLMediaFavoriteListItem(
+            mediaItem: MediaItemUI(id: 1113, title: "Movie One", isFavorited: true, posterUrl: "https://search.yahoo.com/search?p=noster", bannerUrl: "http://www.bing.com/search?q=lacinia", genreIds: [], overview: "electram", popularity: 20.21, voteAverage: 22.23, voteCount: 5474, releaseYear: "mentitum", mediaType: MediaType.movie),
+            onFavoriteClick: {_ in}
+        )
     }
 }
