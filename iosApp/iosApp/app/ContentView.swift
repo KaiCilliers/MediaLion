@@ -36,6 +36,7 @@ struct ContentView: View {
                         
                     case .search:
                         SearchScreen()
+                            .navigationBarBackButtonHidden(true)
                 
                     }
                 }
