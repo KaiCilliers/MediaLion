@@ -12,6 +12,8 @@ import com.sunrisekcdeveloper.medialion.flow.cStateFlow
 import com.sunrisekcdeveloper.medialion.flow.combineTuple
 import com.sunrisekcdeveloper.medialion.mappers.ListMapper
 import com.sunrisekcdeveloper.medialion.mappers.Mapper
+import io.github.aakira.napier.DebugAntilog
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -26,6 +28,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.take
@@ -56,20 +59,32 @@ class MLSearchViewModel(
             if (it.isNotEmpty()) isLoading.value = true
         }
         .flatMapLatest { query ->
+            Napier.d(tag = "pedro") { "search query is $query" }
             when {
                 query.isEmpty() -> emptyFlow<List<MediaItemUI>>()
                 else -> {
                     flow {
-                        emit(
-                            searchComponent.topMediaResultsUseCase(query)
-                                .map { mediaItemMapper.map(it) }
-                                .toList()
-                        )
+                        val listOfMedia = searchComponent.topMediaResultsUseCase(query)
+                            .onEach { Napier.d(tag = "pedro") { "got an item from search component flow ${it.id}" } }
+                            .mapNotNull {
+                                runCatching {
+                                    mediaItemMapper.map(it)
+                                }
+                                    .onSuccess { Napier.d(tag="pedro") { "mapped an item successfully! ${it.id}" } }
+                                    .onFailure { Napier.d(tag="pedro") { "failed to map an item ${it.message}, ${it.cause}" } }
+                                    .getOrNull()
+                            }
+                            .toList()
+
+                        Napier.d(tag="pedro") { "I am going to emit a list of results [${listOfMedia.size}]${listOfMedia.map { it.id }}" }
+
+                        emit(listOfMedia)
                     }
                 }
             }
         }
         .onEach {
+            Napier.d(tag="pedro") { "A list was emitted! [${it.size}] and loading will go to false now!" }
             isLoading.value = false
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000L), listOf())
@@ -135,6 +150,7 @@ class MLSearchViewModel(
     )
 
     init {
+        Napier.base(DebugAntilog())
         viewModelScope.launch {
             val suggestedMedia = searchComponent.suggestedMediaUseCase()
                 .take(30)

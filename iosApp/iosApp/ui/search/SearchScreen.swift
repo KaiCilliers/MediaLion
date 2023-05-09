@@ -14,6 +14,10 @@ struct SearchScreen: View {
 
     @ObservedObject var viewModel = SearchViewModel()
     
+    init() {
+        NapierProxyKt.debugBuild()
+    }
+    
     var body: some View {
         
         VStack {

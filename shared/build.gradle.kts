@@ -45,6 +45,9 @@ kotlin {
                 implementation("com.squareup.sqldelight:coroutines-extensions:$sqlDelightVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
+                // logging
+                implementation("io.github.aakira:napier:2.6.1")
+
                 // see here for koin-ktor dep that might be useful
                 api("io.insert-koin:koin-core:3.4.0")
 
