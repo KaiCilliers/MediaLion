@@ -3,21 +3,29 @@ import shared
 
 struct ContentView: View {
     
-    @State var selectedTab: String = "Discovery"
+    @State var selectedTab: MLTabDestinations = .discovery
     
 	var body: some View {
-        VStack(spacing: 0) {
-            
-            TabView(selection: $selectedTab) {
-                CollectionsScreen()
-                    .tag("My Collection")
+        NavigationStack {
+            VStack(spacing: 0) {
                 
-                DiscoveryScreen()
-                    .tag("Discovery")
-            }
-            
-            MLBottomBar { tab in
-                selectedTab = tab.title
+                TabView(selection: $selectedTab) {
+                    DiscoveryScreen()
+                        .tag(MLTabDestinations.discovery)
+                    
+                    CollectionsScreen()
+                        .tag(MLTabDestinations.collection)
+                }
+                .navigationDestination(for: MLRootDestinations.self) { destination in
+                    switch (destination) {
+                        
+                        case .search:
+                            SearchScreen()
+                            
+                    }
+                }
+                
+                MLBottomBar(selectedTab: $selectedTab)
             }
         }
     }

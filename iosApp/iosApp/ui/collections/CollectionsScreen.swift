@@ -14,9 +14,13 @@ struct CollectionsScreen: View {
         ZStack{
         VStack (alignment: .center, spacing: 0){
                 HStack{
-                    Image("searchIcon")
-                        .resizable()
-                        .frame(width: 27, height: 30)
+                    
+                    NavigationLink(value: MLRootDestinations.search) {
+                        Image("searchIcon")
+                            .resizable()
+                            .frame(width: 27, height: 30)
+                    }
+                    
                     Spacer()
                     Image("aboutIcon")
                         .resizable()

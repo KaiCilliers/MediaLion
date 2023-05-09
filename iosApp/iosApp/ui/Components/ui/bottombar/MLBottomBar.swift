@@ -11,19 +11,13 @@ import shared
 
 struct MLBottomBar: View {
     
-    @State var selectedTab : Tabs = .home
-    let onTabSelected: (TabItem) -> Void
-    
-    init(onTabSelected: @escaping (TabItem) -> Void) {
-        self.onTabSelected = onTabSelected
-        onTabSelected(TabItem(image: "homeIcon", title: "Discovery"))
-    }
+    @Binding var selectedTab : MLTabDestinations
     
     var body: some View {
         HStack{
             
-            let isHomeSelected: Bool = {
-                if selectedTab == .home {
+            let isDiscoverySelected: Bool = {
+                if selectedTab == .discovery {
                     return true
                 } else {
                     return false
@@ -40,20 +34,14 @@ struct MLBottomBar: View {
             
             MLTabItem(
                 tabItem: TabItem(image: "homeIcon", title: StringRes.bottomBarHome),
-                isSelected: isHomeSelected,
-                onTabClicked: { tab in
-                    selectedTab = .home
-                    onTabSelected(tab)
-                }
+                isSelected: isDiscoverySelected,
+                onTabClicked: { tab in selectedTab = .discovery }
             )
             
             MLTabItem(
                 tabItem: TabItem(image: "slideOrangeCogIcon", title: StringRes.bottomBarCollection),
                 isSelected: isCollectionSelected,
-                onTabClicked: { tab in
-                    selectedTab = .collection
-                    onTabSelected(tab)
-                }
+                onTabClicked: { tab in selectedTab = .collection }
             )
         }
         .frame(height: 82)
@@ -62,15 +50,19 @@ struct MLBottomBar: View {
     }
 }
 
-extension MLBottomBar {
-    enum Tabs: Int {
-        case home = 0
-        case collection = 1
-    }
+enum MLTabDestinations: Int {
+    case discovery = 0
+    case collection = 1
+}
+
+enum MLRootDestinations: Int, Hashable {
+    case search
 }
 
 struct bottomBar_Previews: PreviewProvider {
     static var previews: some View {
-        MLBottomBar(onTabSelected: {_ in})
+        StatefulPreviewWrapper(MLTabDestinations.discovery) {
+            MLBottomBar(selectedTab: $0)
+        }
     }
 }
