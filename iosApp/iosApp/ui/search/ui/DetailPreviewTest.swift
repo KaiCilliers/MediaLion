@@ -18,11 +18,11 @@ struct DetailPreviewTest: View {
             
             VStack{
                 HStack{
-                    MLMediaPoster()
-                        .frame(width: 80, height: 120)
-                        .padding(.leading)
-                        .padding(.trailing, 8)
-                        .padding(.bottom)
+//                    MLMediaPoster()
+//                        .frame(width: 80, height: 120)
+//                        .padding(.leading)
+//                        .padding(.trailing, 8)
+//                        .padding(.bottom)
                     
                         
                     

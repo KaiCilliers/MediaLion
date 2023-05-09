@@ -32,11 +32,11 @@ struct MLTitledMediaGrid: View {
                 
                 LazyVGrid(columns: columns, spacing: 16) {
                     ForEach(media, id: \.self) {value in
-                        MLMediaPoster()
-                            .frame(width: 100,height: 170)
-                            .onTapGesture {
-                                onMediaItemClicked(value)
-                            }
+//                        MLMediaPoster()
+//                            .frame(width: 100,height: 170)
+//                            .onTapGesture {
+//                                onMediaItemClicked(value)
+//                            }
                         
                     }
                 }

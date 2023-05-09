@@ -11,7 +11,7 @@ import shared
 typealias AColor = SwiftUI.Color
 
 struct SearchScreen: View {
-
+    
     @Environment(\.presentationMode) var presentationMode
     @StateObject var viewModel = SearchViewModel()
     @State var showAboutDialog: Bool = false
@@ -70,36 +70,36 @@ struct SearchScreen: View {
                 
                 switch(viewModel.state) {
                     
-                    case let idleState as SearchState.Idle:
-                        SearchIdleState(
-                            rowTitle: StringRes.topSuggestions,
-                            media: idleState.suggestedMedia,
-                            onMediaClicked: {_ in},
-                            onFavoriteToggle: {_,_ in}
-                        )
-                        
-                    case let resultState as SearchState.Results:
-                        MLTitledMediaGrid(
-                            gridTitle: StringRes.topResults,
-                            media: resultState.searchResults,
-                            suggestedMedia: resultState.relatedTitles,
-                            onMediaItemClicked: { value in
-                                // show media detail sheet
-                            }
-                        )
-                        
-                    case _ as SearchState.Loading:
-                        ProgressView("Searching for media...")
-                        
-                    case _ as SearchState.Empty:
-                        SearchEmptyState()
-                        
-                    default:
-                        fatalError("Unreachable state! \(viewModel.state)")
+                case let idleState as SearchState.Idle:
+                    SearchIdleState(
+                        rowTitle: StringRes.topSuggestions,
+                        media: idleState.suggestedMedia,
+                        onMediaClicked: {_ in},
+                        onFavoriteToggle: {_,_ in}
+                    )
+                    
+                case let resultState as SearchState.Results:
+                    MLTitledMediaGrid(
+                        gridTitle: StringRes.topResults,
+                        media: resultState.searchResults,
+                        suggestedMedia: resultState.relatedTitles,
+                        onMediaItemClicked: { value in
+                            // show media detail sheet
+                        }
+                    )
+                    
+                case _ as SearchState.Loading:
+                    ProgressView("Searching for media...")
+                    
+                case _ as SearchState.Empty:
+                    SearchEmptyState()
+                    
+                default:
+                    fatalError("Unreachable state! \(viewModel.state)")
                 }
             }
-                .blur(radius: CGFloat(screenBlurAmount))
-                .disabled(showAboutDialog)
+            .blur(radius: CGFloat(screenBlurAmount))
+            .disabled(showAboutDialog)
             
             if showAboutDialog {
                 MLAboutDialog(
@@ -125,3 +125,4 @@ struct SearchScreen: View {
             SearchScreen()
         }
     }
+}

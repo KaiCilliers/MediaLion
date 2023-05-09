@@ -25,8 +25,8 @@ struct MLTitledMediaRow: View {
             ScrollView(.horizontal) {
                 HStack(spacing: 20) {
                     ForEach(media, id: \.self) {value in
-                        MLMediaPoster()
-                            .frame(width: 100, height: 170)
+//                        MLMediaPoster()
+//                            .frame(width: 100, height: 170)
                             
                     }
                 }

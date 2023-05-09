@@ -17,7 +17,7 @@ struct MLMediaFavoriteListItem: View {
     var body: some View {
         HStack(spacing: 0.0) {
 
-            MLMediaPoster()
+            MLMediaBanner(media: mediaItem)
                 .frame(width: 130.0, height: 90.0)
                 .padding(.trailing, 16.0)
                 
