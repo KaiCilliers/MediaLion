@@ -1,8 +1,13 @@
 package com.sunrisekcdeveloper.medialion.data
 
+import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Delay
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.newFixedThreadPoolContext
+import kotlinx.coroutines.Runnable
+import kotlinx.coroutines.*
+import platform.darwin.*
+import kotlin.coroutines.CoroutineContext
 
 actual class DefaultDispatcherProvider : DispatcherProvider {
     override val main: CoroutineDispatcher
@@ -14,7 +19,31 @@ actual class DefaultDispatcherProvider : DispatcherProvider {
     https://github.com/Kotlin/kotlinx.coroutines/issues/3205
      */
     override val io: CoroutineDispatcher
-        get() = newFixedThreadPoolContext(nThreads = 64, name = "Dispatchers.IO")
+        get() = IODispatcher
     override val unconfined: CoroutineDispatcher
         get() = Dispatchers.Unconfined
+}
+
+@OptIn(InternalCoroutinesApi::class)
+private object IODispatcher : CoroutineDispatcher(), Delay {
+    override fun dispatch(context: CoroutineContext, block: Runnable) {
+        val queue = dispatch_get_main_queue()
+        dispatch_async(queue) {
+            block.run()
+        }
+    }
+
+    override fun scheduleResumeAfterDelay(
+        timeMillis: Long,
+        continuation: CancellableContinuation<Unit>
+    ) {
+        val queue = dispatch_get_main_queue()
+
+        val time = dispatch_time(DISPATCH_TIME_NOW, (timeMillis * NSEC_PER_MSEC.toLong()))
+        dispatch_after(time, queue) {
+            with(continuation) {
+                resumeUndispatched(Unit)
+            }
+        }
+    }
 }

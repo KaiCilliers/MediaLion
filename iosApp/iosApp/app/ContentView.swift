@@ -8,7 +8,7 @@ struct ContentView: View {
     
     var body: some View {
         
-        var screenBlurAmount: Float = {
+        let screenBlurAmount: Float = {
             if showAboutDialog {
                 return 4
             } else {

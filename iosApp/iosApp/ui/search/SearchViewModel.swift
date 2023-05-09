@@ -13,7 +13,7 @@ import shared
     
     private var handle: DisposableHandle?
     
-    private let viewModel = WrapperMLSearchViewModel().instance()
+    private var viewModel: MLSearchViewModel = WrapperMLSearchViewModel().instance()
     @Published var state: SearchState = SearchState.Idle(searchQuery: "", suggestedMedia: [])
     
     func submitAction(action: SearchAction) {
@@ -24,12 +24,14 @@ import shared
         handle = viewModel.state.subscribe(onCollect: { state in
             // essentially a null check
             if let state = state {
+                print("IOS - SV - updating state")
                 self.state = state
             }
         })
     }
     
     func dispose() {
+        print("IOS - SV - disposed viewmodel observations")
         handle?.dispose()
     }
     

@@ -14,6 +14,7 @@ import com.sunrisekcdeveloper.medialion.mappers.ListMapper
 import com.sunrisekcdeveloper.medialion.mappers.Mapper
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
+import io.github.aakira.napier.log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,6 +24,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
@@ -43,7 +45,7 @@ class MLSearchViewModel(
     private val movieListMapper: ListMapper<Movie, MediaItemUI>,
     coroutineScope: CoroutineScope?,
 ) {
-    private val viewModelScope = coroutineScope ?: CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private val viewModelScope = coroutineScope ?: CoroutineScope(Dispatchers.Main.immediate)
 
     private val favoriteMovies: StateFlow<List<MediaItem>> = collectionComponent
         .fetchCollection(Title("favorite"))
@@ -59,32 +61,39 @@ class MLSearchViewModel(
             if (it.isNotEmpty()) isLoading.value = true
         }
         .flatMapLatest { query ->
-            Napier.d(tag = "pedro") { "search query is $query" }
             when {
-                query.isEmpty() -> emptyFlow<List<MediaItemUI>>()
+                query.isEmpty() -> {
+                    log { "query is empty, so we return an empty flow" }
+                    emptyFlow<List<MediaItemUI>>()
+                }
                 else -> {
+                    log { "query is not empty $query" }
                     flow {
-                        val listOfMedia = searchComponent.topMediaResultsUseCase(query)
-                            .onEach { Napier.d(tag = "pedro") { "got an item from search component flow ${it.id}" } }
-                            .mapNotNull {
-                                runCatching {
-                                    mediaItemMapper.map(it)
+                        runCatching {
+                            searchComponent.topMediaResultsUseCase(query)
+                                .onEach { log { "got an item from search component flow ${it.id.value}" } }
+                                .mapNotNull {
+                                    runCatching {
+                                        mediaItemMapper.map(it)
+                                    }
+                                        .onFailure { log { "failed to map an item ${it.message}, ${it.cause}" } }
+                                        .getOrNull()
                                 }
-                                    .onSuccess { Napier.d(tag="pedro") { "mapped an item successfully! ${it.id}" } }
-                                    .onFailure { Napier.d(tag="pedro") { "failed to map an item ${it.message}, ${it.cause}" } }
-                                    .getOrNull()
+                                .onEach { log { "processed item to UI - ${it.id}" } }
+                                .catch { log { "caught an exception ${it.message} and ${it.cause}" } }
+                                .toList()
+                        }
+                            .onSuccess {
+                                log { "I am going to emit a list of results [${it.size}]${it.map { it.id }}" }
+                                emit(it)
                             }
-                            .toList()
-
-                        Napier.d(tag="pedro") { "I am going to emit a list of results [${listOfMedia.size}]${listOfMedia.map { it.id }}" }
-
-                        emit(listOfMedia)
+                            .onFailure { log { "Wtf went on here? ${it.message} and ${it.cause}" } }
                     }
                 }
             }
         }
         .onEach {
-            Napier.d(tag="pedro") { "A list was emitted! [${it.size}] and loading will go to false now!" }
+            log { "A list was emitted! [${it.size}] and loading will go to false now!" }
             isLoading.value = false
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000L), listOf())
@@ -119,7 +128,7 @@ class MLSearchViewModel(
         suggestedMovies,
         favoriteMovies,
     ).map { (query, isLoading, results, related, suggestedMovies, favMovies) ->
-        println("wolverine - tuple query=$query, isLoading=$isLoading, results=${results.size}, related=${related.size}, suggested=${suggestedMovies.size}, fav=${favMovies.size}")
+        log {"tuple query=$query, isLoading=$isLoading, results=${results.size}, related=${related.size}, suggested=${suggestedMovies.size}, fav=${favMovies.size}" }
 
         val mergedFavorites = suggestedMovies.map { suggestedMovie ->
             if (favMovies.map { it.id.value }.contains(suggestedMovie.id)) {
@@ -163,7 +172,7 @@ class MLSearchViewModel(
         get() = _state.cStateFlow()
 
     fun submitAction(action: SearchAction) {
-        println("wolverine - submitted an action $action")
+        log { "wolverine - submitted an action $action" }
         when (action) {
             is SearchAction.AddToFavorites -> addToFavorites(action.mediaId, action.mediaType)
             SearchAction.ClearSearchText -> currentQuery.value = ""
