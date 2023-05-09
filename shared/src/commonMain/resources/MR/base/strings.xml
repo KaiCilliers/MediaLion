@@ -22,8 +22,8 @@
     <string name="must_watch_list">Must watch</string>
     <string name="watch_again_list">Watch again</string>
     <string name="save_to_list_title">Save to Collection</string>
-    <string name="bottom_bar_collection">Home</string>
-    <string name="bottom_bar_home">My Collection</string>
+    <string name="bottom_bar_collection">My Collections</string>
+    <string name="bottom_bar_home">Discovery</string>
     <string name="categories">Categories</string>
     <string name="filter_movies">Movies</string>
     <string name="filter_all">All</string>
