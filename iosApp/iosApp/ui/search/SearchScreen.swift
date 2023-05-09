@@ -24,7 +24,7 @@ struct SearchScreen: View {
             
             MLSearchBar(
                 text: viewModel.state.searchQuery,
-                labelText: "Search for a show, movie or documentary",
+                labelText: StringRes.emptySearch,
                 onSearchQueryTextChanged: { query in
                     viewModel.submitAction(action: SearchAction.SubmitSearchQuery(query: query))
                 },
