@@ -8,11 +8,8 @@
 
 import SwiftUI
 
-@available(iOS 15.0, *)
-@available(iOS 16.0, *)
-struct discoveryScreen: View {
+struct DiscoveryScreen: View {
     
-    @State var selectedTab : Tabs = .home
     @State var isActive : Bool = false
     
     var body: some View {
@@ -36,7 +33,7 @@ struct discoveryScreen: View {
                 .padding()
                 .background(Color.background)
                 
-                discoveryFilterItems( action: {filter in
+                DiscoveryFilterItems( action: {filter in
                     if filter == .categories {
                         isActive = true
                     }
@@ -55,20 +52,16 @@ struct discoveryScreen: View {
                     }
                 }
                 
-                bottomBar(selectedTab: $selectedTab)
-                
             }.background(Color.background)
         }
         if isActive {
-            customCategoriesDialog(isActive: .constant(true), title: "Categories", action: {isActive = false})
+            CustomCategoriesDialog(isActive: .constant(true), title: "Categories", action: {isActive = false})
         }
     }
 }
 
-@available(iOS 15.0, *)
-@available(iOS 16.0, *)
 struct discoveryScreen_Previews: PreviewProvider {
     static var previews: some View {
-        discoveryScreen()
+        DiscoveryScreen()
     }
 }

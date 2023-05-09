@@ -8,10 +8,7 @@
 
 import SwiftUI
 
-@available(iOS 16.0, *)
-struct collectionScreen: View {
-    
-    @State var selectedTab : Tabs = .home
+struct CollectionsScreen: View {
     
     var body: some View {
         ZStack{
@@ -39,8 +36,6 @@ struct collectionScreen: View {
 //                        MLTitledMediaRow()
                     }
                 }
-            
-            bottomBar(selectedTab: $selectedTab)
             }
        
         }
@@ -52,6 +47,6 @@ struct collectionScreen: View {
 @available(iOS 16.0, *)
 struct collectionScreen_Previews: PreviewProvider {
     static var previews: some View {
-        collectionScreen()
+        CollectionsScreen()
     }
 }

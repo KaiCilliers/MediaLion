@@ -8,8 +8,7 @@
 
 import SwiftUI
 
-@available(iOS 15.0, *)
-struct categoriesDialog: View {
+struct CategoriesDialog: View {
     @State var isActive : Bool = false
     var body: some View {
         ZStack{
@@ -26,15 +25,14 @@ struct categoriesDialog: View {
             .padding()
             
             if isActive {
-                customCategoriesDialog(isActive: .constant(true), title: "Categories", action: {})
+                CustomCategoriesDialog(isActive: .constant(true), title: "Categories", action: {})
             }
         }
     }
 }
 
-@available(iOS 15.0, *)
 struct categoriesDialog_Previews: PreviewProvider {
     static var previews: some View {
-        categoriesDialog()
+        CategoriesDialog()
     }
 }

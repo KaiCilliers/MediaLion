@@ -13,9 +13,8 @@ struct Category : Identifiable {
     
     let name: String
 }
-@available(iOS 15.0, *)
-@available(iOS 15.0, *)
-struct customCategoriesDialog: View {
+
+struct CustomCategoriesDialog: View {
     
     @Binding var isActive: Bool
     @State private var offset: CGFloat = 1000
@@ -88,7 +87,7 @@ struct customCategoriesDialog: View {
             
             .padding(.top, 25)
             .padding(.trailing, 20)
-           
+            
         }
         .shadow(radius: 10)
         .padding(30)
@@ -110,9 +109,8 @@ struct customCategoriesDialog: View {
     }
 }
 
-@available(iOS 15.0, *)
 struct customCategoriesDialog_Previews: PreviewProvider {
     static var previews: some View {
-        customCategoriesDialog(isActive: .constant(true), title: "Categories", action: {} )
+        CustomCategoriesDialog(isActive: .constant(true), title: "Categories", action: {} )
     }
 }

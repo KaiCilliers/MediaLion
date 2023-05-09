@@ -8,9 +8,7 @@
 
 import SwiftUI
 
-@available(iOS 16.0, *)
 struct gridItemScreen: View {
-    @State var selectedTab : Tabs = .home
     @Environment(\.editMode) var editMode
     
     var body: some View {
@@ -29,7 +27,6 @@ struct gridItemScreen: View {
                 }.background(Color.background)
 //                MLTitledMediaGrid(title: "Horror")
                 
-                bottomBar(selectedTab: $selectedTab)
             }
             .overlay {
                 VStack{
