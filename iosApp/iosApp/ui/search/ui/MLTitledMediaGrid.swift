@@ -27,7 +27,7 @@ struct MLTitledMediaGrid: View {
                     .foregroundColor(.white)
                     .customFont(.h2)
                     .padding(.leading, 16)
-                    .padding(.top, 8)
+                    .padding(.top, 16)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 LazyVGrid(columns: columns, spacing: 16) {

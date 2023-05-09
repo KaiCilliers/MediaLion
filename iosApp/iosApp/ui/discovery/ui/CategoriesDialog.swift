@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import shared
 
 struct CategoriesDialog: View {
     @State var isActive : Bool = false
@@ -16,7 +17,7 @@ struct CategoriesDialog: View {
                 Button{
                     isActive = true
                 } label: {
-                    Text("Categories")
+                    Text(StringRes.categories)
                         .foregroundColor(.mlLightBlue)
                         .background(Color.background)
                         .customFont(.h3)
@@ -25,7 +26,7 @@ struct CategoriesDialog: View {
             .padding()
             
             if isActive {
-                CustomCategoriesDialog(isActive: .constant(true), title: "Categories", action: {})
+                CustomCategoriesDialog(isActive: .constant(true), title: StringRes.categories, action: {})
             }
         }
     }

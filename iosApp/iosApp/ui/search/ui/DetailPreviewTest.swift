@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import shared
 
 struct DetailPreviewTest: View {
     let onCloseClick: () -> ()
@@ -74,7 +75,7 @@ struct DetailPreviewTest: View {
                     .resizable()
                     .frame(width: 40, height: 40)
                 
-                Text("My Collection")
+                Text(StringRes.mtList)
                     .customFont(.h1)
                     .foregroundColor(.white)
             }

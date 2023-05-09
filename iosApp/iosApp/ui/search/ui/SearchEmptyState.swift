@@ -7,19 +7,20 @@
 //
 
 import SwiftUI
+import shared
 
 struct SearchEmptyState: View {
     var body: some View {
         ZStack{
             VStack{
-                Text("We could not find what you are looking for.")
+                Text(StringRes.emptyResultTitle)
                     .frame(maxWidth: .infinity, alignment: .topLeading)
                     .customFont(.subtitle1)
                     .padding(.bottom, 1)
                 
                
                 
-                Text("Try searching for another movie, show, actor, director, or genre")
+                Text(StringRes.emptyResultBody)
                     .frame(maxWidth: .infinity, alignment: .topLeading)
                     .customFont(.h1)
                 Spacer()

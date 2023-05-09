@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import shared
 
 enum Filter: Int {
     case all = 0
@@ -29,11 +30,11 @@ struct DiscoveryFilterItems: View {
                 } label: {
                     
                     if selectedFilter == .all {
-                        Text("All")
+                        Text(StringRes.filterAll)
                             .customFont(.h3)
                             .foregroundColor(.mlLightBlue)
                     } else {
-                        Text("All")
+                        Text(StringRes.filterAll)
                             .customFont(.h3)
                         .foregroundColor(.dialogOrange) }
                 }
@@ -48,11 +49,11 @@ struct DiscoveryFilterItems: View {
                 } label: {
                     
                     if selectedFilter == .movies {
-                        Text("Movies")
+                        Text(StringRes.filterMovies)
                             .customFont(.h3)
                             .foregroundColor(.mlLightBlue)
                     } else {
-                        Text("Movies")
+                        Text(StringRes.filterMovies)
                             .customFont(.h3)
                         .foregroundColor(.dialogOrange) }
                 }
@@ -67,11 +68,11 @@ struct DiscoveryFilterItems: View {
                 } label: {
                     
                     if selectedFilter == .series{
-                        Text("Series")
+                        Text(StringRes.filterSeries)
                             .customFont(.h3)
                             .foregroundColor(.mlLightBlue)
                     } else {
-                        Text("Series")
+                        Text(StringRes.filterSeries)
                             .customFont(.h3)
                         .foregroundColor(.dialogOrange) }
                 }
@@ -88,11 +89,11 @@ struct DiscoveryFilterItems: View {
                     
                     
                     if selectedFilter == .categories {
-                        Text("Categories")
+                        Text(StringRes.filterCategories)
                             .customFont(.h3)
                             .foregroundColor(.mlLightBlue)
                     } else {
-                        Text("Categories")
+                        Text(StringRes.filterCategories)
                             .customFont(.h3)
                         .foregroundColor(.dialogOrange) }
                 }

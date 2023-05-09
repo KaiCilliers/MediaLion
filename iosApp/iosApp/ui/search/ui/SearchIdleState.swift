@@ -22,7 +22,7 @@ struct SearchIdleState: View {
                 Text(rowTitle)
                     .foregroundColor(.white)
                     .customFont(.h2)
-                    .padding(.top, 10)
+                    .padding(.top, 16)
                     .frame(maxWidth: .infinity,alignment: .leading)
                 VStack(spacing: 30) {
                     ForEach(media, id: \.self) {value in

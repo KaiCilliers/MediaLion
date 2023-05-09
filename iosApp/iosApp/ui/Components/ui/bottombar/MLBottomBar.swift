@@ -39,7 +39,7 @@ struct MLBottomBar: View {
             }()
             
             MLTabItem(
-                tabItem: TabItem(image: "homeIcon", title: "Discovery"),
+                tabItem: TabItem(image: "homeIcon", title: StringRes.bottomBarHome),
                 isSelected: isHomeSelected,
                 onTabClicked: { tab in
                     selectedTab = .home
@@ -48,7 +48,7 @@ struct MLBottomBar: View {
             )
             
             MLTabItem(
-                tabItem: TabItem(image: "slideOrangeCogIcon", title: "My Collection"),
+                tabItem: TabItem(image: "slideOrangeCogIcon", title: StringRes.bottomBarCollection),
                 isSelected: isCollectionSelected,
                 onTabClicked: { tab in
                     selectedTab = .collection

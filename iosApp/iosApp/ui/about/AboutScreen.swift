@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import shared
 
 @available(iOS 15.0, *)
 struct AboutScreen: View {
@@ -25,7 +26,7 @@ struct AboutScreen: View {
             .padding()
             
             if isActive {
-                CustomAboutDialog(isActive: .constant(true), title: "About", message1: "MediaLion Information", message2: "This App is a media organiser, which allows users to save and store their favorite movies, series and documentaries in custom collections.", message3: "App Develeopers:", message4: "Kai Cilliers", message5: "Graphic Designer:", message6: "Roxie Nemes", action: {}, buttonTitle: "Done")
+                CustomAboutDialog(isActive: .constant(true), title: StringRes.about, message1: StringRes.aboutHeading, message2: StringRes.appDescription, message3: StringRes.appDevelopers, message4: StringRes.appDevelopersNames, message5: StringRes.graphicDesigner, message6: StringRes.graphicDesignerName, action: {}, buttonTitle: "Done")
             }
         }
     }

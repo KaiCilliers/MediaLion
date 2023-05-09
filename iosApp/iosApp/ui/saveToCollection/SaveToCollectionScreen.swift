@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import shared
 
 @available(iOS 15.0, *)
 struct SaveToCollectionScreen: View {
@@ -26,7 +27,7 @@ struct SaveToCollectionScreen: View {
             .padding()
             
             if isActive {
-                CustomCollectionDialog(isActive: .constant(true), title: "Save to Collection", action: {}, buttoTitle: "Done")
+                CustomCollectionDialog(isActive: .constant(true), title: StringRes.saveToListTitle, action: {}, buttoTitle: "Done")
             }
         }
     }

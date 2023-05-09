@@ -20,7 +20,7 @@ struct SearchScreen: View {
     
     var body: some View {
         
-        VStack {
+        VStack (alignment: .center, spacing: 0){
             
             MLSearchBar(
                 text: viewModel.state.searchQuery,
@@ -37,7 +37,7 @@ struct SearchScreen: View {
                 
                 case let idleState as SearchState.Idle:
                     SearchIdleState(
-                        rowTitle: "Top Suggestions",
+                        rowTitle: StringRes.topSuggestions,
                         media: idleState.suggestedMedia,
                         onMediaClicked: {_ in},
                         onFavoriteToggle: {_,_ in}
@@ -45,7 +45,7 @@ struct SearchScreen: View {
                 
                 case let resultState as SearchState.Results:
                     MLTitledMediaGrid(
-                        gridTitle: "Top Results",
+                        gridTitle: StringRes.topResults,
                         media: resultState.searchResults,
                         suggestedMedia: resultState.relatedTitles,
                         onMediaItemClicked: { value in
@@ -55,7 +55,6 @@ struct SearchScreen: View {
                 
                 case _ as SearchState.Loading:
                     ProgressView("Searching for media...")
-                    .scaleEffect(2)
                 
                 case _ as SearchState.Empty:
                     SearchEmptyState()

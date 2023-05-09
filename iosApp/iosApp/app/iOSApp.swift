@@ -13,7 +13,7 @@ struct iOSApp: App {
             NavigationView {
                 SearchScreen()
             }
-            .navigationTitle("ContentView")
+            .navigationTitle("SearchScreen")
 		}
 	}
 }

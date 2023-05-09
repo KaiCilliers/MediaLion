@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import shared
 
 @available(iOS 15.0, *)
 @available(iOS 15.0, *)
@@ -40,7 +41,7 @@ struct CustomCollectionDialog: View {
                 HStack{
                     TextField("", text: $text)
                         .customFont(.h1)
-                        .modifier(PlaceholderStyleCollections(showPlaceHolder: text.isEmpty, placeholder: "Create new collection")
+                        .modifier(PlaceholderStyleCollections(showPlaceHolder: text.isEmpty, placeholder: StringRes.emptyAddToListText)
                         )
                         .padding(.vertical)
                         .padding(.horizontal)
