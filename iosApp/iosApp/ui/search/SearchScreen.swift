@@ -12,7 +12,9 @@ typealias AColor = SwiftUI.Color
 
 struct SearchScreen: View {
 
+    @Environment(\.presentationMode) var presentationMode
     @ObservedObject var viewModel = SearchViewModel()
+    @State var showAboutDialog: Bool = false
     
     init() {
         NapierProxyKt.debugBuild()
@@ -20,21 +22,54 @@ struct SearchScreen: View {
     
     var body: some View {
         
-        VStack (alignment: .center, spacing: 0){
-            
-            MLSearchBar(
-                text: viewModel.state.searchQuery,
-                labelText: StringRes.emptySearch,
-                onSearchQueryTextChanged: { query in
-                    viewModel.submitAction(action: SearchAction.SubmitSearchQuery(query: query))
-                },
-                onClearSearchText: {
-                    viewModel.submitAction(action: SearchAction.ClearSearchText())
-                }
-            )
-            
-            switch(viewModel.state) {
+        var screenBlurAmount: Float = {
+            if showAboutDialog {
+                return 4
+            } else {
+                return 0
+            }
+        }()
+        
+        ZStack {
+            VStack (alignment: .center, spacing: 0){
                 
+                HStack{
+                    
+                    Button {
+                        self.presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Image("backArrowIcon")
+                            .resizable()
+                            .frame(width: 27, height: 30)
+                    }
+                    
+                    Spacer()
+                    
+                    Button {
+                        showAboutDialog = true
+                    } label: {
+                        Image("aboutIcon")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                    }
+                    
+                }
+                .padding()
+                .background(Color.background)
+                
+                MLSearchBar(
+                    text: viewModel.state.searchQuery,
+                    labelText: StringRes.emptySearch,
+                    onSearchQueryTextChanged: { query in
+                        viewModel.submitAction(action: SearchAction.SubmitSearchQuery(query: query))
+                    },
+                    onClearSearchText: {
+                        viewModel.submitAction(action: SearchAction.ClearSearchText())
+                    }
+                )
+                
+                switch(viewModel.state) {
+                    
                 case let idleState as SearchState.Idle:
                     SearchIdleState(
                         rowTitle: StringRes.topSuggestions,
@@ -42,7 +77,7 @@ struct SearchScreen: View {
                         onMediaClicked: {_ in},
                         onFavoriteToggle: {_,_ in}
                     )
-                
+                    
                 case let resultState as SearchState.Results:
                     MLTitledMediaGrid(
                         gridTitle: StringRes.topResults,
@@ -52,15 +87,26 @@ struct SearchScreen: View {
                             // show media detail sheet
                         }
                     )
-                
+                    
                 case _ as SearchState.Loading:
                     ProgressView("Searching for media...")
-                
+                    
                 case _ as SearchState.Empty:
                     SearchEmptyState()
-                
+                    
                 default:
                     Text("Placeholder - this state should not be reached")
+                }
+            }
+                .blur(radius: CGFloat(screenBlurAmount))
+                .disabled(showAboutDialog)
+            
+            if showAboutDialog {
+                MLAboutDialog(
+                    onCloseAction: {
+                        showAboutDialog = false
+                    }
+                )
             }
         }
         .onAppear {
@@ -69,6 +115,7 @@ struct SearchScreen: View {
         .onDisappear {
             viewModel.dispose()
         }
+        
     }
     
     struct SearchScreen_Previews: PreviewProvider {
