@@ -7,55 +7,45 @@
 //
 
 import SwiftUI
+import shared
 
-@available(iOS 15.0, *)
-struct CustomAboutDialog: View {
+struct MLAboutDialog: View {
     
-    @Binding var isActive: Bool
-    let title: String
-    let message1: String
-    let message2: String
-    let message3: String
-    let message4: String
-    let message5: String
-    let message6: String
-    let action: () -> ()
-    let buttonTitle: String
     @State private var offset: CGFloat = 1000
+    let onCloseAction: () -> Void
     
     var body: some View {
         
-        
             VStack{
-                Text(title)
+                Text(StringRes.about)
                     .customFont(.subtitle1)
                     .padding()
                 
-                Text(message1)
+                Text(StringRes.aboutHeading)
                     .customFont(.h4)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, 5)
                 
-                Text(message2)
+                Text(StringRes.appDescription)
                     .customFont(.body2)
                     .lineSpacing(1)
                     .padding(.bottom, 1)
                 
-                Text(message3)
+                Text(StringRes.appDevelopers)
                     .customFont(.body2)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 
-                Text(message4)
+                Text(StringRes.appDevelopersNames)
                     .customFont(.body2)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, 1 )
                 
-                Text(message5)
+                Text(StringRes.graphicDesigner)
                     .customFont(.body2)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
-                Text(message6)
+                Text(StringRes.graphicDesignerName)
                     .customFont(.body2)
                     .frame(maxWidth: .infinity, alignment: .leading)
             
@@ -103,15 +93,16 @@ struct CustomAboutDialog: View {
         func close() {
             withAnimation(.spring()) {
                 offset = 1000
-                isActive = false
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                onCloseAction()
             }
         }
     }
 
 
-@available(iOS 15.0, *)
 struct CustomAboutDialog_Previews: PreviewProvider {
     static var previews: some View {
-        CustomAboutDialog(isActive: .constant(true),title: "About", message1: "MediaLion Information", message2: "This App is a media organiser, which allows users to save and store their favorite movies, series and documentaries in custom collections.", message3: "App Developers:", message4: "Kai Cilliers & Nadine Cilliers", message5: "Graphic Designer:", message6: "Roxie Nemes", action: {}, buttonTitle: "Done")
+        MLAboutDialog(onCloseAction: {})
     }
 }

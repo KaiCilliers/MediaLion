@@ -26,7 +26,7 @@ struct AboutScreen: View {
             .padding()
             
             if isActive {
-                CustomAboutDialog(isActive: .constant(true), title: StringRes.about, message1: StringRes.aboutHeading, message2: StringRes.appDescription, message3: StringRes.appDevelopers, message4: StringRes.appDevelopersNames, message5: StringRes.graphicDesigner, message6: StringRes.graphicDesignerName, action: {}, buttonTitle: "Done")
+                MLAboutDialog(onCloseAction: {})
             }
         }
     }

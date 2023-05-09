@@ -26,7 +26,10 @@ struct CategoriesDialog: View {
             .padding()
             
             if isActive {
-                CustomCategoriesDialog(isActive: .constant(true), title: StringRes.categories, action: {})
+                CustomCategoriesDialog(
+                    title: StringRes.categories,
+                    onClose: {}
+                )
             }
         }
     }

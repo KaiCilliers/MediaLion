@@ -11,9 +11,19 @@ import SwiftUI
 struct DiscoveryScreen: View {
     
     @State var isActive : Bool = false
+    let onInfoClicked: () -> Void
     
     var body: some View {
+        var blurAmount: Float = {
+            if isActive {
+                return 4
+            } else {
+                return 0
+            }
+        }()
+        
         ZStack{
+            
             VStack (alignment: .center, spacing: 0){
                 HStack{
                     
@@ -28,9 +38,14 @@ struct DiscoveryScreen: View {
                         .resizable()
                         .frame(width: 100, height: 80)
                     Spacer()
-                    Image("aboutIcon")
-                        .resizable()
-                        .frame(width: 30, height: 30)
+                    
+                    Button {
+                        onInfoClicked()
+                    } label: {
+                        Image("aboutIcon")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                    }
                     
                 }
                 .padding()
@@ -55,16 +70,16 @@ struct DiscoveryScreen: View {
                     }
                 }
                 
-            }.background(Color.background)
-        }
-        if isActive {
-            CustomCategoriesDialog(isActive: .constant(true), title: "Categories", action: {isActive = false})
+            }
+            .background(Color.background)
         }
     }
 }
 
 struct discoveryScreen_Previews: PreviewProvider {
     static var previews: some View {
-        DiscoveryScreen()
+        DiscoveryScreen(
+            onInfoClicked: {}
+        )
     }
 }

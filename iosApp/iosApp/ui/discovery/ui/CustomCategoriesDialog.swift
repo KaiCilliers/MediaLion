@@ -16,7 +16,6 @@ struct Category : Identifiable {
 
 struct CustomCategoriesDialog: View {
     
-    @Binding var isActive: Bool
     @State private var offset: CGFloat = 1000
     let categories = [
         Category(id: 1, name: "Horror"),
@@ -33,7 +32,7 @@ struct CustomCategoriesDialog: View {
         Category(id: 12, name:"Sci-Fi")
     ]
     let title: String
-    let action: () -> ()
+    let onClose: () -> Void
     
     
     var body: some View  {
@@ -97,20 +96,29 @@ struct CustomCategoriesDialog: View {
                 offset = 0
             }
         }
+        .onDisappear {
+            withAnimation(.spring()) {
+                offset = 1000
+            }
+        }
     }
     
     
     func close() {
-        action()
         withAnimation(.spring()) {
             offset = 1000
-            isActive = false
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            onClose()
         }
     }
 }
 
 struct customCategoriesDialog_Previews: PreviewProvider {
     static var previews: some View {
-        CustomCategoriesDialog(isActive: .constant(true), title: "Categories", action: {} )
+        CustomCategoriesDialog(
+            title: "Categories",
+            onClose: {}
+        )
     }
 }

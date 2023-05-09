@@ -10,6 +10,8 @@ import SwiftUI
 
 struct CollectionsScreen: View {
     
+    let onInfoClicked: () -> Void
+    
     var body: some View {
         ZStack{
         VStack (alignment: .center, spacing: 0){
@@ -22,9 +24,15 @@ struct CollectionsScreen: View {
                     }
                     
                     Spacer()
-                    Image("aboutIcon")
-                        .resizable()
-                        .frame(width: 30, height: 30)
+                    
+                    Button {
+                        onInfoClicked()
+                    } label: {
+                        Image("aboutIcon")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                    }
+                    
                 }
                 .padding()
                 .background(Color.background)
@@ -48,9 +56,10 @@ struct CollectionsScreen: View {
     }
 }
 
-@available(iOS 16.0, *)
 struct collectionScreen_Previews: PreviewProvider {
     static var previews: some View {
-        CollectionsScreen()
+        CollectionsScreen(
+            onInfoClicked: {}
+        )
     }
 }
