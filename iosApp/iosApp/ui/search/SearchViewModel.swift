@@ -27,6 +27,7 @@ import shared
         handle = viewModel.state.subscribe(onCollect: { state in
             // essentially a null check
             if let state = state {
+                print("IOS - got a state \(state)")
                 self.state = state
             }
         })

@@ -34,6 +34,7 @@ struct MLCollectionsDialog: View {
                             collectionName: collectionItem.name,
                             checked: collectionItem.checked,
                             onCollectionClicked: { favorited in
+                                print("IOS - collection clicked \(collectionItem.name) -> \(favorited)")
                                 if (favorited) {
                                     onAddToCollection(collectionItem.name)
                                 } else { onRemoveFromCollection(collectionItem.name)

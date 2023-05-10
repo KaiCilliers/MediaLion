@@ -17,6 +17,7 @@ struct SearchScreen: View {
     @State private var showAboutDialog: Bool = false
     @State private var mediaPreviewSheet: PreviewMedia = PreviewMedia(media: nil,sheetVisible: false)
     @State private var showCollectionDialog = false
+    @State private var selectedMedia: MediaItemUI? = nil
     
     init() {
         NapierProxyKt.debugBuild()
@@ -78,6 +79,7 @@ struct SearchScreen: View {
                         media: idleState.suggestedMedia,
                         onMediaClicked: { item in
                             mediaPreviewSheet.showSheet(media: item)
+                            selectedMedia = item
                         },
                         onFavoriteToggle: { item, favorited in
                             if(favorited) {
@@ -105,6 +107,7 @@ struct SearchScreen: View {
                         suggestedMedia: resultState.relatedTitles,
                         onMediaItemClicked: { media in
                             mediaPreviewSheet.showSheet(media: media)
+                            selectedMedia = media
                         }
                     )
                     
@@ -134,7 +137,7 @@ struct SearchScreen: View {
                     onDismiss: { showCollectionDialog = false },
                     collections: viewModel.collectionState.compactMap({ $0 as? Collection }).map({ singleCollection in
                       
-                        let selectedMedia = mediaPreviewSheet.media
+                        let selectedMedia = selectedMedia
                         var checked = false
                         
                         if (selectedMedia != nil) {
@@ -149,7 +152,7 @@ struct SearchScreen: View {
                         
                     }),
                     onAddToCollection: { collectionName in
-                        if let selectedMediaItem = mediaPreviewSheet.media {
+                        if let selectedMediaItem = selectedMedia {
                             viewModel.submitAction(
                                 action: SearchAction.AddToCollection(
                                     collectionName: collectionName,
@@ -159,7 +162,7 @@ struct SearchScreen: View {
                         }
                     },
                     onRemoveFromCollection: { collectionName in
-                        if let selectedMediaItem = mediaPreviewSheet.media {
+                        if let selectedMediaItem = selectedMedia {
                             viewModel.submitAction(
                                 action: SearchAction.RemoveFromCollection(
                                     collectionName: collectionName,

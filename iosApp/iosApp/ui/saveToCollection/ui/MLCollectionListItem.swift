@@ -45,7 +45,7 @@ struct MLCollectionListItem_Previews: PreviewProvider {
         MLCollectionListItem(
             collectionName: "Favorites",
             checked: true,
-            onCollectionClicked: { _ in}
+            onCollectionClicked: { _ in print("ok")}
         )
     }
 }
