@@ -3,7 +3,7 @@ CREATE TABLE CollectionCache (
 );
 
 insert:
-INSERT OR REPLACE
+INSERT OR IGNORE
 INTO CollectionCache
 VALUES (?);
 

@@ -69,7 +69,7 @@ interface CollectionRepository {
                         }
 
                 }
-            }.getOrDefault(emptyFlow())
+            }.getOrThrow()
         }
 
         override fun allCollections(): Flow<List<Collection>> {
