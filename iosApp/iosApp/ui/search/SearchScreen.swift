@@ -110,7 +110,7 @@ struct SearchScreen: View {
                     )
                     
                 case _ as SearchState.Loading:
-                    ProgressView("Searching for media...")
+                    LoadingScreen()
                     
                 case _ as SearchState.Empty:
                     SearchEmptyState()

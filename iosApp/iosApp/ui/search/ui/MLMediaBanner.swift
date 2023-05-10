@@ -25,7 +25,7 @@ struct MLMediaBanner: View {
                 ZStack {
                     LinearGradient(gradient: Gradient(colors: [.primaryVariant, .mlPrimary]), startPoint: .topTrailing, endPoint: .bottomLeading)
                     Text(media.title)
-                        .customFont(.h2)
+                        .customFont(.h1)
                         .foregroundColor(Color.white)
                 }
             }
