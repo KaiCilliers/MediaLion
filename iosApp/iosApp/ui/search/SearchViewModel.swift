@@ -17,6 +17,7 @@ import shared
     @Published var state: SearchState = SearchState.Idle(searchQuery: "", suggestedMedia: [])
     
     func submitAction(action: SearchAction) {
+        print("IOS - submitting action \(action)")
         self.viewModel.submitAction(action: action)
     }
     

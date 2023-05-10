@@ -13,8 +13,10 @@ typealias AColor = SwiftUI.Color
 struct SearchScreen: View {
     
     @Environment(\.presentationMode) var presentationMode
-    @StateObject var viewModel = SearchViewModel()
-    @State var showAboutDialog: Bool = false
+    @StateObject private var viewModel = SearchViewModel()
+    @State private var showAboutDialog: Bool = false
+    @State private var selectedMediaItem: MediaItemUI? = nil
+    @State private var showDetailSheet = false
     
     init() {
         NapierProxyKt.debugBuild()
@@ -74,8 +76,27 @@ struct SearchScreen: View {
                     SearchIdleState(
                         rowTitle: StringRes.topSuggestions,
                         media: idleState.suggestedMedia,
-                        onMediaClicked: {_ in},
-                        onFavoriteToggle: {_,_ in}
+                        onMediaClicked: { item in
+                            selectedMediaItem = item
+                            showDetailSheet = true
+                        },
+                        onFavoriteToggle: { item, favorited in
+                            if(favorited) {
+                                viewModel.submitAction(
+                                    action: SearchAction.AddToFavorites(
+                                        mediaId: item.id,
+                                        mediaType: item.mediaType
+                                    )
+                                )
+                            } else {
+                                viewModel.submitAction(
+                                    action: SearchAction.RemoveFromFavorites(
+                                        movieId: item.id,
+                                        mediaType: item.mediaType
+                                    )
+                                )
+                            }
+                        }
                     )
                     
                 case let resultState as SearchState.Results:
@@ -116,6 +137,23 @@ struct SearchScreen: View {
         .onDisappear {
             print("IOS - disposing viewModel")
             viewModel.dispose()
+        }
+        .sheet(isPresented: $showDetailSheet) {
+            if let itemToPreview = selectedMediaItem {
+                DetailPreviewSheet(
+                    mediaItem: itemToPreview,
+                    onCloseClick: {
+                        showDetailSheet = false
+                    },
+                    onMyCollectionClick: { item in
+                        // todo show my collection dialog
+                    }
+                )
+                .presentationDetents([.medium, .fraction(0.4)])
+                .presentationDragIndicator(.hidden)
+            } else {
+//                fatalError("item to show was nil!")
+            }
         }
         
     }

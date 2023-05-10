@@ -31,12 +31,12 @@ struct MLTitledMediaGrid: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 LazyVGrid(columns: columns, spacing: 16) {
-                    ForEach(media, id: \.self) {value in
-//                        MLMediaPoster()
-//                            .frame(width: 100,height: 170)
-//                            .onTapGesture {
-//                                onMediaItemClicked(value)
-//                            }
+                    ForEach(media, id: \.self) { item in
+                        MLMediaPoster(media: item)
+                            .frame(width: 100,height: 170)
+                            .onTapGesture {
+                                onMediaItemClicked(item)
+                            }
                         
                     }
                 }
@@ -46,7 +46,9 @@ struct MLTitledMediaGrid: View {
                         MLTitledMediaRow(
                             rowTitle: titledMedia.title,
                             media: titledMedia.content,
-                            onMediaItemClicked: { media in onMediaItemClicked(media)}
+                            onMediaItemClicked: { media in onMediaItemClicked(media)
+                                
+                            }
                         )
                     }
                 }

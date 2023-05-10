@@ -101,7 +101,7 @@ interface MovieRepository {
             var page = 1
             var totalPages = Int.MAX_VALUE
             do {
-                val res = client.searchMovies(query, page++)
+                client.searchMovies(query, page++)
                     .onSuccess {
                         totalPages = it.totalPages
                         println("pedro movie search page - ${it.page}")

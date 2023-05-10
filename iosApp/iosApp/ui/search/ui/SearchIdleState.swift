@@ -25,10 +25,16 @@ struct SearchIdleState: View {
                     .padding(.top, 16)
                     .frame(maxWidth: .infinity,alignment: .leading)
                 VStack(spacing: 30) {
-                    ForEach(media, id: \.self) {value in
-                        MLMediaFavoriteListItem(
-                            mediaItem: value, onFavoriteClick: {_ in}
-                        )
+                    ForEach(media, id: \.self) {item in
+                        Button {
+                            onMediaClicked(item)
+                        } label: {
+                            MLMediaFavoriteListItem(
+                                mediaItem: item, onFavoriteClick: { favorited in
+                                    onFavoriteToggle(item, favorited)
+                                }
+                            )
+                        }
                     }
                 }
             }
