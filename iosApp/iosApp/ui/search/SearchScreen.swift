@@ -15,8 +15,7 @@ struct SearchScreen: View {
     @Environment(\.presentationMode) var presentationMode
     @StateObject private var viewModel = SearchViewModel()
     @State private var showAboutDialog: Bool = false
-    @State private var selectedMediaItem: MediaItemUI? = nil
-    @State private var showDetailSheet = false
+    @State private var mediaPreviewSheet: PreviewMedia = PreviewMedia(media: nil,sheetVisible: false)
     @State private var showCollectionDialog = false
     
     init() {
@@ -78,8 +77,7 @@ struct SearchScreen: View {
                         rowTitle: StringRes.topSuggestions,
                         media: idleState.suggestedMedia,
                         onMediaClicked: { item in
-                            selectedMediaItem = item
-                            showDetailSheet = true
+                            mediaPreviewSheet.showSheet(media: item)
                         },
                         onFavoriteToggle: { item, favorited in
                             if(favorited) {
@@ -105,8 +103,8 @@ struct SearchScreen: View {
                         gridTitle: StringRes.topResults,
                         media: resultState.searchResults,
                         suggestedMedia: resultState.relatedTitles,
-                        onMediaItemClicked: { value in
-                            // show media detail sheet
+                        onMediaItemClicked: { media in
+                            mediaPreviewSheet.showSheet(media: media)
                         }
                     )
                     
@@ -136,7 +134,7 @@ struct SearchScreen: View {
                     onDismiss: { showCollectionDialog = false },
                     collections: viewModel.collectionState.compactMap({ $0 as? Collection }).map({ singleCollection in
                       
-                        let selectedMedia = selectedMediaItem
+                        let selectedMedia = mediaPreviewSheet.media
                         var checked = false
                         
                         if (selectedMedia != nil) {
@@ -151,7 +149,7 @@ struct SearchScreen: View {
                         
                     }),
                     onAddToCollection: { collectionName in
-                        if let selectedMediaItem = selectedMediaItem {
+                        if let selectedMediaItem = mediaPreviewSheet.media {
                             viewModel.submitAction(
                                 action: SearchAction.AddToCollection(
                                     collectionName: collectionName,
@@ -161,7 +159,7 @@ struct SearchScreen: View {
                         }
                     },
                     onRemoveFromCollection: { collectionName in
-                        if let selectedMediaItem = selectedMediaItem {
+                        if let selectedMediaItem = mediaPreviewSheet.media {
                             viewModel.submitAction(
                                 action: SearchAction.RemoveFromCollection(
                                     collectionName: collectionName,
@@ -185,16 +183,16 @@ struct SearchScreen: View {
             print("IOS - disposing viewModel")
             viewModel.dispose()
         }
-        .sheet(isPresented: $showDetailSheet) {
-            if let itemToPreview = selectedMediaItem {
+        .sheet(isPresented: $mediaPreviewSheet.sheetVisible) {
+            if let itemToPreview = mediaPreviewSheet.media {
                 DetailPreviewSheet(
                     mediaItem: itemToPreview,
                     onCloseClick: {
-                        showDetailSheet = false
+                        mediaPreviewSheet.hideSheet()
                     },
                     onMyCollectionClick: { item in
                         showCollectionDialog = true
-                        showDetailSheet = false
+                        mediaPreviewSheet.hideSheet()
                     }
                 )
                 .presentationDetents([.medium, .fraction(0.4)])
@@ -210,5 +208,20 @@ struct SearchScreen: View {
         static var previews: some View {
             SearchScreen()
         }
+    }
+}
+
+struct PreviewMedia {
+    var media: MediaItemUI? = nil
+    var sheetVisible: Bool = false
+    
+    mutating func showSheet(media: MediaItemUI) {
+        self.media = media
+        self.sheetVisible = true
+    }
+    
+    mutating func hideSheet() {
+        self.media = nil
+        self.sheetVisible = false
     }
 }

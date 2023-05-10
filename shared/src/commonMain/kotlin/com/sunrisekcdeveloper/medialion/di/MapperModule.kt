@@ -11,6 +11,7 @@ import com.sunrisekcdeveloper.medialion.di.MapperNames.movieResponseToDomain
 import com.sunrisekcdeveloper.medialion.di.MapperNames.tvCacheToDomain
 import com.sunrisekcdeveloper.medialion.di.MapperNames.tvDomainToCache
 import com.sunrisekcdeveloper.medialion.di.MapperNames.tvDomainToMediaDomain
+import com.sunrisekcdeveloper.medialion.di.MapperNames.tvDomainToUI
 import com.sunrisekcdeveloper.medialion.di.MapperNames.tvResponseToDomain
 import com.sunrisekcdeveloper.medialion.domain.entities.MediaItem
 import com.sunrisekcdeveloper.medialion.domain.entities.Movie
@@ -30,6 +31,7 @@ val mapperModule = module {
     factory<Mapper<MediaResponse, TVShow>>(named(tvResponseToDomain)) { Mapper.TVShowEntity.ResponseToDomain() }
     factory<Mapper<TVShow, TVShowCache>>(named(tvDomainToCache)) { Mapper.TVShowEntity.DomainToCache() }
     factory<Mapper<TVShowCache, TVShow>>(named(tvCacheToDomain)) { Mapper.TVShowEntity.CacheToDomain() }
+    factory<Mapper<TVShow, MediaItemUI>>(named(tvDomainToUI)) { Mapper.TVShowEntity.DomainToUI() }
     factory<Mapper<TVShow, MediaItem>>(named(tvDomainToMediaDomain)) { Mapper.TVShowEntity.DomainToMediaDomain() }
     factory<Mapper<MediaItem, MediaItemUI>>(named(mediaDomainToUI)) { Mapper.DomainToUI() }
 }
@@ -45,4 +47,5 @@ object MapperNames {
     const val tvCacheToDomain = "tvCacheToDomain"
     const val tvDomainToMediaDomain = "tvDomainToMediaDomain"
     const val mediaDomainToUI = "mediaDomainToUI"
+    const val tvDomainToUI = "tvDomainToUI"
 }

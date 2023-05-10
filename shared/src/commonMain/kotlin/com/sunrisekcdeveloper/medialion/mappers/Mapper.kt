@@ -169,6 +169,26 @@ interface Mapper<I, O> {
                 return input
             }
         }
+
+        class DomainToUI: Mapper<TVShow, MediaItemUI> {
+            override fun map(input: TVShow): MediaItemUI {
+                return MediaItemUI(
+                    id = input.id.value,
+                    title = input.name.value,
+                    isFavorited = false,
+                    posterUrl = input.posterPath.value,
+                    bannerUrl = input.backdropPath.value,
+                    genreIds = input.genreIds.map { it.value },
+                    overview = input.overview.value,
+                    popularity = input.popularity.value,
+                    voteAverage = input.voteAverage.value,
+                    voteCount = input.voteCount,
+                    releaseYear = input.firstAirDate.value,
+                    mediaType = MediaType.TV,
+
+                )
+            }
+        }
     }
 
     class DomainToUI : Mapper<MediaItem, MediaItemUI> {

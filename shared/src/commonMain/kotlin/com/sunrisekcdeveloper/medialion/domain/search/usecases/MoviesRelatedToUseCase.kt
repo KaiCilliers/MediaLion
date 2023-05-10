@@ -12,7 +12,7 @@ interface MoviesRelatedToUseCase {
         private val movieRepo: MovieRepository
     ) : MoviesRelatedToUseCase {
         override fun invoke(id: ID): Flow<Movie> {
-            return movieRepo.recommendationsForMovie(id).take(30)
+            return movieRepo.moviesRelatedTo(id.value).take(30)
         }
     }
 }

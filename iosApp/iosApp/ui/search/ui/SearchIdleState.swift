@@ -26,14 +26,15 @@ struct SearchIdleState: View {
                     .frame(maxWidth: .infinity,alignment: .leading)
                 VStack(spacing: 30) {
                     ForEach(media, id: \.self) {item in
-                        Button {
+                        MLMediaFavoriteListItem(
+                            mediaItem: item, onFavoriteClick: { favorited in
+                                onFavoriteToggle(item, favorited)
+                            }
+                        )
+                        // TODO convert this into a .clickable View extension
+                        .containerShape(Rectangle())
+                        .onTapGesture {
                             onMediaClicked(item)
-                        } label: {
-                            MLMediaFavoriteListItem(
-                                mediaItem: item, onFavoriteClick: { favorited in
-                                    onFavoriteToggle(item, favorited)
-                                }
-                            )
                         }
                     }
                 }

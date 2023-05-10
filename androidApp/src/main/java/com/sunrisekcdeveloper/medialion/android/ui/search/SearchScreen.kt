@@ -252,7 +252,6 @@ fun SearchScreen(
                         suggestedMedia = listOf(
                             state.relatedTitles[0],
                             state.relatedTitles[1],
-                            state.relatedTitles[2],
                         ),
                         onMediaClicked = {
                             selectedMediaItem = SimpleMediaItem(

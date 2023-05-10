@@ -5,6 +5,7 @@ import com.sunrisekcdeveloper.medialion.TitledMedia
 import com.sunrisekcdeveloper.medialion.domain.MediaType
 import com.sunrisekcdeveloper.medialion.domain.entities.MediaItem
 import com.sunrisekcdeveloper.medialion.domain.entities.Movie
+import com.sunrisekcdeveloper.medialion.domain.entities.TVShow
 import com.sunrisekcdeveloper.medialion.domain.value.ID
 import com.sunrisekcdeveloper.medialion.domain.value.Title
 import com.sunrisekcdeveloper.medialion.flow.CStateFlow
@@ -43,6 +44,7 @@ class MLSearchViewModel(
     private val collectionComponent: CollectionComponent,
     private val mediaItemMapper: Mapper<MediaItem, MediaItemUI>,
     private val movieListMapper: ListMapper<Movie, MediaItemUI>,
+    private val tvListMapper: ListMapper<TVShow, MediaItemUI>,
     coroutineScope: CoroutineScope?,
 ) {
     private val viewModelScope = coroutineScope ?: CoroutineScope(Dispatchers.Main.immediate)
@@ -71,7 +73,6 @@ class MLSearchViewModel(
                     flow {
                         runCatching {
                             searchComponent.topMediaResultsUseCase(query)
-                                .onEach { log { "got an item from search component flow ${it.id.value}" } }
                                 .mapNotNull {
                                     runCatching {
                                         mediaItemMapper.map(it)
@@ -79,33 +80,42 @@ class MLSearchViewModel(
                                         .onFailure { log { "failed to map an item ${it.message}, ${it.cause}" } }
                                         .getOrNull()
                                 }
-                                .onEach { log { "processed item to UI - ${it.id}" } }
-                                .catch { log { "caught an exception ${it.message} and ${it.cause}" } }
                                 .toList()
                         }
                             .onSuccess {
-                                log { "I am going to emit a list of results [${it.size}]${it.map { it.id }}" }
                                 emit(it)
                             }
-                            .onFailure { log { "Wtf went on here? ${it.message} and ${it.cause}" } }
                     }
                 }
             }
         }
         .onEach {
-            log { "A list was emitted! [${it.size}] and loading will go to false now!" }
             isLoading.value = false
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000L), listOf())
 
     private val relatedMovies: Flow<List<MediaItemUI>> = searchResults
-        .flatMapLatest<List<MediaItemUI>, List<MediaItemUI>> { movies ->
+        .flatMapLatest { media ->
             flow {
-                if (movies.isNotEmpty()) {
-                    searchComponent.relatedMoviesUseCase(ID(movies.minByOrNull { it.popularity }!!.id))
+                media.sortedBy { it.popularity }.firstOrNull { it.mediaType == MediaType.MOVIE }?.let { sourceMovie ->
+                    searchComponent.relatedMoviesUseCase(ID(sourceMovie.id))
                         .toList()
                         .also { relatedMovies ->
                             emit(movieListMapper.map(relatedMovies))
+                        }
+                }
+            }
+        }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+
+    private val relatedTVShows: Flow<List<MediaItemUI>> = searchResults
+        .flatMapLatest { media ->
+            flow {
+                media.sortedBy { it.popularity }.firstOrNull { it.mediaType == MediaType.TV }?.let { sourceTV ->
+                    searchComponent.tvRelatedToUseCase(ID(sourceTV.id))
+                        .toList()
+                        .also { relatedTV ->
+                            emit(tvListMapper.map(relatedTV))
                         }
                 }
             }
@@ -125,10 +135,11 @@ class MLSearchViewModel(
         isLoading,
         searchResults,
         relatedMovies,
+        relatedTVShows,
         suggestedMovies,
         favoriteMovies,
-    ).map { (query, isLoading, results, related, suggestedMovies, favMovies) ->
-        log {"tuple query=$query, isLoading=$isLoading, results=${results.size}, related=${related.size}, suggested=${suggestedMovies.size}, fav=${favMovies.size}" }
+    ).map { (query, isLoading, results, relatedMovies, relatedTV, suggestedMovies, favMovies) ->
+        log {"tuple query=$query, isLoading=$isLoading, results=${results.size}, relatedMovies=${relatedMovies.size}, relatedTv=${relatedTV.size} suggested=${suggestedMovies.size}, fav=${favMovies.size}" }
 
         val mergedFavorites = suggestedMovies.map { suggestedMovie ->
             if (favMovies.map { it.id.value }.contains(suggestedMovie.id)) {
@@ -142,9 +153,9 @@ class MLSearchViewModel(
             results.isNotEmpty() -> SearchState.Results(
                 searchResults = results,
                 relatedTitles = listOf(
-                    TitledMedia(title = "Suggested Media #1", content = related.sortedBy { it.title }),
-                    TitledMedia(title = "Suggested Media #2", content =related.sortedBy { it.posterUrl }),
-                    TitledMedia(title = "Suggested Media #3", content =related.sortedBy { it.id })),
+                    TitledMedia(title = "Related Movies", content = relatedMovies.sortedBy { it.popularity }),
+                    TitledMedia(title = "Related TV Shows", content = relatedTV.sortedBy { it.popularity }),
+                ),
                 searchQuery = query
             )
 

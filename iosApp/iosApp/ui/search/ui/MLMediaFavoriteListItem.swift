@@ -25,6 +25,7 @@ struct MLMediaFavoriteListItem: View {
                 .multilineTextAlignment(.leading)
                 .customFont(.h4)
                 .foregroundColor(.white)
+                .padding(.leading, 8)
 
             Spacer()
 

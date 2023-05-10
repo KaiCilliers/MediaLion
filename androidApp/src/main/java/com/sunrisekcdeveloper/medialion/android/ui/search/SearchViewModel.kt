@@ -32,6 +32,7 @@ class SearchViewModel(
             collectionComponent = collectionComponent,
             mediaItemMapper = get(named(MapperNames.mediaDomainToUI)),
             movieListMapper = ListMapper.Impl(get(named(MapperNames.movieDomainToUI))),
+            tvListMapper = ListMapper.Impl(get(named(MapperNames.tvDomainToUI))),
             coroutineScope = viewModelScope,
         )
     }

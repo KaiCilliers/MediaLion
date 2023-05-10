@@ -43,13 +43,14 @@ struct MLTitledMediaGrid: View {
                 
                 LazyVStack {
                     ForEach(suggestedMedia, id: \.self) { titledMedia in
-                        MLTitledMediaRow(
-                            rowTitle: titledMedia.title,
-                            media: titledMedia.content,
-                            onMediaItemClicked: { media in onMediaItemClicked(media)
-                                
-                            }
-                        )
+                        if (!titledMedia.content.isEmpty) {
+                            MLTitledMediaRow(
+                                rowTitle: titledMedia.title,
+                                media: titledMedia.content,
+                                onMediaItemClicked: { media in onMediaItemClicked(media)
+                                }
+                            )
+                        }
                     }
                 }
             }
