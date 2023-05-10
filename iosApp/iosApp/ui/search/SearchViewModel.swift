@@ -12,9 +12,11 @@ import shared
 @MainActor class SearchViewModel: ObservableObject {
     
     private var handle: DisposableHandle?
+    private var handleCollection: DisposableHandle?
     
     private var viewModel: MLSearchViewModel = WrapperMLSearchViewModel().instance()
     @Published var state: SearchState = SearchState.Idle(searchQuery: "", suggestedMedia: [])
+    @Published var collectionState: NSArray = []
     
     func submitAction(action: SearchAction) {
         print("IOS - submitting action \(action)")
@@ -25,8 +27,12 @@ import shared
         handle = viewModel.state.subscribe(onCollect: { state in
             // essentially a null check
             if let state = state {
-                print("IOS - SV - updating state")
                 self.state = state
+            }
+        })
+        handleCollection = viewModel.allCollectionsState.subscribe(onCollect: { collections in
+            if let collections = collections {
+                self.collectionState = collections
             }
         })
     }

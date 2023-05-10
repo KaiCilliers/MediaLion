@@ -17,6 +17,7 @@ struct SearchScreen: View {
     @State private var showAboutDialog: Bool = false
     @State private var selectedMediaItem: MediaItemUI? = nil
     @State private var showDetailSheet = false
+    @State private var showCollectionDialog = false
     
     init() {
         NapierProxyKt.debugBuild()
@@ -129,6 +130,52 @@ struct SearchScreen: View {
                     }
                 )
             }
+            
+            if showCollectionDialog {
+                MLCollectionsDialog(
+                    onDismiss: { showCollectionDialog = false },
+                    collections: viewModel.collectionState.compactMap({ $0 as? Collection }).map({ singleCollection in
+                      
+                        let selectedMedia = selectedMediaItem
+                        var checked = false
+                        
+                        if (selectedMedia != nil) {
+                            let collectionsWithMediaIds = singleCollection.contents.map { mediaItem in
+                                return mediaItem.id
+                            }
+                            
+                            checked = collectionsWithMediaIds.contains(selectedMedia!.id)
+                        }
+                        
+                        return CollectionItem(name: singleCollection.name as! String, checked: checked)
+                        
+                    }),
+                    onAddToCollection: { collectionName in
+                        if let selectedMediaItem = selectedMediaItem {
+                            viewModel.submitAction(
+                                action: SearchAction.AddToCollection(
+                                    collectionName: collectionName,
+                                    mediaId: selectedMediaItem.id,
+                                    mediaType: selectedMediaItem.mediaType)
+                            )
+                        }
+                    },
+                    onRemoveFromCollection: { collectionName in
+                        if let selectedMediaItem = selectedMediaItem {
+                            viewModel.submitAction(
+                                action: SearchAction.RemoveFromCollection(
+                                    collectionName: collectionName,
+                                    mediaId:selectedMediaItem.id,
+                                    mediaType: selectedMediaItem.mediaType
+                                )
+                            )
+                        }
+                    },
+                    onCreateNewCollection: { collectionName in
+                        viewModel.submitAction(action: SearchAction.CreateCollection(collectionName: collectionName))
+                    }
+                )
+            }
         }
         .onAppear {
             print("IOS - starting to observe viewModel")
@@ -146,7 +193,8 @@ struct SearchScreen: View {
                         showDetailSheet = false
                     },
                     onMyCollectionClick: { item in
-                        // todo show my collection dialog
+                        showCollectionDialog = true
+                        showDetailSheet = false
                     }
                 )
                 .presentationDetents([.medium, .fraction(0.4)])

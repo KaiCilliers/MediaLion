@@ -9,6 +9,11 @@
 import SwiftUI
 
 struct MLCollectionListItem: View {
+    
+    let collectionName: String
+    var checked: Bool
+    let onCollectionClicked: (Bool) -> Void
+    
     var body: some View {
         HStack{
             Image("placeholderReel")
@@ -18,20 +23,29 @@ struct MLCollectionListItem: View {
                
             Spacer()
                 .frame(width: 10)
-            Text("Title")
+            Text(collectionName)
                 .customFont(.h4)
             Spacer()
-            Image(systemName: "checkmark")
-                .resizable()
-                .frame(width: 20, height: 20)
-                .padding(.horizontal)
-                
+            if (checked) {
+                Image(systemName: "checkmark")
+                    .resizable()
+                    .frame(width: 20, height: 20)
+                    .padding(.horizontal)
+            }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            onCollectionClicked(!checked)
         }
     }
 }
 
 struct MLCollectionListItem_Previews: PreviewProvider {
     static var previews: some View {
-        MLCollectionListItem()
+        MLCollectionListItem(
+            collectionName: "Favorites",
+            checked: true,
+            onCollectionClicked: { _ in}
+        )
     }
 }

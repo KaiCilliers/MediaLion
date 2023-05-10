@@ -106,3 +106,32 @@ struct CustomAboutDialog_Previews: PreviewProvider {
         MLAboutDialog(onCloseAction: {})
     }
 }
+
+
+private struct AboutScreen: View {
+    
+    @State var isActive: Bool = false
+
+    var body: some View {
+        ZStack{
+            VStack{
+                Button{
+                    isActive = true
+                } label: {
+                    Image("aboutIcon").background(Color.background)
+                }
+            }
+            .padding()
+            
+            if isActive {
+                MLAboutDialog(onCloseAction: {})
+            }
+        }
+    }
+}
+
+struct AboutScreen_Previews: PreviewProvider {
+    static var previews: some View {
+        AboutScreen()
+    }
+}
