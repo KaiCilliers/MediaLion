@@ -25,7 +25,7 @@ struct SearchScreen: View {
     var body: some View {
         
         let screenBlurAmount: Float = {
-            if showAboutDialog {
+            if (showAboutDialog || mediaPreviewSheet.sheetVisible || showCollectionDialog) {
                 return 4
             } else {
                 return 0
