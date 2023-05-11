@@ -5,7 +5,7 @@ import com.sunrisekcdeveloper.medialion.clients.runReThrowable
 import com.sunrisekcdeveloper.medialion.clients.suspendRunReThrowable
 import com.sunrisekcdeveloper.medialion.data.DispatcherProvider
 import com.sunrisekcdeveloper.medialion.domain.MediaType
-import com.sunrisekcdeveloper.medialion.domain.entities.Collection
+import com.sunrisekcdeveloper.medialion.domain.entities.CollectionWithMedia
 import com.sunrisekcdeveloper.medialion.domain.entities.MediaItem
 import com.sunrisekcdeveloper.medialion.domain.entities.Movie
 import com.sunrisekcdeveloper.medialion.domain.entities.TVShow
@@ -18,7 +18,6 @@ import database.MovieCache
 import database.TVShowCache
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -26,8 +25,8 @@ import kotlinx.coroutines.withContext
 
 interface CollectionRepository {
     suspend fun insertCollection(name: String)
-    fun getCollection(name: String): Flow<Collection>
-    fun allCollections(): Flow<List<Collection>>
+    fun getCollection(name: String): Flow<CollectionWithMedia>
+    fun allCollections(): Flow<List<CollectionWithMedia>>
     suspend fun addMediaToCollection(collection: String, mediaItem: MediaItem)
     suspend fun removeMediaFromCollection(collection: String, mediaId: ID, mediaType: MediaType)
 
@@ -51,7 +50,7 @@ interface CollectionRepository {
                 .onFailure { throw it }
         }
 
-        override fun getCollection(name: String): Flow<Collection> {
+        override fun getCollection(name: String): Flow<CollectionWithMedia> {
             return database.transactionWithResult {
                 runReThrowable("Failed to fetch a collection from database [name=$name]") {
 
@@ -65,14 +64,14 @@ interface CollectionRepository {
                     }
                         .flowOn(dispatcherProvider.io)
                         .map {
-                            Collection(name = Title(name), contents = it)
+                            CollectionWithMedia(name = Title(name), contents = it)
                         }
 
                 }
             }.getOrThrow()
         }
 
-        override fun allCollections(): Flow<List<Collection>> {
+        override fun allCollections(): Flow<List<CollectionWithMedia>> {
             return collectionQueries
                 .fetchAll()
                 .asFlow()

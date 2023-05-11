@@ -27,6 +27,9 @@ struct ContentView: View {
                     CollectionsScreen(
                         onInfoClicked: {
                             showAboutDialog = true
+                        },
+                        onMediaItemClicked: { media in
+                            
                         }
                     )
                         .tag(MLTabDestinations.collection)

@@ -135,7 +135,7 @@ struct SearchScreen: View {
             if showCollectionDialog {
                 MLCollectionsDialog(
                     onDismiss: { showCollectionDialog = false },
-                    collections: viewModel.collectionState.compactMap({ $0 as? Collection }).map({ singleCollection in
+                    collections: viewModel.collectionState.compactMap({ $0 as? CollectionWithMedia }).map({ singleCollection in
                       
                         let selectedMedia = selectedMedia
                         var checked = false

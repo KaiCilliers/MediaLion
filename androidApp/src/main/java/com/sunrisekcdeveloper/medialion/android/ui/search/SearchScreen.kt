@@ -22,7 +22,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -46,7 +45,6 @@ import com.sunrisekcdeveloper.medialion.ColorRes
 import com.sunrisekcdeveloper.medialion.MediaItemUI
 import com.sunrisekcdeveloper.medialion.SimpleMediaItem
 import com.sunrisekcdeveloper.medialion.StringRes
-import com.sunrisekcdeveloper.medialion.TitledMedia
 import com.sunrisekcdeveloper.medialion.android.R
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.about.ui.AboutScreen
@@ -58,7 +56,7 @@ import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLTitledMediaGrid
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.SearchEmptyState
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.SearchIdleState
 import com.sunrisekcdeveloper.medialion.domain.MediaType
-import com.sunrisekcdeveloper.medialion.domain.entities.Collection
+import com.sunrisekcdeveloper.medialion.domain.entities.CollectionWithMedia
 import com.sunrisekcdeveloper.medialion.domain.search.SearchAction
 import com.sunrisekcdeveloper.medialion.domain.search.SearchState
 import com.sunrisekcdeveloper.medialion.domain.value.ID
@@ -70,7 +68,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun SearchScreen(
     state: SearchState,
-    collectionState: List<Collection>,
+    collectionState: List<CollectionWithMedia>,
     submitAction: (SearchAction) -> Unit,
     backstack: Backstack,
 ) {
@@ -281,7 +279,7 @@ private fun SearchScreenPreview() {
                 mutableStateOf(SearchState.Loading(""))
             }
 
-            val collectionState: List<Collection> by remember {
+            val collectionState: List<CollectionWithMedia> by remember {
                 mutableStateOf(emptyList())
             }
 

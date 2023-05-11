@@ -1,7 +1,7 @@
 package com.sunrisekcdeveloper.medialion.android.ui.search
 
 import com.sunrisekcdeveloper.medialion.di.MapperNames
-import com.sunrisekcdeveloper.medialion.domain.entities.Collection
+import com.sunrisekcdeveloper.medialion.domain.entities.CollectionWithMedia
 import com.sunrisekcdeveloper.medialion.domain.search.CollectionComponent
 import com.sunrisekcdeveloper.medialion.domain.search.MLSearchViewModel
 import com.sunrisekcdeveloper.medialion.domain.search.SearchAction
@@ -38,7 +38,7 @@ class SearchViewModel(
     }
 
     val state: StateFlow<SearchState> = sharedViewModel.state
-    val collectionState: StateFlow<List<Collection>> = sharedViewModel.allCollectionsState
+    val collectionState: StateFlow<List<CollectionWithMedia>> = sharedViewModel.allCollectionsState
 
     fun submitAction(action: SearchAction) {
         sharedViewModel.submitAction(action)
