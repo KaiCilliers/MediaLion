@@ -38,6 +38,8 @@ class WrapperMLCollectionViewModel : KoinComponent {
 class WrapperMLDiscoveryViewModel : KoinComponent {
     fun instance() = MLDiscoveryViewModel(
         fetchDiscoveryContent = get(),
+        collectionComponent = get(),
+        searchComponent = get(),
         coroutineScope = null
     )
 }

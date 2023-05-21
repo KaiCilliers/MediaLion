@@ -19,10 +19,6 @@ struct SearchScreen: View {
     @State private var showCollectionDialog = false
     @State private var selectedMedia: MediaItemUI? = nil
     
-    init() {
-        NapierProxyKt.debugBuild()
-    }
-    
     var body: some View {
         
         let screenBlurAmount: Float = {

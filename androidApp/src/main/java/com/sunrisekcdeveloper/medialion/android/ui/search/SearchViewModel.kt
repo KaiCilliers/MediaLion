@@ -54,11 +54,15 @@ class DiscoveryViewModel(
 ) : KoinComponent {
 
     private val fetchDiscoveryContent by inject<FetchDiscoveryContent>()
+    private val collectionComponent by inject<CollectionComponent>()
+    private val searchComponent by inject<SearchComponent>()
 
     private val viewModelScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private val sharedViewModel: MLDiscoveryViewModel by lazy {
        MLDiscoveryViewModel(
            fetchDiscoveryContent = fetchDiscoveryContent,
+           collectionComponent = collectionComponent,
+           searchComponent = searchComponent,
            coroutineScope = viewModelScope
        )
     }

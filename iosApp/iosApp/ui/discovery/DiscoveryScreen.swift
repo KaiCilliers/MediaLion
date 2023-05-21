@@ -15,6 +15,14 @@ struct DiscoveryScreen: View {
     let onInfoClicked: () -> Void
     
     @StateObject private var viewModel = DiscoveryViewModel()
+    @State private var mediaPreviewSheet: PreviewMedia = PreviewMedia(media: nil,sheetVisible: false)
+    @State private var selectedMedia: MediaItemUI? = nil
+    @State private var showCollectionDialog = false
+
+    init(onInfoClicked: @escaping () -> Void) {
+        self.onInfoClicked = onInfoClicked
+        NapierProxyKt.debugBuild()
+    }
     
     var body: some View {
         var blurAmount: Float = {
@@ -76,20 +84,72 @@ struct DiscoveryScreen: View {
                             ForEach(contentState.media, id: \.self) { item in
                                 MLTitledMediaRow(
                                     rowTitle: item.title,
-                                    media: item.content) { selectedItem in
-                                        print("item clicked - \(selectedItem.title)")
-                                    }
+                                    media: item.content,
+                                    onMediaItemClicked: {
+                                        singleItem in
+                                            print("wolverine man - \(singleItem.title)")
+                                            mediaPreviewSheet
+                                                .showSheet(media: singleItem)
+                                            selectedMedia = singleItem
+                                    })
                             }
                             
                             
                         default:
-                            Text("default...")
+                            fatalError("state should not be reachable \(viewModel.state)")
                         }
                     }
                 }
                 
             }
             .background(Color.background)
+            
+            if showCollectionDialog {
+                MLCollectionsDialog(
+                    onDismiss: { showCollectionDialog = false },
+                    collections: viewModel.collectionState.compactMap({ $0 as? CollectionWithMedia }).map({ singleCollection in
+                      
+                        let selectedMedia = selectedMedia
+                        var checked = false
+                        
+                        if (selectedMedia != nil) {
+                            let collectionsWithMediaIds = singleCollection.contents.map { mediaItem in
+                                return mediaItem.id
+                            }
+                            
+                            checked = collectionsWithMediaIds.contains(selectedMedia!.id)
+                        }
+                        
+                        return CollectionItem(name: singleCollection.name as! String, checked: checked)
+                        
+                    }),
+                    onAddToCollection: { collectionName in
+                        if let selectedMediaItem = selectedMedia {
+                            viewModel.submitAction(
+                                action: DiscoveryAction.AddToCollection(
+                                    collectionName: collectionName,
+                                    mediaId: selectedMediaItem.id,
+                                    mediaType: selectedMediaItem.mediaType)
+                            )
+                        }
+                    },
+                    onRemoveFromCollection: { collectionName in
+                        if let selectedMediaItem = selectedMedia {
+                            viewModel.submitAction(
+                                action: DiscoveryAction.RemoveFromCollection(
+                                    collectionName: collectionName,
+                                    mediaId:selectedMediaItem.id,
+                                    mediaType: selectedMediaItem.mediaType
+                                )
+                            )
+                        }
+                    },
+                    onCreateNewCollection: { collectionName in
+                        viewModel.submitAction(action: DiscoveryAction.CreateCollection(collectionName: collectionName))
+                    }
+                )
+            }
+            
         }
         .onAppear {
             print("IOS - discovery - starting to observe viewmodel")
@@ -99,6 +159,24 @@ struct DiscoveryScreen: View {
         .onDisappear {
             print("IOS - discovery - disposing viewmodel")
             viewModel.dispose()
+        }
+        .sheet(isPresented: $mediaPreviewSheet.sheetVisible) {
+            if let itemToPreview = mediaPreviewSheet.media {
+                DetailPreviewSheet(
+                    mediaItem: itemToPreview,
+                    onCloseClick: {
+                        mediaPreviewSheet.hideSheet()
+                    },
+                    onMyCollectionClick: { item in
+                        showCollectionDialog = true
+                        mediaPreviewSheet.hideSheet()
+                    }
+                )
+                .presentationDetents([.medium, .fraction(0.4)])
+                .presentationDragIndicator(.hidden)
+            } else {
+//                fatalError("item to show was nil!")
+            }
         }
     }
 }

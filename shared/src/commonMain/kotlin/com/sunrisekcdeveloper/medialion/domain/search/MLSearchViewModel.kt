@@ -170,7 +170,6 @@ class MLSearchViewModel(
     )
 
     init {
-        Napier.base(DebugAntilog())
         viewModelScope.launch {
             val suggestedMedia = searchComponent.suggestedMediaUseCase()
                 .take(30)

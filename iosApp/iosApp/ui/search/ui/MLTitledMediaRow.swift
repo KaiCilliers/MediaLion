@@ -27,6 +27,9 @@ struct MLTitledMediaRow: View {
                     ForEach(media, id: \.self) { item in
                         MLMediaPoster(media: item)
                             .frame(width: 100, height: 170)
+                            .onTapGesture {
+                                onMediaItemClicked(item)
+                            }
                             
                     }
                 }

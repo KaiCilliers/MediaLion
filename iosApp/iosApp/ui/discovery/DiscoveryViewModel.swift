@@ -12,10 +12,12 @@ import shared
 @MainActor class DiscoveryViewModel: ObservableObject {
     
     private var handle: DisposableHandle?
+    private var collectionHandle: DisposableHandle?
     
     private var viewModel: MLDiscoveryViewModel = WrapperMLDiscoveryViewModel().instance()
     
     @Published var state: DiscoveryState = DiscoveryState.Loading()
+    @Published var collectionState: NSArray = []
     
     func submitAction(action: DiscoveryAction) {
         print("IOS - submitting action \(action)")
@@ -27,6 +29,11 @@ import shared
             if let state = state {
                 print("IOS - discovery - state \(state)")
                 self.state = state
+            }
+        })
+        collectionHandle = viewModel.allCollectionsState.subscribe( onCollect: { collections in
+            if let collections = collections {
+                self.collectionState = collections
             }
         })
     }
