@@ -12,6 +12,7 @@ data object SearchKey : BaseKey() {
     override fun bindServices(serviceBinder: ServiceBinder) {
         with(serviceBinder) {
             add(SearchViewModel(backstack))
+            add(DiscoveryViewModel(backstack))
         }
     }
 }

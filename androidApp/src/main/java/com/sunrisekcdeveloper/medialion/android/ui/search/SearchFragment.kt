@@ -16,10 +16,12 @@ import androidx.fragment.app.Fragment
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.zhuinden.simplestackextensions.fragmentsktx.lookup
 import com.zhuinden.simplestackextensions.navigatorktx.backstack
+import kotlin.math.log
 
 class SearchFragment : Fragment() {
 
     private val viewModel by lazy { lookup<SearchViewModel>() }
+    private val viewModelDiscovery by lazy { lookup<DiscoveryViewModel>() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -33,7 +35,10 @@ class SearchFragment : Fragment() {
                         color = MaterialTheme.colors.background
                     ) {
                         val state by viewModel.state.collectAsState()
+                        val discState by viewModelDiscovery.state.collectAsState()
                         val collectionState by viewModel.collectionState.collectAsState()
+
+                        println("deadpool - got state $discState")
 
                         SearchScreen(
                             state = state,

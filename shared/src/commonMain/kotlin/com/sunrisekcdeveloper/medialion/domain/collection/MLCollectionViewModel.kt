@@ -2,7 +2,6 @@ package com.sunrisekcdeveloper.medialion.domain.collection
 
 import com.sunrisekcdeveloper.medialion.MediaItemUI
 import com.sunrisekcdeveloper.medialion.domain.MediaType
-import com.sunrisekcdeveloper.medialion.domain.entities.CollectionWithMedia
 import com.sunrisekcdeveloper.medialion.domain.entities.CollectionWithMediaUI
 import com.sunrisekcdeveloper.medialion.domain.entities.MediaItem
 import com.sunrisekcdeveloper.medialion.domain.search.CollectionComponent
@@ -12,7 +11,6 @@ import com.sunrisekcdeveloper.medialion.domain.value.Title
 import com.sunrisekcdeveloper.medialion.flow.CStateFlow
 import com.sunrisekcdeveloper.medialion.flow.cStateFlow
 import com.sunrisekcdeveloper.medialion.mappers.ListMapper
-import com.sunrisekcdeveloper.medialion.mappers.Mapper
 import io.github.aakira.napier.log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +20,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
 class MLCollectionViewModel(
     private val collectionComponent: CollectionComponent,

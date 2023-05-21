@@ -6,6 +6,7 @@ import com.sunrisekcdeveloper.medialion.clients.suspendRunReThrowable
 import com.sunrisekcdeveloper.medialion.data.DispatcherProvider
 import com.sunrisekcdeveloper.medialion.database.MediaLionDatabase
 import com.sunrisekcdeveloper.medialion.domain.entities.Movie
+import com.sunrisekcdeveloper.medialion.domain.search.SearchComponent
 import com.sunrisekcdeveloper.medialion.domain.value.ID
 import com.sunrisekcdeveloper.medialion.mappers.ListMapper
 import com.sunrisekcdeveloper.medialion.mappers.Mapper

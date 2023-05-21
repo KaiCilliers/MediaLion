@@ -2,11 +2,13 @@ package com.sunrisekcdeveloper.medialion.di
 
 import com.sunrisekcdeveloper.medialion.di.MapperNames.movieDomainToMediaDomain
 import com.sunrisekcdeveloper.medialion.di.MapperNames.tvDomainToMediaDomain
+import com.sunrisekcdeveloper.medialion.di.MapperNames.tvDomainToUI
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.CreateCollectionUseCase
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.SaveMediaToCollectionUseCase
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.DocumentariesRelatedToUseCase
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.FetchAllCollectionsUseCase
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.FetchCollectionUseCase
+import com.sunrisekcdeveloper.medialion.domain.search.usecases.FetchDiscoveryContent
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.MovieDetailsUseCase
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.MoviesRelatedToUseCase
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.RemoveMediaFromCollectionUseCase
@@ -14,6 +16,7 @@ import com.sunrisekcdeveloper.medialion.domain.search.usecases.SuggestedMediaUse
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.TVDetailsUseCase
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.TVRelatedToUseCase
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.TopMediaResultsUseCase
+import com.sunrisekcdeveloper.medialion.mappers.ListMapper
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -30,4 +33,5 @@ val useCaseModule = module {
     factory<FetchAllCollectionsUseCase> { FetchAllCollectionsUseCase.Default(get()) }
     factory<FetchCollectionUseCase> { FetchCollectionUseCase.Default(get()) }
     factory<RemoveMediaFromCollectionUseCase> { RemoveMediaFromCollectionUseCase.Default(get()) }
+    factory<FetchDiscoveryContent> { FetchDiscoveryContent.Default(get(), ListMapper.Impl(get(named(tvDomainToUI)))) }
 }

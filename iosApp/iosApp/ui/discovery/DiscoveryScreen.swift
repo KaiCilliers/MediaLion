@@ -7,11 +7,14 @@
 //
 
 import SwiftUI
+import shared
 
 struct DiscoveryScreen: View {
     
     @State var isActive : Bool = false
     let onInfoClicked: () -> Void
+    
+    @StateObject private var viewModel = DiscoveryViewModel()
     
     var body: some View {
         var blurAmount: Float = {
@@ -55,23 +58,47 @@ struct DiscoveryScreen: View {
                     if filter == .categories {
                         isActive = true
                     }
-                       
+                    
                 }
                 )
                 
                 ScrollView {
                     VStack (alignment: .center, spacing: 0){
-//                        MLTitledMediaRow()
-//                        MLTitledMediaRow()
-//                        MLTitledMediaRow()
-//                        MLTitledMediaRow()
-//                        MLTitledMediaRow()
-//                        MLTitledMediaRow()
+                        switch(viewModel.state) {
+                            
+                        case let loadingState as DiscoveryState.Loading:
+                            LoadingScreen()
+                        case let errorState as DiscoveryState.Error:
+                            Text("Error...")
+                                .foregroundColor(Color.white)
+                            
+                        case let contentState as DiscoveryState.Content:
+                            ForEach(contentState.media, id: \.self) { item in
+                                MLTitledMediaRow(
+                                    rowTitle: item.title,
+                                    media: item.content) { selectedItem in
+                                        print("item clicked - \(selectedItem.title)")
+                                    }
+                            }
+                            
+                            
+                        default:
+                            Text("default...")
+                        }
                     }
                 }
                 
             }
             .background(Color.background)
+        }
+        .onAppear {
+            print("IOS - discovery - starting to observe viewmodel")
+            viewModel.observe()
+            viewModel.submitAction(action: DiscoveryAction.FetchContent())
+        }
+        .onDisappear {
+            print("IOS - discovery - disposing viewmodel")
+            viewModel.dispose()
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.sunrisekcdeveloper.medialion.di
 
 import com.sunrisekcdeveloper.medialion.domain.collection.MLCollectionViewModel
+import com.sunrisekcdeveloper.medialion.domain.discovery.MLDiscoveryViewModel
 import com.sunrisekcdeveloper.medialion.domain.search.MLSearchViewModel
 import com.sunrisekcdeveloper.medialion.mappers.ListMapper
 import org.koin.core.component.KoinComponent
@@ -30,6 +31,13 @@ class WrapperMLCollectionViewModel : KoinComponent {
         collectionComponent = get(),
         searchComponent = get(),
         mediaListMapper = ListMapper.Impl(get(named(MapperNames.mediaDomainToUI))),
+        coroutineScope = null
+    )
+}
+
+class WrapperMLDiscoveryViewModel : KoinComponent {
+    fun instance() = MLDiscoveryViewModel(
+        fetchDiscoveryContent = get(),
         coroutineScope = null
     )
 }

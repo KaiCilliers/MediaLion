@@ -41,6 +41,7 @@ import shared
     func dispose() {
         print("IOS - SV - disposed viewmodel observations")
         handle?.dispose()
+        handleCollection?.dispose()
     }
     
 }
