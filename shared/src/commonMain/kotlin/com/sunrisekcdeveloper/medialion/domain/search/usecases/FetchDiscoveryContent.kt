@@ -6,7 +6,7 @@ import com.sunrisekcdeveloper.medialion.domain.entities.TVShow
 import com.sunrisekcdeveloper.medialion.domain.value.ID
 import com.sunrisekcdeveloper.medialion.mappers.ListMapper
 import com.sunrisekcdeveloper.medialion.repos.TVRepository
-import kotlinx.coroutines.flow.Flow
+import io.github.aakira.napier.log
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
@@ -33,15 +33,16 @@ interface FetchDiscoveryContent {
 
         override suspend fun invoke(): List<TitledMedia> {
             val content = mutableListOf<TitledMedia>()
-            repeat(6) {
-                println("deadpool - $it")
+            genresId.shuffled()
+                .take(6)
+                .forEach { (genreId, title) ->
                 val tvShows = tvRepository
-                    .withGenre(genresId[it].first)
-                    .onEach { println("deadpool - ${it.id}") }
+                    .withGenre(genreId)
+                    .onEach { log { "deadpool - ${it.id}" } }
                     .take(20)
                     .toList()
                 TitledMedia(
-                    title = genresId[it].second,
+                    title = title,
                     content = mapper.map(tvShows)
                 ).also {
                     content.add(it)
