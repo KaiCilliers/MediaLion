@@ -62,45 +62,50 @@ struct DiscoveryScreen: View {
                 .padding()
                 .background(Color.background)
                 
-                DiscoveryFilterItems( action: {filter in
-                    if filter == .categories {
-                        isActive = true
+                DiscoveryFilterItems( action: { filter in
+                    switch (filter){
+                    case .all:
+                        viewModel.submitAction(action: DiscoveryAction.FetchContent(mediaType: 0))
+                    case .movies:
+                        viewModel.submitAction(action: DiscoveryAction.FetchContent(mediaType: 1))
+                    case .series:
+                        viewModel.submitAction(action: DiscoveryAction.FetchContent(mediaType: 2))
+                    default:
+                        viewModel.submitAction(action: DiscoveryAction.FetchContent(mediaType: 0))
                     }
-                    
                 }
                 )
-                
-                ScrollView {
-                    VStack (alignment: .center, spacing: 0){
-                        switch(viewModel.state) {
-                            
-                        case let loadingState as DiscoveryState.Loading:
-                            LoadingScreen()
-                        case let errorState as DiscoveryState.Error:
-                            Text("Error...")
-                                .foregroundColor(Color.white)
-                            
-                        case let contentState as DiscoveryState.Content:
-                            ForEach(contentState.media, id: \.self) { item in
-                                MLTitledMediaRow(
-                                    rowTitle: item.title,
-                                    media: item.content,
-                                    onMediaItemClicked: {
-                                        singleItem in
-                                            print("wolverine man - \(singleItem.title)")
+               
+                    ScrollView {
+                        VStack (alignment: .center, spacing: 0){
+                            switch(viewModel.state) {
+                                
+                            case let loadingState as DiscoveryState.Loading:
+                                LoadingScreen()
+                            case let errorState as DiscoveryState.Error:
+                                Text("Error...")
+                                    .foregroundColor(Color.white)
+                                
+                            case let contentState as DiscoveryState.Content:
+                                ForEach(contentState.media, id: \.self) { item in
+                                    MLTitledMediaRow(
+                                        rowTitle: item.title,
+                                        media: item.content,
+                                        onMediaItemClicked: {
+                                            singleItem in
                                             mediaPreviewSheet
                                                 .showSheet(media: singleItem)
                                             selectedMedia = singleItem
-                                    })
+                                        })
+                                }
+                                
+                                
+                            default:
+                                fatalError("state should not be reachable \(viewModel.state)")
                             }
-                            
-                            
-                        default:
-                            fatalError("state should not be reachable \(viewModel.state)")
+                       
                         }
-                    }
-                }
-                
+                }.padding(.bottom, 30)
             }
             .background(Color.background)
             
@@ -154,7 +159,7 @@ struct DiscoveryScreen: View {
         .onAppear {
             print("IOS - discovery - starting to observe viewmodel")
             viewModel.observe()
-            viewModel.submitAction(action: DiscoveryAction.FetchContent())
+            viewModel.submitAction(action: DiscoveryAction.FetchContent(mediaType: 0))
         }
         .onDisappear {
             print("IOS - discovery - disposing viewmodel")

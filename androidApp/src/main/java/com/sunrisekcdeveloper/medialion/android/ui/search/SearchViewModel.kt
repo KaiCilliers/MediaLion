@@ -68,7 +68,7 @@ class DiscoveryViewModel(
     }
 
     init {
-        submitAction(DiscoveryAction.FetchContent)
+        submitAction(DiscoveryAction.FetchContent(0))
     }
 
     val state: StateFlow<DiscoveryState> = sharedViewModel.state

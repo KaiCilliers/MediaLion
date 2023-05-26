@@ -3,7 +3,6 @@ package com.sunrisekcdeveloper.medialion.domain.discovery
 import com.sunrisekcdeveloper.medialion.TitledMedia
 import com.sunrisekcdeveloper.medialion.domain.MediaType
 import com.sunrisekcdeveloper.medialion.domain.search.CollectionComponent
-import com.sunrisekcdeveloper.medialion.domain.search.SearchAction
 import com.sunrisekcdeveloper.medialion.domain.search.SearchComponent
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.FetchDiscoveryContent
 import com.sunrisekcdeveloper.medialion.domain.value.ID
@@ -18,8 +17,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 
 class MLDiscoveryViewModel(
@@ -50,10 +47,9 @@ class MLDiscoveryViewModel(
     fun submitAction(action: DiscoveryAction) {
         log { "Discovery - submitted an action $action" }
         when (action) {
-            DiscoveryAction.FetchContent -> {
+            is DiscoveryAction.FetchContent -> {
                 viewModelScope.launch {
-                    val cot = fetchDiscoveryContent()
-                    log { "deadpool - content - $cot" }
+                    val cot = fetchDiscoveryContent(action.mediaType)
                     _state.value = DiscoveryState.Content(cot)
                 }
             }
@@ -111,7 +107,7 @@ class MLDiscoveryViewModel(
 }
 
 sealed class DiscoveryAction {
-    object FetchContent : DiscoveryAction()
+    data class FetchContent(val mediaType: Int) : DiscoveryAction()
     data class RemoveFromFavorites(
         val movieId: ID,
         val mediaType: MediaType,

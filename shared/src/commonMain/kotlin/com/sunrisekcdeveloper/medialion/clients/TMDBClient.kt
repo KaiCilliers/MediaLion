@@ -47,6 +47,7 @@ interface TMDBClient {
 
     // region discover
     suspend fun discoverTv(genreId: Int, page: Int): Result<PagedMediaResponse>
+    suspend fun discoverMovie(genreId: Int, page: Int): Result<PagedMediaResponse>
     // endregion
 
     class Default(private val httpClient: HttpClient) : TMDBClient {
@@ -309,6 +310,21 @@ interface TMDBClient {
         override suspend fun discoverTv(genreId: Int, page: Int): Result<PagedMediaResponse> {
             val endpoint = NetworkConstants.BASE_URL_TMDB + "/discover/tv"
             return this.suspendRunReThrowable("Failed to fetch tv show [genreId=$genreId, page=$page, endpoint=$endpoint]") {
+                httpClient.get(endpoint) {
+                    url {
+                        parameters.apply {
+                            standardParameters()
+                            append(NetworkConstants.FIELD_WITH_GENRES, genreId.toString())
+                            append(NetworkConstants.FIELD_PAGE, page.toString())
+                        }
+                    }
+                }.body()
+            }
+        }
+
+        override suspend fun discoverMovie(genreId: Int, page: Int): Result<PagedMediaResponse> {
+            val endpoint = NetworkConstants.BASE_URL_TMDB + "/discover/movie"
+            return this.suspendRunReThrowable("Failed to fetch movies [genreId=$genreId, page=$page, endpoint=$endpoint]") {
                 httpClient.get(endpoint) {
                     url {
                         parameters.apply {

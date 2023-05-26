@@ -6,7 +6,6 @@ import com.sunrisekcdeveloper.medialion.clients.suspendRunReThrowable
 import com.sunrisekcdeveloper.medialion.data.DispatcherProvider
 import com.sunrisekcdeveloper.medialion.database.MediaLionDatabase
 import com.sunrisekcdeveloper.medialion.domain.entities.Movie
-import com.sunrisekcdeveloper.medialion.domain.search.SearchComponent
 import com.sunrisekcdeveloper.medialion.domain.value.ID
 import com.sunrisekcdeveloper.medialion.mappers.ListMapper
 import com.sunrisekcdeveloper.medialion.mappers.Mapper
@@ -25,6 +24,7 @@ interface MovieRepository {
     fun popularMovies(): Flow<Movie>
     fun search(query: String): Flow<Movie>
     fun moviesRelatedTo(id: Int): Flow<Movie>
+    fun withGenre(id: ID): Flow<Movie>
 
     class Default(
         database: MediaLionDatabase,
@@ -37,6 +37,26 @@ interface MovieRepository {
     ) : MovieRepository {
 
         private val movieQueries = database.tbl_movieQueries
+
+        override fun withGenre(id: ID): Flow<Movie> = flow<Movie> {
+            var page = 1
+            var totalPages = Int.MAX_VALUE
+            do {
+                client.discoverMovie(id.value, page++)
+                    .onSuccess {
+                        totalPages = it.totalResults
+                        val res = it.results.mapNotNull {
+                            suspendRunReThrowable("Unable to map response to domain model") {
+                                responseToDomain.map(it)
+                            }.getOrNull()
+                        }
+                        emitAll(res.asFlow())
+                    }
+                    .onFailure { throw Exception("Unable to fetch Movies with genre id [id=$id, page=$page, totalPages=$totalPages]", it.cause) }
+            } while (page <= totalPages)
+        }
+            .onEach { movieQueries.insert(domainToCache.map(it)) }
+            .flowOn(dispatcherProvider.io)
 
         override suspend fun movieDetails(id: ID): Result<Movie> {
             return withContext(dispatcherProvider.io) {
