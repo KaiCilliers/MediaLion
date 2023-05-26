@@ -39,9 +39,9 @@ struct ContentView: View {
                             .navigationBarBackButtonHidden(true)
                 
                     }
+                }.overlay(alignment: .bottom) {
+                    MLBottomBar(selectedTab: $selectedTab)
                 }
-                
-                MLBottomBar(selectedTab: $selectedTab)
             }
             .blur(radius: CGFloat(screenBlurAmount))
             .disabled(showAboutDialog)
