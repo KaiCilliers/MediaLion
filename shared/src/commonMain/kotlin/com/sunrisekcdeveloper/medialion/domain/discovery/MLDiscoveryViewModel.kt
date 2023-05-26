@@ -48,6 +48,7 @@ class MLDiscoveryViewModel(
         log { "Discovery - submitted an action $action" }
         when (action) {
             is DiscoveryAction.FetchContent -> {
+                _state.value = DiscoveryState.Loading
                 viewModelScope.launch {
                     val cot = fetchDiscoveryContent(action.mediaType)
                     _state.value = DiscoveryState.Content(cot)
