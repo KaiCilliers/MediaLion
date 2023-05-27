@@ -24,6 +24,9 @@ struct CollectionsScreen: View {
     @State private var selectedMedia: MediaItemUI? = nil
     @State private var fullScreenGridContent: MediaWithTitle? = nil
     
+    @State private var editTitleMode: Bool = false
+    @State private var newCollectionTitle: String? = nil
+    
     var body: some View {
         ZStack{
             VStack (alignment: .center, spacing: 0){
@@ -166,15 +169,47 @@ struct CollectionsScreen: View {
             showCollectionDialogInner = false
         }) { content in
             let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
+            
             ZStack{
                 ScrollView{
                     
-                    Text(content.title)
+                    if (editTitleMode) {
+                        TextField(
+                            content.title,
+                            text: $newCollectionTitle.toUnwrapped(defaultValue: ""),
+                            onEditingChanged: { (isBegin) in
+                                if isBegin {
+                                    newCollectionTitle = content.title
+                                    print("Begins editing")
+                                } else {
+                                    print("Finishes editing")
+                                }
+                            },
+                            onCommit: {
+                                if(newCollectionTitle == nil) {
+                                    newCollectionTitle = content.title
+                                }
+                                print("commit, old=\(content.title) and new=\(newCollectionTitle)")
+                                viewModel.submitAction(action: CollectionAction.RenameCollection(oldCollectionName: content.title, newCollectionName: newCollectionTitle))
+                                editTitleMode = false
+                            }
+                        )
                         .foregroundColor(.white)
                         .customFont(.h2)
                         .padding(.leading, 16)
                         .padding(.top, 16)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                    } else {
+                        Text(newCollectionTitle ?? content.title)
+                            .foregroundColor(.white)
+                            .customFont(.h2)
+                            .padding(.leading, 16)
+                            .padding(.top, 16)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .onTapGesture {
+                                editTitleMode = true
+                            }
+                    }
                     
                     LazyVGrid(columns: columns, spacing: 16) {
                         ForEach(content.media, id: \.self) { item in
@@ -265,4 +300,10 @@ struct MediaWithTitle: Identifiable {
     var id: String { title }
     let title: String
     let media: [MediaItemUI]
+}
+
+extension Binding {
+     func toUnwrapped<T>(defaultValue: T) -> Binding<T> where Value == Optional<T>  {
+        Binding<T>(get: { self.wrappedValue ?? defaultValue }, set: { self.wrappedValue = $0 })
+    }
 }
