@@ -14,6 +14,14 @@ struct MLTitledMediaRow: View {
     let rowTitle: String
     let media: [MediaItemUI]
     let onMediaItemClicked: (MediaItemUI) -> Void
+    let onTitleClicked: () -> Void
+    
+    init(rowTitle: String, media: [MediaItemUI], onMediaItemClicked: @escaping (MediaItemUI) -> Void, onTitleClicked: @escaping () -> Void = {}) {
+        self.rowTitle = rowTitle
+        self.media = media
+        self.onMediaItemClicked = onMediaItemClicked
+        self.onTitleClicked = onTitleClicked
+    }
     
     var body: some View {
         VStack{
@@ -21,6 +29,7 @@ struct MLTitledMediaRow: View {
                 .foregroundColor(.white)
                 .customFont(.subtitle1)
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .onTapGesture { onTitleClicked() }
             
             ScrollView(.horizontal) {
                 HStack(spacing: 20) {
