@@ -80,6 +80,12 @@ class MLCollectionViewModel(
                     collectionComponent.removeMediaFromCollection(action.collectionName, action.mediaId, action.mediaType)
                 }
             }
+
+            is CollectionAction.RenameCollection -> {
+                viewModelScope.launch {
+                    collectionComponent.renameCollection(action.oldCollectionName, action.newCollectionName)
+                }
+            }
         }
     }
 
@@ -110,5 +116,9 @@ sealed class CollectionAction {
     ): CollectionAction()
     data class CreateCollection(
         val collectionName: Title
+    ) : CollectionAction()
+    data class RenameCollection(
+        val oldCollectionName: Title,
+        val newCollectionName: Title
     ) : CollectionAction()
 }

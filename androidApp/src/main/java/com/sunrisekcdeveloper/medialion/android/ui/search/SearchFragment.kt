@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.zhuinden.simplestackextensions.fragmentsktx.lookup
 import com.zhuinden.simplestackextensions.navigatorktx.backstack
-import kotlin.math.log
 
 class SearchFragment : Fragment() {
 

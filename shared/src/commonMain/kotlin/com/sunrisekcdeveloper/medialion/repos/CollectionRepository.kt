@@ -18,6 +18,7 @@ import database.MovieCache
 import database.TVShowCache
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -29,6 +30,7 @@ interface CollectionRepository {
     fun allCollections(): Flow<List<CollectionWithMedia>>
     suspend fun addMediaToCollection(collection: String, mediaItem: MediaItem)
     suspend fun removeMediaFromCollection(collection: String, mediaId: ID, mediaType: MediaType)
+    suspend fun renameCollection(oldCollection: Title, newCollection: Title)
 
     class Default(
         private val database: MediaLionDatabase,
@@ -41,10 +43,22 @@ interface CollectionRepository {
 
         private val collectionQueries = database.tbl_collectionQueries
 
+        override suspend fun renameCollection(oldCollection: Title, newCollection: Title) {
+            suspendRunReThrowable("Failed to rename collection - oldName=$oldCollection, newName=$newCollection") {
+                withContext(dispatcherProvider.io) {
+                    database.transaction {
+                        collectionQueries.findCollection(oldCollection.value).executeAsOne().also {
+                            collectionQueries.renameCollection(newCollection.value, it.id)
+                        }
+                    }
+                }
+            }
+        }
+
         override suspend fun insertCollection(name: String) {
             suspendRunReThrowable("Failed to inset a collection [name=$name]") {
                 withContext(dispatcherProvider.io) {
-                    collectionQueries.insert(name)
+                    collectionQueries.insert(id = null, name = name)
                 }
             }
                 .onFailure { throw it }
@@ -54,19 +68,23 @@ interface CollectionRepository {
             return database.transactionWithResult {
                 runReThrowable("Failed to fetch a collection from database [name=$name]") {
 
-                    collectionQueries.insert(name)
-                    val movies = database.xref_movie_collectionQueries.moviesFromCollection(name).asFlow().mapToList()
-                    val tvShows = database.xref_tvshow_collectionQueries.tvShowsFromCollection(name).asFlow().mapToList()
+                    val collectionId = collectionQueries.findCollection(name).executeAsList().firstOrNull()?.id
 
-                    combine(movies, tvShows) { sourceMovies, sourceTVShows ->
-                        movieDomainToMediaDomain.map(movieCacheToDomainList.map(sourceMovies)) + tvShowDomainToMediaDomain.map(tvShowCacheToDomainList.map(sourceTVShows))
-                            .sortedBy { it.id.value }
-                    }
-                        .flowOn(dispatcherProvider.io)
-                        .map {
-                            CollectionWithMedia(name = Title(name), contents = it)
+                    if (collectionId != null) {
+                        val movies = database.xref_movie_collectionQueries.moviesFromCollection(collectionId).asFlow().mapToList()
+                        val tvShows = database.xref_tvshow_collectionQueries.tvShowsFromCollection(collectionId).asFlow().mapToList()
+
+                        combine(movies, tvShows) { sourceMovies, sourceTVShows ->
+                            movieDomainToMediaDomain.map(movieCacheToDomainList.map(sourceMovies)) + tvShowDomainToMediaDomain.map(tvShowCacheToDomainList.map(sourceTVShows))
+                                .sortedBy { it.id.value }
                         }
-
+                            .flowOn(dispatcherProvider.io)
+                            .map {
+                                CollectionWithMedia(name = Title(name), contents = it)
+                            }
+                    } else {
+                        emptyFlow()
+                    }
                 }
             }.getOrThrow()
         }
@@ -77,7 +95,7 @@ interface CollectionRepository {
                 .asFlow()
                 .mapToList()
                 .map { collectionNames ->
-                    collectionNames.map { getCollection(it).first() }
+                    collectionNames.map { getCollection(it.name).first() }
                 }
         }
 
@@ -86,14 +104,18 @@ interface CollectionRepository {
                 when(mediaItem) {
                     is Movie -> {
                         database.transaction {
-                            collectionQueries.insert(collection)
-                            database.xref_movie_collectionQueries.addToCollection(collection, mediaItem.id.value)
+                            collectionQueries.insert(null, collection)
+                            collectionQueries.findCollection(collection).executeAsOne().also {
+                                database.xref_movie_collectionQueries.addToCollection(it.id, mediaItem.id.value)
+                            }
                         }
                     }
                     is TVShow -> {
                         database.transaction {
-                            collectionQueries.insert(collection)
-                            database.xref_tvshow_collectionQueries.addToCollection(collection, mediaItem.id.value)
+                            collectionQueries.insert(null, collection)
+                            collectionQueries.findCollection(collection).executeAsOne().also {
+                                database.xref_tvshow_collectionQueries.addToCollection(it.id, mediaItem.id.value)
+                            }
                         }
                     }
                 }
@@ -105,14 +127,18 @@ interface CollectionRepository {
                 when(mediaType) {
                     MediaType.MOVIE -> {
                         database.transaction {
-                            collectionQueries.insert(collection)
-                            database.xref_movie_collectionQueries.removeFromCollection(collection, mediaId.value)
+                            collectionQueries.insert(null, collection)
+                            collectionQueries.findCollection(collection).executeAsOne().also {
+                                database.xref_movie_collectionQueries.removeFromCollection(it.id, mediaId.value)
+                            }
                         }
                     }
                     MediaType.TV -> {
                         database.transaction {
-                            collectionQueries.insert(collection)
-                            database.xref_tvshow_collectionQueries.removeFromCollection(collection, mediaId.value)
+                            collectionQueries.insert(null, collection)
+                            collectionQueries.findCollection(collection).executeAsOne().also {
+                                database.xref_tvshow_collectionQueries.removeFromCollection(it.id, mediaId.value)
+                            }
                         }
                     }
                 }

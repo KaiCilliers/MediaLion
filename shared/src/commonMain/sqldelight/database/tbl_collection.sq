@@ -1,11 +1,12 @@
 CREATE TABLE CollectionCache (
-    name TEXT PRIMARY KEY NOT NULL
+    id INTEGER AS Int PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE
 );
 
 insert:
 INSERT OR IGNORE
 INTO CollectionCache
-VALUES (?);
+VALUES (?,?);
 
 fetchAll:
 SELECT *
@@ -15,3 +16,8 @@ findCollection:
 SELECT *
 FROM CollectionCache
 WHERE name = ?;
+
+renameCollection:
+UPDATE CollectionCache
+SET name = ?
+WHERE id = ?;
