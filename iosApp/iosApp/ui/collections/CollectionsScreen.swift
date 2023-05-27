@@ -69,20 +69,22 @@ struct CollectionsScreen: View {
                                 let rowTitle = c.name as! String
                                 let media = c.contents
                                 
-                                MLTitledMediaRow(
-                                    rowTitle: rowTitle,
-                                    media: media,
-                                    onMediaItemClicked: { mediaItem in
-                                        mediaPreviewSheet = MediaItemUiIdentifiable(media: mediaItem)
-                                        selectedMedia = mediaItem
-                                    },
-                                    onTitleClicked: {
-                                        fullScreenGridContent = MediaWithTitle(
-                                            title: rowTitle,
-                                            media: media
-                                        )
-                                    }
-                                )
+                                if(!media.isEmpty) {
+                                    MLTitledMediaRow(
+                                        rowTitle: rowTitle,
+                                        media: media,
+                                        onMediaItemClicked: { mediaItem in
+                                            mediaPreviewSheet = MediaItemUiIdentifiable(media: mediaItem)
+                                            selectedMedia = mediaItem
+                                        },
+                                        onTitleClicked: {
+                                            fullScreenGridContent = MediaWithTitle(
+                                                title: rowTitle,
+                                                media: media
+                                            )
+                                        }
+                                    )
+                                }
                             }
                             
                         default:
