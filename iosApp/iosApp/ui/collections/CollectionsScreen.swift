@@ -191,8 +191,8 @@ struct CollectionsScreen: View {
                                 if(newCollectionTitle == nil) {
                                     newCollectionTitle = content.title
                                 }
-                                print("commit, old=\(content.title) and new=\(newCollectionTitle)")
-                                viewModel.submitAction(action: CollectionAction.RenameCollection(oldCollectionName: content.title, newCollectionName: newCollectionTitle))
+                                print("commit, old=\(content.title) and new=\(newCollectionTitle ?? "")")
+                                viewModel.submitAction(action: CollectionAction.RenameCollection(oldCollectionName: content.title, newCollectionName: newCollectionTitle ?? ""))
                                 editTitleMode = false
                             }
                         )

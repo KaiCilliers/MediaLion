@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import shared
 
 struct Category : Identifiable {
     var id: Int
@@ -17,23 +18,9 @@ struct Category : Identifiable {
 struct CustomCategoriesDialog: View {
     
     @State private var offset: CGFloat = 1000
-    let categories = [
-        Category(id: 1, name: "Horror"),
-        Category(id: 2, name: "Romance"),
-        Category(id: 3, name:"Comedy"),
-        Category(id: 4, name:"Thriller"),
-        Category(id: 5, name:"Crime"),
-        Category(id: 6, name:"Drama"),
-        Category(id: 7, name:"Fantasy"),
-        Category(id: 8, name:"Rom-Com"),
-        Category(id: 9, name:"Action"),
-        Category(id: 10, name:"Animation"),
-        Category(id: 11, name:"Adventure"),
-        Category(id: 12, name:"Sci-Fi")
-    ]
+    let genres: [GenreWithType]
     let title: String
     let onClose: () -> Void
-    
     
     var body: some View  {
         
@@ -46,8 +33,8 @@ struct CustomCategoriesDialog: View {
                 HStack{
                     Spacer()
                     VStack(alignment: .center, spacing: 8) {
-                        ForEach(categories) {Category in
-                            Text(Category.name)
+                        ForEach(genres) { genre in
+                            Text("\(genre.genre.name) - \(genre.mediaType)")
                             
                         }
                     }
@@ -116,8 +103,27 @@ struct CustomCategoriesDialog: View {
 
 struct customCategoriesDialog_Previews: PreviewProvider {
     static var previews: some View {
+        
+        let categories = [
+            Category(id: 1, name: "Horror"),
+            Category(id: 2, name: "Romance"),
+            Category(id: 3, name:"Comedy"),
+            Category(id: 4, name:"Thriller"),
+            Category(id: 5, name:"Crime"),
+            Category(id: 6, name:"Drama"),
+            Category(id: 7, name:"Fantasy"),
+            Category(id: 8, name:"Rom-Com"),
+            Category(id: 9, name:"Action"),
+            Category(id: 10, name:"Animation"),
+            Category(id: 11, name:"Adventure"),
+            Category(id: 12, name:"Sci-Fi")
+        ]
+        
         CustomCategoriesDialog(
-            title: "Categories",
+            genres: categories.map({ item in
+                print("deadpool - \(item.name)")
+                return GenreWithType(genre: Genre(id: Int32(Int(Int.random(in: 0..<100000))), name: "\(item.name)"), mediaType: MediaType.movie)
+            }), title: "Categories",
             onClose: {}
         )
     }
