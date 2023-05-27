@@ -224,3 +224,13 @@ struct PreviewMedia {
         self.sheetVisible = false
     }
 }
+
+struct MediaItemUiIdentifiable: Identifiable {
+    let id: UUID
+    let media: MediaItemUI
+    
+    init(media: MediaItemUI) {
+        self.id = UUID()
+        self.media = media
+    }
+}

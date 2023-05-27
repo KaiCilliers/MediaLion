@@ -15,10 +15,12 @@ struct CollectionsScreen: View {
     @StateObject var viewModel = CollectionViewModel()
     @StateObject var searchViewModel = SearchViewModel()
     
-    @State private var mediaPreviewSheet: PreviewMedia = PreviewMedia(media: nil,sheetVisible: false)
-    @State private var mediaPreviewSheetInner: PreviewMedia = PreviewMedia(media: nil,sheetVisible: false)
+    @State private var mediaPreviewSheet: MediaItemUiIdentifiable? = nil
+    @State private var mediaPreviewSheetInner: MediaItemUiIdentifiable? = nil
+    
     @State private var showCollectionDialog = false
     @State private var showCollectionDialogInner = false
+    
     @State private var selectedMedia: MediaItemUI? = nil
     @State private var fullScreenGridContent: MediaWithTitle? = nil
     
@@ -68,7 +70,7 @@ struct CollectionsScreen: View {
                                     rowTitle: rowTitle,
                                     media: media,
                                     onMediaItemClicked: { mediaItem in
-                                        mediaPreviewSheet.showSheet(media: mediaItem)
+                                        mediaPreviewSheet = MediaItemUiIdentifiable(media: mediaItem)
                                         selectedMedia = mediaItem
                                     },
                                     onTitleClicked: {
@@ -145,25 +147,24 @@ struct CollectionsScreen: View {
             viewModel.dispose()
             searchViewModel.dispose()
         }
-        .sheet(isPresented: $mediaPreviewSheet.sheetVisible) {
-            if let itemToPreview = mediaPreviewSheet.media {
-                DetailPreviewSheet(
-                    mediaItem: itemToPreview,
-                    onCloseClick: {
-                        mediaPreviewSheet.hideSheet()
-                    },
-                    onMyCollectionClick: { item in
-                        showCollectionDialog = true
-                        mediaPreviewSheet.hideSheet()
-                    }
-                )
-                .presentationDetents([.medium, .fraction(0.4)])
-                .presentationDragIndicator(.hidden)
-            } else {
-                //                fatalError("item to show was nil!")
-            }
+        .sheet(item: $mediaPreviewSheet) { mediaItem in
+            DetailPreviewSheet(
+                mediaItem: mediaItem.media,
+                onCloseClick: {
+                    mediaPreviewSheet = nil
+                },
+                onMyCollectionClick: { item in
+                    showCollectionDialog = true
+                    mediaPreviewSheet = nil
+                }
+            )
+            .presentationDetents([.medium, .fraction(0.4)])
+            .presentationDragIndicator(.hidden)
         }
-        .sheet(item: $fullScreenGridContent) { content in
+        .sheet(item: $fullScreenGridContent, onDismiss: {
+            mediaPreviewSheetInner = nil
+            showCollectionDialogInner = false
+        }) { content in
             let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
             ZStack{
                 ScrollView{
@@ -180,7 +181,7 @@ struct CollectionsScreen: View {
                             MLMediaPoster(media: item)
                                 .frame(width: 100,height: 170)
                                 .onTapGesture {
-                                    mediaPreviewSheetInner.showSheet(media: item)
+                                    mediaPreviewSheetInner = MediaItemUiIdentifiable(media: item)
                                     selectedMedia = item
                                 }
                         }
@@ -189,7 +190,7 @@ struct CollectionsScreen: View {
                 
                 if showCollectionDialogInner {
                     MLCollectionsDialog(
-                        onDismiss: { showCollectionDialog = false },
+                        onDismiss: { showCollectionDialogInner = false },
                         collections: searchViewModel.collectionState.compactMap({ $0 as? CollectionWithMedia }).map({ singleCollection in
                             
                             let selectedMedia = selectedMedia
@@ -234,23 +235,19 @@ struct CollectionsScreen: View {
                 }
             }
                 .background(Color.background)
-                .sheet(isPresented: $mediaPreviewSheetInner.sheetVisible) {
-                    if let itemToPreview = mediaPreviewSheetInner.media {
-                        DetailPreviewSheet(
-                            mediaItem: itemToPreview,
-                            onCloseClick: {
-                                mediaPreviewSheetInner.hideSheet()
-                            },
-                            onMyCollectionClick: { item in
-                                showCollectionDialogInner = true
-                                mediaPreviewSheetInner.hideSheet()
-                            }
-                        )
-                        .presentationDetents([.medium, .fraction(0.4)])
-                        .presentationDragIndicator(.hidden)
-                    } else {
-                        //                fatalError("item to show was nil!")
-                    }
+                .sheet(item: $mediaPreviewSheetInner) { mediaItem in
+                    DetailPreviewSheet(
+                        mediaItem: mediaItem.media,
+                        onCloseClick: {
+                            mediaPreviewSheetInner = nil
+                        },
+                        onMyCollectionClick: { item in
+                            showCollectionDialogInner = true
+                            mediaPreviewSheetInner = nil
+                        }
+                    )
+                    .presentationDetents([.medium, .fraction(0.4)])
+                    .presentationDragIndicator(.hidden)
                 }
         }
     }
