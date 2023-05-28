@@ -286,6 +286,23 @@ struct CollectionsScreen: View {
                     .presentationDetents([.medium, .fraction(0.4)])
                     .presentationDragIndicator(.hidden)
                 }
+                .overlay {
+                    VStack{
+                        Spacer()
+                        HStack{
+                            Spacer()
+                            Button {
+                                EditButton()
+                            }label: {
+                                Image("editIcon")
+                                    .resizable()
+                                    .frame(width: 90, height: 90)
+                            }
+                        }
+                    }
+                    .padding(.bottom, 20)
+                    .padding(.trailing, 40)
+                }
         }
     }
     
