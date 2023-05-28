@@ -19,7 +19,7 @@ interface FetchDiscoveryContent {
         1 --> Movie
         2 --> TV
      */
-    suspend operator fun invoke(mediaToShow: Int): List<TitledMedia>
+    suspend operator fun invoke(mediaToShow: Int, genreId: ID? = null): List<TitledMedia>
     class Default(
         private val tvRepository: TVRepository,
         private val movieRepository: MovieRepository,
@@ -102,17 +102,46 @@ interface FetchDiscoveryContent {
             return content
         }
 
-        override suspend fun invoke(mediaToShow: Int): List<TitledMedia> {
+        override suspend fun invoke(mediaToShow: Int, genreId: ID?): List<TitledMedia> {
             val content = mutableListOf<TitledMedia>()
-            when (mediaToShow) {
-                1 -> content.addAll(fetchMovieContent())
-                2 -> content.addAll(fetchTvContent())
-                else -> {
-                    content.addAll(fetchMovieContent())
-                    content.addAll(fetchTvContent())
+            if (genreId == null) {
+                when (mediaToShow) {
+                    1 -> content.addAll(fetchMovieContent())
+                    2 -> content.addAll(fetchTvContent())
+                    else -> {
+                        content.addAll(fetchMovieContent())
+                        content.addAll(fetchTvContent())
+                    }
                 }
+            } else {
+                content.add(fetchGenreMedia(mediaToShow, genreId))
             }
             return content.shuffled().take(6)
+        }
+
+        private suspend fun fetchGenreMedia(mediaType: Int, genreId: ID): TitledMedia {
+            return when(mediaType) {
+                1 -> {
+                    val media = movieRepository
+                        .withGenre(genreId)
+                        .take(40)
+                        .toList()
+                    TitledMedia(
+                        title = movieGenres.find { it.first == genreId }?.second ?: "Genre",
+                        content = mapperMovie.map(media)
+                    )
+                }
+                else -> {
+                    val media = tvRepository
+                        .withGenre(genreId)
+                        .take(40)
+                        .toList()
+                    TitledMedia(
+                        title = tvGenres.find { it.first == genreId }?.second ?: "Genre",
+                        content = mapperTv.map(media)
+                    )
+                }
+            }
         }
     }
 }

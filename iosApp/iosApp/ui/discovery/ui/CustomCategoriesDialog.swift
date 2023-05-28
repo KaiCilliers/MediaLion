@@ -20,7 +20,7 @@ struct CustomCategoriesDialog: View {
     @State private var offset: CGFloat = 1000
     let genres: [GenreWithType]
     let title: String
-    let onClose: () -> Void
+    let onClose: (GenreWithType) -> Void
     
     var body: some View  {
         
@@ -35,6 +35,10 @@ struct CustomCategoriesDialog: View {
                     VStack(alignment: .center, spacing: 8) {
                         ForEach(genres) { genre in
                             Text("\(genre.genre.name) - \(genre.mediaType)")
+                                .onTapGesture {
+                                    onClose(genre)
+                                    close()
+                                }
                             
                         }
                     }
@@ -95,9 +99,9 @@ struct CustomCategoriesDialog: View {
         withAnimation(.spring()) {
             offset = 1000
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            onClose()
-        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+//            onClose(nil)
+//        }
     }
 }
 
@@ -122,9 +126,15 @@ struct customCategoriesDialog_Previews: PreviewProvider {
         CustomCategoriesDialog(
             genres: categories.map({ item in
                 print("deadpool - \(item.name)")
-                return GenreWithType(genre: Genre(id: Int32(Int(Int.random(in: 0..<100000))), name: "\(item.name)"), mediaType: MediaType.movie)
+                return GenreWithType(
+                    genre: Genre(
+                        id: Int32(Int(Int.random(in: 0..<100000))),
+                        name: "\(item.name)",
+                        mediaType: MediaType.movie
+                    ), mediaType: MediaType.movie
+                )
             }), title: "Categories",
-            onClose: {}
+            onClose: {_ in}
         )
     }
 }

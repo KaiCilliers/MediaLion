@@ -95,6 +95,20 @@ class MLDiscoveryViewModel(
                     )
                 }
             }
+
+            is DiscoveryAction.FetchGenreContent -> {
+                viewModelScope.launch {
+                    _state.value = DiscoveryState.Loading
+                    viewModelScope.launch {
+                        val mediaType = when (action.mediaType) {
+                            MediaType.MOVIE -> 1
+                            MediaType.TV -> 2
+                        }
+                        val cot = fetchDiscoveryContent(mediaType, action.genreId)
+                        _state.value = DiscoveryState.Content(cot)
+                    }
+                }
+            }
         }
     }
 
@@ -109,6 +123,7 @@ class MLDiscoveryViewModel(
 
 sealed class DiscoveryAction {
     data class FetchContent(val mediaType: Int) : DiscoveryAction()
+    data class FetchGenreContent(val genreId: ID, val mediaType: MediaType) : DiscoveryAction()
     data class RemoveFromFavorites(
         val movieId: ID,
         val mediaType: MediaType,

@@ -13,11 +13,14 @@ import shared
     
     private var handle: DisposableHandle?
     private var collectionHandle: DisposableHandle?
+    private var genreHandle: DisposableHandle?
     
     private var viewModel: MLDiscoveryViewModel = WrapperMLDiscoveryViewModel().instance()
+    private var collectionViewModel: MLCollectionViewModel = WrapperMLCollectionViewModel().instance()
     
     @Published var state: DiscoveryState = DiscoveryState.Loading()
     @Published var collectionState: NSArray = []
+    @Published var genreState: GenreState = GenreState.Genres(all: [])
     
     func submitAction(action: DiscoveryAction) {
         print("IOS - submitting action \(action)")
@@ -36,10 +39,17 @@ import shared
                 self.collectionState = collections
             }
         })
+        genreHandle = collectionViewModel.genres.subscribe(onCollect: { state in
+            if let state = state {
+                self.genreState = state
+            }
+        })
     }
     
     func dispose() {
         print("IOS - discovery - disposing observers")
         handle?.dispose()
+        collectionHandle?.dispose()
+        genreHandle?.dispose()
     }
 }

@@ -36,8 +36,10 @@ class SearchFragment : Fragment() {
                         val state by viewModel.state.collectAsState()
                         val discState by viewModelDiscovery.state.collectAsState()
                         val collectionState by viewModel.collectionState.collectAsState()
+                        val genreSta by viewModelDiscovery.genres.genres.collectAsState()
 
                         println("deadpool - got state $discState")
+                        println("deadpool - got genres $genreSta")
 
                         SearchScreen(
                             state = state,

@@ -1,9 +1,9 @@
 package com.sunrisekcdeveloper.medialion.clients
 
-import com.sunrisekcdeveloper.medialion.data.NetworkConstants
-import com.sunrisekcdeveloper.medialion.clients.models.GenreResponse
+import com.sunrisekcdeveloper.medialion.clients.models.GenreWrapper
 import com.sunrisekcdeveloper.medialion.clients.models.MediaResponse
 import com.sunrisekcdeveloper.medialion.clients.models.PagedMediaResponse
+import com.sunrisekcdeveloper.medialion.data.NetworkConstants
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -17,8 +17,8 @@ interface TMDBClient {
     //endregion
 
     // region genre
-    suspend fun movieGenres(): Result<GenreResponse>
-    suspend fun tvGenres(): Result<GenreResponse>
+    suspend fun movieGenres(): Result<GenreWrapper>
+    suspend fun tvGenres(): Result<GenreWrapper>
     // endregion
 
     // region movie
@@ -97,17 +97,21 @@ interface TMDBClient {
             }
         }
 
-        override suspend fun movieGenres(): Result<GenreResponse> {
+        override suspend fun movieGenres(): Result<GenreWrapper> {
             val endpoint = NetworkConstants.BASE_URL_TMDB + "/genre/movie/list"
             return this.suspendRunReThrowable("Failed to fetch movie genres [endpoint=$endpoint]") {
-                httpClient.get(endpoint).body()
+                httpClient.get(endpoint){
+                    url { parameters.standardParameters() }
+                }.body()
             }
         }
 
-        override suspend fun tvGenres(): Result<GenreResponse> {
+        override suspend fun tvGenres(): Result<GenreWrapper> {
             val endpoint = NetworkConstants.BASE_URL_TMDB + "/genre/tv/list"
             return this.suspendRunReThrowable("Failed to fetch tv genres [endpoint=$endpoint]") {
-                httpClient.get(endpoint).body()
+                httpClient.get(endpoint){
+                    url { parameters.standardParameters() }
+                }.body()
             }
         }
 

@@ -18,6 +18,7 @@ struct DiscoveryScreen: View {
     @State private var mediaPreviewSheet: PreviewMedia = PreviewMedia(media: nil,sheetVisible: false)
     @State private var selectedMedia: MediaItemUI? = nil
     @State private var showCollectionDialog = false
+    @State private var showGenreDialog = false
 
     init(onInfoClicked: @escaping () -> Void) {
         self.onInfoClicked = onInfoClicked
@@ -65,13 +66,17 @@ struct DiscoveryScreen: View {
                 DiscoveryFilterItems( action: { filter in
                     switch (filter){
                     case .all:
+                        showGenreDialog = false
                         viewModel.submitAction(action: DiscoveryAction.FetchContent(mediaType: 0))
                     case .movies:
+                        showGenreDialog = false
                         viewModel.submitAction(action: DiscoveryAction.FetchContent(mediaType: 1))
                     case .series:
+                        showGenreDialog = false
                         viewModel.submitAction(action: DiscoveryAction.FetchContent(mediaType: 2))
-                    default:
-                        viewModel.submitAction(action: DiscoveryAction.FetchContent(mediaType: 0))
+                    case .categories:
+                        showGenreDialog = true
+                        
                     }
                 }
                 )
@@ -153,6 +158,29 @@ struct DiscoveryScreen: View {
                         viewModel.submitAction(action: DiscoveryAction.CreateCollection(collectionName: collectionName))
                     }
                 )
+            }
+            
+            if showGenreDialog {
+                switch (viewModel.genreState) {
+                    case let genres as GenreState.Genres:
+                    CustomCategoriesDialog(
+                        genres: genres.all.map({ item in
+                            return GenreWithType(
+                                genre: item,
+                                mediaType: item.mediaType
+                            )
+                        }),
+                        title: "Genres",
+                        onClose: { genre in
+                            viewModel.submitAction(action: DiscoveryAction.FetchGenreContent(
+                                genreId: Int32(genre.id),
+                                mediaType: genre.mediaType
+                            ))
+                        }
+                    )
+                default:
+                    fatalError("state should not be reachable \(viewModel.genreState)")
+                }
             }
             
         }

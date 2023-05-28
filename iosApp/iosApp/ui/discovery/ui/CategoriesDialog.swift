@@ -32,7 +32,7 @@ struct CategoriesDialog: View {
                 CustomCategoriesDialog(
                     genres: genres,
                     title: StringRes.categories,
-                    onClose: {}
+                    onClose: {_ in}
                 )
             }
         }
@@ -59,7 +59,7 @@ struct categoriesDialog_Previews: PreviewProvider {
         
         CategoriesDialog(
             genres: categories.map({ item in
-                GenreWithType(genre: Genre(id: Int32(Int(Int.random(in: 0..<100000))), name: "\(item.name)"), mediaType: MediaType.movie)
+                GenreWithType(genre: Genre(id: Int32(Int(Int.random(in: 0..<100000))), name: "\(item.name)", mediaType: MediaType.movie), mediaType: MediaType.movie)
             }),
             onCategorySelection: {_ in}
         )

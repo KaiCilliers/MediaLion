@@ -6,6 +6,7 @@ import com.sunrisekcdeveloper.medialion.domain.entities.CollectionWithMediaUI
 import com.sunrisekcdeveloper.medialion.domain.entities.MediaItem
 import com.sunrisekcdeveloper.medialion.domain.search.CollectionComponent
 import com.sunrisekcdeveloper.medialion.domain.search.SearchComponent
+import com.sunrisekcdeveloper.medialion.domain.value.Genre
 import com.sunrisekcdeveloper.medialion.domain.value.ID
 import com.sunrisekcdeveloper.medialion.domain.value.Title
 import com.sunrisekcdeveloper.medialion.flow.CStateFlow
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -54,6 +56,22 @@ class MLCollectionViewModel(
     val state: CStateFlow<CollectionState>
         get() = _state.cStateFlow()
 
+    private val _genres: MutableStateFlow<GenreState> = MutableStateFlow(GenreState.Genres(emptyList()))
+    val genres: CStateFlow<GenreState> = _genres
+        .onEach { log { "deadpool - got a list of genres $it" } }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000L), GenreState.Genres(emptyList()))
+        .cStateFlow()
+
+    init {
+        viewModelScope.launch {
+            collectionComponent.fetchAllGenresUseCase().also {
+                log { "Deadpool - Got genres $it" }
+                _genres.value = GenreState.Genres(it)
+                log { "deadpool  - state value is ${genres.value}" }
+            }
+        }
+    }
+
     fun submitAction(action: CollectionAction) {
         log { "Collections - submitted an action $action" }
         when (action) {
@@ -89,6 +107,10 @@ class MLCollectionViewModel(
         }
     }
 
+}
+
+sealed class GenreState {
+    data class Genres(val all: List<Genre>) : GenreState()
 }
 
 sealed class CollectionState {
