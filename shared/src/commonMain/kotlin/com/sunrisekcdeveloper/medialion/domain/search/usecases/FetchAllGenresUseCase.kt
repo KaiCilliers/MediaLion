@@ -39,7 +39,7 @@ interface FetchAllGenresUseCase {
                         }
                     }
                 }
-            return allGenres
+            return allGenres.sortedBy { it.name }
         }
     }
 }
