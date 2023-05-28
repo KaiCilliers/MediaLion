@@ -75,6 +75,7 @@ struct DiscoveryScreen: View {
                         showGenreDialog = false
                         viewModel.submitAction(action: DiscoveryAction.FetchContent(mediaType: 2))
                     case .categories:
+                        print("leka joshua - \(showGenreDialog)")
                         showGenreDialog = true
                         
                     }
@@ -92,18 +93,42 @@ struct DiscoveryScreen: View {
                                     .foregroundColor(Color.white)
                                 
                             case let contentState as DiscoveryState.Content:
-                                ForEach(contentState.media, id: \.self) { item in
-                                    MLTitledMediaRow(
-                                        rowTitle: item.title,
-                                        media: item.content,
-                                        onMediaItemClicked: {
-                                            singleItem in
-                                            mediaPreviewSheet
-                                                .showSheet(media: singleItem)
-                                            selectedMedia = singleItem
-                                        })
+                                if (contentState.media.count > 1) {
+                                    ForEach(contentState.media, id: \.self) { item in
+                                        MLTitledMediaRow(
+                                            rowTitle: item.title,
+                                            media: item.content,
+                                            onMediaItemClicked: {
+                                                singleItem in
+                                                mediaPreviewSheet
+                                                    .showSheet(media: singleItem)
+                                                selectedMedia = singleItem
+                                            })
+                                    }
+                                } else {
+                                    ForEach(contentState.media, id: \.self) { titledMedia in
+                                        Text(titledMedia.title)
+                                            .foregroundColor(.white)
+                                            .customFont(.h2)
+                                            .padding(.leading, 16)
+                                            .padding(.top, 16)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                    LazyVGrid(
+                                        columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())],
+                                        spacing: 16
+                                    ) {
+                                            ForEach(titledMedia.content, id: \.self) { item in
+                                                MLMediaPoster(media: item)
+                                                    .frame(width: 100,height: 170)
+                                                    .onTapGesture {
+                                                        mediaPreviewSheet
+                                                            .showSheet(media: item)
+                                                        selectedMedia = item
+                                                    }
+                                            }
+                                        }
+                                    }
                                 }
-                                
                                 
                             default:
                                 fatalError("state should not be reachable \(viewModel.state)")
@@ -161,10 +186,11 @@ struct DiscoveryScreen: View {
             }
             
             if showGenreDialog {
-                switch (viewModel.genreState) {
-                    case let genres as GenreState.Genres:
+                let a = print("leka joshua - show genres \(viewModel.genreState)")
+                let genres = viewModel.genreState
+                if(genres is GenreState.Genres) {
                     CustomCategoriesDialog(
-                        genres: genres.all.map({ item in
+                        genres: (genres as! GenreState.Genres).all.map({ item in
                             return GenreWithType(
                                 genre: item,
                                 mediaType: item.mediaType
@@ -173,13 +199,12 @@ struct DiscoveryScreen: View {
                         title: "Genres",
                         onClose: { genre in
                             viewModel.submitAction(action: DiscoveryAction.FetchGenreContent(
-                                genreId: Int32(genre.id),
+                                genreId: Int32(genre.genre.id),
                                 mediaType: genre.mediaType
                             ))
+                            showGenreDialog = false
                         }
                     )
-                default:
-                    fatalError("state should not be reachable \(viewModel.genreState)")
                 }
             }
             

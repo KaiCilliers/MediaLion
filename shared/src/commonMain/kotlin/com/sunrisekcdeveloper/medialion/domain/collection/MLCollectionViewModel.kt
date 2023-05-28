@@ -65,7 +65,7 @@ class MLCollectionViewModel(
     init {
         viewModelScope.launch {
             collectionComponent.fetchAllGenresUseCase().also {
-                log { "Deadpool - Got genres ${it.size}" }
+                log { "Deadpool - Got genres ${it}" }
                 _genres.value = GenreState.Genres(it)
             }
         }

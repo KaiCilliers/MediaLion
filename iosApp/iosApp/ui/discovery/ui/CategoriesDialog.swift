@@ -75,6 +75,14 @@ struct GenreWithType: Identifiable {
     init(genre: Genre, mediaType: MediaType) {
         self.genre = genre
         self.mediaType = mediaType
-        self.id = Int(genre.id)
+        
+        var extra = 0
+        if (mediaType == MediaType.movie) {
+            extra = extra + 1
+        } else {
+            extra = extra + 2
+        }
+        
+        self.id = Int(genre.id) + extra
     }
 }
