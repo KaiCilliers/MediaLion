@@ -23,75 +23,76 @@ import androidx.compose.ui.unit.dp
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 
 
-enum class FilterCategories {All, MOVIES, SERIES, CATEGORIES}
+enum class FilterCategory { All, MOVIES, SERIES, CATEGORIES }
 
 @Composable
-fun FilterCategories(
-    modifier: Modifier = Modifier
+fun MLFilterCategories(
+    selectedFilter: FilterCategory,
+    onNewSelection: (FilterCategory) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    var selectedFilter by remember { mutableStateOf(FilterCategories.All) }
-    Box (
+    Box(
         modifier = modifier
             .fillMaxWidth()
             .height(60.dp)
-    ){
-        Row (
+    ) {
+        Row(
             modifier = modifier
                 .background(MaterialTheme.colors.background)
                 .fillMaxSize()
                 .padding(vertical = 16.dp),
             horizontalArrangement = Arrangement.Center
 
-        ){
+        ) {
             Text(
                 text = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.filter_all),
-                color = if (selectedFilter == FilterCategories.All) {
+                color = if (selectedFilter == FilterCategory.All) {
                     MaterialTheme.colors.onSurface
                 } else {
-                       MaterialTheme.colors.onSecondary
-                       },
+                    MaterialTheme.colors.onSecondary
+                },
                 style = MaterialTheme.typography.subtitle2,
                 modifier = modifier
                     .padding(end = 40.dp)
-                    .clickable {selectedFilter = FilterCategories.All}
+                    .clickable { onNewSelection(FilterCategory.All) }
             )
             Text(
                 text = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.filter_movies),
-                color = if (selectedFilter == FilterCategories.MOVIES) {
+                color = if (selectedFilter == FilterCategory.MOVIES) {
                     MaterialTheme.colors.onSurface
                 } else {
-                       MaterialTheme.colors.onSecondary
-                       },
+                    MaterialTheme.colors.onSecondary
+                },
                 style = MaterialTheme.typography.subtitle2,
                 modifier = modifier
                     .padding(end = 40.dp)
-                    .clickable { selectedFilter = FilterCategories.MOVIES }
+                    .clickable { onNewSelection(FilterCategory.MOVIES) }
             )
 
 
             Text(
                 text = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.filter_series),
-                color = if (selectedFilter == FilterCategories.SERIES) {
-                    MaterialTheme.colors.onSurface
-                }else {
-                      MaterialTheme.colors.onSecondary
-                      },
-                style = MaterialTheme.typography.subtitle2,
-                modifier = modifier
-                    .clickable { selectedFilter = FilterCategories.SERIES }
-
-                )
-            Text(
-                text = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.filter_categories),
-                color = if (selectedFilter == FilterCategories.CATEGORIES) {
+                color = if (selectedFilter == FilterCategory.SERIES) {
                     MaterialTheme.colors.onSurface
                 } else {
-                       MaterialTheme.colors.onSecondary
-                       },
+                    MaterialTheme.colors.onSecondary
+                },
+                style = MaterialTheme.typography.subtitle2,
+                modifier = modifier
+                    .clickable { onNewSelection(FilterCategory.SERIES) }
+
+            )
+            Text(
+                text = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.filter_categories),
+                color = if (selectedFilter == FilterCategory.CATEGORIES) {
+                    MaterialTheme.colors.onSurface
+                } else {
+                    MaterialTheme.colors.onSecondary
+                },
                 style = MaterialTheme.typography.subtitle2,
                 modifier = modifier
                     .padding(start = 40.dp)
-                    .clickable { selectedFilter = FilterCategories.CATEGORIES }
+                    .clickable { onNewSelection(FilterCategory.CATEGORIES) }
             )
         }
     }
@@ -102,7 +103,10 @@ fun FilterCategories(
 @Composable
 private fun FilterCategoriesPreview() {
     MediaLionTheme {
-        FilterCategories()
+        MLFilterCategories(
+            selectedFilter = FilterCategory.All,
+            onNewSelection = {}
+        )
     }
 
 }
