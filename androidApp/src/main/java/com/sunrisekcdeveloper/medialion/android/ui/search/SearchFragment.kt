@@ -46,6 +46,7 @@ class SearchFragment : Fragment() {
                             collectionState = collectionState,
                             submitAction = { viewModel.submitAction(it) },
                             backstack = backstack,
+                            onNavigateBack = { backstack.goBack() },
                         )
                     }
                 }

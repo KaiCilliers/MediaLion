@@ -12,6 +12,8 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
+import com.sunrisekcdeveloper.medialion.android.ui.search.SearchKey
+import com.zhuinden.simplestackextensions.fragmentsktx.backstack
 
 class HomeFragment : Fragment() {
     override fun onCreateView(
@@ -27,7 +29,9 @@ class HomeFragment : Fragment() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colors.background
                     ) {
-                        HomeScreen()
+                        HomeScreen(
+                            onNavigateToSearchScreen = { backstack.goTo(SearchKey) }
+                        )
                     }
                 }
             }

@@ -1,7 +1,6 @@
 package com.sunrisekcdeveloper.medialion.android.ui.search
 
 import android.view.MotionEvent
-import android.widget.Toast
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -70,6 +69,7 @@ fun SearchScreen(
     state: SearchState,
     collectionState: List<CollectionWithMedia>,
     submitAction: (SearchAction) -> Unit,
+    onNavigateBack: () -> Unit,
     backstack: Backstack,
 ) {
     val context = LocalContext.current
@@ -170,15 +170,7 @@ fun SearchScreen(
                     contentDescription = "",
                     modifier = Modifier
                         .size(25.dp)
-                        .clickable {
-                            Toast
-                                .makeText(
-                                    context,
-                                    "Navigate back functionality...",
-                                    Toast.LENGTH_SHORT
-                                )
-                                .show()
-                        },
+                        .clickable { onNavigateBack() },
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Image(
@@ -306,6 +298,7 @@ private fun SearchScreenPreview() {
                         is SearchAction.RemoveFromCollection -> TODO()
                     }
                 },
+                onNavigateBack = {},
                 backstack = Backstack()
             )
         }

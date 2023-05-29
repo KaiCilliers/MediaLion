@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
+import com.sunrisekcdeveloper.medialion.android.ui.about.ui.AboutScreen
 import com.sunrisekcdeveloper.medialion.android.ui.collections.ui.CollectionScreen
 import com.sunrisekcdeveloper.medialion.android.ui.components.ui.BottomBar
 import com.sunrisekcdeveloper.medialion.android.ui.components.ui.BottomBarOption
@@ -18,28 +19,35 @@ import com.sunrisekcdeveloper.medialion.android.ui.discovery.DiscoveryScreen
 
 @Composable
 fun HomeScreen(
+    onNavigateToSearchScreen: () -> Unit
 ) {
 
-    var selectedTab by remember {
-        mutableStateOf(BottomBarOption.DISCOVERY)
-    }
+    var selectedTab by remember { mutableStateOf(BottomBarOption.DISCOVERY) }
+    var showAboutDialog by remember { mutableStateOf(false) }
 
     ConstraintLayout {
         val (coreContent, bottombar) = createRefs()
 
         when (selectedTab) {
-            BottomBarOption.DISCOVERY -> DiscoveryScreen(modifier = Modifier.constrainAs(coreContent) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                bottom.linkTo(bottombar.top)
-            })
-            BottomBarOption.COLLECTION -> CollectionScreen(modifier = Modifier.constrainAs(coreContent) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                bottom.linkTo(bottombar.top)
-            })
+            BottomBarOption.DISCOVERY -> DiscoveryScreen(
+                onInfoIconClicked = { showAboutDialog = true },
+                onSearchIconClicked = { onNavigateToSearchScreen() },
+                modifier = Modifier.constrainAs(coreContent) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(bottombar.top)
+                })
+
+            BottomBarOption.COLLECTION -> CollectionScreen(
+                modifier = Modifier.constrainAs(
+                    coreContent
+                ) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(bottombar.top)
+                })
         }
 
         BottomBar(
@@ -52,6 +60,10 @@ fun HomeScreen(
             }
         )
     }
+
+    if (showAboutDialog) {
+        AboutScreen(onDismiss = { showAboutDialog = false })
+    }
 }
 
 @Preview
@@ -59,7 +71,7 @@ fun HomeScreen(
 fun HomeScreenPreview() {
     MediaLionTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            HomeScreen()
+            HomeScreen(onNavigateToSearchScreen = {})
         }
     }
 }

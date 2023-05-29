@@ -2,6 +2,7 @@ package com.sunrisekcdeveloper.medialion.android.ui.discovery
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,7 +30,9 @@ import com.sunrisekcdeveloper.medialion.domain.MediaType
 
 @Composable
 fun DiscoveryScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onSearchIconClicked: () -> Unit = {},
+    onInfoIconClicked: () -> Unit = {},
 ) {
     ConstraintLayout(
         modifier = modifier
@@ -68,6 +71,7 @@ fun DiscoveryScreen(
                         contentDescription = "",
                         modifier = Modifier
                             .size(30.dp)
+                            .clickable { onSearchIconClicked() }
 
                     )
                     Spacer(modifier = Modifier.weight(1f))
@@ -84,6 +88,7 @@ fun DiscoveryScreen(
                         contentDescription = "",
                         modifier = Modifier
                             .size(30.dp)
+                            .clickable { onInfoIconClicked() }
 
                     )
                 }
