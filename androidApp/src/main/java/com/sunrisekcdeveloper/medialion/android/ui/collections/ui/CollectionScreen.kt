@@ -20,7 +20,6 @@ import androidx.constraintlayout.compose.Dimension
 import com.sunrisekcdeveloper.medialion.MediaItemUI
 import com.sunrisekcdeveloper.medialion.android.R
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
-import com.sunrisekcdeveloper.medialion.android.ui.components.ui.BottomBar
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLTitledMediaRow
 import com.sunrisekcdeveloper.medialion.domain.MediaType
 

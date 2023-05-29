@@ -6,11 +6,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
@@ -25,7 +23,6 @@ import androidx.constraintlayout.compose.Dimension
 import com.sunrisekcdeveloper.medialion.MediaItemUI
 import com.sunrisekcdeveloper.medialion.android.R
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
-import com.sunrisekcdeveloper.medialion.android.ui.components.ui.BottomBar
 import com.sunrisekcdeveloper.medialion.android.ui.discovery.ui.FilterCategories
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLTitledMediaRow
 import com.sunrisekcdeveloper.medialion.domain.MediaType
@@ -37,7 +34,6 @@ fun DiscoveryScreen(
     ConstraintLayout(
         modifier = modifier
             .fillMaxWidth()
-            .wrapContentHeight()
     ) {
 
         val (containerTop, column) = createRefs()
@@ -51,7 +47,7 @@ fun DiscoveryScreen(
             }
         ) {
             Column(
-                modifier = modifier
+                modifier = Modifier
                     .background(MaterialTheme.colors.background)
                     .padding(horizontal = 16.dp)
                     .constrainAs(column) {
@@ -61,7 +57,7 @@ fun DiscoveryScreen(
 
             ) {
                 Row(
-                    modifier = modifier
+                    modifier = Modifier
                         .background(MaterialTheme.colors.background)
                         .padding(top = 16.dp, bottom = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -70,23 +66,23 @@ fun DiscoveryScreen(
                     Image(
                         painter = painterResource(id = R.drawable.search_icon),
                         contentDescription = "",
-                        modifier = modifier
+                        modifier = Modifier
                             .size(30.dp)
 
                     )
-                    Spacer(modifier = modifier.weight(1f))
+                    Spacer(modifier = Modifier.weight(1f))
                     Image(
                         painter = painterResource(id = R.drawable.logo_icon),
                         contentDescription = "",
-                        modifier = modifier
+                        modifier = Modifier
                             .size(60.dp)
 
                     )
-                    Spacer(modifier = modifier.weight(1f))
+                    Spacer(modifier = Modifier.weight(1f))
                     Image(
                         painter = painterResource(id = R.drawable.about_icon),
                         contentDescription = "",
-                        modifier = modifier
+                        modifier = Modifier
                             .size(30.dp)
 
                     )
@@ -114,8 +110,6 @@ fun DiscoveryScreen(
                 val allMedia =
                     listOf(media, media, media, media, media, media, media, media, media, media)
                 LazyColumn(
-                    modifier = modifier
-                        .fillMaxHeight(),
                     verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
                     items(allMedia) {
@@ -125,8 +119,6 @@ fun DiscoveryScreen(
                             onMediaItemClicked = {})
                     }
                 }
-
-
             }
         }
 
