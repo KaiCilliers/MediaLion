@@ -15,10 +15,6 @@ import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,17 +29,14 @@ import com.sunrisekcdeveloper.medialion.android.R
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.extensions.gradientBackground
 
-enum class BottomBarOption { HOME, COLLECTION }
+enum class BottomBarOption { DISCOVERY, COLLECTION }
 
 @Composable
 fun BottomBar(
+    selectedTab: BottomBarOption,
+    onNewSelection: (BottomBarOption) -> Unit,
     modifier: Modifier = Modifier,
-    onNewSelection: (BottomBarOption) -> Unit
 ) {
-    var selectedScreen by remember {
-        mutableStateOf(BottomBarOption.HOME)
-    }
-
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -74,8 +67,7 @@ fun BottomBar(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.clickable {
-                    selectedScreen = BottomBarOption.HOME
-                    onNewSelection(selectedScreen)
+                    onNewSelection(BottomBarOption.DISCOVERY)
                 }
             ) {
 
@@ -83,7 +75,7 @@ fun BottomBar(
                 Image(
                     painter = painterResource(id = R.drawable.home_icon),
                     contentDescription = "",
-                    colorFilter = if (selectedScreen == BottomBarOption.HOME) {
+                    colorFilter = if (selectedTab == BottomBarOption.DISCOVERY) {
                         ColorFilter.tint(MaterialTheme.colors.onSecondary)
                     } else {
                         ColorFilter.tint(MaterialTheme.colors.primaryVariant)
@@ -97,7 +89,7 @@ fun BottomBar(
                 Text(
                     text = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.bottom_bar_collection),
                     style = MaterialTheme.typography.h1,
-                    color = if (selectedScreen == BottomBarOption.HOME) {
+                    color = if (selectedTab == BottomBarOption.DISCOVERY) {
                         MaterialTheme.colors.onSecondary
                     } else {
                         MaterialTheme.colors.primaryVariant
@@ -111,14 +103,13 @@ fun BottomBar(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.clickable {
-                    selectedScreen = BottomBarOption.COLLECTION
-                    onNewSelection(selectedScreen)
+                    onNewSelection(BottomBarOption.COLLECTION)
                 }
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.slide_orange_cog_icon),
                     contentDescription = "",
-                    colorFilter = if (selectedScreen == BottomBarOption.COLLECTION) {
+                    colorFilter = if (selectedTab == BottomBarOption.COLLECTION) {
                         ColorFilter.tint(MaterialTheme.colors.onSecondary)
                     } else {
                         ColorFilter.tint(MaterialTheme.colors.primaryVariant)
@@ -132,7 +123,7 @@ fun BottomBar(
                 Text(
                     text = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.bottom_bar_home),
                     style = MaterialTheme.typography.h1,
-                    color = if (selectedScreen == BottomBarOption.COLLECTION) {
+                    color = if (selectedTab == BottomBarOption.COLLECTION) {
                         MaterialTheme.colors.onSecondary
                     } else {
                         MaterialTheme.colors.primaryVariant
@@ -147,7 +138,10 @@ fun BottomBar(
 @Composable
 private fun BottomBarPreview() {
     MediaLionTheme {
-        BottomBar(onNewSelection = {})
+        BottomBar(
+            selectedTab = BottomBarOption.DISCOVERY,
+            onNewSelection = {}
+        )
     }
 
 }

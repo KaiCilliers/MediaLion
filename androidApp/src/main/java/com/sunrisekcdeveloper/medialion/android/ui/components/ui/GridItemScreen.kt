@@ -122,14 +122,6 @@ fun GridItemScreen(
                 )
 
             }
-
-            BottomBar(
-                modifier = modifier
-                    .constrainAs(bottomBar) {
-                        bottom.linkTo(parent.bottom)
-                    },
-                onNewSelection = {}
-            )
         }
     }
 

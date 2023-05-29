@@ -40,7 +40,7 @@ fun DiscoveryScreen(
             .wrapContentHeight()
     ) {
 
-        val (containerTop, column, bottomBar) = createRefs()
+        val (containerTop, column) = createRefs()
 
         ConstraintLayout(
             modifier = Modifier.constrainAs(containerTop) {
@@ -128,14 +128,6 @@ fun DiscoveryScreen(
 
 
             }
-            BottomBar(
-                modifier = modifier
-                    .constrainAs(bottomBar) {
-                        bottom.linkTo(parent.bottom)
-                        width = Dimension.fillToConstraints
-                    },
-                onNewSelection = {}
-            )
         }
 
     }

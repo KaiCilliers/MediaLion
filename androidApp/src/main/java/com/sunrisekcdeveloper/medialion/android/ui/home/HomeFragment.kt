@@ -27,7 +27,7 @@ class HomeFragment : Fragment() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colors.background
                     ) {
-
+                        HomeScreen()
                     }
                 }
             }
