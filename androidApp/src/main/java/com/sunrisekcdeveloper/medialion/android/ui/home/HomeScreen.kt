@@ -12,16 +12,21 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.sunrisekcdeveloper.medialion.TitledMedia
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.about.ui.AboutScreen
 import com.sunrisekcdeveloper.medialion.android.ui.collections.ui.CollectionScreen
 import com.sunrisekcdeveloper.medialion.android.ui.components.ui.BottomBar
 import com.sunrisekcdeveloper.medialion.android.ui.components.ui.BottomBarOption
 import com.sunrisekcdeveloper.medialion.android.ui.discovery.DiscoveryScreen
+import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryAction
+import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryState
 
 @Composable
 fun HomeScreen(
-    onNavigateToSearchScreen: () -> Unit
+    discoveryState: DiscoveryState,
+    submitDiscoveryAction: (DiscoveryAction) -> Unit,
+    onNavigateToSearchScreen: () -> Unit,
 ) {
 
     var selectedTab by remember { mutableStateOf(BottomBarOption.DISCOVERY) }
@@ -35,6 +40,8 @@ fun HomeScreen(
 
         when (selectedTab) {
             BottomBarOption.DISCOVERY -> DiscoveryScreen(
+                state = discoveryState,
+                submitAction = submitDiscoveryAction,
                 onInfoIconClicked = { showAboutDialog = true },
                 onSearchIconClicked = { onNavigateToSearchScreen() },
                 modifier = Modifier.constrainAs(coreContent) {
@@ -76,7 +83,14 @@ fun HomeScreen(
 fun HomeScreenPreview() {
     MediaLionTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            HomeScreen(onNavigateToSearchScreen = {})
+            HomeScreen(
+                onNavigateToSearchScreen = {},
+                discoveryState = DiscoveryState.Content(listOf(
+                    TitledMedia("Content #1", listOf()),
+                    TitledMedia("Content #2", listOf()),
+                    TitledMedia("Content #3", listOf()),
+                )),
+                submitDiscoveryAction = {})
         }
     }
 }

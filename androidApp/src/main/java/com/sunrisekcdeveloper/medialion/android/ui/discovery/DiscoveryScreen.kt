@@ -13,25 +13,29 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.sunrisekcdeveloper.medialion.MediaItemUI
+import com.sunrisekcdeveloper.medialion.TitledMedia
 import com.sunrisekcdeveloper.medialion.android.R
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
+import com.sunrisekcdeveloper.medialion.android.ui.components.ui.MLProgress
 import com.sunrisekcdeveloper.medialion.android.ui.discovery.ui.FilterCategories
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLTitledMediaRow
-import com.sunrisekcdeveloper.medialion.domain.MediaType
+import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryAction
+import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryState
 
 @Composable
 fun DiscoveryScreen(
     modifier: Modifier = Modifier,
+    state: DiscoveryState,
+    submitAction: (DiscoveryAction) -> Unit,
     onSearchIconClicked: () -> Unit = {},
     onInfoIconClicked: () -> Unit = {},
 ) {
@@ -93,37 +97,25 @@ fun DiscoveryScreen(
 
                     )
                 }
+
                 FilterCategories()
 
 
-                val media = (0..10).map {
-                    MediaItemUI(
-                        id = 9528 + it,
-                        title = "Title $it",
-                        isFavorited = false,
-                        posterUrl = "https://duckduckgo.com/?q=aperiri",
-                        bannerUrl = "http://www.bing.com/search?q=homero",
-                        genreIds = listOf(),
-                        overview = "sadipscing",
-                        popularity = 32.33,
-                        voteAverage = 34.35,
-                        voteCount = 7426,
-                        releaseYear = "auctor",
-                        mediaType = MediaType.MOVIE,
-                    )
-                }
-
-                val allMedia =
-                    listOf(media, media, media, media, media, media, media, media, media, media)
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(20.dp)
-                ) {
-                    items(allMedia) {
-                        MLTitledMediaRow(
-                            rowTitle = "Horror",
-                            media = media,
-                            onMediaItemClicked = {})
+                when(state) {
+                    is DiscoveryState.Content -> {
+                        LazyColumn(
+                            verticalArrangement = Arrangement.spacedBy(20.dp)
+                        ) {
+                            items(state.media) {
+                                MLTitledMediaRow(
+                                    rowTitle = it.title,
+                                    media = it.content,
+                                    onMediaItemClicked = {})
+                            }
+                        }
                     }
+                    is DiscoveryState.Error -> Text("Something went wrong ${state.msg} - ${state.exception}")
+                    DiscoveryState.Loading -> MLProgress()
                 }
             }
         }
@@ -138,7 +130,16 @@ fun DiscoveryScreen(
 @Composable
 private fun DiscoveryScreenPreview() {
     MediaLionTheme {
-        DiscoveryScreen()
+        DiscoveryScreen(
+            state = DiscoveryState.Content(listOf(
+                TitledMedia("Content #1", listOf()),
+                TitledMedia("Content #2", listOf()),
+                TitledMedia("Content #3", listOf()),
+            )),
+            submitAction = {},
+            onSearchIconClicked = {},
+            onInfoIconClicked = {}
+        )
     }
 
 }
