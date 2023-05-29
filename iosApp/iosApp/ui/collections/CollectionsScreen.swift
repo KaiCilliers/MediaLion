@@ -27,6 +27,8 @@ struct CollectionsScreen: View {
     @State private var editTitleMode: Bool = false
     @State private var newCollectionTitle: String? = nil
     
+    @State private var isEditingCollection: Bool = false
+    
     var body: some View {
         ZStack{
             VStack (alignment: .center, spacing: 0){
@@ -78,10 +80,11 @@ struct CollectionsScreen: View {
                                             selectedMedia = mediaItem
                                         },
                                         onTitleClicked: {
-                                            fullScreenGridContent = MediaWithTitle(
-                                                title: rowTitle,
-                                                media: media
-                                            )
+                                            
+                                                fullScreenGridContent = MediaWithTitle(
+                                                    title: rowTitle,
+                                                    media: media
+                                                )
                                         }
                                     )
                                 }
@@ -95,9 +98,10 @@ struct CollectionsScreen: View {
             }
             
             if showCollectionDialog {
+                let collectionState = searchViewModel.collectionState.compactMap({$0 as? CollectionWithMedia})
                 MLCollectionsDialog(
                     onDismiss: { showCollectionDialog = false },
-                    collections: searchViewModel.collectionState.compactMap({ $0 as? CollectionWithMedia }).map({ singleCollection in
+                    collections: collectionState.map({ singleCollection in
                         
                         let selectedMedia = selectedMedia
                         var checked = false
@@ -169,6 +173,8 @@ struct CollectionsScreen: View {
         .sheet(item: $fullScreenGridContent, onDismiss: {
             mediaPreviewSheetInner = nil
             showCollectionDialogInner = false
+            editTitleMode = false
+            isEditingCollection = false
         }) { content in
             let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
             
@@ -191,7 +197,6 @@ struct CollectionsScreen: View {
                                 if(newCollectionTitle == nil) {
                                     newCollectionTitle = content.title
                                 }
-                                print("commit, old=\(content.title) and new=\(newCollectionTitle ?? "")")
                                 viewModel.submitAction(action: CollectionAction.RenameCollection(oldCollectionName: content.title, newCollectionName: newCollectionTitle ?? ""))
                                 editTitleMode = false
                             }
@@ -215,14 +220,43 @@ struct CollectionsScreen: View {
                     
                     LazyVGrid(columns: columns, spacing: 16) {
                         ForEach(content.media, id: \.self) { item in
-                            MLMediaPoster(media: item)
-                                .frame(width: 100,height: 170)
-                                .onTapGesture {
-                                    mediaPreviewSheetInner = MediaItemUiIdentifiable(media: item)
-                                    selectedMedia = item
-                                }
+                            ZStack {
+                                MLMediaPoster(media: item)
+                                    .frame(width: 100,height: 170)
+                                    .onTapGesture {
+                                        mediaPreviewSheetInner = MediaItemUiIdentifiable(media: item)
+                                        selectedMedia = item
+                                    }
+                                    if isEditingCollection {
+                                        Button {
+                                            viewModel.submitAction(action: CollectionAction.RemoveFromCollection(
+                                                collectionName: content.title,
+                                                mediaId: item.id,
+                                                mediaType: item.mediaType
+                                            ))
+                                            
+                                            let mediaCache = content.media
+                                            let new = mediaCache.filter { i in
+                                                i.id != item.id
+                                            }
+                                            
+                                            fullScreenGridContent = MediaWithTitle(
+                                                title: content.title,
+                                                media: new
+                                            )
+                                            
+                                        } label: {
+                                            Image(systemName: "xmark.square.fill")
+                                                .font(.title)
+                                                .symbolRenderingMode(.palette)
+                                                .foregroundStyle(.white, Color.red)
+                                        }
+                                    }
+                            
+                            }
                         }
                     }
+                    .environment(\.editMode, .constant(self.isEditingCollection ? EditMode.active : EditMode.inactive))
                 }
                 
                 if showCollectionDialogInner {
@@ -292,11 +326,17 @@ struct CollectionsScreen: View {
                         HStack{
                             Spacer()
                             Button {
-                                EditButton()
-                            }label: {
-                                Image("editIcon")
-                                    .resizable()
-                                    .frame(width: 90, height: 90)
+                                isEditingCollection.toggle()
+                            } label: {
+                                if self.isEditingCollection {
+                                    Image("nameCreated")
+                                        .resizable()
+                                        .frame(width: 90, height: 90)
+                                } else {
+                                    Image("editIcon")
+                                        .resizable()
+                                        .frame(width: 90, height: 90)
+                                }
                             }
                         }
                     }
@@ -319,10 +359,4 @@ struct MediaWithTitle: Identifiable {
     var id: String { title }
     let title: String
     let media: [MediaItemUI]
-}
-
-extension Binding {
-     func toUnwrapped<T>(defaultValue: T) -> Binding<T> where Value == Optional<T>  {
-        Binding<T>(get: { self.wrappedValue ?? defaultValue }, set: { self.wrappedValue = $0 })
-    }
 }

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -38,6 +38,7 @@
 		608EE2E52A0132DC005F2719 /* CollectionsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608EE2E42A0132DC005F2719 /* CollectionsScreen.swift */; };
 		608EE2E72A0132F0005F2719 /* DiscoveryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608EE2E62A0132F0005F2719 /* DiscoveryScreen.swift */; };
 		60AEBA682A18C2BD00AF17D3 /* DiscoveryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AEBA672A18C2BD00AF17D3 /* DiscoveryViewModel.swift */; };
+		60BB0BD12A24CBDD004981DE /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BB0BD02A24CBDD004981DE /* Util.swift */; };
 		60F944712A015567004B5315 /* rootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F944702A015567004B5315 /* rootView.swift */; };
 		60F944732A01738A004B5315 /* CustomCategoriesDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F944722A01738A004B5315 /* CustomCategoriesDialog.swift */; };
 		60FB16132A0C33F100C4DEAD /* CollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FB16122A0C33F100C4DEAD /* CollectionViewModel.swift */; };
@@ -89,6 +90,7 @@
 		608EE2E42A0132DC005F2719 /* CollectionsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsScreen.swift; sourceTree = "<group>"; };
 		608EE2E62A0132F0005F2719 /* DiscoveryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryScreen.swift; sourceTree = "<group>"; };
 		60AEBA672A18C2BD00AF17D3 /* DiscoveryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryViewModel.swift; sourceTree = "<group>"; };
+		60BB0BD02A24CBDD004981DE /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		60F944702A015567004B5315 /* rootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = rootView.swift; sourceTree = "<group>"; };
 		60F944722A01738A004B5315 /* CustomCategoriesDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCategoriesDialog.swift; sourceTree = "<group>"; };
 		60FB16122A0C33F100C4DEAD /* CollectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewModel.swift; sourceTree = "<group>"; };
@@ -300,6 +302,7 @@
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
 				7555FF8C242A565B00829871 /* Info.plist */,
 				058557D7273AAEEB004C7B11 /* Preview Content */,
+				60BB0BD02A24CBDD004981DE /* Util.swift */,
 			);
 			path = iosApp;
 			sourceTree = "<group>";
@@ -339,8 +342,9 @@
 		7555FF73242A565900829871 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1130;
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1430;
 				ORGANIZATIONNAME = orgName;
 				TargetAttributes = {
 					7555FF7A242A565900829871 = {
@@ -431,6 +435,7 @@
 				605F60D52A0A0CD20049AB6F /* Strings.swift in Sources */,
 				6010A4BD2A06AFD8005A6A1C /* SearchViewModel.swift in Sources */,
 				60120C932A0ACE07002D7BE9 /* MLMediaBanner.swift in Sources */,
+				60BB0BD12A24CBDD004981DE /* Util.swift in Sources */,
 				608EE2E12A013296005F2719 /* CategoriesDialog.swift in Sources */,
 				607CE29529EB21E2005B8886 /* MLTitledMediaGrid.swift in Sources */,
 				6088366929FE8F1300D5F717 /* MLAboutDialog.swift in Sources */,
