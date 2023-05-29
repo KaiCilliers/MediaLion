@@ -8,7 +8,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.about.ui.AboutScreen
@@ -25,7 +27,10 @@ fun HomeScreen(
     var selectedTab by remember { mutableStateOf(BottomBarOption.DISCOVERY) }
     var showAboutDialog by remember { mutableStateOf(false) }
 
-    ConstraintLayout {
+    ConstraintLayout(
+        modifier = Modifier
+            .blur(radius = if (showAboutDialog) 10.dp else 0.dp)
+    ) {
         val (coreContent, bottombar) = createRefs()
 
         when (selectedTab) {
