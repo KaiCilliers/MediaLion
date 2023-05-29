@@ -33,115 +33,121 @@ import com.sunrisekcdeveloper.medialion.android.R
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.extensions.gradientBackground
 
-enum class BottomBar {HOME, COLLECTION}
+enum class BottomBarOption { HOME, COLLECTION }
 
 @Composable
 fun BottomBar(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNewSelection: (BottomBarOption) -> Unit
 ) {
-    var selectedScreen by remember {mutableStateOf(BottomBar.HOME)}
-  Card (
-modifier = modifier
-    .fillMaxWidth()
-    .gradientBackground(
-        colors = listOf(
-            colorResource(id = ColorRes.primary.resourceId),
-            colorResource(id = ColorRes.primaryVariantBlue.resourceId)
-        ),
-        angle = -90f
-    ),
-      shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)
-  ){
-Row (
-    modifier = modifier
-        .gradientBackground(
-            colors = listOf(
-                colorResource(id = ColorRes.primary.resourceId),
-                colorResource(id = ColorRes.primaryVariantBlue.resourceId)
+    var selectedScreen by remember {
+        mutableStateOf(BottomBarOption.HOME)
+    }
+
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .gradientBackground(
+                colors = listOf(
+                    colorResource(id = ColorRes.primary.resourceId),
+                    colorResource(id = ColorRes.primaryVariantBlue.resourceId)
+                ),
+                angle = -90f
             ),
-            angle = -90f
-        )
-        .padding(horizontal = 60.dp, vertical = 16.dp),
-    horizontalArrangement = Arrangement.SpaceBetween,
-
-
-){
-    Column (
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)
     ) {
-
-
-
-        Image(
-            painter = painterResource(id = R.drawable.home_icon),
-            contentDescription = "",
-            colorFilter = if (selectedScreen == BottomBar.HOME) {
-                ColorFilter.tint(MaterialTheme.colors.onSecondary)
-            } else {
-                   ColorFilter.tint(MaterialTheme.colors.primaryVariant)
-                   },
+        Row(
             modifier = modifier
-                .size(40.dp)
-                .clickable { selectedScreen = BottomBar.HOME},
-            )
+                .gradientBackground(
+                    colors = listOf(
+                        colorResource(id = ColorRes.primary.resourceId),
+                        colorResource(id = ColorRes.primaryVariantBlue.resourceId)
+                    ),
+                    angle = -90f
+                )
+                .padding(horizontal = 60.dp, vertical = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
 
-        Spacer(modifier = modifier.height(5.dp))
 
-        Text(
-            text = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.bottom_bar_collection),
-            style = MaterialTheme.typography.h1,
-            color = if (selectedScreen == BottomBar.HOME) {
-                MaterialTheme.colors.onSecondary
-            } else {
-                   MaterialTheme.colors.primaryVariant
-                   },
-            modifier = modifier
-                .clickable { selectedScreen = BottomBar.HOME }
+            ) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.clickable {
+                    selectedScreen = BottomBarOption.HOME
+                    onNewSelection(selectedScreen)
+                }
+            ) {
 
-            )
+
+                Image(
+                    painter = painterResource(id = R.drawable.home_icon),
+                    contentDescription = "",
+                    colorFilter = if (selectedScreen == BottomBarOption.HOME) {
+                        ColorFilter.tint(MaterialTheme.colors.onSecondary)
+                    } else {
+                        ColorFilter.tint(MaterialTheme.colors.primaryVariant)
+                    },
+                    modifier = modifier
+                        .size(40.dp),
+                )
+
+                Spacer(modifier = modifier.height(5.dp))
+
+                Text(
+                    text = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.bottom_bar_collection),
+                    style = MaterialTheme.typography.h1,
+                    color = if (selectedScreen == BottomBarOption.HOME) {
+                        MaterialTheme.colors.onSecondary
+                    } else {
+                        MaterialTheme.colors.primaryVariant
+                    },
+                    modifier = modifier
+
+                )
+            }
+
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.clickable {
+                    selectedScreen = BottomBarOption.COLLECTION
+                    onNewSelection(selectedScreen)
+                }
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.slide_orange_cog_icon),
+                    contentDescription = "",
+                    colorFilter = if (selectedScreen == BottomBarOption.COLLECTION) {
+                        ColorFilter.tint(MaterialTheme.colors.onSecondary)
+                    } else {
+                        ColorFilter.tint(MaterialTheme.colors.primaryVariant)
+                    },
+                    modifier = modifier
+                        .size(40.dp)
+                )
+
+                Spacer(modifier = modifier.height(5.dp))
+
+                Text(
+                    text = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.bottom_bar_home),
+                    style = MaterialTheme.typography.h1,
+                    color = if (selectedScreen == BottomBarOption.COLLECTION) {
+                        MaterialTheme.colors.onSecondary
+                    } else {
+                        MaterialTheme.colors.primaryVariant
+                    }
+                )
+            }
+        }
     }
-
-    Column (
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.slide_orange_cog_icon),
-            contentDescription = "",
-            colorFilter = if (selectedScreen == BottomBar.COLLECTION) {
-                ColorFilter.tint(MaterialTheme.colors.onSecondary)
-            } else {
-                   ColorFilter.tint(MaterialTheme.colors.primaryVariant)
-                   },
-            modifier = modifier
-                .size(40.dp)
-                .clickable { selectedScreen = BottomBar.COLLECTION }
-            )
-
-        Spacer(modifier = modifier.height(5.dp))
-
-        Text(
-            text = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.bottom_bar_home),
-            style = MaterialTheme.typography.h1,
-            color = if (selectedScreen == BottomBar.COLLECTION) {
-                MaterialTheme.colors.onSecondary
-            } else {
-                   MaterialTheme.colors.primaryVariant
-                   },
-            modifier = modifier
-                .clickable { selectedScreen = BottomBar.COLLECTION }
-            )
-    }
-}
-  }
 }
 
 @Preview
 @Composable
 private fun BottomBarPreview() {
     MediaLionTheme {
-        BottomBar()
+        BottomBar(onNewSelection = {})
     }
 
 }

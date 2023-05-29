@@ -28,11 +28,11 @@ import com.sunrisekcdeveloper.medialion.domain.MediaType
 fun CollectionScreen(
     modifier: Modifier = Modifier
 ) {
-    ConstraintLayout (
+    ConstraintLayout(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
-    ){
+    ) {
 
         val (containerTop, column, bottomBar) = createRefs()
 
@@ -44,7 +44,7 @@ fun CollectionScreen(
                 width = Dimension.fillToConstraints
             }
         ) {
-            Column (
+            Column(
                 modifier = modifier
                     .background(MaterialTheme.colors.background)
                     .padding(horizontal = 16.dp)
@@ -53,12 +53,12 @@ fun CollectionScreen(
                         width = Dimension.fillToConstraints
 
                     }
-            ){
-                Row (
+            ) {
+                Row(
                     modifier = modifier
                         .background(MaterialTheme.colors.background)
                         .padding(top = 16.dp, bottom = 16.dp)
-                ){
+                ) {
                     Image(
                         painter = painterResource(id = R.drawable.back_arrow_icon),
                         contentDescription = "",
@@ -114,10 +114,11 @@ fun CollectionScreen(
                     .constrainAs(bottomBar) {
                         bottom.linkTo(parent.bottom)
                         width = Dimension.fillToConstraints
-                    }
+                    },
+                onNewSelection = {}
             )
         }
-        }
+    }
 }
 
 @Preview

@@ -1,4 +1,4 @@
-package com.sunrisekcdeveloper.medialion.android.ui.discovery.ui
+package com.sunrisekcdeveloper.medialion.android.ui.discovery
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,6 +26,7 @@ import com.sunrisekcdeveloper.medialion.MediaItemUI
 import com.sunrisekcdeveloper.medialion.android.R
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.components.ui.BottomBar
+import com.sunrisekcdeveloper.medialion.android.ui.discovery.ui.FilterCategories
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLTitledMediaRow
 import com.sunrisekcdeveloper.medialion.domain.MediaType
 
@@ -132,7 +133,8 @@ fun DiscoveryScreen(
                     .constrainAs(bottomBar) {
                         bottom.linkTo(parent.bottom)
                         width = Dimension.fillToConstraints
-                    }
+                    },
+                onNewSelection = {}
             )
         }
 
