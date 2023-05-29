@@ -10,6 +10,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,6 +22,7 @@ import androidx.constraintlayout.compose.Dimension
 import com.sunrisekcdeveloper.medialion.TitledMedia
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.components.ui.MLProgress
+import com.sunrisekcdeveloper.medialion.android.ui.discovery.ui.FilterCategory
 import com.sunrisekcdeveloper.medialion.android.ui.discovery.ui.MLFilterCategories
 import com.sunrisekcdeveloper.medialion.android.ui.discovery.ui.MLTopBar
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLTitledMediaRow
@@ -32,6 +37,9 @@ fun DiscoveryScreen(
     onSearchIconClicked: () -> Unit = {},
     onInfoIconClicked: () -> Unit = {},
 ) {
+
+    var contentFilter by remember { mutableStateOf(FilterCategory.All) }
+
     ConstraintLayout(
         modifier = modifier
             .fillMaxWidth()
@@ -63,8 +71,20 @@ fun DiscoveryScreen(
                     onInfoIconClicked = onInfoIconClicked
                 )
 
-//                MLFilterCategories()
-
+                MLFilterCategories(
+                    selectedFilter = contentFilter,
+                    onNewSelection = {
+                        if (contentFilter != it) {
+                            contentFilter = it
+                            when (it) {
+                                FilterCategory.All -> submitAction(DiscoveryAction.FetchContent(0))
+                                FilterCategory.MOVIES -> submitAction(DiscoveryAction.FetchContent(1))
+                                FilterCategory.SERIES -> submitAction(DiscoveryAction.FetchContent(2))
+                                FilterCategory.CATEGORIES -> {}
+                            }
+                        }
+                    }
+                )
 
                 when(state) {
                     is DiscoveryState.Content -> {
