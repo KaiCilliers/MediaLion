@@ -19,12 +19,14 @@ import com.sunrisekcdeveloper.medialion.android.ui.collections.ui.CollectionScre
 import com.sunrisekcdeveloper.medialion.android.ui.components.ui.BottomBar
 import com.sunrisekcdeveloper.medialion.android.ui.components.ui.BottomBarOption
 import com.sunrisekcdeveloper.medialion.android.ui.discovery.DiscoveryScreen
+import com.sunrisekcdeveloper.medialion.domain.collection.GenreState
 import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryAction
 import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryState
 
 @Composable
 fun HomeScreen(
     discoveryState: DiscoveryState,
+    genreState: GenreState,
     submitDiscoveryAction: (DiscoveryAction) -> Unit,
     onNavigateToSearchScreen: () -> Unit,
 ) {
@@ -41,6 +43,7 @@ fun HomeScreen(
         when (selectedTab) {
             BottomBarOption.DISCOVERY -> DiscoveryScreen(
                 state = discoveryState,
+                genreState = genreState,
                 submitAction = submitDiscoveryAction,
                 onInfoIconClicked = { showAboutDialog = true },
                 onSearchIconClicked = { onNavigateToSearchScreen() },
@@ -90,7 +93,9 @@ fun HomeScreenPreview() {
                     TitledMedia("Content #2", listOf()),
                     TitledMedia("Content #3", listOf()),
                 )),
-                submitDiscoveryAction = {})
+                submitDiscoveryAction = {},
+                genreState = GenreState.Genres(listOf())
+            )
         }
     }
 }

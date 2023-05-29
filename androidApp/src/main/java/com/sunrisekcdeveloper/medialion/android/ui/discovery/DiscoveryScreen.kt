@@ -22,23 +22,49 @@ import androidx.constraintlayout.compose.Dimension
 import com.sunrisekcdeveloper.medialion.TitledMedia
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.components.ui.MLProgress
+import com.sunrisekcdeveloper.medialion.android.ui.discovery.ui.CategoriesDialog
 import com.sunrisekcdeveloper.medialion.android.ui.discovery.ui.FilterCategory
 import com.sunrisekcdeveloper.medialion.android.ui.discovery.ui.MLFilterCategories
 import com.sunrisekcdeveloper.medialion.android.ui.discovery.ui.MLTopBar
+import com.sunrisekcdeveloper.medialion.android.ui.saveToCollection.ui.CollectionItem
+import com.sunrisekcdeveloper.medialion.android.ui.saveToCollection.ui.SaveToCollectionScreen
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLTitledMediaRow
+import com.sunrisekcdeveloper.medialion.domain.collection.GenreState
 import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryAction
 import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryState
+import com.sunrisekcdeveloper.medialion.domain.search.SearchAction
+import com.sunrisekcdeveloper.medialion.domain.value.ID
+import com.sunrisekcdeveloper.medialion.domain.value.Title
 
 @Composable
 fun DiscoveryScreen(
     modifier: Modifier = Modifier,
     state: DiscoveryState,
+    genreState: GenreState,
     submitAction: (DiscoveryAction) -> Unit,
     onSearchIconClicked: () -> Unit = {},
     onInfoIconClicked: () -> Unit = {},
 ) {
 
     var contentFilter by remember { mutableStateOf(FilterCategory.All) }
+    var showGenreSelectionDialog by remember { mutableStateOf(false) }
+
+    if (showGenreSelectionDialog) {
+        if (genreState is GenreState.Genres) {
+            CategoriesDialog(
+                categories = genreState.all,
+                onDismiss = { showGenreSelectionDialog = false },
+                onSelection = {
+                    submitAction(
+                        DiscoveryAction.FetchGenreContent(
+                            genreId = ID(value = it.id),
+                            mediaType = it.mediaType
+                        )
+                    )
+                }
+            )
+        }
+    }
 
     ConstraintLayout(
         modifier = modifier
@@ -74,19 +100,21 @@ fun DiscoveryScreen(
                 MLFilterCategories(
                     selectedFilter = contentFilter,
                     onNewSelection = {
-                        if (contentFilter != it) {
+                        if (contentFilter != it || contentFilter == FilterCategory.CATEGORIES) {
                             contentFilter = it
                             when (it) {
                                 FilterCategory.All -> submitAction(DiscoveryAction.FetchContent(0))
                                 FilterCategory.MOVIES -> submitAction(DiscoveryAction.FetchContent(1))
                                 FilterCategory.SERIES -> submitAction(DiscoveryAction.FetchContent(2))
-                                FilterCategory.CATEGORIES -> {}
+                                FilterCategory.CATEGORIES -> {
+                                    showGenreSelectionDialog = true
+                                }
                             }
                         }
                     }
                 )
 
-                when(state) {
+                when (state) {
                     is DiscoveryState.Content -> {
                         LazyColumn(
                             verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -99,15 +127,13 @@ fun DiscoveryScreen(
                             }
                         }
                     }
+
                     is DiscoveryState.Error -> Text("Something went wrong ${state.msg} - ${state.exception}")
                     DiscoveryState.Loading -> MLProgress()
                 }
             }
         }
-
     }
-
-
 }
 
 
@@ -116,14 +142,17 @@ fun DiscoveryScreen(
 private fun DiscoveryScreenPreview() {
     MediaLionTheme {
         DiscoveryScreen(
-            state = DiscoveryState.Content(listOf(
-                TitledMedia("Content #1", listOf()),
-                TitledMedia("Content #2", listOf()),
-                TitledMedia("Content #3", listOf()),
-            )),
+            state = DiscoveryState.Content(
+                listOf(
+                    TitledMedia("Content #1", listOf()),
+                    TitledMedia("Content #2", listOf()),
+                    TitledMedia("Content #3", listOf()),
+                )
+            ),
             submitAction = {},
             onSearchIconClicked = {},
-            onInfoIconClicked = {}
+            onInfoIconClicked = {},
+            genreState = GenreState.Genres(listOf())
         )
     }
 

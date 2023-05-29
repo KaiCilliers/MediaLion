@@ -38,9 +38,11 @@ class HomeFragment : Fragment() {
                     ) {
 
                         val discoveryState by discoveryViewModel.state.collectAsState()
+                        val genreState by discoveryViewModel.genres.genres.collectAsState()
 
                         HomeScreen(
                             discoveryState = discoveryState,
+                            genreState = genreState,
                             submitDiscoveryAction = { discoveryViewModel.submitAction(it) },
                             onNavigateToSearchScreen = { backstack.goTo(SearchKey) }
                         )

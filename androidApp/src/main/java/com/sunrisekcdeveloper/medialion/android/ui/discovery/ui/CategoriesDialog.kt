@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -16,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,20 +27,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.sunrisekcdeveloper.medialion.android.R
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
+import com.sunrisekcdeveloper.medialion.domain.MediaType
+import com.sunrisekcdeveloper.medialion.domain.value.Genre
 
 @Composable
 fun CategoriesDialog(
-    categories : List<CategoriesNames>,
-    onDismiss: () -> Unit = {},
+    categories : List<Genre>,
+    onDismiss: () -> Unit,
+    onSelection: (Genre) -> Unit,
 ) {
     Dialog(
-        onDismissRequest = {onDismiss()},
+        onDismissRequest = { onDismiss() },
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         Card (
@@ -75,9 +81,7 @@ fun CategoriesDialog(
                         contentDescription = "",
                         modifier = Modifier
                             .size(30.dp)
-                            .clickable {
-                                onDismiss()
-                            }
+                            .clickable { onDismiss() }
                     )
                 }
                 LazyColumn(
@@ -88,9 +92,16 @@ fun CategoriesDialog(
                 ) {
                     items(categories) {
                         Text(
-                            text = it.name,
+                            text = "${it.name} - ${it.mediaType}",
                             style = MaterialTheme.typography.h4,
-                            color = MaterialTheme.colors.secondaryVariant
+                            color = MaterialTheme.colors.secondaryVariant,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    onSelection(it)
+                                    onDismiss()
+                                }
                         )
                     }
 
@@ -103,26 +114,34 @@ fun CategoriesDialog(
 @Preview
 @Composable
 private fun CategoriesDialogPreview() {
-    val categories: List<CategoriesNames> by remember {
+    val categories: List<Genre> by remember {
         mutableStateOf(
             listOf(
-                CategoriesNames(name = "Horror"),
-                CategoriesNames(name = "Romance"),
-                CategoriesNames(name = "Thriller"),
-                CategoriesNames(name = "Crime"),
-                CategoriesNames(name = "Comedy"),
-                CategoriesNames(name = "Drama"),
-                CategoriesNames(name = "Fantasy"),
-                CategoriesNames(name = "RomCom"),
-                CategoriesNames(name = "Action"),
-                CategoriesNames(name = "Adventure"),
-                CategoriesNames(name = "Animation"),
-                CategoriesNames(name = "Sci-Fi"),
+                Genre(id = 1, name = "Horror", mediaType = MediaType.TV),
+                Genre(id = 1, name = "Romance", mediaType = MediaType.TV),
+                Genre(id = 1, name = "Thriller", mediaType = MediaType.MOVIE),
+                Genre(id = 1, name = "Crime", mediaType = MediaType.MOVIE),
+                Genre(id = 1, name = "Comedy", mediaType = MediaType.MOVIE),
+                Genre(id = 1, name = "Drama", mediaType = MediaType.MOVIE),
+                Genre(id = 1, name = "Fantasy", mediaType = MediaType.MOVIE),
+                Genre(id = 1, name = "RomCom", mediaType = MediaType.MOVIE),
+                Genre(id = 1, name = "Action", mediaType = MediaType.MOVIE),
+                Genre(id = 1, name = "Adventure", mediaType = MediaType.MOVIE),
+                Genre(id = 1, name = "Animation", mediaType = MediaType.MOVIE),
+                Genre(id = 1, name = "Sci-Fi", mediaType = MediaType.MOVIE),
             )
         )
     }
     MediaLionTheme {
-        CategoriesDialog(categories = categories)
+        Surface(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            CategoriesDialog(
+                categories = categories,
+                onDismiss = {},
+                onSelection = {}
+            )
+        }
     }
 
 }
