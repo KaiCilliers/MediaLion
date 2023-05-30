@@ -133,7 +133,8 @@ fun SearchScreen(
                     modifier = Modifier.blur(radius = if (showCollectionDialog) 10.dp else 0.dp)
                 )
             }
-        }) {
+        })
+    {
 
         Column(
             Modifier

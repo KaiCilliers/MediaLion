@@ -16,12 +16,14 @@ import androidx.fragment.app.Fragment
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.search.DiscoveryViewModel
 import com.sunrisekcdeveloper.medialion.android.ui.search.SearchKey
+import com.sunrisekcdeveloper.medialion.android.ui.search.SearchViewModel
 import com.zhuinden.simplestackextensions.fragmentsktx.backstack
 import com.zhuinden.simplestackextensions.fragmentsktx.lookup
 
 class HomeFragment : Fragment() {
 
     private val discoveryViewModel by lazy { lookup<DiscoveryViewModel>() }
+    private val searchViewModel by lazy { lookup<SearchViewModel>() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,10 +41,13 @@ class HomeFragment : Fragment() {
 
                         val discoveryState by discoveryViewModel.state.collectAsState()
                         val genreState by discoveryViewModel.genres.genres.collectAsState()
+                        val collectionState by searchViewModel.collectionState.collectAsState()
 
                         HomeScreen(
                             discoveryState = discoveryState,
                             genreState = genreState,
+                            collectionState = collectionState,
+                            submitSearchAction = { searchViewModel.submitAction(it) },
                             submitDiscoveryAction = { discoveryViewModel.submitAction(it) },
                             onNavigateToSearchScreen = { backstack.goTo(SearchKey) }
                         )

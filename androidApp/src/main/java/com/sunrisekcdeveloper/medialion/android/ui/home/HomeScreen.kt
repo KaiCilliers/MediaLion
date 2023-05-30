@@ -22,11 +22,15 @@ import com.sunrisekcdeveloper.medialion.android.ui.discovery.DiscoveryScreen
 import com.sunrisekcdeveloper.medialion.domain.collection.GenreState
 import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryAction
 import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryState
+import com.sunrisekcdeveloper.medialion.domain.entities.CollectionWithMedia
+import com.sunrisekcdeveloper.medialion.domain.search.SearchAction
 
 @Composable
 fun HomeScreen(
     discoveryState: DiscoveryState,
     genreState: GenreState,
+    collectionState: List<CollectionWithMedia>,
+    submitSearchAction: (SearchAction) -> Unit,
     submitDiscoveryAction: (DiscoveryAction) -> Unit,
     onNavigateToSearchScreen: () -> Unit,
 ) {
@@ -47,6 +51,8 @@ fun HomeScreen(
                 submitAction = submitDiscoveryAction,
                 onInfoIconClicked = { showAboutDialog = true },
                 onSearchIconClicked = { onNavigateToSearchScreen() },
+                collectionState = collectionState,
+                submitSearchAction = submitSearchAction,
                 modifier = Modifier.constrainAs(coreContent) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
@@ -94,7 +100,9 @@ fun HomeScreenPreview() {
                     TitledMedia("Content #3", listOf()),
                 )),
                 submitDiscoveryAction = {},
-                genreState = GenreState.Genres(listOf())
+                genreState = GenreState.Genres(listOf()),
+                collectionState = emptyList(),
+                submitSearchAction = {}
             )
         }
     }
