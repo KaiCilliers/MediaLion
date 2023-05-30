@@ -20,34 +20,41 @@ struct MLAboutDialog: View {
                 Text(StringRes.about)
                     .customFont(.subtitle1)
                     .padding()
+                    .foregroundColor(.textBlack)
                 
                 Text(StringRes.aboutHeading)
                     .customFont(.h4)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, 5)
+                    .foregroundColor(.textBlack)
                 
                 Text(StringRes.appDescription)
                     .customFont(.body2)
                     .lineSpacing(1)
                     .padding(.bottom, 1)
+                    .foregroundColor(.textBlack)
                 
                 Text(StringRes.appDevelopers)
                     .customFont(.body2)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .foregroundColor(.textBlack)
                 
                 
                 Text(StringRes.appDevelopersNames)
                     .customFont(.body2)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, 1 )
+                    .foregroundColor(.textBlack)
                 
                 Text(StringRes.graphicDesigner)
                     .customFont(.body2)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .foregroundColor(.textBlack)
                 
                 Text(StringRes.graphicDesignerName)
                     .customFont(.body2)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .foregroundColor(.textBlack)
             
                 
             }

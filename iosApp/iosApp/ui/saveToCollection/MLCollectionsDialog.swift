@@ -25,6 +25,7 @@ struct MLCollectionsDialog: View {
             Text(StringRes.saveToListTitle)
                 .customFont(.subtitle1)
                 .padding()
+                .foregroundColor(.textBlack)
             
             
             ScrollView {
@@ -42,6 +43,7 @@ struct MLCollectionsDialog: View {
                             }
                        )
                             .background(Color.dialogOrange)
+                            .foregroundColor(.textBlack)
                     }
                 }
             }.frame(height: 150)
@@ -50,6 +52,7 @@ struct MLCollectionsDialog: View {
                 HStack{
                     TextField("", text: $newCollectionName)
                         .customFont(.h1)
+                        .foregroundColor(.textBlack)
                         .modifier(
                             PlaceholderStyleCollections(
                                 showPlaceHolder: newCollectionName.isEmpty,

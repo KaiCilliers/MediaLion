@@ -95,7 +95,7 @@ struct CollectionsScreen: View {
                         }
                     }
                 }
-            }
+            }.padding(.bottom, 30)
             
             if showCollectionDialog {
                 let collectionState = searchViewModel.collectionState.compactMap({$0 as? CollectionWithMedia})

@@ -28,6 +28,7 @@ struct CustomCategoriesDialog: View {
             Text(title)
                 .padding()
                 .customFont(.subtitle1)
+                .foregroundColor(.textBlack)
             
             ScrollView {
                 HStack{
@@ -49,6 +50,7 @@ struct CustomCategoriesDialog: View {
             .frame(height: 270)
             .frame(maxWidth: .infinity, alignment: .leading)
             .customFont(.h4)
+            .foregroundColor(.textBlack)
             
             
         }

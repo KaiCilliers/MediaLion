@@ -26,13 +26,7 @@ struct DiscoveryScreen: View {
     }
     
     var body: some View {
-        var blurAmount: Float = {
-            if isActive {
-                return 4
-            } else {
-                return 0
-            }
-        }()
+   
         
         ZStack{
             
@@ -196,7 +190,7 @@ struct DiscoveryScreen: View {
                                 mediaType: item.mediaType
                             )
                         }),
-                        title: "Genres",
+                        title: "Categories",
                         onClose: { genre in
                             viewModel.submitAction(action: DiscoveryAction.FetchGenreContent(
                                 genreId: Int32(genre.genre.id),
