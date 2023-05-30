@@ -1,12 +1,19 @@
 package com.sunrisekcdeveloper.medialion.android.ui.discovery
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -20,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.sunrisekcdeveloper.medialion.SimpleMediaItem
 import com.sunrisekcdeveloper.medialion.TitledMedia
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.components.ui.MLProgress
@@ -29,6 +37,7 @@ import com.sunrisekcdeveloper.medialion.android.ui.discovery.ui.MLFilterCategori
 import com.sunrisekcdeveloper.medialion.android.ui.discovery.ui.MLTopBar
 import com.sunrisekcdeveloper.medialion.android.ui.saveToCollection.ui.CollectionItem
 import com.sunrisekcdeveloper.medialion.android.ui.saveToCollection.ui.SaveToCollectionScreen
+import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLMediaPoster
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLTitledMediaRow
 import com.sunrisekcdeveloper.medialion.domain.collection.GenreState
 import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryAction
@@ -119,15 +128,49 @@ fun DiscoveryScreen(
 
                 when (state) {
                     is DiscoveryState.Content -> {
-                        // TODO show grid if size is 1
-                        LazyColumn(
-                            verticalArrangement = Arrangement.spacedBy(20.dp)
-                        ) {
-                            items(state.media) {
-                                MLTitledMediaRow(
-                                    rowTitle = it.title,
-                                    media = it.content,
-                                    onMediaItemClicked = {})
+                        if (state.media.size > 1) {
+                            LazyColumn(
+                                verticalArrangement = Arrangement.spacedBy(20.dp)
+                            ) {
+                                items(state.media) {
+                                    MLTitledMediaRow(
+                                        rowTitle = it.title,
+                                        media = it.content,
+                                        onMediaItemClicked = {})
+                                }
+                            }
+                        } else if (state.media.size == 1) {
+                            LazyVerticalGrid(
+                                columns = GridCells.Fixed(3),
+                                modifier = modifier
+                                    .background(MaterialTheme.colors.background)
+                                    .fillMaxSize(),
+                                contentPadding = PaddingValues(22.dp),
+                                verticalArrangement = Arrangement.spacedBy(24.dp),
+                                horizontalArrangement = Arrangement.spacedBy(24.dp)
+
+                            ) {
+                                item(span = { GridItemSpan(3) }) {
+                                    Text(
+                                        text = state.media.first().title,
+                                        style = MaterialTheme.typography.h3,
+                                        color = MaterialTheme.colors.secondary,
+                                        modifier = modifier.padding(top = 8.dp, bottom = 6.dp),
+                                        )
+                                }
+                                items(state.media.first().content) { singleMovie ->
+                                    MLMediaPoster(
+                                        mediaItem = SimpleMediaItem(
+                                            id = singleMovie.id.toString(),
+                                            title = singleMovie.title,
+                                            posterUrl = singleMovie.posterUrl,
+                                            mediaType = singleMovie.mediaType,
+                                        ),
+                                        modifier = Modifier.clickable {
+//                                            onMediaClicked(singleMovie)
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
