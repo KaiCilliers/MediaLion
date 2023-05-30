@@ -124,7 +124,7 @@ interface FetchDiscoveryContent {
                 1 -> {
                     val media = movieRepository
                         .withGenre(genreId)
-                        .take(40)
+                        .take(42)
                         .toList()
                     TitledMedia(
                         title = movieGenres.find { it.first == genreId }?.second ?: "Genre",
