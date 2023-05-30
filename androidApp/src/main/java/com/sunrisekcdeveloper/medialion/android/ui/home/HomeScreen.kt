@@ -15,10 +15,12 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.sunrisekcdeveloper.medialion.TitledMedia
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.about.ui.AboutScreen
-import com.sunrisekcdeveloper.medialion.android.ui.collections.ui.CollectionScreen
+import com.sunrisekcdeveloper.medialion.android.ui.collections.CollectionScreen
 import com.sunrisekcdeveloper.medialion.android.ui.components.ui.BottomBar
 import com.sunrisekcdeveloper.medialion.android.ui.components.ui.BottomBarOption
 import com.sunrisekcdeveloper.medialion.android.ui.discovery.DiscoveryScreen
+import com.sunrisekcdeveloper.medialion.domain.collection.CollectionAction
+import com.sunrisekcdeveloper.medialion.domain.collection.CollectionState
 import com.sunrisekcdeveloper.medialion.domain.collection.GenreState
 import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryAction
 import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryState
@@ -29,9 +31,11 @@ import com.sunrisekcdeveloper.medialion.domain.search.SearchAction
 fun HomeScreen(
     discoveryState: DiscoveryState,
     genreState: GenreState,
-    collectionState: List<CollectionWithMedia>,
+    collectionState: CollectionState,
+    collectionsState: List<CollectionWithMedia>,
     submitSearchAction: (SearchAction) -> Unit,
     submitDiscoveryAction: (DiscoveryAction) -> Unit,
+    submitCollectionAction: (CollectionAction) -> Unit,
     onNavigateToSearchScreen: () -> Unit,
 ) {
 
@@ -51,7 +55,7 @@ fun HomeScreen(
                 submitAction = submitDiscoveryAction,
                 onInfoIconClicked = { showAboutDialog = true },
                 onSearchIconClicked = { onNavigateToSearchScreen() },
-                collectionState = collectionState,
+                collectionState = collectionsState,
                 submitSearchAction = submitSearchAction,
                 modifier = Modifier.constrainAs(coreContent) {
                     top.linkTo(parent.top)
@@ -61,6 +65,8 @@ fun HomeScreen(
                 })
 
             BottomBarOption.COLLECTION -> CollectionScreen(
+                state = collectionState,
+                submitAction = submitCollectionAction,
                 modifier = Modifier.constrainAs(
                     coreContent
                 ) {
@@ -68,7 +74,11 @@ fun HomeScreen(
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     bottom.linkTo(bottombar.top)
-                })
+                },
+                onSearchIconClicked = { onNavigateToSearchScreen() },
+                onInfoIconClicked = { showAboutDialog = true },
+                submitSearchAction = submitSearchAction,
+            )
         }
 
         BottomBar(
@@ -101,8 +111,11 @@ fun HomeScreenPreview() {
                 )),
                 submitDiscoveryAction = {},
                 genreState = GenreState.Genres(listOf()),
-                collectionState = emptyList(),
-                submitSearchAction = {}
+                collectionsState = emptyList(),
+                submitSearchAction = {},
+                collectionState = CollectionState.Empty,
+                submitCollectionAction = {},
+
             )
         }
     }

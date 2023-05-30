@@ -13,9 +13,11 @@ import androidx.compose.ui.res.colorResource
 import com.sunrisekcdeveloper.medialion.ColorRes
 
 @Composable
-fun MLProgress() {
+fun MLProgress(
+    modifier: Modifier = Modifier
+) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(colorResource(id = ColorRes.background.resourceId)),
         verticalArrangement = Arrangement.Center,

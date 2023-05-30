@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
+import com.sunrisekcdeveloper.medialion.android.ui.collections.CollectionViewModel
 import com.sunrisekcdeveloper.medialion.android.ui.search.DiscoveryViewModel
 import com.sunrisekcdeveloper.medialion.android.ui.search.SearchKey
 import com.sunrisekcdeveloper.medialion.android.ui.search.SearchViewModel
@@ -24,6 +25,7 @@ class HomeFragment : Fragment() {
 
     private val discoveryViewModel by lazy { lookup<DiscoveryViewModel>() }
     private val searchViewModel by lazy { lookup<SearchViewModel>() }
+    private val collectionViewModel by lazy { lookup<CollectionViewModel>() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,14 +44,17 @@ class HomeFragment : Fragment() {
                         val discoveryState by discoveryViewModel.state.collectAsState()
                         val genreState by discoveryViewModel.genres.genres.collectAsState()
                         val collectionState by searchViewModel.collectionState.collectAsState()
+                        val otherCollectionState by collectionViewModel.state.collectAsState()
 
                         HomeScreen(
                             discoveryState = discoveryState,
                             genreState = genreState,
-                            collectionState = collectionState,
+                            collectionsState = collectionState,
                             submitSearchAction = { searchViewModel.submitAction(it) },
                             submitDiscoveryAction = { discoveryViewModel.submitAction(it) },
-                            onNavigateToSearchScreen = { backstack.goTo(SearchKey) }
+                            onNavigateToSearchScreen = { backstack.goTo(SearchKey) },
+                            collectionState = otherCollectionState,
+                            submitCollectionAction = { collectionViewModel.submitAction(it) },
                         )
                     }
                 }
