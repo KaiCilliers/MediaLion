@@ -3,6 +3,7 @@ package com.sunrisekcdeveloper.medialion.android.ui.discovery
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -69,6 +70,7 @@ fun DiscoveryScreen(
     ConstraintLayout(
         modifier = modifier
             .fillMaxWidth()
+            .fillMaxHeight()
     ) {
 
         val (containerTop, column) = createRefs()
@@ -84,7 +86,8 @@ fun DiscoveryScreen(
             Column(
                 modifier = Modifier
                     .background(MaterialTheme.colors.background)
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = 16.dp, vertical = 25.dp)
+                    .padding(bottom = 20.dp)
                     .constrainAs(column) {
                         top.linkTo(parent.top)
                         width = Dimension.fillToConstraints
@@ -116,6 +119,7 @@ fun DiscoveryScreen(
 
                 when (state) {
                     is DiscoveryState.Content -> {
+                        // TODO show grid if size is 1
                         LazyColumn(
                             verticalArrangement = Arrangement.spacedBy(20.dp)
                         ) {

@@ -58,17 +58,21 @@ fun BottomBar(
                     ),
                     angle = -90f
                 )
-                .padding(horizontal = 60.dp, vertical = 16.dp),
+                .padding(horizontal = 20.dp, vertical = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
 
 
             ) {
+
+            Spacer(modifier = modifier.weight(1f))
+
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.clickable {
                     onNewSelection(BottomBarOption.DISCOVERY)
                 }
+
             ) {
 
 
@@ -81,13 +85,13 @@ fun BottomBar(
                         ColorFilter.tint(MaterialTheme.colors.primaryVariant)
                     },
                     modifier = modifier
-                        .size(40.dp),
+                        .size(20.dp),
                 )
 
                 Spacer(modifier = modifier.height(5.dp))
 
                 Text(
-                    text = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.bottom_bar_collection),
+                    text = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.bottom_bar_home),
                     style = MaterialTheme.typography.h1,
                     color = if (selectedTab == BottomBarOption.DISCOVERY) {
                         MaterialTheme.colors.onSecondary
@@ -99,12 +103,15 @@ fun BottomBar(
                 )
             }
 
+            Spacer(modifier = modifier.weight(1f))
+
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.clickable {
                     onNewSelection(BottomBarOption.COLLECTION)
                 }
+
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.slide_orange_cog_icon),
@@ -115,13 +122,13 @@ fun BottomBar(
                         ColorFilter.tint(MaterialTheme.colors.primaryVariant)
                     },
                     modifier = modifier
-                        .size(40.dp)
+                        .size(20.dp)
                 )
 
                 Spacer(modifier = modifier.height(5.dp))
 
                 Text(
-                    text = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.bottom_bar_home),
+                    text = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.bottom_bar_collection),
                     style = MaterialTheme.typography.h1,
                     color = if (selectedTab == BottomBarOption.COLLECTION) {
                         MaterialTheme.colors.onSecondary
@@ -130,6 +137,9 @@ fun BottomBar(
                     }
                 )
             }
+
+            Spacer(modifier = modifier.weight(1f))
+
         }
     }
 }
