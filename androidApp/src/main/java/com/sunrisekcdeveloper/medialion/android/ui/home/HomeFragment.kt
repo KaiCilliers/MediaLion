@@ -26,6 +26,7 @@ class HomeFragment : Fragment() {
     private val discoveryViewModel by lazy { lookup<DiscoveryViewModel>() }
     private val searchViewModel by lazy { lookup<SearchViewModel>() }
     private val collectionViewModel by lazy { lookup<CollectionViewModel>() }
+    private val homeViewModel by lazy { lookup<HomeViewModel>() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,6 +46,7 @@ class HomeFragment : Fragment() {
                         val genreState by discoveryViewModel.genres.genres.collectAsState()
                         val collectionState by searchViewModel.collectionState.collectAsState()
                         val otherCollectionState by collectionViewModel.state.collectAsState()
+                        val selectedTab by homeViewModel.currentTab.collectAsState()
 
                         HomeScreen(
                             discoveryState = discoveryState,
@@ -55,6 +57,8 @@ class HomeFragment : Fragment() {
                             onNavigateToSearchScreen = { backstack.goTo(SearchKey) },
                             collectionState = otherCollectionState,
                             submitCollectionAction = { collectionViewModel.submitAction(it) },
+                            selectedTab = selectedTab,
+                            onSelectedTabChange = { homeViewModel.setCurrentTab(it) }
                         )
                     }
                 }

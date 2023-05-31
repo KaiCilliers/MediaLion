@@ -17,6 +17,7 @@ data object HomeKey : BaseKey() {
             add(SearchViewModel(backstack))
             add(DiscoveryViewModel(backstack))
             add(CollectionViewModel())
+            add(HomeViewModel())
         }
     }
 }

@@ -38,9 +38,9 @@ fun HomeScreen(
     submitDiscoveryAction: (DiscoveryAction) -> Unit,
     submitCollectionAction: (CollectionAction) -> Unit,
     onNavigateToSearchScreen: () -> Unit,
+    selectedTab: BottomBarOption,
+    onSelectedTabChange: (BottomBarOption) -> Unit,
 ) {
-
-    var selectedTab by remember { mutableStateOf(BottomBarOption.DISCOVERY) }
     var showAboutDialog by remember { mutableStateOf(false) }
 
     ConstraintLayout(
@@ -57,6 +57,8 @@ fun HomeScreen(
                 bottom.linkTo(bottombar.top)
             }
         ) {
+
+            println("Deadpool - selected tab $selectedTab")
             when (selectedTab) {
                 BottomBarOption.DISCOVERY -> DiscoveryScreen(
                     state = discoveryState,
@@ -80,7 +82,7 @@ fun HomeScreen(
 
         BottomBar(
             selectedTab = selectedTab,
-            onNewSelection = { selectedTab = it },
+            onNewSelection = { onSelectedTabChange(it) },
             modifier = Modifier.constrainAs(bottombar) {
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
@@ -112,7 +114,8 @@ fun HomeScreenPreview() {
                 submitSearchAction = {},
                 collectionState = CollectionState.Empty,
                 submitCollectionAction = {},
-
+                selectedTab = BottomBarOption.DISCOVERY,
+                onSelectedTabChange = {}
             )
         }
     }
