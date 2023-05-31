@@ -1,5 +1,6 @@
 package com.sunrisekcdeveloper.medialion.android.ui.home
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -48,37 +49,33 @@ fun HomeScreen(
     ) {
         val (coreContent, bottombar) = createRefs()
 
-        when (selectedTab) {
-            BottomBarOption.DISCOVERY -> DiscoveryScreen(
-                state = discoveryState,
-                genreState = genreState,
-                submitAction = submitDiscoveryAction,
-                onInfoIconClicked = { showAboutDialog = true },
-                onSearchIconClicked = { onNavigateToSearchScreen() },
-                collectionState = collectionsState,
-                submitSearchAction = submitSearchAction,
-                modifier = Modifier.constrainAs(coreContent) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(bottombar.top)
-                })
+        Column(
+            modifier = Modifier.constrainAs(coreContent) {
+                top.linkTo(parent.top)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                bottom.linkTo(bottombar.top)
+            }
+        ) {
+            when (selectedTab) {
+                BottomBarOption.DISCOVERY -> DiscoveryScreen(
+                    state = discoveryState,
+                    genreState = genreState,
+                    submitAction = submitDiscoveryAction,
+                    onInfoIconClicked = { showAboutDialog = true },
+                    onSearchIconClicked = { onNavigateToSearchScreen() },
+                    collectionState = collectionsState,
+                    submitSearchAction = submitSearchAction,
+                )
 
-            BottomBarOption.COLLECTION -> CollectionScreen(
-                state = collectionState,
-                submitAction = submitCollectionAction,
-                modifier = Modifier.constrainAs(
-                    coreContent
-                ) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(bottombar.top)
-                },
-                onSearchIconClicked = { onNavigateToSearchScreen() },
-                onInfoIconClicked = { showAboutDialog = true },
-                submitSearchAction = submitSearchAction,
-            )
+                BottomBarOption.COLLECTION -> CollectionScreen(
+                    state = collectionState,
+                    submitAction = submitCollectionAction,
+                    onSearchIconClicked = { onNavigateToSearchScreen() },
+                    onInfoIconClicked = { showAboutDialog = true },
+                    submitSearchAction = submitSearchAction,
+                )
+            }
         }
 
         BottomBar(
