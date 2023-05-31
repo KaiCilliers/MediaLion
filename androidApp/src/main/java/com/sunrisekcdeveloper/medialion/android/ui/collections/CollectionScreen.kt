@@ -181,7 +181,12 @@ fun CollectionScreen(
                         contentDescription = "",
                         modifier = modifier
                             .size(30.dp)
-                            .clickable { onSearchIconClicked() }
+                            .clickable {
+                                coroutineScope.launch {
+                                    modalSheetState.hide()
+                                    onSearchIconClicked()
+                                }
+                            }
                     )
 
                     Spacer(modifier = modifier.weight(1f))
