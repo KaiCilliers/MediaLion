@@ -8,6 +8,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -38,9 +39,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -161,6 +162,7 @@ fun CollectionScreen(
                         )
                     }
                 }
+
                 is BottomSheetScreen.EntireCollection -> {
                     ModalBottomSheetLayout(
                         sheetState = innerModalSheetState,
@@ -186,45 +188,66 @@ fun CollectionScreen(
                             }
                         }
                     ) {
-                        LazyVerticalGrid(
-                            columns = GridCells.Fixed(3),
-                            modifier = modifier
-                                .background(MaterialTheme.colors.background)
-                                .fillMaxSize(),
-                            contentPadding = PaddingValues(22.dp),
-                            verticalArrangement = Arrangement.spacedBy(24.dp),
-                            horizontalArrangement = Arrangement.spacedBy(24.dp)
+                        Box {
+                            LazyVerticalGrid (
+                                columns = GridCells.Fixed(3),
+                                modifier = modifier
+                                    .background(MaterialTheme.colors.background)
+                                    .fillMaxSize(),
+                                contentPadding = PaddingValues(22.dp),
+                                verticalArrangement = Arrangement.spacedBy(24.dp),
+                                horizontalArrangement = Arrangement.spacedBy(24.dp)
 
-                        ) {
-                            item(span = { GridItemSpan(3) }) {
-                                Text(
-                                    text = sheet.title.value,
-                                    style = MaterialTheme.typography.h3,
-                                    color = MaterialTheme.colors.secondary,
-                                    modifier = modifier.padding(top = 8.dp, bottom = 6.dp),
+                            ) {
+                                item(span = { GridItemSpan(3) }) {
+                                    Text(
+                                        text = sheet.title.value,
+                                        style = MaterialTheme.typography.h3,
+                                        color = MaterialTheme.colors.secondary,
+                                        modifier = modifier.padding(top = 8.dp, bottom = 6.dp),
 
+                                        )
+                                }
+                                items(sheet.media) { singleMovie ->
+                                    val simple = SimpleMediaItem(
+                                        id = singleMovie.id.toString(),
+                                        title = singleMovie.title,
+                                        posterUrl = singleMovie.posterUrl,
+                                        mediaType = singleMovie.mediaType,
+                                        description = singleMovie.overview,
+                                        year = singleMovie.releaseYear,
                                     )
+                                    MLMediaPoster(
+                                        mediaItem = simple,
+                                        modifier = Modifier.clickable {
+                                            innerBottomSheet = simple
+                                            coroutineScope.launch { innerModalSheetState.show() }
+                                        }
+                                    )
+                                }
+
                             }
-                            items(sheet.media) { singleMovie ->
-                                val simple = SimpleMediaItem(
-                                    id = singleMovie.id.toString(),
-                                    title = singleMovie.title,
-                                    posterUrl = singleMovie.posterUrl,
-                                    mediaType = singleMovie.mediaType,
-                                    description = singleMovie.overview,
-                                    year = singleMovie.releaseYear,
-                                )
-                                MLMediaPoster(
-                                    mediaItem = simple,
-                                    modifier = Modifier.clickable {
-                                        innerBottomSheet = simple
-                                        coroutineScope.launch { innerModalSheetState.show() }
+                            Image(
+                                painter = painterResource(id = R.drawable.edit_icon),
+                                contentDescription = "",
+                                modifier = modifier
+                                    .padding(bottom = 80.dp, end = 20.dp)
+                                    .size(90.dp)
+                                    .clickable {
+                                        coroutineScope.launch {
+                                            modalSheetState.hide()
+                                            onSearchIconClicked()
+                                        }
                                     }
-                                )
-                            }
+                                    .align(Alignment.BottomEnd),
+
+                            )
+
+
                         }
                     }
                 }
+
                 null -> {
                     Text(text = "empty") // required view
                     LaunchedEffect(key1 = Unit) {
@@ -382,6 +405,7 @@ private fun CollectionScreenPreview() {
 }
 
 sealed class BottomSheetScreen {
-    data class DetailPreview(val mediaItem: SimpleMediaItem):BottomSheetScreen()
-    data class EntireCollection(val title: Title, val media: List<MediaItemUI>):BottomSheetScreen()
+    data class DetailPreview(val mediaItem: SimpleMediaItem) : BottomSheetScreen()
+    data class EntireCollection(val title: Title, val media: List<MediaItemUI>) :
+        BottomSheetScreen()
 }
