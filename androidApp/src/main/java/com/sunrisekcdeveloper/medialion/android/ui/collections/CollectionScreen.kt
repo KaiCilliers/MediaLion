@@ -2,6 +2,7 @@
 
 package com.sunrisekcdeveloper.medialion.android.ui.collections
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -63,7 +64,7 @@ fun CollectionScreen(
     onSearchIconClicked: () -> Unit = {},
     onInfoIconClicked: () -> Unit = {},
     submitSearchAction: (SearchAction) -> Unit,
-    modifier: Modifier = Modifier,
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
 ) {
 
     var showCollectionDialog by remember { mutableStateOf(false) }
@@ -154,61 +155,59 @@ fun CollectionScreen(
                 .fillMaxHeight()
         ) {
 
-            val (containerTop, column, content) = createRefs()
+            val (containerTop, content) = createRefs()
 
-            ConstraintLayout(
-                modifier = Modifier.constrainAs(containerTop) {
-                    top.linkTo(parent.top)
+            Column(
+                modifier = modifier
+                    .background(MaterialTheme.colors.background)
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 100.dp) // hacky fix
+                    .constrainAs(containerTop) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(content.top)
+                        width = Dimension.fillToConstraints
+                    }
+            ) {
+                Row(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colors.background)
+                        .padding(top = 64.dp, bottom = 16.dp),
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.search_icon),
+                        contentDescription = "",
+                        modifier = modifier
+                            .size(30.dp)
+                            .clickable { onSearchIconClicked() }
+                    )
+
+                    Spacer(modifier = modifier.weight(1f))
+                    Image(
+                        painter = painterResource(id = R.drawable.about_icon),
+                        contentDescription = "",
+                        modifier = modifier
+                            .size(30.dp)
+                            .clickable { onInfoIconClicked() }
+                    )
+                }
+            }
+
+            Column(
+                modifier = Modifier.constrainAs(content) {
+                    top.linkTo(containerTop.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                    width = Dimension.fillToConstraints
+                    bottom.linkTo(parent.bottom)
                 }
+                    .padding(bottom = 150.dp) // hacky fix
             ) {
-                Column(
-                    modifier = modifier
-                        .background(MaterialTheme.colors.background)
-                        .padding(horizontal = 16.dp)
-                        .constrainAs(column) {
-                            top.linkTo(parent.top)
-                            width = Dimension.fillToConstraints
-
-                        }
-                ) {
-                    Row(
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colors.background)
-                            .padding(top = 64.dp, bottom = 16.dp),
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.search_icon),
-                            contentDescription = "",
-                            modifier = modifier
-                                .size(30.dp)
-                                .clickable { onSearchIconClicked() }
-                        )
-
-                        Spacer(modifier = modifier.weight(1f))
-                        Image(
-                            painter = painterResource(id = R.drawable.about_icon),
-                            contentDescription = "",
-                            modifier = modifier
-                                .size(30.dp)
-                                .clickable { onInfoIconClicked() }
-                        )
-                    }
-                }
-
                 when (state) {
                     is CollectionState.AllCollections -> {
                         LazyColumn(
                             verticalArrangement = Arrangement.spacedBy(20.dp),
-                            modifier = Modifier.constrainAs(content) {
-                                top.linkTo(column.bottom)
-                                start.linkTo(parent.start)
-                                end.linkTo(parent.end)
-                                bottom.linkTo(parent.bottom)
-                            }
                         ) {
                             items(state.collections) {
                                 MLTitledMediaRow(
@@ -230,21 +229,11 @@ fun CollectionScreen(
                     }
 
                     CollectionState.Empty -> {
-                        Text(text = "Empty Collections", modifier = Modifier.constrainAs(content) {
-                            top.linkTo(column.bottom)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                            bottom.linkTo(parent.bottom)
-                        })
+                        Text(text = "Empty Collections")
                     }
 
                     CollectionState.Loading -> {
-                        MLProgress(modifier = Modifier.constrainAs(content) {
-                            top.linkTo(column.bottom)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                            bottom.linkTo(parent.bottom)
-                        })
+                        MLProgress()
                     }
                 }
             }
