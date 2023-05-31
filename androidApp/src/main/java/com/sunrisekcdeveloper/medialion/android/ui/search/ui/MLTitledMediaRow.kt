@@ -27,6 +27,7 @@ fun MLTitledMediaRow(
     rowTitle: String,
     media: List<MediaItemUI>,
     onMediaItemClicked: (MediaItemUI) -> Unit,
+    onTitleClicked: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -38,7 +39,9 @@ fun MLTitledMediaRow(
                 text = rowTitle,
                 style = MaterialTheme.typography.h3,
                 color = MaterialTheme.colors.secondary,
-                modifier = modifier.padding(bottom = 20.dp, top = 6.dp)
+                modifier = modifier
+                    .padding(bottom = 20.dp, top = 6.dp)
+                    .clickable { onTitleClicked() }
             )
         LazyRow(
             modifier = modifier
@@ -80,7 +83,8 @@ private fun MLTitledMediaRowPreview() {
                     MediaItemUI(id = 6381, title = "ignota", isFavorited = false, posterUrl = "https://www.google.com/#q=aenean", bannerUrl = "https://duckduckgo.com/?q=lectus", genreIds = listOf(), overview = "quis", popularity = 44.45, voteAverage = 46.47, voteCount = 8908, releaseYear = "blandit", mediaType = MediaType.MOVIE),
                     MediaItemUI(id = 6381, title = "ignota", isFavorited = false, posterUrl = "https://www.google.com/#q=aenean", bannerUrl = "https://duckduckgo.com/?q=lectus", genreIds = listOf(), overview = "quis", popularity = 44.45, voteAverage = 46.47, voteCount = 8908, releaseYear = "blandit", mediaType = MediaType.MOVIE),
                 ),
-                onMediaItemClicked = {})
+                onMediaItemClicked = {},
+                onTitleClicked = {})
         }
     }
 }

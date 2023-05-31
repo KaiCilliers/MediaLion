@@ -9,13 +9,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
@@ -26,6 +32,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +40,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,6 +54,7 @@ import com.sunrisekcdeveloper.medialion.android.ui.components.ui.MLProgress
 import com.sunrisekcdeveloper.medialion.android.ui.detailPreview.ui.DetailPreviewScreen
 import com.sunrisekcdeveloper.medialion.android.ui.saveToCollection.ui.CollectionItem
 import com.sunrisekcdeveloper.medialion.android.ui.saveToCollection.ui.SaveToCollectionScreen
+import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLMediaPoster
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLTitledMediaRow
 import com.sunrisekcdeveloper.medialion.domain.MediaType
 import com.sunrisekcdeveloper.medialion.domain.collection.CollectionAction
@@ -69,9 +78,18 @@ fun CollectionScreen(
 
     var showCollectionDialog by remember { mutableStateOf(false) }
 
-    var selectedMediaItem by remember { mutableStateOf<SimpleMediaItem?>(null) }
+    var currentBottomSheet by remember { mutableStateOf<BottomSheetScreen?>(null) }
     val coroutineScope = rememberCoroutineScope()
     val modalSheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
+        confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded },
+        skipHalfExpanded = true,
+        animationSpec = spring(
+            2.5f
+        ),
+    )
+    var innerBottomSheet by remember { mutableStateOf<SimpleMediaItem?>(null) }
+    val innerModalSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
         confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded },
         skipHalfExpanded = true,
@@ -86,36 +104,36 @@ fun CollectionScreen(
             collections = (state as CollectionState.AllCollections).collections
                 .map { it.name to it.contents.map { it.id } }
                 .map {
-                    val selectedMedia = selectedMediaItem
-                    val checked = if (selectedMedia != null) {
-                        it.second.contains(selectedMedia.id.toInt())
-                    } else false
+                    val selectedMedia =
+                        (currentBottomSheet as? BottomSheetScreen.DetailPreview)?.mediaItem
+                            ?: innerBottomSheet!!
+                    val checked = it.second.contains(selectedMedia.id.toInt())
                     CollectionItem(it.first.value, checked)
                 },
             onCollectionItemClicked = { collectionName -> },
             onAddToCollection = { collectionName ->
-                val selectedMedia = selectedMediaItem
-                if (selectedMedia != null) {
-                    submitSearchAction(
-                        SearchAction.AddToCollection(
-                            Title(collectionName),
-                            ID(selectedMedia.id.toInt()),
-                            selectedMedia.mediaType
-                        )
+                val selectedMedia =
+                    (currentBottomSheet as? BottomSheetScreen.DetailPreview)?.mediaItem
+                        ?: innerBottomSheet!!
+                submitSearchAction(
+                    SearchAction.AddToCollection(
+                        Title(collectionName),
+                        ID(selectedMedia.id.toInt()),
+                        selectedMedia.mediaType
                     )
-                }
+                )
             },
             onRemoveFromCollection = { collectionName ->
-                val selectedMedia = selectedMediaItem
-                if (selectedMedia != null) {
-                    submitSearchAction(
-                        SearchAction.RemoveFromCollection(
-                            Title(collectionName),
-                            ID(selectedMedia.id.toInt()),
-                            selectedMedia.mediaType
-                        )
+                val selectedMedia =
+                    (currentBottomSheet as? BottomSheetScreen.DetailPreview)?.mediaItem
+                        ?: innerBottomSheet!!
+                submitSearchAction(
+                    SearchAction.RemoveFromCollection(
+                        Title(collectionName),
+                        ID(selectedMedia.id.toInt()),
+                        selectedMedia.mediaType
                     )
-                }
+                )
             },
             onSaveList = {
                 submitSearchAction(SearchAction.CreateCollection(Title(it)))
@@ -127,24 +145,92 @@ fun CollectionScreen(
         sheetState = modalSheetState,
         sheetShape = RoundedCornerShape(12.dp),
         sheetContent = {
-            Surface {
-                DetailPreviewScreen(
-                    mediaItem = selectedMediaItem ?: SimpleMediaItem(
-                        "",
-                        "",
-                        "",
-                        "",
-                        "",
-                        MediaType.MOVIE
-                    ),
-                    onCloseClick = {
-                        selectedMediaItem = null; coroutineScope.launch { modalSheetState.hide() }
-                    },
-                    onMyListClick = {
-                        showCollectionDialog = true
-                    },
-                    modifier = Modifier.blur(radius = if (showCollectionDialog) 10.dp else 0.dp)
-                )
+            when (val sheet = currentBottomSheet) {
+                is BottomSheetScreen.DetailPreview -> {
+                    Surface {
+                        DetailPreviewScreen(
+                            mediaItem = sheet.mediaItem,
+                            onCloseClick = {
+                                currentBottomSheet = null
+                                coroutineScope.launch { modalSheetState.hide() }
+                            },
+                            onMyListClick = {
+                                showCollectionDialog = true
+                            },
+                            modifier = Modifier.blur(radius = if (showCollectionDialog) 10.dp else 0.dp)
+                        )
+                    }
+                }
+                is BottomSheetScreen.EntireCollection -> {
+                    ModalBottomSheetLayout(
+                        sheetState = innerModalSheetState,
+                        sheetShape = RoundedCornerShape(12.dp),
+                        sheetContent = {
+                            Surface {
+                                val item = innerBottomSheet
+                                if (item != null) {
+                                    DetailPreviewScreen(
+                                        mediaItem = item,
+                                        onCloseClick = {
+                                            innerBottomSheet = null
+                                            coroutineScope.launch { innerModalSheetState.hide() }
+                                        },
+                                        onMyListClick = {
+                                            showCollectionDialog = true
+                                        },
+                                        modifier = Modifier.blur(radius = if (showCollectionDialog) 10.dp else 0.dp)
+                                    )
+                                } else {
+                                    Text(text = "placeholder")
+                                }
+                            }
+                        }
+                    ) {
+                        LazyVerticalGrid(
+                            columns = GridCells.Fixed(3),
+                            modifier = modifier
+                                .background(MaterialTheme.colors.background)
+                                .fillMaxSize(),
+                            contentPadding = PaddingValues(22.dp),
+                            verticalArrangement = Arrangement.spacedBy(24.dp),
+                            horizontalArrangement = Arrangement.spacedBy(24.dp)
+
+                        ) {
+                            item(span = { GridItemSpan(3) }) {
+                                Text(
+                                    text = sheet.title.value,
+                                    style = MaterialTheme.typography.h3,
+                                    color = MaterialTheme.colors.secondary,
+                                    modifier = modifier.padding(top = 8.dp, bottom = 6.dp),
+
+                                    )
+                            }
+                            items(sheet.media) { singleMovie ->
+                                val simple = SimpleMediaItem(
+                                    id = singleMovie.id.toString(),
+                                    title = singleMovie.title,
+                                    posterUrl = singleMovie.posterUrl,
+                                    mediaType = singleMovie.mediaType,
+                                    description = singleMovie.overview,
+                                    year = singleMovie.releaseYear,
+                                )
+                                MLMediaPoster(
+                                    mediaItem = simple,
+                                    modifier = Modifier.clickable {
+                                        innerBottomSheet = simple
+                                        coroutineScope.launch { innerModalSheetState.show() }
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+                null -> {
+                    Text(text = "empty") // required view
+                    LaunchedEffect(key1 = Unit) {
+                        coroutineScope.launch { modalSheetState.hide() }
+                    }
+                }
             }
         }
     ) {
@@ -201,12 +287,13 @@ fun CollectionScreen(
             }
 
             Column(
-                modifier = Modifier.constrainAs(content) {
-                    top.linkTo(containerTop.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                }
+                modifier = Modifier
+                    .constrainAs(content) {
+                        top.linkTo(containerTop.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom)
+                    }
                     .padding(bottom = 150.dp) // hacky fix
             ) {
                 when (state) {
@@ -219,16 +306,26 @@ fun CollectionScreen(
                                     rowTitle = it.name.value,
                                     media = it.contents,
                                     onMediaItemClicked = {
-                                        selectedMediaItem = SimpleMediaItem(
-                                            id = it.id.toString(),
-                                            title = it.title,
-                                            posterUrl = it.posterUrl,
-                                            description = it.overview,
-                                            year = it.releaseYear,
-                                            mediaType = it.mediaType,
+                                        currentBottomSheet = BottomSheetScreen.DetailPreview(
+                                            mediaItem = SimpleMediaItem(
+                                                id = it.id.toString(),
+                                                title = it.title,
+                                                posterUrl = it.posterUrl,
+                                                description = it.overview,
+                                                year = it.releaseYear,
+                                                mediaType = it.mediaType,
+                                            )
                                         )
                                         coroutineScope.launch { modalSheetState.show() }
-                                    })
+                                    },
+                                    onTitleClicked = {
+                                        currentBottomSheet = BottomSheetScreen.EntireCollection(
+                                            title = it.name,
+                                            media = it.contents
+                                        )
+                                        coroutineScope.launch { modalSheetState.show() }
+                                    }
+                                )
                             }
                         }
                     }
@@ -282,4 +379,9 @@ private fun CollectionScreenPreview() {
         )
     }
 
+}
+
+sealed class BottomSheetScreen {
+    data class DetailPreview(val mediaItem: SimpleMediaItem):BottomSheetScreen()
+    data class EntireCollection(val title: Title, val media: List<MediaItemUI>):BottomSheetScreen()
 }
