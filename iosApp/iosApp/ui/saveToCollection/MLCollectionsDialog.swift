@@ -66,6 +66,7 @@ struct MLCollectionsDialog: View {
                         Button(
                             action: {
                                 onCreateNewCollection(self.newCollectionName)
+                                onAddToCollection(self.newCollectionName)
                                 self.newCollectionName = ""
                             },
                             label: {

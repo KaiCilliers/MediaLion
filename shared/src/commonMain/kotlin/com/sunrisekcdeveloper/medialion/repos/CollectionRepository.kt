@@ -94,6 +94,7 @@ interface CollectionRepository {
                 .fetchAll()
                 .asFlow()
                 .mapToList()
+                .map { it.asReversed() }
                 .map { collectionNames ->
                     collectionNames.map { getCollection(it.name).first() }
                 }

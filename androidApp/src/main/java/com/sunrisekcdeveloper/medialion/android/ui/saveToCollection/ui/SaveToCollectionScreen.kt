@@ -104,7 +104,12 @@ fun SaveToCollectionScreen(
                     textQuery = text,
                     labelText = stringResource(id = R.string.empty_add_to_list_text),
                     onTextQueryTextChange = { text = it },
-                    onSaveList = { onSaveList(text); text = "" })
+                    onSaveList = {
+                        onSaveList(text)
+                        onAddToCollection(text)
+                        text = ""
+                    }
+                )
 
                 Row {
                     Spacer(modifier = Modifier.weight(1f))
