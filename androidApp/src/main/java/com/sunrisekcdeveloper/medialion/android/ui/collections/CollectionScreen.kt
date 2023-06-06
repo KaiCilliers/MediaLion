@@ -39,9 +39,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -98,6 +101,22 @@ fun CollectionScreen(
             2.5f
         ),
     )
+    var editMode by remember {
+        mutableStateOf(false)
+    }
+    var collectionMedia by remember {
+        mutableStateOf(emptyList<MediaItemUI>())
+    }
+
+    // State change callback
+    LaunchedEffect(modalSheetState) {
+        snapshotFlow { modalSheetState.isVisible }.collect { isVisible ->
+            println("deadpool $isVisible")
+            if (!isVisible) {
+                collectionMedia = emptyList()
+            }
+        }
+    }
 
     if (showCollectionDialog) {
         SaveToCollectionScreen(
@@ -164,6 +183,9 @@ fun CollectionScreen(
                 }
 
                 is BottomSheetScreen.EntireCollection -> {
+                    if (collectionMedia.isEmpty()) {
+                        collectionMedia = sheet.media
+                    }
                     ModalBottomSheetLayout(
                         sheetState = innerModalSheetState,
                         sheetShape = RoundedCornerShape(12.dp),
@@ -208,7 +230,7 @@ fun CollectionScreen(
 
                                         )
                                 }
-                                items(sheet.media) { singleMovie ->
+                                items(collectionMedia) { singleMovie ->
                                     val simple = SimpleMediaItem(
                                         id = singleMovie.id.toString(),
                                         title = singleMovie.title,
@@ -217,27 +239,57 @@ fun CollectionScreen(
                                         description = singleMovie.overview,
                                         year = singleMovie.releaseYear,
                                     )
-                                    MLMediaPoster(
-                                        mediaItem = simple,
-                                        modifier = Modifier.clickable {
-                                            innerBottomSheet = simple
-                                            coroutineScope.launch { innerModalSheetState.show() }
+                                    Box(
+                                        modifier = Modifier.fillMaxSize()
+                                    ) {
+                                        MLMediaPoster(
+                                            mediaItem = simple,
+                                            modifier = Modifier.clickable {
+                                                innerBottomSheet = simple
+                                                coroutineScope.launch { innerModalSheetState.show() }
+                                            }
+                                        )
+                                        if (editMode) {
+                                            Image(
+                                                painter = painterResource(id = R.drawable.ic_boxed_x),
+                                                contentDescription = "",
+                                                colorFilter = ColorFilter.tint(Color.Red),
+                                                modifier = modifier
+                                                    .padding(bottom = 80.dp, end = 20.dp)
+                                                    .size(90.dp)
+                                                    .clickable {
+                                                        submitAction(
+                                                            CollectionAction.RemoveFromCollection(
+                                                                collectionName = sheet.title,
+                                                                mediaId = ID(singleMovie.id),
+                                                                mediaType = singleMovie.mediaType,
+                                                            )
+                                                        )
+                                                        val items = collectionMedia.toMutableList()
+                                                        items.removeIf { it.id == singleMovie.id }
+                                                        collectionMedia = items
+                                                    }
+                                                    .align(Alignment.Center),
+
+                                                )
                                         }
-                                    )
+                                    }
                                 }
 
                             }
                             Image(
-                                painter = painterResource(id = R.drawable.edit_icon),
+                                painter = painterResource(id =
+                                if(editMode) {
+                                    R.drawable.name_created_icon
+                                } else {
+                                    R.drawable.edit_icon
+                                }),
                                 contentDescription = "",
                                 modifier = modifier
                                     .padding(bottom = 80.dp, end = 20.dp)
                                     .size(90.dp)
                                     .clickable {
-                                        coroutineScope.launch {
-                                            modalSheetState.hide()
-                                            onSearchIconClicked()
-                                        }
+                                        editMode = !editMode
                                     }
                                     .align(Alignment.BottomEnd),
 
