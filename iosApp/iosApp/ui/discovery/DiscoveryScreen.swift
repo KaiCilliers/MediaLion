@@ -15,10 +15,10 @@ struct DiscoveryScreen: View {
     let onInfoClicked: () -> Void
     
     @StateObject private var viewModel = DiscoveryViewModel()
-    @State private var mediaPreviewSheet: PreviewMedia = PreviewMedia(media: nil,sheetVisible: false)
     @State private var selectedMedia: MediaItemUI? = nil
     @State private var showCollectionDialog = false
     @State private var showGenreDialog = false
+    @State private var mediaPreviewSheet: MediaItemUiIdentifiable? = nil
 
     init(onInfoClicked: @escaping () -> Void) {
         self.onInfoClicked = onInfoClicked
@@ -94,8 +94,7 @@ struct DiscoveryScreen: View {
                                             media: item.content,
                                             onMediaItemClicked: {
                                                 singleItem in
-                                                mediaPreviewSheet
-                                                    .showSheet(media: singleItem)
+                                                mediaPreviewSheet = MediaItemUiIdentifiable(media: singleItem)
                                                 selectedMedia = singleItem
                                             })
                                     }
@@ -115,8 +114,7 @@ struct DiscoveryScreen: View {
                                                 MLMediaPoster(media: item)
                                                     .frame(width: 100,height: 170)
                                                     .onTapGesture {
-                                                        mediaPreviewSheet
-                                                            .showSheet(media: item)
+                                                        mediaPreviewSheet = MediaItemUiIdentifiable(media: item)
                                                         selectedMedia = item
                                                     }
                                             }
@@ -212,23 +210,19 @@ struct DiscoveryScreen: View {
             print("IOS - discovery - disposing viewmodel")
             viewModel.dispose()
         }
-        .sheet(isPresented: $mediaPreviewSheet.sheetVisible) {
-            if let itemToPreview = mediaPreviewSheet.media {
-                DetailPreviewSheet(
-                    mediaItem: itemToPreview,
-                    onCloseClick: {
-                        mediaPreviewSheet.hideSheet()
-                    },
-                    onMyCollectionClick: { item in
-                        showCollectionDialog = true
-                        mediaPreviewSheet.hideSheet()
-                    }
-                )
-                .presentationDetents([.medium, .fraction(0.4)])
-                .presentationDragIndicator(.hidden)
-            } else {
-//                fatalError("item to show was nil!")
-            }
+        .sheet(item: $mediaPreviewSheet) { mediaItem in
+            DetailPreviewSheet(
+                mediaItem: mediaItem.media,
+                onCloseClick: {
+                    mediaPreviewSheet = nil
+                },
+                onMyCollectionClick: { item in
+                    showCollectionDialog = true
+                    mediaPreviewSheet = nil
+                }
+            )
+            .presentationDetents([.medium, .fraction(0.4)])
+            .presentationDragIndicator(.hidden)
         }
     }
 }
