@@ -9,6 +9,10 @@ import com.sunrisekcdeveloper.medialion.mappers.ListMapper
 import com.sunrisekcdeveloper.medialion.repos.MovieRepository
 import com.sunrisekcdeveloper.medialion.repos.TVRepository
 import io.github.aakira.napier.log
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
@@ -104,41 +108,57 @@ interface FetchDiscoveryContent {
 
         override suspend fun invoke(mediaToShow: Int, genreId: ID?): List<TitledMedia> {
             val content = mutableListOf<TitledMedia>()
-            if (genreId == null) {
-                when (mediaToShow) {
-                    1 -> content.addAll(fetchMovieContent())
-                    2 -> content.addAll(fetchTvContent())
-                    else -> {
-                        content.addAll(fetchMovieContent())
-                        content.addAll(fetchTvContent())
+            val asyncOperations = mutableListOf<Deferred<List<TitledMedia>>>()
+            coroutineScope {
+                if (genreId == null) {
+                    when (mediaToShow) {
+                        1 -> async { fetchMovieContent() }.also { asyncOperations.add(it) }
+                        2 -> async { fetchTvContent() }.also { asyncOperations.add(it) }
+                        else -> {
+                            async { fetchMovieContent() }.also { asyncOperations.add(it) }
+                            async { fetchTvContent() }.also { asyncOperations.add(it) }
+                        }
                     }
+                } else {
+                    async { fetchGenreMedia(mediaToShow, genreId) }.also { asyncOperations.add(it) }
                 }
-            } else {
-                content.add(fetchGenreMedia(mediaToShow, genreId))
             }
-            return content.shuffled().take(6)
+            asyncOperations
+                .awaitAll()
+                .flatten()
+                .shuffled()
+                .take(6)
+                .forEach {
+                    content.add(it)
+                }
+            return content
         }
 
-        private suspend fun fetchGenreMedia(mediaType: Int, genreId: ID): TitledMedia {
-            return when(mediaType) {
+        private suspend fun fetchGenreMedia(mediaType: Int, genreId: ID): List<TitledMedia> {
+            return when (mediaType) {
                 1 -> {
                     val media = movieRepository
                         .withGenre(genreId)
                         .take(42)
                         .toList()
-                    TitledMedia(
-                        title = movieGenres.find { it.first == genreId }?.second ?: "Genre",
-                        content = mapperMovie.map(media)
+                    listOf(
+                        TitledMedia(
+                            title = movieGenres.find { it.first == genreId }?.second ?: "Genre",
+                            content = mapperMovie.map(media)
+                        )
                     )
                 }
+
                 else -> {
                     val media = tvRepository
                         .withGenre(genreId)
                         .take(40)
                         .toList()
-                    TitledMedia(
-                        title = tvGenres.find { it.first == genreId }?.second ?: "Genre",
-                        content = mapperTv.map(media)
+                    listOf(
+                        TitledMedia(
+                            title = tvGenres.find { it.first == genreId }?.second ?: "Genre",
+                            content = mapperTv.map(media)
+                        )
                     )
                 }
             }
