@@ -57,23 +57,6 @@ struct MLTitledMediaGrid: View {
         }
             .background(Color.background)
             .edgesIgnoringSafeArea(.all)
-            .overlay {
-                VStack{
-                    Spacer()
-                    HStack{
-                        Spacer()
-                        Button {
-                            
-                        }label: {
-                            Image("editIcon")
-                                .resizable()
-                                .frame(width: 90, height: 90)
-                        }
-                    }
-                }
-                .padding(.bottom, 100)
-                .padding(.trailing, 20)
-            }
     }
 }
 
