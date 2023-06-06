@@ -267,7 +267,6 @@ private fun SearchScreenPreview() {
                 state = screenState,
                 submitAction = { action ->
                     when (action) {
-                        is SearchAction.AddToFavorites -> TODO()
                         SearchAction.ClearSearchText -> {
                             screenState = SearchState.Idle(
                                 "",
@@ -276,13 +275,7 @@ private fun SearchScreenPreview() {
                                 )
                             )
                         }
-
-                        is SearchAction.RemoveFromFavorites -> TODO()
-                        is SearchAction.SubmitSearchQuery -> TODO()
-                        is SearchAction.GetMediaDetails -> TODO()
-                        is SearchAction.AddToCollection -> TODO()
-                        is SearchAction.CreateCollection -> TODO()
-                        is SearchAction.RemoveFromCollection -> TODO()
+                        else -> {}
                     }
                 },
                 onNavigateBack = {},
