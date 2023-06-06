@@ -5,6 +5,11 @@ struct ContentView: View {
     
     @State var selectedTab: MLTabDestinations = .discovery
     @State var showAboutDialog: Bool = false
+    @StateObject private var discoveryViewModel = DiscoveryViewModel()
+    
+    init() {
+        NapierProxyKt.debugBuild()
+    }
     
     var body: some View {
         
@@ -20,7 +25,8 @@ struct ContentView: View {
                 
                 TabView(selection: $selectedTab) {
                     DiscoveryScreen(
-                        onInfoClicked: { showAboutDialog = true }
+                        onInfoClicked: { showAboutDialog = true },
+                        viewModel: discoveryViewModel
                     )
                     .tag(MLTabDestinations.discovery)
                     
@@ -53,6 +59,15 @@ struct ContentView: View {
                     }
                 )
             }
+        }
+        .onAppear {
+            print("IOS - discovery - starting to observe viewmodel")
+            discoveryViewModel.observe()
+            discoveryViewModel.submitAction(action: DiscoveryAction.FetchContent(mediaType: 0))
+        }
+        .onDisappear {
+            print("IOS - discovery - disposing viewmodel")
+            discoveryViewModel.dispose()
         }
     }
     

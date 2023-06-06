@@ -14,16 +14,11 @@ struct DiscoveryScreen: View {
     @State var isActive : Bool = false
     let onInfoClicked: () -> Void
     
-    @StateObject private var viewModel = DiscoveryViewModel()
+    @ObservedObject var viewModel: DiscoveryViewModel
     @State private var selectedMedia: MediaItemUI? = nil
     @State private var showCollectionDialog = false
     @State private var showGenreDialog = false
     @State private var mediaPreviewSheet: MediaItemUiIdentifiable? = nil
-
-    init(onInfoClicked: @escaping () -> Void) {
-        self.onInfoClicked = onInfoClicked
-        NapierProxyKt.debugBuild()
-    }
     
     var body: some View {
    
@@ -201,15 +196,6 @@ struct DiscoveryScreen: View {
             }
             
         }
-        .onAppear {
-            print("IOS - discovery - starting to observe viewmodel")
-            viewModel.observe()
-            viewModel.submitAction(action: DiscoveryAction.FetchContent(mediaType: 0))
-        }
-        .onDisappear {
-            print("IOS - discovery - disposing viewmodel")
-            viewModel.dispose()
-        }
         .sheet(item: $mediaPreviewSheet) { mediaItem in
             DetailPreviewSheet(
                 mediaItem: mediaItem.media,
@@ -230,7 +216,8 @@ struct DiscoveryScreen: View {
 struct discoveryScreen_Previews: PreviewProvider {
     static var previews: some View {
         DiscoveryScreen(
-            onInfoClicked: {}
+            onInfoClicked: {},
+            viewModel: DiscoveryViewModel()
         )
     }
 }
