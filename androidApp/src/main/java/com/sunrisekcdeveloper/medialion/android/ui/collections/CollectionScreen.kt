@@ -31,6 +31,7 @@ import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,6 +47,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -107,6 +109,12 @@ fun CollectionScreen(
     var collectionMedia by remember {
         mutableStateOf(emptyList<MediaItemUI>())
     }
+    var editTitleMode by remember {
+        mutableStateOf(false)
+    }
+    var headingValue by remember {
+        mutableStateOf("")
+    }
 
     // State change callback
     LaunchedEffect(modalSheetState) {
@@ -114,6 +122,7 @@ fun CollectionScreen(
             println("deadpool $isVisible")
             if (!isVisible) {
                 collectionMedia = emptyList()
+                headingValue = ""
             }
         }
     }
@@ -183,8 +192,9 @@ fun CollectionScreen(
                 }
 
                 is BottomSheetScreen.EntireCollection -> {
-                    if (collectionMedia.isEmpty()) {
+                    if (collectionMedia.isEmpty() || headingValue.isEmpty()) {
                         collectionMedia = sheet.media
+                        headingValue = sheet.title.value
                     }
                     ModalBottomSheetLayout(
                         sheetState = innerModalSheetState,
@@ -222,13 +232,37 @@ fun CollectionScreen(
 
                             ) {
                                 item(span = { GridItemSpan(3) }) {
-                                    Text(
-                                        text = sheet.title.value,
-                                        style = MaterialTheme.typography.h3,
-                                        color = MaterialTheme.colors.secondary,
-                                        modifier = modifier.padding(top = 8.dp, bottom = 6.dp),
-
+                                    if (editTitleMode) {
+                                        TextField(
+                                            value = headingValue,
+                                            onValueChange = { newText ->
+                                                headingValue = newText
+                                            },
+                                            modifier = Modifier
+                                                .padding(top = 8.dp, bottom = 6.dp)
+                                                .clickable {
+                                                    editTitleMode = !editTitleMode
+                                                },
+                                                textStyle = MaterialTheme.typography.h3,
                                         )
+                                    } else {
+                                        if (sheet.title.value != headingValue) {
+                                            submitAction(CollectionAction.RenameCollection(
+                                                oldCollectionName = sheet.title,
+                                                newCollectionName = Title(value = headingValue)
+                                            ))
+                                        }
+                                        Text(
+                                            text = headingValue,
+                                            style = MaterialTheme.typography.h3,
+                                            color = MaterialTheme.colors.secondary,
+                                            modifier = modifier
+                                                .padding(top = 8.dp, bottom = 6.dp)
+                                                .clickable {
+                                                    editTitleMode = !editTitleMode
+                                                },
+                                        )
+                                    }
                                 }
                                 items(collectionMedia) { singleMovie ->
                                     val simple = SimpleMediaItem(
