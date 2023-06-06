@@ -15,32 +15,33 @@ struct MLTabItem: View {
     let onTabClicked: (TabItem) -> Void
     
     var body: some View {
-    
-        Button { onTabClicked(tabItem) } label: {
+
+        GeometryReader { geo in
             
-            GeometryReader { geo in
+            if isSelected {
+                Rectangle()
+                    .foregroundColor(.dialogOrange)
+                    .frame(width: geo.size.width/2, height: 6)
+                .padding(.leading, geo.size.width/4)
                 
-                if isSelected {
-                    Rectangle()
-                        .foregroundColor(.dialogOrange)
-                        .frame(width: geo.size.width/2, height: 6)
-                    .padding(.leading, geo.size.width/4)
-                    
-                }
-                
-                VStack (alignment: .center, spacing: 4){
-                    Image(tabItem.image)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 20, height: 24)
-                       
-                    Text(tabItem.title)
-                        .customFont(.h1)
-                }
-                .frame(width: geo.size.width, height: geo.size.height)
             }
+            
+            VStack (alignment: .center, spacing: 4){
+                Image(tabItem.image)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 20, height: 24)
+                   
+                Text(tabItem.title)
+                    .customFont(.h1)
+                    .foregroundColor(Color.primaryVariant)
+            }
+            .frame(width: geo.size.width, height: geo.size.height)
         }
         .tint(Color.primaryVariant)
+        .onTapGesture {
+            onTabClicked(tabItem)
+        }
         
     }
 }
