@@ -78,12 +78,9 @@ fun CollectionScreen(
     submitAction: (CollectionAction) -> Unit,
     onSearchIconClicked: () -> Unit = {},
     onInfoIconClicked: () -> Unit = {},
-    submitSearchAction: (SearchAction) -> Unit,
+    showCollectionDialogWithMedia: (SimpleMediaItem) -> Unit,
     @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
 ) {
-
-    var showCollectionDialog by remember { mutableStateOf(false) }
-
     var currentBottomSheet by remember { mutableStateOf<BottomSheetScreen?>(null) }
     val coroutineScope = rememberCoroutineScope()
     val modalSheetState = rememberModalBottomSheetState(
@@ -127,49 +124,6 @@ fun CollectionScreen(
         }
     }
 
-    if (showCollectionDialog) {
-        SaveToCollectionScreen(
-            onDismiss = { showCollectionDialog = false },
-            collections = (state as CollectionState.AllCollections).collections
-                .map { it.name to it.contents.map { it.id } }
-                .map {
-                    val selectedMedia =
-                        (currentBottomSheet as? BottomSheetScreen.DetailPreview)?.mediaItem
-                            ?: innerBottomSheet!!
-                    val checked = it.second.contains(selectedMedia.id.toInt())
-                    CollectionItem(it.first.value, checked)
-                },
-            onCollectionItemClicked = { collectionName -> },
-            onAddToCollection = { collectionName ->
-                val selectedMedia =
-                    (currentBottomSheet as? BottomSheetScreen.DetailPreview)?.mediaItem
-                        ?: innerBottomSheet!!
-                submitSearchAction(
-                    SearchAction.AddToCollection(
-                        Title(collectionName),
-                        ID(selectedMedia.id.toInt()),
-                        selectedMedia.mediaType
-                    )
-                )
-            },
-            onRemoveFromCollection = { collectionName ->
-                val selectedMedia =
-                    (currentBottomSheet as? BottomSheetScreen.DetailPreview)?.mediaItem
-                        ?: innerBottomSheet!!
-                submitSearchAction(
-                    SearchAction.RemoveFromCollection(
-                        Title(collectionName),
-                        ID(selectedMedia.id.toInt()),
-                        selectedMedia.mediaType
-                    )
-                )
-            },
-            onSaveList = {
-                submitSearchAction(SearchAction.CreateCollection(Title(it)))
-            }
-        )
-    }
-
     ModalBottomSheetLayout(
         sheetState = modalSheetState,
         sheetShape = RoundedCornerShape(12.dp),
@@ -183,10 +137,7 @@ fun CollectionScreen(
                                 currentBottomSheet = null
                                 coroutineScope.launch { modalSheetState.hide() }
                             },
-                            onMyListClick = {
-                                showCollectionDialog = true
-                            },
-                            modifier = Modifier.blur(radius = if (showCollectionDialog) 10.dp else 0.dp)
+                            onMyListClick = { showCollectionDialogWithMedia(it) },
                         )
                     }
                 }
@@ -209,10 +160,7 @@ fun CollectionScreen(
                                             innerBottomSheet = null
                                             coroutineScope.launch { innerModalSheetState.hide() }
                                         },
-                                        onMyListClick = {
-                                            showCollectionDialog = true
-                                        },
-                                        modifier = Modifier.blur(radius = if (showCollectionDialog) 10.dp else 0.dp)
+                                        onMyListClick = { showCollectionDialogWithMedia(it) },
                                     )
                                 } else {
                                     Text(text = "placeholder")
@@ -486,7 +434,8 @@ private fun CollectionScreenPreview() {
             submitAction = {},
             onSearchIconClicked = {},
             onInfoIconClicked = {},
-            submitSearchAction = {},
+            showCollectionDialogWithMedia = {},
+
         )
     }
 

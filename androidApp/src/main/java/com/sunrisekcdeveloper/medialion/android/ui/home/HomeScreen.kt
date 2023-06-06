@@ -13,6 +13,8 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.sunrisekcdeveloper.medialion.MediaItemUI
+import com.sunrisekcdeveloper.medialion.SimpleMediaItem
 import com.sunrisekcdeveloper.medialion.TitledMedia
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.about.ui.AboutScreen
@@ -20,6 +22,8 @@ import com.sunrisekcdeveloper.medialion.android.ui.collections.CollectionScreen
 import com.sunrisekcdeveloper.medialion.android.ui.components.ui.BottomBar
 import com.sunrisekcdeveloper.medialion.android.ui.components.ui.BottomBarOption
 import com.sunrisekcdeveloper.medialion.android.ui.discovery.DiscoveryScreen
+import com.sunrisekcdeveloper.medialion.android.ui.saveToCollection.ui.CollectionItem
+import com.sunrisekcdeveloper.medialion.android.ui.saveToCollection.ui.SaveToCollectionScreen
 import com.sunrisekcdeveloper.medialion.domain.collection.CollectionAction
 import com.sunrisekcdeveloper.medialion.domain.collection.CollectionState
 import com.sunrisekcdeveloper.medialion.domain.collection.GenreState
@@ -27,6 +31,8 @@ import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryAction
 import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryState
 import com.sunrisekcdeveloper.medialion.domain.entities.CollectionWithMedia
 import com.sunrisekcdeveloper.medialion.domain.search.SearchAction
+import com.sunrisekcdeveloper.medialion.domain.value.ID
+import com.sunrisekcdeveloper.medialion.domain.value.Title
 
 @Composable
 fun HomeScreen(
@@ -42,10 +48,11 @@ fun HomeScreen(
     onSelectedTabChange: (BottomBarOption) -> Unit,
 ) {
     var showAboutDialog by remember { mutableStateOf(false) }
+    var collectionDialogMedia by remember { mutableStateOf<SimpleMediaItem?>(null) }
 
     ConstraintLayout(
         modifier = Modifier
-            .blur(radius = if (showAboutDialog) 10.dp else 0.dp)
+            .blur(radius = if (showAboutDialog || collectionDialogMedia != null) 10.dp else 0.dp)
     ) {
         val (coreContent, bottombar) = createRefs()
 
@@ -66,8 +73,7 @@ fun HomeScreen(
                     submitAction = submitDiscoveryAction,
                     onInfoIconClicked = { showAboutDialog = true },
                     onSearchIconClicked = { onNavigateToSearchScreen() },
-                    collectionState = collectionsState,
-                    submitSearchAction = submitSearchAction,
+                    showCollectionDialogWithMedia = { collectionDialogMedia = it },
                 )
 
                 BottomBarOption.COLLECTION -> CollectionScreen(
@@ -75,7 +81,7 @@ fun HomeScreen(
                     submitAction = submitCollectionAction,
                     onSearchIconClicked = { onNavigateToSearchScreen() },
                     onInfoIconClicked = { showAboutDialog = true },
-                    submitSearchAction = submitSearchAction,
+                    showCollectionDialogWithMedia = { collectionDialogMedia = it },
                 )
             }
         }
@@ -93,6 +99,30 @@ fun HomeScreen(
 
     if (showAboutDialog) {
         AboutScreen(onDismiss = { showAboutDialog = false })
+    }
+
+    val mediaItem = collectionDialogMedia
+    if (mediaItem != null) {
+        SaveToCollectionScreen(
+            onDismiss = { collectionDialogMedia = null },
+            collections = collectionsState
+                .map { it.name to it.contents.map { it.id.value } }
+                .map {
+                    val checked =
+                        it.second.contains(mediaItem.id.toInt())
+                    CollectionItem(it.first.value, checked)
+                },
+            onCollectionItemClicked = { collectionName -> },
+            onAddToCollection = { collectionName ->
+                submitSearchAction(SearchAction.AddToCollection(Title(collectionName), ID(mediaItem.id.toInt()), mediaItem.mediaType))
+            },
+            onRemoveFromCollection = { collectionName ->
+                submitSearchAction(SearchAction.RemoveFromCollection(Title(collectionName), ID(mediaItem.id.toInt()), mediaItem.mediaType))
+            },
+            onSaveList = {
+                submitSearchAction(SearchAction.CreateCollection(Title(it)))
+            }
+        )
     }
 }
 

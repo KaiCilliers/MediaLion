@@ -38,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.sunrisekcdeveloper.medialion.MediaItemUI
 import com.sunrisekcdeveloper.medialion.SimpleMediaItem
 import com.sunrisekcdeveloper.medialion.TitledMedia
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
@@ -66,16 +67,14 @@ fun DiscoveryScreen(
     modifier: Modifier = Modifier,
     state: DiscoveryState,
     genreState: GenreState,
-    collectionState: List<CollectionWithMedia>,
-    submitSearchAction: (SearchAction) -> Unit,
     submitAction: (DiscoveryAction) -> Unit,
     onSearchIconClicked: () -> Unit = {},
     onInfoIconClicked: () -> Unit = {},
+    showCollectionDialogWithMedia: (SimpleMediaItem) -> Unit,
 ) {
 
     var contentFilter by remember { mutableStateOf(FilterCategory.All) }
     var showGenreSelectionDialog by remember { mutableStateOf(false) }
-    var showCollectionDialog by remember { mutableStateOf(false) }
 
     var selectedMediaItem by remember { mutableStateOf<SimpleMediaItem?>(null) }
     val coroutineScope = rememberCoroutineScope()
@@ -105,51 +104,24 @@ fun DiscoveryScreen(
         }
     }
 
-    if (showCollectionDialog) {
-        SaveToCollectionScreen(
-            onDismiss = { showCollectionDialog = false },
-            collections = collectionState
-                .map { it.name to it.contents.map { it.id.value } }
-                .map {
-                    val selectedMedia = selectedMediaItem
-                    val checked = if (selectedMedia != null) {
-                        it.second.contains(selectedMedia.id.toInt())
-                    } else false
-                    CollectionItem(it.first.value, checked)
-                },
-            onCollectionItemClicked = { collectionName -> },
-            onAddToCollection = { collectionName ->
-                val selectedMedia = selectedMediaItem
-                if (selectedMedia != null) {
-                    submitSearchAction(SearchAction.AddToCollection(Title(collectionName), ID(selectedMedia.id.toInt()), selectedMedia.mediaType))
-                }
-            },
-            onRemoveFromCollection = { collectionName ->
-                val selectedMedia = selectedMediaItem
-                if (selectedMedia != null) {
-                    submitSearchAction(SearchAction.RemoveFromCollection(Title(collectionName), ID(selectedMedia.id.toInt()), selectedMedia.mediaType))
-                }
-            },
-            onSaveList = {
-                submitSearchAction(SearchAction.CreateCollection(Title(it)))
-            }
-        )
-    }
-
     ModalBottomSheetLayout(
         sheetState = modalSheetState,
         sheetShape = RoundedCornerShape(12.dp),
         sheetContent = {
             Surface {
                 DetailPreviewScreen(
-                    mediaItem = selectedMediaItem ?: SimpleMediaItem("", "", "", "", "", MediaType.MOVIE),
+                    mediaItem = selectedMediaItem ?: SimpleMediaItem(
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        MediaType.MOVIE
+                    ),
                     onCloseClick = {
                         selectedMediaItem = null; coroutineScope.launch { modalSheetState.hide() }
                     },
-                    onMyListClick = {
-                        showCollectionDialog = true
-                                    },
-                    modifier = Modifier.blur(radius = if (showCollectionDialog) 10.dp else 0.dp)
+                    onMyListClick = { showCollectionDialogWithMedia(it) },
                 )
             }
         }
@@ -184,7 +156,6 @@ fun DiscoveryScreen(
                     MLTopBar(
                         onSearchIconClicked = {
                             onSearchIconClicked()
-                            showCollectionDialog = false
                             selectedMediaItem = null
                             coroutineScope.launch { modalSheetState.hide() }
                         },
@@ -197,9 +168,24 @@ fun DiscoveryScreen(
                             if (contentFilter != it || contentFilter == FilterCategory.CATEGORIES) {
                                 contentFilter = it
                                 when (it) {
-                                    FilterCategory.All -> submitAction(DiscoveryAction.FetchContent(0))
-                                    FilterCategory.MOVIES -> submitAction(DiscoveryAction.FetchContent(1))
-                                    FilterCategory.SERIES -> submitAction(DiscoveryAction.FetchContent(2))
+                                    FilterCategory.All -> submitAction(
+                                        DiscoveryAction.FetchContent(
+                                            0
+                                        )
+                                    )
+
+                                    FilterCategory.MOVIES -> submitAction(
+                                        DiscoveryAction.FetchContent(
+                                            1
+                                        )
+                                    )
+
+                                    FilterCategory.SERIES -> submitAction(
+                                        DiscoveryAction.FetchContent(
+                                            2
+                                        )
+                                    )
+
                                     FilterCategory.CATEGORIES -> {
                                         showGenreSelectionDialog = true
                                     }
@@ -302,9 +288,7 @@ private fun DiscoveryScreenPreview() {
             onSearchIconClicked = {},
             onInfoIconClicked = {},
             genreState = GenreState.Genres(listOf()),
-            collectionState = listOf(),
-            submitSearchAction = {},
-
+            showCollectionDialogWithMedia = {},
         )
     }
 
