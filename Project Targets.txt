@@ -6,6 +6,8 @@
     - compose list state knowledge - https://medium.com/mobile-app-development-publication/setup-a-self-modifiable-list-of-data-in-jetpack-compose-2057c1ae6109
     - theme management - https://levelup.gitconnected.com/theme-management-with-datastore-in-jetpack-compose-c10c043ab276
     - usecase structure - https://www.techyourchance.com/how-to-use-case-interactor-kotlin/
+    - Viewmodel testing - https://betterprogramming.pub/how-to-make-unit-tests-for-viewmodel-easier-to-write-and-maintain-a7efd74cc4db
+    - common pitfalls - https://blog.kotlin-academy.com/most-common-android-problems-android-pitfalls-d7f3e11dabff
 
 1. https://medium.com/mobile-app-development-publication/3-things-ive-stop-doing-manually-as-an-android-developer-c783c726181f
     - Dependabot for updating dependencies. Also creates PRs and runs your CI (tests)
@@ -42,9 +44,11 @@
 11. https://medium.com/@helmersebastian/clean-sharedpreferences-in-android-using-kotlin-delegation-ffabffd26990
     - shared preferences delegation
     - Multiplatform variant - https://blog.protein.tech/kotlin-multiplatform-the-ultimate-guide-to-key-value-storage-ded5cc17cd42
+    - firebase analytics variant - https://itnext.io/avoid-rewriting-your-app-with-dependency-inversion-dfe525075f28
 
 12. https://betterprogramming.pub/jetpack-compose-with-lifecycle-aware-composables-7bd5d6793e0
     - lifecyleaware composables & viewmodels Android
+    - more -> https://betterprogramming.pub/empowered-lifecycle-aware-viewmodel-for-android-f495de9a8170
 
 13. https://proandroiddev.com/kotlin-flow-the-easy-way-to-deal-with-local-and-remote-data-fbcbc67eb7a5
     - handling local & remote data
@@ -57,6 +61,9 @@
 
 16. https://stackoverflow.com/questions/24018758/when-should-i-use-deinit
     - Potentially useful IOS deinit to clear viewmodel reference
+
+17. https://medium.com/google-developer-experts/avoid-backing-properties-for-livedata-and-stateflow-706006c9867e
+    - remove backing fields by using interfaces
 
 X. Miscellaneous
     - Project structure
