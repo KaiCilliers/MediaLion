@@ -1,0 +1,64 @@
+0. To Read
+    - Releasing often benefits - https://betterprogramming.pub/software-release-early-release-often-is-really-good-b4acb017e79
+    - Create User Stories & Epics - https://medium.com/@kaijohan428/list/product-mangement-b1d0ad204710
+    - RC refreshers - https://medium.com/@kaijohan428/list/recyclerview-14f7d6d25090
+    - Android Flavours -  https://proandroiddev.com/advanced-android-flavors-part-1-building-white-label-apps-on-android-ade16af23bcf
+    - compose list state knowledge - https://medium.com/mobile-app-development-publication/setup-a-self-modifiable-list-of-data-in-jetpack-compose-2057c1ae6109
+    - theme management - https://levelup.gitconnected.com/theme-management-with-datastore-in-jetpack-compose-c10c043ab276
+    - usecase structure - https://www.techyourchance.com/how-to-use-case-interactor-kotlin/
+
+1. https://medium.com/mobile-app-development-publication/3-things-ive-stop-doing-manually-as-an-android-developer-c783c726181f
+    - Dependabot for updating dependencies. Also creates PRs and runs your CI (tests)
+    - automated release pipeline
+    - Github Actions KMM - https://engineering.premise.com/kotlin-multiplatforrm-github-actions-workflow-3e5e0fcb7081
+
+2. https://medium.com/mobile-app-development-publication/kotlin-automatic-code-style-formatting-75cc078c6b06
+    - Code formatting automation Ktlint
+
+3. https://medium.com/tech-takeaways/how-to-safely-collect-flows-lifecycle-aware-in-jetpack-compose-a-new-approach-ed20ead25be9
+    - safely collect flows in lifecycle aware
+
+4. https://blog.canopas.com/keyboard-handling-in-jetpack-compose-all-you-need-to-know-3e6fddd30d9a
+    - compose keyboard handling
+
+5. https://proandroiddev.com/activity-alias-in-android-manifest-174622a3f2dc
+    - activity alias to avoid shortcut loss
+
+6. https://proandroiddev.com/top-put-your-number-kotlin-utils-we-use-all-over-in-the-project-c3a8c8b87cb7
+    - Extension functions on Result class
+
+7. https://gist.github.com/gpeal/2666c668c9e02e3064e87bcd0557e070
+    - Logging delegate for easier tags in log messages
+
+8. https://barros9.medium.com/how-to-keep-your-certificates-and-api-keys-secrets-on-android-ebc5fde4b106
+    - safely store api keys & secrets
+    - CI Github Actions' Secrets
+9. https://medium.com/@kaijohan428/list/monitization-73a770cdc62a
+    - app monetization
+
+10. https://medium.com/@ReneeVandervelde/values-not-enums-1223f85c7f7
+    - replace enums with value classes
+
+11. https://medium.com/@helmersebastian/clean-sharedpreferences-in-android-using-kotlin-delegation-ffabffd26990
+    - shared preferences delegation
+    - Multiplatform variant - https://blog.protein.tech/kotlin-multiplatform-the-ultimate-guide-to-key-value-storage-ded5cc17cd42
+
+12. https://betterprogramming.pub/jetpack-compose-with-lifecycle-aware-composables-7bd5d6793e0
+    - lifecyleaware composables & viewmodels Android
+
+13. https://proandroiddev.com/kotlin-flow-the-easy-way-to-deal-with-local-and-remote-data-fbcbc67eb7a5
+    - handling local & remote data
+
+14. https://markonovakovic.medium.com/android-better-internet-connection-monitoring-with-kotlin-flow-feac139e2a3
+    - network status monitor with Flows
+
+15. https://betterprogramming.pub/experience-using-kmp-in-production-apps-for-a-year-2474406d99d4
+    - Kermit improved crash reports for IOS
+
+16. https://stackoverflow.com/questions/24018758/when-should-i-use-deinit
+    - Potentially useful IOS deinit to clear viewmodel reference
+
+X. Miscellaneous
+    - Project structure
+    - buildSrc directory
+
