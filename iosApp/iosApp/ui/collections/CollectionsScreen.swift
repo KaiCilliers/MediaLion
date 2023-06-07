@@ -218,6 +218,20 @@ struct CollectionsScreen: View {
                             }
                     }
                     
+                    if (isEditingCollection) {
+                        Text("Delete Collection")
+                            .foregroundColor(Color.red)
+                            .customFont(.subtitle2)
+                            .padding(.trailing, 16)
+                            .underline()
+                            .padding(.top, 16)
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                            .onTapGesture {
+                                viewModel.submitAction(action: CollectionAction.DeleteCollection(collectionName: newCollectionTitle ?? content.title))
+                                fullScreenGridContent = nil
+                            }
+                    }
+                    
                     LazyVGrid(columns: columns, spacing: 16) {
                         ForEach(content.media, id: \.self) { item in
                             ZStack {
