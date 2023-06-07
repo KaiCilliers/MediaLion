@@ -8,6 +8,7 @@ import com.sunrisekcdeveloper.medialion.domain.search.usecases.FetchCollectionUs
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.RemoveMediaFromCollectionUseCase
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.RenameCollectionUseCase
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.SaveMediaToCollectionUseCase
+import com.sunrisekcdeveloper.medialion.domain.search.usecases.SetupInitialCollectionUseCase
 
 interface CollectionComponent {
 
@@ -19,6 +20,7 @@ interface CollectionComponent {
     val renameCollection: RenameCollectionUseCase
     val fetchAllGenresUseCase: FetchAllGenresUseCase
     val deleteCollectionUseCase: DeleteCollectionUseCase
+    val setupInitialCollections : SetupInitialCollectionUseCase
 
     class Default(
         override val saveMediaToCollection: SaveMediaToCollectionUseCase,
@@ -28,7 +30,8 @@ interface CollectionComponent {
         override val fetchCollection: FetchCollectionUseCase,
         override val renameCollection: RenameCollectionUseCase,
         override val fetchAllGenresUseCase: FetchAllGenresUseCase,
-        override val deleteCollectionUseCase: DeleteCollectionUseCase
+        override val deleteCollectionUseCase: DeleteCollectionUseCase,
+        override val setupInitialCollections: SetupInitialCollectionUseCase,
     ) : CollectionComponent
 
 }

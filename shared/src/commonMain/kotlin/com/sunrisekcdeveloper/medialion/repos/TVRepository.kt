@@ -23,6 +23,7 @@ interface TVRepository {
     fun withGenre(id: ID): Flow<TVShow>
     fun relatedTo(id: ID): Flow<TVShow>
     fun search(query: String): Flow<TVShow>
+    fun popularTV(): Flow<TVShow>
     class Default(
         database: MediaLionDatabase,
         private val client: TMDBClient,
@@ -123,6 +124,36 @@ interface TVRepository {
                     .onFailure {
                         throw Exception(
                             "Unable to fetch TV shows [query=$query, page=$page, totalPages=$totalPages]",
+                            it.cause
+                        )
+                    }
+            } while (page <= totalPages)
+        }
+            .onEach { tvShowQueries.insert(domainToCache.map(it)) }
+            .flowOn(dispatcherProvider.io)
+
+        override fun popularTV(): Flow<TVShow> = flow<TVShow> {
+            var page = 1
+            var totalPages = Int.MAX_VALUE
+            do {
+                client.popularTv(page++)
+                    .onSuccess {
+                        totalPages = it.totalResults
+                        val res = it.results.mapNotNull {
+                            suspendRunReThrowable("Unable to map response to domain model") {
+                                responseToDomain.map(it)
+                            }.also {
+                                if (it.isFailure) {
+                                    println("deadpool - failed to map $it")
+                                    it.exceptionOrNull()?.printStackTrace()
+                                }
+                            }.getOrNull()
+                        }
+                        emitAll(res.asFlow())
+                    }
+                    .onFailure {
+                        throw Exception(
+                            "Unable to fetch popular TV shows [page=$page, totalPages=$totalPages]",
                             it.cause
                         )
                     }

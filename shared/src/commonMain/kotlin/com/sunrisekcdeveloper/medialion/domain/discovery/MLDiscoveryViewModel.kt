@@ -42,6 +42,8 @@ class MLDiscoveryViewModel(
 
     init {
         Napier.base(DebugAntilog())
+        // TODO find better place to setup initial collections
+        viewModelScope.launch { collectionComponent.setupInitialCollections() }
     }
 
     fun submitAction(action: DiscoveryAction) {

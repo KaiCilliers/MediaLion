@@ -13,19 +13,15 @@ import com.sunrisekcdeveloper.medialion.flow.cStateFlow
 import com.sunrisekcdeveloper.medialion.flow.combineTuple
 import com.sunrisekcdeveloper.medialion.mappers.ListMapper
 import com.sunrisekcdeveloper.medialion.mappers.Mapper
-import io.github.aakira.napier.DebugAntilog
-import io.github.aakira.napier.Napier
 import io.github.aakira.napier.log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
@@ -216,10 +212,10 @@ class MLSearchViewModel(
     }
 
     private  fun addToFavorites(mediaId: ID, mediaType: MediaType) = viewModelScope.launch {
-        collectionComponent.saveMediaToCollection(Title("favorite"), mediaId, mediaType)
+        collectionComponent.saveMediaToCollection(Title("Favorites"), mediaId, mediaType)
     }
 
     private fun removeFromFavorites(mediaId: ID, mediaType: MediaType) = viewModelScope.launch {
-        collectionComponent.removeMediaFromCollection(Title("favorite"), mediaId, mediaType)
+        collectionComponent.removeMediaFromCollection(Title("Favorites"), mediaId, mediaType)
     }
 }

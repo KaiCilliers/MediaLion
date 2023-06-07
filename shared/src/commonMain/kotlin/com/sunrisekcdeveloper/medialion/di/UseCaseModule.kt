@@ -16,6 +16,7 @@ import com.sunrisekcdeveloper.medialion.domain.search.usecases.MovieDetailsUseCa
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.MoviesRelatedToUseCase
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.RemoveMediaFromCollectionUseCase
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.RenameCollectionUseCase
+import com.sunrisekcdeveloper.medialion.domain.search.usecases.SetupInitialCollectionUseCase
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.SuggestedMediaUseCase
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.TVDetailsUseCase
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.TVRelatedToUseCase
@@ -41,4 +42,5 @@ val useCaseModule = module {
     factory<RenameCollectionUseCase> { RenameCollectionUseCase.Default(get()) }
     factory<FetchAllGenresUseCase> { FetchAllGenresUseCase.Default(get()) }
     factory<DeleteCollectionUseCase> { DeleteCollectionUseCase.Default(get()) }
+    factory<SetupInitialCollectionUseCase> { SetupInitialCollectionUseCase.Default(get(), get(), get()) }
 }
