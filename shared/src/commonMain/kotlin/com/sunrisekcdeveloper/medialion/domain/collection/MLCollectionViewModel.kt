@@ -56,10 +56,15 @@ class MLCollectionViewModel(
     val state: CStateFlow<CollectionState>
         get() = _state.cStateFlow()
 
-    private val _genres: MutableStateFlow<GenreState> = MutableStateFlow(GenreState.Genres(emptyList()))
+    private val _genres: MutableStateFlow<GenreState> =
+        MutableStateFlow(GenreState.Genres(emptyList()))
     val genres: CStateFlow<GenreState> = _genres
         .onEach { log { "deadpool - got a list of genres $it" } }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000L), GenreState.Genres(emptyList()))
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000L),
+            GenreState.Genres(emptyList())
+        )
         .cStateFlow()
 
     init {
@@ -76,14 +81,20 @@ class MLCollectionViewModel(
         when (action) {
             is CollectionAction.AddToCollection -> {
                 viewModelScope.launch {
-                    collectionComponent.saveMediaToCollection(action.collectionName, action.mediaId, action.mediaType)
+                    collectionComponent.saveMediaToCollection(
+                        action.collectionName,
+                        action.mediaId,
+                        action.mediaType
+                    )
                 }
             }
+
             is CollectionAction.CreateCollection -> {
                 viewModelScope.launch {
                     collectionComponent.createCollection(action.collectionName)
                 }
             }
+
             is CollectionAction.GetMediaDetails -> {
                 viewModelScope.launch {
                     when (action.mediaType) {
@@ -92,15 +103,29 @@ class MLCollectionViewModel(
                     }
                 }
             }
+
             is CollectionAction.RemoveFromCollection -> {
                 viewModelScope.launch {
-                    collectionComponent.removeMediaFromCollection(action.collectionName, action.mediaId, action.mediaType)
+                    collectionComponent.removeMediaFromCollection(
+                        action.collectionName,
+                        action.mediaId,
+                        action.mediaType
+                    )
                 }
             }
 
             is CollectionAction.RenameCollection -> {
                 viewModelScope.launch {
-                    collectionComponent.renameCollection(action.oldCollectionName, action.newCollectionName)
+                    collectionComponent.renameCollection(
+                        action.oldCollectionName,
+                        action.newCollectionName
+                    )
+                }
+            }
+
+            is CollectionAction.DeleteCollection -> {
+                viewModelScope.launch {
+                    collectionComponent.deleteCollectionUseCase(action.collectionName)
                 }
             }
         }
@@ -116,30 +141,40 @@ sealed class CollectionState {
     data class AllCollections(
         val collections: List<CollectionWithMediaUI>
     ) : CollectionState()
+
     object Loading : CollectionState()
     object Empty : CollectionState()
 }
 
 sealed class CollectionAction {
+
     data class GetMediaDetails(
         val mediaId: ID,
         val mediaType: MediaType,
-    ): CollectionAction()
+    ) : CollectionAction()
+
     data class RemoveFromCollection(
         val collectionName: Title,
         val mediaId: ID,
         val mediaType: MediaType,
-    ): CollectionAction()
+    ) : CollectionAction()
+
     data class AddToCollection(
         val collectionName: Title,
         val mediaId: ID,
         val mediaType: MediaType,
-    ): CollectionAction()
+    ) : CollectionAction()
+
     data class CreateCollection(
         val collectionName: Title
     ) : CollectionAction()
+
     data class RenameCollection(
         val oldCollectionName: Title,
         val newCollectionName: Title
+    ) : CollectionAction()
+
+    data class DeleteCollection(
+        val collectionName: Title
     ) : CollectionAction()
 }

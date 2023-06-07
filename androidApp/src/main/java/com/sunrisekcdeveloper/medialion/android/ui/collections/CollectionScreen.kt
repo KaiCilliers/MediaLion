@@ -44,6 +44,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -103,6 +105,8 @@ fun CollectionScreen(
             if (!isVisible) {
                 collectionMedia = emptyList()
                 headingValue = ""
+                editMode = false
+                currentBottomSheet = null
             }
         }
     }
@@ -152,8 +156,8 @@ fun CollectionScreen(
                                         )
                                     }
                                     Text(
-                                        text = headingValue,
-                                        style = MaterialTheme.typography.h3,
+                                        text = headingValue.trim(),
+                                        style = MaterialTheme.typography.subtitle1,
                                         color = MaterialTheme.colors.secondary,
                                         modifier = modifier
                                             .padding(top = 8.dp, bottom = 6.dp)
@@ -163,6 +167,25 @@ fun CollectionScreen(
                                     )
                                 }
                             }
+
+                            if (editMode) {
+                                item(span = { GridItemSpan(3) }) {
+                                    Text(
+                                        text = "Delete Collection",
+                                        style = MaterialTheme.typography.caption,
+                                        color = Color.Red,
+                                        textAlign = TextAlign.End,
+                                        textDecoration = TextDecoration.Underline,
+                                        modifier = modifier
+                                            .padding(top = 8.dp, bottom = 6.dp)
+                                            .clickable {
+                                                submitAction(CollectionAction.DeleteCollection(Title(headingValue)))
+                                                coroutineScope.launch { modalSheetState.hide() }
+                                            },
+                                    )
+                                }
+                            }
+
                             items(collectionMedia) { singleMovie ->
                                 val simple = SimpleMediaItem(
                                     id = singleMovie.id.toString(),

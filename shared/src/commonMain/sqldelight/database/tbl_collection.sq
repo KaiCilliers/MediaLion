@@ -21,3 +21,7 @@ renameCollection:
 UPDATE CollectionCache
 SET name = ?
 WHERE id = ?;
+
+delete:
+DELETE FROM CollectionCache
+WHERE id = ?;

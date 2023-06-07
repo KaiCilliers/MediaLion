@@ -29,3 +29,7 @@ removeFromCollection:
 DELETE FROM xref_tvshow_collection
 WHERE collection_id = ?
 AND tvshow_id = ?;
+
+deleteCollection:
+DELETE FROM xref_tvshow_collection
+WHERE collection_id = ?;

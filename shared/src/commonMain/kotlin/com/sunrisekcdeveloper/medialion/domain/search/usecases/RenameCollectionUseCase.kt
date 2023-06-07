@@ -9,8 +9,7 @@ interface RenameCollectionUseCase {
         private val collectionRepo: CollectionRepository
     ) : RenameCollectionUseCase {
         override suspend fun invoke(oldCollectionName: Title, newCollectionName: Title) {
-            collectionRepo.renameCollection(oldCollectionName, newCollectionName)
+            collectionRepo.renameCollection(oldCollectionName, Title(newCollectionName.value.trim()))
         }
     }
 }
-

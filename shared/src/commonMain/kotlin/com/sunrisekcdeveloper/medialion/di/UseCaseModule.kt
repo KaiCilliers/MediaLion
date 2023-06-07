@@ -5,6 +5,7 @@ import com.sunrisekcdeveloper.medialion.di.MapperNames.movieDomainToUI
 import com.sunrisekcdeveloper.medialion.di.MapperNames.tvDomainToMediaDomain
 import com.sunrisekcdeveloper.medialion.di.MapperNames.tvDomainToUI
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.CreateCollectionUseCase
+import com.sunrisekcdeveloper.medialion.domain.search.usecases.DeleteCollectionUseCase
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.SaveMediaToCollectionUseCase
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.DocumentariesRelatedToUseCase
 import com.sunrisekcdeveloper.medialion.domain.search.usecases.FetchAllCollectionsUseCase
@@ -39,4 +40,5 @@ val useCaseModule = module {
     factory<FetchDiscoveryContent> { FetchDiscoveryContent.Default(get(), get(), ListMapper.Impl(get(named(tvDomainToUI))), ListMapper.Impl(get(named(movieDomainToUI)))) }
     factory<RenameCollectionUseCase> { RenameCollectionUseCase.Default(get()) }
     factory<FetchAllGenresUseCase> { FetchAllGenresUseCase.Default(get()) }
+    factory<DeleteCollectionUseCase> { DeleteCollectionUseCase.Default(get()) }
 }

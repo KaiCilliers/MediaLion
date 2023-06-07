@@ -31,6 +31,7 @@ interface CollectionRepository {
     suspend fun addMediaToCollection(collection: String, mediaItem: MediaItem)
     suspend fun removeMediaFromCollection(collection: String, mediaId: ID, mediaType: MediaType)
     suspend fun renameCollection(oldCollection: Title, newCollection: Title)
+    suspend fun deleteCollection(collection: Title)
 
     class Default(
         private val database: MediaLionDatabase,
@@ -142,6 +143,21 @@ interface CollectionRepository {
                             }
                         }
                     }
+                }
+            }
+        }
+
+        override suspend fun deleteCollection(collection: Title) {
+            withContext(dispatcherProvider.io) {
+                database.transaction {
+                    collectionQueries.findCollection(collection.value)
+                        .executeAsList()
+                        .firstOrNull()
+                        ?.also { dbCollection ->
+                            database.xref_movie_collectionQueries.deleteCollection(dbCollection.id)
+                            database.xref_tvshow_collectionQueries.deleteCollection(dbCollection.id)
+                            collectionQueries.delete(dbCollection.id)
+                        }
                 }
             }
         }
