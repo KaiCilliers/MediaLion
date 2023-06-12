@@ -94,7 +94,7 @@ struct MLCollectionsDialog: View {
                         .foregroundColor(.white)
                         .padding()
                 }
-                .padding(.horizontal, 100)
+                .padding(.horizontal, 50)
                 .padding(.vertical)
             }
             
