@@ -29,6 +29,8 @@ struct CollectionsScreen: View {
     
     @State private var isEditingCollection: Bool = false
     
+    private let staticCollections = ["Popular TV Shows", "Popular Movies", "Favorites"]
+    
     var body: some View {
         ZStack{
             VStack (alignment: .center, spacing: 0){
@@ -214,11 +216,13 @@ struct CollectionsScreen: View {
                             .padding(.top, 16)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .onTapGesture {
-                                editTitleMode = true
+                                if(!staticCollections.contains(newCollectionTitle ?? content.title)) {
+                                    editTitleMode = true
+                                }
                             }
                     }
                     
-                    if (isEditingCollection) {
+                    if (isEditingCollection && !staticCollections.contains(newCollectionTitle ?? content.title)) {
                         Text("Delete Collection")
                             .foregroundColor(Color.red)
                             .customFont(.subtitle2)
