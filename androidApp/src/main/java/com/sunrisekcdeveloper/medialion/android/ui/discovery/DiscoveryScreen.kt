@@ -49,14 +49,14 @@ import com.sunrisekcdeveloper.medialion.domain.value.ID
 fun DiscoveryScreen(
     state: DiscoveryState,
     genreState: GenreState,
+    contentFilter: FilterCategory,
+    onChangeContentFilter: (FilterCategory) -> Unit,
     submitAction: (DiscoveryAction) -> Unit,
     onSearchIconClicked: () -> Unit,
     onInfoIconClicked: () -> Unit,
     showDetailPreviewDialogWithMedia: (SimpleMediaItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
-    var contentFilter by remember { mutableStateOf(FilterCategory.All) }
     var showGenreSelectionDialog by remember { mutableStateOf(false) }
 
     var selectedMediaItem by remember { mutableStateOf<SimpleMediaItem?>(null) }
@@ -116,7 +116,7 @@ fun DiscoveryScreen(
                     selectedFilter = contentFilter,
                     onNewSelection = {
                         if (contentFilter != it || contentFilter == FilterCategory.CATEGORIES) {
-                            contentFilter = it
+                            onChangeContentFilter(it)
                             when (it) {
                                 FilterCategory.All -> submitAction(
                                     DiscoveryAction.FetchContent(
@@ -240,6 +240,8 @@ private fun DiscoveryScreenPreview() {
             onInfoIconClicked = {},
             genreState = GenreState.Genres(listOf()),
             showDetailPreviewDialogWithMedia = {},
+            contentFilter = FilterCategory.All,
+            onChangeContentFilter = {},
         )
     }
 

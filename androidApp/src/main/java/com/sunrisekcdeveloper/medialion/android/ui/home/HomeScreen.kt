@@ -33,6 +33,7 @@ import com.sunrisekcdeveloper.medialion.android.ui.components.ui.BottomBar
 import com.sunrisekcdeveloper.medialion.android.ui.components.ui.BottomBarOption
 import com.sunrisekcdeveloper.medialion.android.ui.detailPreview.ui.DetailPreviewScreen
 import com.sunrisekcdeveloper.medialion.android.ui.discovery.DiscoveryScreen
+import com.sunrisekcdeveloper.medialion.android.ui.discovery.ui.FilterCategory
 import com.sunrisekcdeveloper.medialion.android.ui.saveToCollection.ui.CollectionItem
 import com.sunrisekcdeveloper.medialion.android.ui.saveToCollection.ui.SaveToCollectionScreen
 import com.sunrisekcdeveloper.medialion.domain.collection.CollectionAction
@@ -62,6 +63,7 @@ fun HomeScreen(
     var showAboutDialog by remember { mutableStateOf(false) }
     var collectionDialogMedia by remember { mutableStateOf<SimpleMediaItem?>(null) }
     var detailPreviewDialogMedia by remember { mutableStateOf<SimpleMediaItem?>(null) }
+    var contentFilter by remember { mutableStateOf(FilterCategory.All) }
 
     var currentBottomSheet by remember { mutableStateOf<BottomSheetScreen?>(null) }
     val coroutineScope = rememberCoroutineScope()
@@ -125,7 +127,9 @@ fun HomeScreen(
                         submitAction = submitDiscoveryAction,
                         onInfoIconClicked = { showAboutDialog = true },
                         onSearchIconClicked = { onNavigateToSearchScreen() },
-                        showDetailPreviewDialogWithMedia = { detailPreviewDialogMedia = it }
+                        showDetailPreviewDialogWithMedia = { detailPreviewDialogMedia = it },
+                        contentFilter = contentFilter,
+                        onChangeContentFilter = { contentFilter = it },
                     )
 
                     BottomBarOption.COLLECTION -> CollectionScreen(
