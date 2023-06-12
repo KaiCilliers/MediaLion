@@ -76,7 +76,7 @@ interface SetupInitialCollectionUseCase {
     }
 
     companion object {
-        private val PRE_PACKAGED_COLLECTIONS =
+        val PRE_PACKAGED_COLLECTIONS =
             listOf("Favorites", "Popular Movies", "Popular TV Shows")
     }
 }

@@ -61,6 +61,7 @@ import com.sunrisekcdeveloper.medialion.domain.MediaType
 import com.sunrisekcdeveloper.medialion.domain.collection.CollectionAction
 import com.sunrisekcdeveloper.medialion.domain.collection.CollectionState
 import com.sunrisekcdeveloper.medialion.domain.entities.CollectionWithMediaUI
+import com.sunrisekcdeveloper.medialion.domain.search.usecases.SetupInitialCollectionUseCase
 import com.sunrisekcdeveloper.medialion.domain.value.ID
 import com.sunrisekcdeveloper.medialion.domain.value.Title
 import kotlinx.coroutines.launch
@@ -162,13 +163,15 @@ fun CollectionScreen(
                                         modifier = modifier
                                             .padding(top = 8.dp, bottom = 6.dp)
                                             .clickable {
-                                                editTitleMode = !editTitleMode
+                                                if (!SetupInitialCollectionUseCase.PRE_PACKAGED_COLLECTIONS.contains(headingValue.trim())) {
+                                                    editTitleMode = !editTitleMode
+                                                }
                                             },
                                     )
                                 }
                             }
 
-                            if (editMode) {
+                            if (editMode && !SetupInitialCollectionUseCase.PRE_PACKAGED_COLLECTIONS.contains(headingValue.trim())) {
                                 item(span = { GridItemSpan(3) }) {
                                     Text(
                                         text = "Delete Collection",
