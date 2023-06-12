@@ -115,11 +115,11 @@ class MLDiscoveryViewModel(
     }
 
     private fun addToFavorites(mediaId: ID, mediaType: MediaType) = viewModelScope.launch {
-        collectionComponent.saveMediaToCollection(Title("favorite"), mediaId, mediaType)
+        collectionComponent.saveMediaToCollection(Title("Favorites"), mediaId, mediaType)
     }
 
     private fun removeFromFavorites(mediaId: ID, mediaType: MediaType) = viewModelScope.launch {
-        collectionComponent.removeMediaFromCollection(Title("favorite"), mediaId, mediaType)
+        collectionComponent.removeMediaFromCollection(Title("Favorites"), mediaId, mediaType)
     }
 }
 

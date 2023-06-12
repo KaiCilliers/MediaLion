@@ -46,7 +46,7 @@ class MLSearchViewModel(
     private val viewModelScope = coroutineScope ?: CoroutineScope(Dispatchers.Main.immediate)
 
     private val favoriteMovies: StateFlow<List<MediaItem>> = collectionComponent
-        .fetchCollection(Title("favorite"))
+        .fetchCollection(Title("Favorites"))
         .map { it.contents }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000L), emptyList())
 
