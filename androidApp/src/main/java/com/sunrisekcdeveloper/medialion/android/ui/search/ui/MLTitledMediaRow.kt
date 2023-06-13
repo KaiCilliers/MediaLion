@@ -51,6 +51,16 @@ fun MLTitledMediaRow(
             userScrollEnabled = true
         ) {
 
+            if (media.isEmpty()) {
+                items(1) {
+                    MLMediaPoster(null,
+                        modifier = modifier
+                            // todo replace hardcoded size
+                            .size(height = 143.dp, width = 92.dp)
+                    )
+                }
+            }
+
             items(media) { singleMovie ->
                 MLMediaPoster(   mediaItem = SimpleMediaItem(
                     id = singleMovie.id.toString(),

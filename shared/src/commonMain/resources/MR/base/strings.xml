@@ -29,4 +29,5 @@
     <string name="filter_all">All</string>
     <string name="filter_series">Series</string>
     <string name="filter_categories">Categories</string>
+    <string name="text_placeholder">Placeholder</string>
 </resources>

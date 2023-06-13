@@ -338,31 +338,29 @@ fun CollectionScreen(
                             verticalArrangement = Arrangement.spacedBy(20.dp),
                         ) {
                             items(state.collections) {
-                                if (it.contents.isNotEmpty()) {
-                                    MLTitledMediaRow(
-                                        rowTitle = it.name.value,
-                                        media = it.contents,
-                                        onMediaItemClicked = {
-                                            showDetailPreviewDialogWithMedia(
-                                                SimpleMediaItem(
-                                                    id = it.id.toString(),
-                                                    title = it.title,
-                                                    posterUrl = it.posterUrl,
-                                                    description = it.overview,
-                                                    year = it.releaseYear,
-                                                    mediaType = it.mediaType,
-                                                )
+                                MLTitledMediaRow(
+                                    rowTitle = it.name.value,
+                                    media = it.contents,
+                                    onMediaItemClicked = {
+                                        showDetailPreviewDialogWithMedia(
+                                            SimpleMediaItem(
+                                                id = it.id.toString(),
+                                                title = it.title,
+                                                posterUrl = it.posterUrl,
+                                                description = it.overview,
+                                                year = it.releaseYear,
+                                                mediaType = it.mediaType,
                                             )
-                                        },
-                                        onTitleClicked = {
-                                            currentBottomSheet = BottomSheetScreen.EntireCollection(
-                                                title = it.name,
-                                                media = it.contents
-                                            )
-                                            coroutineScope.launch { modalSheetState.show() }
-                                        }
-                                    )
-                                }
+                                        )
+                                    },
+                                    onTitleClicked = {
+                                        currentBottomSheet = BottomSheetScreen.EntireCollection(
+                                            title = it.name,
+                                            media = it.contents
+                                        )
+                                        coroutineScope.launch { modalSheetState.show() }
+                                    }
+                                )
                             }
                         }
                     }

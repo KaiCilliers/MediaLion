@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,32 +23,37 @@ import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.sunrisekcdeveloper.medialion.SimpleMediaItem
+import com.sunrisekcdeveloper.medialion.StringRes
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.extensions.gradientOrange
 import com.sunrisekcdeveloper.medialion.domain.MediaType
 
 @Composable
 fun MLMediaPoster(
-    mediaItem: SimpleMediaItem,
+    mediaItem: SimpleMediaItem?,
     modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
             .aspectRatio(0.6f)
     ) {
-        PosterPlaceholder(mediaTitle = mediaItem.title)
-        SubcomposeAsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(mediaItem.posterUrl)
-                .crossfade(true)
-                .build(),
-            contentScale = ContentScale.FillHeight,
-            modifier = Modifier
-                .clip(RoundedCornerShape(4.dp)),
-            contentDescription = null,
-            loading = { PosterPlaceholder(mediaTitle = mediaItem.title) },
-            error = { PosterPlaceholder(mediaTitle = mediaItem.title) },
-        )
+        if (mediaItem != null) {
+            PosterPlaceholder(mediaTitle = mediaItem.title)
+            SubcomposeAsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(mediaItem.posterUrl)
+                    .crossfade(true)
+                    .build(),
+                contentScale = ContentScale.FillHeight,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(4.dp)),
+                contentDescription = null,
+                loading = { PosterPlaceholder(mediaTitle = mediaItem.title) },
+                error = { PosterPlaceholder(mediaTitle = mediaItem.title) },
+            )
+        } else {
+            PosterPlaceholder(mediaTitle = stringResource(id = StringRes.textPlaceholder.resourceId))
+        }
     }
 }
 

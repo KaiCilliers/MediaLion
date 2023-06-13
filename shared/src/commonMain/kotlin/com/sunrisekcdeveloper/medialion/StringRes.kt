@@ -1,7 +1,5 @@
 package com.sunrisekcdeveloper.medialion
 
-import com.sunrisekcdeveloper.medialion.SharedRes
-
 object StringRes {
     val emptySearch by lazy { SharedRes.strings.empty_search }
     val topSuggestions by lazy { SharedRes.strings.top_suggestions }
@@ -32,4 +30,5 @@ object StringRes {
     val filterAll by lazy { SharedRes.strings.filter_all }
     val filterSeries by lazy { SharedRes.strings.filter_series }
     val filterCategories by lazy { SharedRes.strings.filter_categories }
+    val textPlaceholder by lazy { SharedRes.strings.text_placeholder }
 }
