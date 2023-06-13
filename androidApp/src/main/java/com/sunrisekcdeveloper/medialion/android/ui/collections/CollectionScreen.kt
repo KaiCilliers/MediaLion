@@ -199,11 +199,13 @@ fun CollectionScreen(
                                     year = singleMovie.releaseYear,
                                 )
                                 Box(
-                                    modifier = Modifier.fillMaxSize()
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
                                 ) {
                                     MLMediaPoster(
                                         mediaItem = simple,
-                                        modifier = Modifier.clickable {
+                                        modifier = Modifier
+                                            .clickable {
                                             showDetailPreviewDialogWithMedia(
                                                 simple
                                             )
@@ -215,8 +217,7 @@ fun CollectionScreen(
                                             contentDescription = "",
                                             colorFilter = ColorFilter.tint(Color.Red),
                                             modifier = modifier
-                                                .padding(bottom = 80.dp, end = 20.dp)
-                                                .size(90.dp)
+                                                .size(60.dp)
                                                 .clickable {
                                                     submitAction(
                                                         CollectionAction.RemoveFromCollection(
