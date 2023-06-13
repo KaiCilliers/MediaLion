@@ -11,7 +11,7 @@
     <string name="related_series">Related Series Titles</string>
     <string name="related_documentaries">Related Documentary Titles</string>
     <string name="about">About</string>
-    <string name="app_description">This App is a media organiser, which allows users to save and store their favorite movies, series and documentaries in custom lists.</string>
+    <string name="app_description">This App is a media organiser, which allows users to save and store their favorite movies, series and documentaries in custom lists. This product uses the TMDB API but is not endorsed or certified by TMDB.</string>
     <string name="about_heading">MediaLion Information</string>
     <string name="app_developers">App Developers:</string>
     <string name="app_developer_names">Kai Cilliers &amp; Nadine Cilliers</string>
