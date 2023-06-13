@@ -69,6 +69,7 @@ struct ContentView: View {
             print("IOS - discovery - disposing viewmodel")
             discoveryViewModel.dispose()
         }
+        .ignoresSafeArea(.keyboard)
     }
     
 }
