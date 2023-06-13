@@ -90,7 +90,7 @@ fun CollectionScreen(
         mutableStateOf(false)
     }
     var collectionMedia by remember {
-        mutableStateOf(emptyList<MediaItemUI>())
+        mutableStateOf<List<MediaItemUI>?>(null)
     }
     var editTitleMode by remember {
         mutableStateOf(false)
@@ -118,7 +118,7 @@ fun CollectionScreen(
         sheetContent = {
             when (val sheet = currentBottomSheet) {
                 is BottomSheetScreen.EntireCollection -> {
-                    if (collectionMedia.isEmpty() || headingValue.isEmpty()) {
+                    if (collectionMedia == null || headingValue.isEmpty()) {
                         collectionMedia = sheet.media
                         headingValue = sheet.title.value
                     }
@@ -189,7 +189,7 @@ fun CollectionScreen(
                                 }
                             }
 
-                            items(collectionMedia) { singleMovie ->
+                            items(collectionMedia ?: emptyList()) { singleMovie ->
                                 val simple = SimpleMediaItem(
                                     id = singleMovie.id.toString(),
                                     title = singleMovie.title,
@@ -225,7 +225,7 @@ fun CollectionScreen(
                                                             mediaType = singleMovie.mediaType,
                                                         )
                                                     )
-                                                    val items = collectionMedia.toMutableList()
+                                                    val items = collectionMedia?.toMutableList() ?: mutableListOf()
                                                     items.removeIf { it.id == singleMovie.id }
                                                     collectionMedia = items
                                                 }
