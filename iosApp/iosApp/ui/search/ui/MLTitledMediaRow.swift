@@ -33,13 +33,18 @@ struct MLTitledMediaRow: View {
             
             ScrollView(.horizontal) {
                 HStack(spacing: 20) {
-                    ForEach(media, id: \.self) { item in
-                        MLMediaPoster(media: item)
+                    if (!media.isEmpty) {
+                        ForEach(media, id: \.self) { item in
+                            MLMediaPoster(media: item)
+                                .frame(width: 100, height: 170)
+                                .onTapGesture {
+                                    onMediaItemClicked(item)
+                                }
+                                
+                        }
+                    } else {
+                        MLMediaPoster(media: nil)
                             .frame(width: 100, height: 170)
-                            .onTapGesture {
-                                onMediaItemClicked(item)
-                            }
-                            
                     }
                 }
             }

@@ -11,20 +11,29 @@ import shared
 
 struct MLMediaPoster: View {
     
-    let media: MediaItemUI
+    let media: MediaItemUI?
     
     var body: some View {
         ZStack {
-            AsyncImage(
-                url: URL(string: media.posterUrl)
-            ) { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            } placeholder: {
+            if (media != nil) {
+                AsyncImage(
+                    url: URL(string: media!.posterUrl)
+                ) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                } placeholder: {
+                    ZStack {
+                        LinearGradient(gradient: Gradient(colors: [.primaryVariant, .mlPrimary]), startPoint: .topTrailing, endPoint: .bottomLeading)
+                        Text(media!.title)
+                            .customFont(.h1)
+                            .foregroundColor(Color.white)
+                    }
+                }
+            } else {
                 ZStack {
                     LinearGradient(gradient: Gradient(colors: [.primaryVariant, .mlPrimary]), startPoint: .topTrailing, endPoint: .bottomLeading)
-                    Text(media.title)
+                    Text(StringRes.textPlaceholder)
                         .customFont(.h1)
                         .foregroundColor(Color.white)
                 }
