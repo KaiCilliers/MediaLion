@@ -8,6 +8,7 @@
 
 import SwiftUI
 import shared
+import CachedAsyncImage
 
 struct MLMediaPoster: View {
     
@@ -16,7 +17,7 @@ struct MLMediaPoster: View {
     var body: some View {
         ZStack {
             if (media != nil) {
-                AsyncImage(
+                CachedAsyncImage(
                     url: URL(string: media!.posterUrl)
                 ) { image in
                     image

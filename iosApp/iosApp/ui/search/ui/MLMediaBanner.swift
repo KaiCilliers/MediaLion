@@ -8,6 +8,7 @@
 
 import SwiftUI
 import shared
+import CachedAsyncImage
 
 struct MLMediaBanner: View {
     
@@ -15,7 +16,7 @@ struct MLMediaBanner: View {
     
     var body: some View {
         ZStack {
-            AsyncImage(
+            CachedAsyncImage(
                 url: URL(string: media.bannerUrl)
             ) { image in
                 image
