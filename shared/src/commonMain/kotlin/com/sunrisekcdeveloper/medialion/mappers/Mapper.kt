@@ -25,12 +25,12 @@ interface Mapper<I, O> {
                 return try {
                     Movie(
                         adult = input.adult ?: false,
-                        backdropPath = ImageURL(value = NetworkConstants.BASE_IMAGE_URL_TMDB + input.backdropPath.orEmpty()),
+                        backdropPath = ImageURL(value = NetworkConstants.BASE_IMAGE_BACKDROP_URL_TMDB + input.backdropPath.orEmpty()),
                         genreIds = input.genreIds?.map { ID(it) } ?: emptyList(),
                         id = ID(value = input.id!!),
                         overview = Overview(value = input.overview.orEmpty()),
                         popularity = Rating(value = input.popularity ?: 0.0),
-                        posterPath = ImageURL(value = NetworkConstants.BASE_IMAGE_URL_TMDB + input.posterPath.orEmpty()),
+                        posterPath = ImageURL(value = NetworkConstants.BASE_IMAGE_POSTER_URL_TMDB + input.posterPath.orEmpty()),
                         releaseDate = Date(value = input.releaseDate.orEmpty()),
                         title = Title(value = input.title ?: input.originalTitle.orEmpty()),
                         voteAverage = Rating(value = input.voteAverage ?: 0.0),
@@ -111,12 +111,12 @@ interface Mapper<I, O> {
                 try {
                     return TVShow(
                         adult = input.adult ?: false,
-                        backdropPath = ImageURL(value = NetworkConstants.BASE_IMAGE_URL_TMDB + input.backdropPath.orEmpty()),
+                        backdropPath = ImageURL(value = NetworkConstants.BASE_IMAGE_BACKDROP_URL_TMDB + input.backdropPath.orEmpty()),
                         genreIds = input.genreIds?.map { ID(it) } ?: emptyList(),
                         id = ID(value = input.id!!),
                         overview = Overview(value = input.overview.orEmpty()),
                         popularity = Rating(value = input.popularity ?: 0.0),
-                        posterPath = ImageURL(value = NetworkConstants.BASE_IMAGE_URL_TMDB + input.posterPath.orEmpty()),
+                        posterPath = ImageURL(value = NetworkConstants.BASE_IMAGE_POSTER_URL_TMDB + input.posterPath.orEmpty()),
                         name = Title(value = input.name ?: input.originalName.orEmpty()),
                         voteAverage = Rating(value = input.voteAverage ?: 0.0),
                         voteCount = input.voteCount ?: 0,
