@@ -1,0 +1,12 @@
+//
+//  Development.xcconfig
+//  iosApp
+//
+//  Created by Nadine Cilliers on 24/06/2023.
+//  Copyright © 2023 orgName. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+APP_NAME = MediaLion (Dev)
+APP_BUNDLE_ID = com.sunrisekcdeveloper.medialion.debug

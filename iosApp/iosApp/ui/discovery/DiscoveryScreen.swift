@@ -38,6 +38,9 @@ struct DiscoveryScreen: View {
                     Image("logoIcon")
                         .resizable()
                         .frame(width: 100, height: 80)
+                        .onTapGesture {
+                            fatalError("Test Crash debug")
+                        }
                     Spacer()
                     
                     Button {
