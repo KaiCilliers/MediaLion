@@ -16,6 +16,17 @@ android {
         versionCode = 10
         versionName = "0.1.0"
     }
+
+    signingConfigs {
+        signingConfigs.create("release")
+        getByName("release") {
+            storeFile = file("/Users/nadinecilliers/kaisigningkey")
+            storePassword = "password"
+            keyAlias = "key0"
+            keyPassword = "password"
+        }
+    }
+
     buildFeatures {
         compose = true
     }
@@ -29,10 +40,13 @@ android {
     }
     buildTypes {
         getByName("debug") {
+            isDebuggable = true
             applicationIdSuffix = ".debug"
+            versionNameSuffix = " (Dev)"
         }
         getByName("release") {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
