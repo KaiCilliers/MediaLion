@@ -43,10 +43,12 @@ android {
             isDebuggable = true
             applicationIdSuffix = ".debug"
             versionNameSuffix = " (Dev)"
+            manifestPlaceholders["appName"] = "Dev-MediaLion"
         }
         getByName("release") {
             isMinifyEnabled = false
             signingConfig = signingConfigs.getByName("release")
+            manifestPlaceholders["appName"] = "MediaLion"
         }
     }
     compileOptions {

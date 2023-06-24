@@ -8,5 +8,5 @@
 
 // Configuration settings file format documentation can be found at:
 // https://help.apple.com/xcode/#/dev745c5c974
-APP_NAME = MediaLion (Dev)
+APP_NAME = Dev-MediaLion
 APP_BUNDLE_ID = com.sunrisekcdeveloper.medialion.debug

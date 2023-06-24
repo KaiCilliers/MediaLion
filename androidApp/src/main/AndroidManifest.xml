@@ -8,7 +8,7 @@
         android:name=".app.MediaLionApp"
         android:allowBackup="false"
         android:supportsRtl="true"
-        android:label="MediaLion"
+        android:label="${appName}"
         android:icon="@mipmap/ml_launcher"
         android:theme="@style/AppTheme">
         <activity
