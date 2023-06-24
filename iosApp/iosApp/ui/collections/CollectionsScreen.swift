@@ -175,6 +175,7 @@ struct CollectionsScreen: View {
             showCollectionDialogInner = false
             editTitleMode = false
             isEditingCollection = false
+            newCollectionTitle = nil
         }) { content in
             let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
             
