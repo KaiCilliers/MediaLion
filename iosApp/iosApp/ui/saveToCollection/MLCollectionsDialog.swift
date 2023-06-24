@@ -65,8 +65,8 @@ struct MLCollectionsDialog: View {
                     if !newCollectionName.isEmpty {
                         Button(
                             action: {
-                                onCreateNewCollection(self.newCollectionName)
-                                onAddToCollection(self.newCollectionName)
+                                onCreateNewCollection(self.newCollectionName.trimmingCharacters(in: .whitespacesAndNewlines))
+                                onAddToCollection(self.newCollectionName.trimmingCharacters(in: .whitespacesAndNewlines))
                                 self.newCollectionName = ""
                             },
                             label: {

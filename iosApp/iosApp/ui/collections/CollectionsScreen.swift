@@ -197,7 +197,7 @@ struct CollectionsScreen: View {
                                 if(newCollectionTitle == nil) {
                                     newCollectionTitle = content.title
                                 }
-                                viewModel.submitAction(action: CollectionAction.RenameCollection(oldCollectionName: content.title, newCollectionName: newCollectionTitle ?? ""))
+                                viewModel.submitAction(action: CollectionAction.RenameCollection(oldCollectionName: content.title, newCollectionName: newCollectionTitle?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""))
                                 editTitleMode = false
                             }
                         )
