@@ -58,7 +58,9 @@ fun HomeScreen(
     submitCollectionAction: (CollectionAction) -> Unit,
     onNavigateToSearchScreen: () -> Unit,
     selectedTab: BottomBarOption,
+    selectedTopTab: FilterCategory,
     onSelectedTabChange: (BottomBarOption) -> Unit,
+    onSelectedTopTabChange: (FilterCategory) -> Unit,
 ) {
     var showAboutDialog by remember { mutableStateOf(false) }
     var collectionDialogMedia by remember { mutableStateOf<SimpleMediaItem?>(null) }
@@ -128,8 +130,8 @@ fun HomeScreen(
                         onInfoIconClicked = { showAboutDialog = true },
                         onSearchIconClicked = { onNavigateToSearchScreen() },
                         showDetailPreviewDialogWithMedia = { detailPreviewDialogMedia = it },
-                        contentFilter = contentFilter,
-                        onChangeContentFilter = { contentFilter = it },
+                        contentFilter = selectedTopTab,
+                        onChangeContentFilter = { onSelectedTopTabChange(it) },
                     )
 
                     BottomBarOption.COLLECTION -> CollectionScreen(
@@ -216,7 +218,9 @@ fun HomeScreenPreview() {
                 collectionState = CollectionState.Empty,
                 submitCollectionAction = {},
                 selectedTab = BottomBarOption.DISCOVERY,
-                onSelectedTabChange = {}
+                onSelectedTabChange = {},
+                onSelectedTopTabChange = {},
+                selectedTopTab = FilterCategory.All
             )
         }
     }

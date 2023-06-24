@@ -47,6 +47,7 @@ class HomeFragment : Fragment() {
                         val collectionState by searchViewModel.collectionState.collectAsState()
                         val otherCollectionState by collectionViewModel.state.collectAsState()
                         val selectedTab by homeViewModel.currentTab.collectAsState()
+                        val selectedDiscoveryTopTab by homeViewModel.currentTopTab.collectAsState()
 
                         HomeScreen(
                             discoveryState = discoveryState,
@@ -58,7 +59,9 @@ class HomeFragment : Fragment() {
                             collectionState = otherCollectionState,
                             submitCollectionAction = { collectionViewModel.submitAction(it) },
                             selectedTab = selectedTab,
-                            onSelectedTabChange = { homeViewModel.setCurrentTab(it) }
+                            selectedTopTab = selectedDiscoveryTopTab,
+                            onSelectedTabChange = { homeViewModel.setCurrentTab(it) },
+                            onSelectedTopTabChange = { homeViewModel.setTopTab(it) }
                         )
                     }
                 }
