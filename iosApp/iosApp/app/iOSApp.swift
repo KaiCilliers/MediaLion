@@ -5,8 +5,18 @@ import Firebase
 class AppDelegate: NSObject, UIApplicationDelegate {
   func application(_ application: UIApplication,
                    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-    FirebaseApp.configure()
-    return true
+      var filePath:String!
+            #if DEBUG
+                print("[FIREBASE] Development mode.")
+                filePath = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist", inDirectory: "debug")
+            #else
+                print("[FIREBASE] Production mode.")
+                filePath = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist", inDirectory: "release")
+            #endif
+
+            let options = FirebaseOptions.init(contentsOfFile: filePath)!
+            FirebaseApp.configure(options: options)
+          return true
   }
 }
 
