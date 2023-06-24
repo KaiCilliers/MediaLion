@@ -19,7 +19,14 @@ struct MLAboutDialog: View {
             VStack{
                 Text(StringRes.about)
                     .customFont(.subtitle1)
-                    .padding()
+                    .padding(.horizontal)
+                    .padding(.bottom, 4)
+                    .foregroundColor(.textBlack)
+                
+                Text(StringRes.aboutVersionText)
+                    .customFont(.subtitle2)
+                    .padding(.horizontal)
+                    .padding(.bottom, 4)
                     .foregroundColor(.textBlack)
                 
                 Text(StringRes.aboutHeading)
@@ -55,8 +62,6 @@ struct MLAboutDialog: View {
                     .customFont(.body2)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(.textBlack)
-            
-                
             }
            
             .padding()

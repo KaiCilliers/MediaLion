@@ -42,4 +42,5 @@ extension StringRes {
     static let filterSeries = StringRes().filterSeries.desc().localized()
     static let filterCategories = StringRes().filterCategories.desc().localized()
     static let textPlaceholder = StringRes().textPlaceholder.desc().localized()
+    static let aboutVersionText = StringRes().aboutVersionText.desc().localized()
 }

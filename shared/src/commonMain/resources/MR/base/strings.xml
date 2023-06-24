@@ -30,4 +30,5 @@
     <string name="filter_series">Series</string>
     <string name="filter_categories">Categories</string>
     <string name="text_placeholder">Placeholder</string>
+    <string name="about_version">App Version: 0.1.0</string>
 </resources>

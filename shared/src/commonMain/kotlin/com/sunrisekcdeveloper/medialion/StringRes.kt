@@ -31,4 +31,5 @@ object StringRes {
     val filterSeries by lazy { SharedRes.strings.filter_series }
     val filterCategories by lazy { SharedRes.strings.filter_categories }
     val textPlaceholder by lazy { SharedRes.strings.text_placeholder }
+    val aboutVersionText by lazy { SharedRes.strings.about_version }
 }

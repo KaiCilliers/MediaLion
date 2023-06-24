@@ -31,7 +31,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.sunrisekcdeveloper.medialion.StringRes
 import com.sunrisekcdeveloper.medialion.android.R
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import kotlinx.coroutines.delay
@@ -63,8 +62,7 @@ fun AboutScreen(
 
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 15.dp),
+                        .fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.Top
                 ) {
@@ -86,6 +84,16 @@ fun AboutScreen(
                             }
                             .size(30.dp)
                     )
+                }
+                Row {
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text(
+                        text = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.about_version),
+                        modifier = Modifier.padding(bottom = 10.dp),
+                        style = MaterialTheme.typography.subtitle2,
+                        color = MaterialTheme.colors.secondaryVariant,
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
                 }
                 Text(
                     text = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.about_heading),
