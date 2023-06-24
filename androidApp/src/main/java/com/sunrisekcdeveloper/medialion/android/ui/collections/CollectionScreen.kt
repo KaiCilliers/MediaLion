@@ -163,7 +163,10 @@ fun CollectionScreen(
                                         modifier = modifier
                                             .padding(top = 8.dp, bottom = 6.dp)
                                             .clickable {
-                                                if (!SetupInitialCollectionUseCase.PRE_PACKAGED_COLLECTIONS.contains(headingValue.trim())) {
+                                                if (!SetupInitialCollectionUseCase.PRE_PACKAGED_COLLECTIONS.contains(
+                                                        headingValue.trim()
+                                                    )
+                                                ) {
                                                     editTitleMode = !editTitleMode
                                                 }
                                             },
@@ -182,7 +185,13 @@ fun CollectionScreen(
                                         modifier = modifier
                                             .padding(top = 8.dp, bottom = 6.dp)
                                             .clickable {
-                                                submitAction(CollectionAction.DeleteCollection(Title(headingValue)))
+                                                submitAction(
+                                                    CollectionAction.DeleteCollection(
+                                                        Title(
+                                                            headingValue
+                                                        )
+                                                    )
+                                                )
                                                 coroutineScope.launch { modalSheetState.hide() }
                                             },
                                     )
@@ -226,7 +235,8 @@ fun CollectionScreen(
                                                             mediaType = singleMovie.mediaType,
                                                         )
                                                     )
-                                                    val items = collectionMedia?.toMutableList() ?: mutableListOf()
+                                                    val items = collectionMedia?.toMutableList()
+                                                        ?: mutableListOf()
                                                     items.removeIf { it.id == singleMovie.id }
                                                     collectionMedia = items
                                                 }
@@ -367,7 +377,7 @@ fun CollectionScreen(
                     }
 
                     CollectionState.Empty -> {
-                        Text(text = "Empty Collections")
+                        MLProgress()
                     }
 
                     CollectionState.Loading -> {

@@ -62,7 +62,7 @@ struct CollectionsScreen: View {
                         switch(viewModel.state) {
                             
                         case let emptyState as CollectionState.Empty:
-                            Text("empty")
+                            LoadingScreen()
                             
                         case let loadingState as CollectionState.Loading:
                             LoadingScreen()
