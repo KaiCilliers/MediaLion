@@ -3,6 +3,7 @@ import shared
 
 struct ContentView: View {
     
+    @State var fetchInitialContentFlag: Bool = true
     @State var selectedTab: MLTabDestinations = .discovery
     @State var showAboutDialog: Bool = false
     @StateObject private var discoveryViewModel = DiscoveryViewModel()
@@ -63,7 +64,10 @@ struct ContentView: View {
         .onAppear {
             print("IOS - discovery - starting to observe viewmodel")
             discoveryViewModel.observe()
-            discoveryViewModel.submitAction(action: DiscoveryAction.FetchContent(mediaType: nil))
+            if (fetchInitialContentFlag) {
+                discoveryViewModel.submitAction(action: DiscoveryAction.FetchContent(mediaType: nil))
+                fetchInitialContentFlag = false
+            }
         }
         .onDisappear {
             print("IOS - discovery - disposing viewmodel")
