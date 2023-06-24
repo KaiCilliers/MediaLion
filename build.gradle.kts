@@ -5,6 +5,8 @@ plugins {
     kotlin("android").version("1.8.10").apply(false)
     kotlin("multiplatform").version("1.8.10").apply(false)
     id("dev.icerock.mobile.multiplatform-resources").version("0.21.1")
+    id("com.google.gms.google-services").version("4.3.15").apply(false)
+    id("com.google.firebase.crashlytics").version("2.9.6").apply(false)
 }
 
 tasks.register("clean", Delete::class) {
