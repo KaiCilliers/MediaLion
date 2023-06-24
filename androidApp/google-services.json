@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "411476423111",
+    "project_id": "medialion-debug",
+    "storage_bucket": "medialion-debug.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:411476423111:android:5d953ee73188727cd6a9e2",
+        "android_client_info": {
+          "package_name": "com.sunrisekcdeveloper.medialion.android.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "411476423111-fnprfk5pf2ufl2kkuja61d8clo65aqtp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sunrisekcdeveloper.medialion.android.debug",
+            "certificate_hash": "3d7f0eecb10bc2a7b9085a318af13bc14c621dea"
+          }
+        },
+        {
+          "client_id": "411476423111-j61gus0vc0q55tj36keutej0uqtitrqq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqQoynj1C3qGtYqMcM8Tmc-jAii9PhPsc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "411476423111-j61gus0vc0q55tj36keutej0uqtitrqq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
