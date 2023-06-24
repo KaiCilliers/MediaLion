@@ -63,7 +63,7 @@ struct ContentView: View {
         .onAppear {
             print("IOS - discovery - starting to observe viewmodel")
             discoveryViewModel.observe()
-            discoveryViewModel.submitAction(action: DiscoveryAction.FetchContent(mediaType: 0))
+            discoveryViewModel.submitAction(action: DiscoveryAction.FetchContent(mediaType: nil))
         }
         .onDisappear {
             print("IOS - discovery - disposing viewmodel")

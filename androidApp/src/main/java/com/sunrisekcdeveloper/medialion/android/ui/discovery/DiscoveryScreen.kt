@@ -40,6 +40,7 @@ import com.sunrisekcdeveloper.medialion.android.ui.discovery.ui.MLFilterCategori
 import com.sunrisekcdeveloper.medialion.android.ui.discovery.ui.MLTopBar
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLMediaPoster
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLTitledMediaRow
+import com.sunrisekcdeveloper.medialion.domain.MediaType
 import com.sunrisekcdeveloper.medialion.domain.collection.GenreState
 import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryAction
 import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryState
@@ -119,21 +120,15 @@ fun DiscoveryScreen(
                             onChangeContentFilter(it)
                             when (it) {
                                 FilterCategory.All -> submitAction(
-                                    DiscoveryAction.FetchContent(
-                                        0
-                                    )
+                                    DiscoveryAction.FetchContent(null)
                                 )
 
                                 FilterCategory.MOVIES -> submitAction(
-                                    DiscoveryAction.FetchContent(
-                                        1
-                                    )
+                                    DiscoveryAction.FetchContent(MediaType.MOVIE)
                                 )
 
                                 FilterCategory.SERIES -> submitAction(
-                                    DiscoveryAction.FetchContent(
-                                        2
-                                    )
+                                    DiscoveryAction.FetchContent(MediaType.TV)
                                 )
 
                                 FilterCategory.CATEGORIES -> {

@@ -56,13 +56,13 @@ struct DiscoveryScreen: View {
                     switch (filter){
                     case .all:
                         showGenreDialog = false
-                        viewModel.submitAction(action: DiscoveryAction.FetchContent(mediaType: 0))
+                        viewModel.submitAction(action: DiscoveryAction.FetchContent(mediaType: nil))
                     case .movies:
                         showGenreDialog = false
-                        viewModel.submitAction(action: DiscoveryAction.FetchContent(mediaType: 1))
+                        viewModel.submitAction(action: DiscoveryAction.FetchContent(mediaType: MediaType.movie))
                     case .series:
                         showGenreDialog = false
-                        viewModel.submitAction(action: DiscoveryAction.FetchContent(mediaType: 2))
+                        viewModel.submitAction(action: DiscoveryAction.FetchContent(mediaType: MediaType.tv))
                     case .categories:
                         print("leka joshua - \(showGenreDialog)")
                         showGenreDialog = true

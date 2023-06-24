@@ -1,12 +1,12 @@
 package com.sunrisekcdeveloper.medialion.android.ui.search
 
 import com.sunrisekcdeveloper.medialion.di.MapperNames
+import com.sunrisekcdeveloper.medialion.di.MapperNames.mediaDomainToUI
 import com.sunrisekcdeveloper.medialion.domain.collection.MLCollectionViewModel
 import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryAction
 import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryState
 import com.sunrisekcdeveloper.medialion.domain.discovery.MLDiscoveryViewModel
 import com.sunrisekcdeveloper.medialion.domain.entities.CollectionWithMedia
-import com.sunrisekcdeveloper.medialion.di.MapperNames.mediaDomainToUI
 import com.sunrisekcdeveloper.medialion.domain.search.CollectionComponent
 import com.sunrisekcdeveloper.medialion.domain.search.MLSearchViewModel
 import com.sunrisekcdeveloper.medialion.domain.search.SearchAction
@@ -19,7 +19,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.component.inject
@@ -79,7 +78,7 @@ class DiscoveryViewModel(
     }
 
     init {
-        submitAction(DiscoveryAction.FetchContent(0))
+        submitAction(DiscoveryAction.FetchContent(null))
     }
 
     val state: StateFlow<DiscoveryState> = sharedViewModel.state
