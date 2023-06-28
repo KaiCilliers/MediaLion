@@ -192,6 +192,7 @@ fun CollectionScreen(
                                                         )
                                                     )
                                                 )
+                                                editMode = false
                                                 coroutineScope.launch { modalSheetState.hide() }
                                             },
                                     )
