@@ -284,8 +284,7 @@ fun CollectionScreen(
 
         ConstraintLayout(
             modifier = modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
+                .fillMaxSize()
         ) {
 
             val (containerTop, content) = createRefs()
@@ -294,12 +293,10 @@ fun CollectionScreen(
                 modifier = modifier
                     .background(MaterialTheme.colors.background)
                     .padding(horizontal = 16.dp)
-                    .padding(top = 100.dp) // hacky fix
                     .constrainAs(containerTop) {
                         top.linkTo(parent.top)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
-                        bottom.linkTo(content.top)
                         width = Dimension.fillToConstraints
                     }
             ) {
@@ -335,18 +332,23 @@ fun CollectionScreen(
 
             Column(
                 modifier = Modifier
+                    .fillMaxHeight()
+                    .background(MaterialTheme.colors.background)
                     .constrainAs(content) {
                         top.linkTo(containerTop.bottom)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                         bottom.linkTo(parent.bottom)
+                        height = Dimension.fillToConstraints
                     }
-                    .padding(bottom = 150.dp) // hacky fix
             ) {
                 when (state) {
                     is CollectionState.AllCollections -> {
                         LazyColumn(
                             verticalArrangement = Arrangement.spacedBy(20.dp),
+                            modifier = Modifier
+                                .background(MaterialTheme.colors.background)
+                                .padding(bottom = 20.dp)
                         ) {
                             items(state.collections) {
                                 MLTitledMediaRow(

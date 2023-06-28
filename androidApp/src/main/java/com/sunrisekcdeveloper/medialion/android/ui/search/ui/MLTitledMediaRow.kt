@@ -40,7 +40,7 @@ fun MLTitledMediaRow(
                 style = MaterialTheme.typography.h3,
                 color = MaterialTheme.colors.secondary,
                 modifier = modifier
-                    .padding(bottom = 20.dp, top = 6.dp)
+                    .padding(bottom = 20.dp, top = 6.dp, start = 6.dp)
                     .clickable { onTitleClicked() }
             )
         LazyRow(
