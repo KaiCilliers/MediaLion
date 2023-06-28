@@ -29,7 +29,7 @@ struct CollectionsScreen: View {
     
     @State private var isEditingCollection: Bool = false
     
-    private let staticCollections = ["Popular TV Shows", "Popular Movies", "Favorites"]
+    private let staticCollections = ["Favorites"]
     
     var body: some View {
         ZStack{
