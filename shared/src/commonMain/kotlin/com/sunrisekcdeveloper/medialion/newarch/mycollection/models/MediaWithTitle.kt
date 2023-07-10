@@ -1,3 +1,0 @@
-package com.sunrisekcdeveloper.medialion.newarch.mycollection.models
-
-interface MediaWithTitle
