@@ -14,9 +14,6 @@ interface AddUpdateCollectionUseCase {
         override suspend fun invoke(collection: CollectionNew): Result<Unit, AddUpdateCollectionError> {
             return collectionRepository.upsert(collection)
                 .mapError { FailedToAddCollection }
-                .also {
-                    println("result is $it")
-                }
         }
     }
 }

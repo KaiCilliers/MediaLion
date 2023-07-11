@@ -7,12 +7,35 @@ interface CollectionNew {
     fun title(): Title
     fun rename(newTitle: Title): CollectionNew
     fun identifier(): ID
+    fun add(item: SingleMediaItem)
+    fun media(): List<SingleMediaItem>
+    fun remove(item: SingleMediaItem)
 
     data class Def(
         private val id: ID,
-        private var title: Title
+        private var title: Title,
+        private var media: List<SingleMediaItem>,
     ) : CollectionNew {
-        constructor(name: String) : this(ID.Def(), Title(name))
+        constructor(name: String) : this(ID.Def(), Title(name), emptyList())
+        constructor(name: String, media: List<SingleMediaItem>) : this(ID.Def(), Title(name), media)
+
+        override fun remove(item: SingleMediaItem) {
+            media.toMutableList().run {
+                remove(item)
+                media = this
+            }
+        }
+
+        override fun add(item: SingleMediaItem) {
+            media.toMutableList().run {
+                add(item)
+                media = this
+            }
+        }
+
+        override fun media(): List<SingleMediaItem> {
+            return media
+        }
 
         override fun asMediaWithTitle(): MediaWithTitle {
             return MediaWithTitle.Def(title)

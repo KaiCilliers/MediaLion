@@ -30,7 +30,6 @@ interface CollectionRepositoryNew {
         private var cache: Set<CollectionNew> = mutableSetOf(CollectionNew.Def("Favorite"))
             set(value) {
                 cacheFlow.update { Ok(value) }
-                println("updated cache --> $value")
                 field = value
             }
 
@@ -51,7 +50,6 @@ interface CollectionRepositoryNew {
 
         override suspend fun observe(): Flow<Result<List<CollectionNew>, LocalCacheError>> {
             return exceptionsFlow.combine(cacheFlow) { throwFailure, result ->
-                println("observing state $throwFailure, $result")
                 if (throwFailure) {
                     Err(DatabaseAccessError)
                 } else result.map { it.toList() }
@@ -81,10 +79,8 @@ interface CollectionRepositoryNew {
                 cache.toMutableSet().run {
                     remove(collection)
                     add(collection)
-                    println("new collection $this")
                     cache = this
                 }
-                println("done adding $cache")
             }
                 .map { Unit }
                 .mapError { DatabaseAccessError }

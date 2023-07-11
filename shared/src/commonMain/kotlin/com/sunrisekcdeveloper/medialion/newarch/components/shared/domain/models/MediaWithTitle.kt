@@ -16,6 +16,3 @@ interface MediaWithTitle {
     }
 }
 
-interface SingleMediaItem {
-    class Def() : SingleMediaItem
-}

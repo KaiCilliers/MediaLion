@@ -5,6 +5,7 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import com.sunrisekcdeveloper.medialion.domain.value.Title
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.CollectionNew
+import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.SingleMediaItem
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.repos.CollectionRepositoryNew
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -58,5 +59,38 @@ class AddUpdateCollectionUseCaseTest {
 
         assertThat(savedCollection).isNotNull()
         assertThat(savedCollection).isEqualTo(collection)
+    }
+
+    @Test
+    fun `any updates to a collection's media content should be saved when collection already exists`() = runTest {
+        val media = listOf(
+            SingleMediaItem.Def("Movie #1"),
+            SingleMediaItem.Def("Movie #2"),
+            SingleMediaItem.Def("Movie #3"),
+        )
+
+        val collection: CollectionNew = CollectionNew.Def(
+            name = "Xmas movies",
+            media = listOf(media.first())
+        )
+        useCase(collection)
+
+
+        collection.add(media[1])
+        collection.add(media[2])
+        useCase(collection)
+
+        val (savedCollection, _) = collectionRepository.collection(Title("Xmas movies"))
+
+        assertThat(savedCollection).isNotNull()
+        assertThat(savedCollection!!.media().size).isEqualTo(3)
+
+        collection.remove(media[1])
+        useCase(collection)
+
+        val (savedCollection2, _) = collectionRepository.collection(Title("Xmas movies"))
+
+        assertThat(savedCollection2).isNotNull()
+        assertThat(savedCollection2!!.media().size).isEqualTo(2)
     }
 }
