@@ -1,8 +1,21 @@
 package com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models
 
-import kotlin.jvm.JvmInline
+import com.sunrisekcdeveloper.medialion.domain.value.Title
 
 interface TitledMediaList {
-    @JvmInline
-    value class Def(private val value: List<MediaWithTitle>) : TitledMediaList
+
+    fun collectionNames(): List<Title>
+    fun clearMedia()
+
+  class Def(private var content: List<MediaWithTitle>) : TitledMediaList {
+        constructor(singleItem: MediaWithTitle) : this(listOf(singleItem))
+
+        override fun collectionNames(): List<Title> {
+            return content.map { it.title() }
+        }
+
+        override fun clearMedia() {
+            content = emptyList()
+        }
+    }
 }
