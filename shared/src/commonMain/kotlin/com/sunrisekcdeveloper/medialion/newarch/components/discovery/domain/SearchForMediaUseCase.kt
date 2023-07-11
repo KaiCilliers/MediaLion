@@ -22,5 +22,5 @@ interface SearchForMediaUseCase {
     }
 }
 
-interface SearchForMediaError
+sealed interface SearchForMediaError
 object NoMediaFound : SearchForMediaError

@@ -3,7 +3,7 @@ package com.sunrisekcdeveloper.medialion.newarch.features.mycollection
 import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isInstanceOf
-import com.sunrisekcdeveloper.medialion.newarch.components.collections.domain.FetchMyCollectionsUseCaseNew
+import com.sunrisekcdeveloper.medialion.newarch.components.collections.domain.FetchAllCollectionsUseCaseNew
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -20,14 +20,14 @@ class MLMyCollectionViewModelTest {
 
 
     private lateinit var sut: MLMyCollectionViewModelNew
-    private lateinit var fetchMyCollectionsUseCase: FetchMyCollectionsUseCaseNew.Fake
+    private lateinit var fetchMyCollectionsUseCase: FetchAllCollectionsUseCaseNew.Fake
 
     private val scope = TestScope()
 
     @BeforeTest
     fun setup() {
         Dispatchers.setMain(StandardTestDispatcher(scope.testScheduler))
-        fetchMyCollectionsUseCase = FetchMyCollectionsUseCaseNew.Fake()
+        fetchMyCollectionsUseCase = FetchAllCollectionsUseCaseNew.Fake()
         sut = MLMyCollectionViewModelNew.Default(
             fetchMyCollectionsUseCase = fetchMyCollectionsUseCase,
             coroutineScope = scope,

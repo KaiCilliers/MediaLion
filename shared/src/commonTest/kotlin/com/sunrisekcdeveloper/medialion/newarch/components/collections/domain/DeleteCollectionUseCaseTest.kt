@@ -1,0 +1,63 @@
+package com.sunrisekcdeveloper.medialion.newarch.components.collections.domain
+
+import assertk.assertThat
+import assertk.assertions.isInstanceOf
+import assertk.assertions.isNull
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.sunrisekcdeveloper.medialion.domain.value.Title
+import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.CollectionNew
+import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.repos.CollectionRepositoryNew
+import io.ktor.util.reflect.instanceOf
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+
+@OptIn(ExperimentalCoroutinesApi::class)
+class DeleteCollectionUseCaseTest {
+
+    private lateinit var deleteCollectionUseCase: DeleteCollectionUseCaseNew
+    private lateinit var collectionRepository: CollectionRepositoryNew.Fake
+
+    @BeforeTest
+    fun setup() {
+        collectionRepository = CollectionRepositoryNew.Fake()
+        deleteCollectionUseCase = DeleteCollectionUseCaseNew.Def(
+            collectionRepository = collectionRepository
+        )
+    }
+
+    @Test
+    fun `return success when a collection was successfully deleted`() = runTest {
+        val newCollection = CollectionNew.Def("Holiday Specials")
+        collectionRepository.upsert(newCollection)
+        val (success, _) = deleteCollectionUseCase(newCollection)
+
+        assertThat(success).instanceOf(Ok::class)
+        assertThat(collectionRepository.collection(Title("Holiday Specials"))).isInstanceOf(Err::class)
+    }
+
+    @Test
+    fun `return failure when there is no matching collection to delete`() = runTest {
+        val newCollection = CollectionNew.Def("Holiday Specials")
+        val (_, failure) = deleteCollectionUseCase(newCollection)
+
+        assertThat(failure).instanceOf(CollectionDoesNotExist::class)
+        assertThat(collectionRepository.collection(Title("Holiday Specials"))).isInstanceOf(Err::class)
+    }
+
+    @Test
+    fun `return failure when an unexpected error occurs when trying to delete a collection`() = runTest {
+        val newCollection = CollectionNew.Def("Holiday Specials")
+        collectionRepository.upsert(newCollection)
+
+        collectionRepository.forceFailure = true
+        val (success, failure) = deleteCollectionUseCase(newCollection)
+
+        println("$failure")
+        assertThat(success).isNull()
+        assertThat(failure).instanceOf(FailedToDeleteCollection::class)
+        assertThat(collectionRepository.collection(Title("Holiday Specials"))).isInstanceOf(Ok::class)
+    }
+}
