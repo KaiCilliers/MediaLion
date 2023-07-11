@@ -55,7 +55,6 @@ class DeleteCollectionUseCaseTest {
         collectionRepository.forceFailure = true
         val (success, failure) = deleteCollectionUseCase(newCollection)
 
-        println("$failure")
         assertThat(success).isNull()
         assertThat(failure).instanceOf(FailedToDeleteCollection::class)
         assertThat(collectionRepository.collection(Title("Holiday Specials"))).isInstanceOf(Ok::class)
