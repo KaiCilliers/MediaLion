@@ -52,7 +52,7 @@ class FetchSuggestedMediaUseCaseTest {
     @Test
     fun `media retrieved should not contain any media found in user's collections`() = runTest {
         val mediaItems = (0..100)
-            .map { SingleMediaItem.Def("Item #$it") }
+            .map { SingleMediaItem.Movie("Item #$it") }
         collectionRepository.upsert(
             CollectionNew.Def("Watch Later").apply {
                 add(mediaItems[2])

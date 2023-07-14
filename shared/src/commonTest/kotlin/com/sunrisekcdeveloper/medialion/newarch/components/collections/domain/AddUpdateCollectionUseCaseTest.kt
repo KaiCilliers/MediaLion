@@ -64,9 +64,9 @@ class AddUpdateCollectionUseCaseTest {
     @Test
     fun `any updates to a collection's media content should be saved when collection already exists`() = runTest {
         val media = listOf(
-            SingleMediaItem.Def("Movie #1"),
-            SingleMediaItem.Def("Movie #2"),
-            SingleMediaItem.Def("Movie #3"),
+            SingleMediaItem.Movie("Movie #1"),
+            SingleMediaItem.Movie("Movie #2"),
+            SingleMediaItem.Movie("Movie #3"),
         )
 
         val collection: CollectionNew = CollectionNew.Def(

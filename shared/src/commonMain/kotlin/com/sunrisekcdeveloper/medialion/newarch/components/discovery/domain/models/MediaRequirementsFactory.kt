@@ -11,8 +11,8 @@ interface MediaRequirementsFactory {
         override fun fromSearchQuery(query: SearchQuery): MediaRequirements {
             return MediaRequirements(
                 withTitle = Title(value = "Search Results"),
-                mediaType = listOf(MediaTypeNew.All),
-                categories = listOf(),
+                withMediaTypes = listOf(MediaTypeNew.All),
+                withCategories = listOf(),
                 withText = query.toString()
             )
         }
@@ -20,8 +20,8 @@ interface MediaRequirementsFactory {
         override fun fromCategory(category: MediaCategory): MediaRequirements {
             return MediaRequirements(
                 withTitle = Title(value = ""),
-                mediaType = category.appliesToTypes(),
-                categories = listOf(),
+                withMediaTypes = category.appliesToTypes(),
+                withCategories = listOf(),
                 withText = ""
             )
         }
@@ -29,8 +29,8 @@ interface MediaRequirementsFactory {
         override fun suggestedMediaRequirements(): MediaRequirements {
             return MediaRequirements(
                 withTitle = Title(value = "Suggested Media"),
-                mediaType = listOf(MediaTypeNew.All),
-                categories = listOf(),
+                withMediaTypes = listOf(MediaTypeNew.All),
+                withCategories = listOf(),
                 withText = ""
             )
         }
@@ -44,8 +44,8 @@ interface MediaRequirementsFactory {
             if (forceFailure) throw Exception("Forced Failure")
             return MediaRequirements(
                 withTitle = Title(value = "Search Results"),
-                mediaType = listOf(MediaTypeNew.All),
-                categories = listOf(),
+                withMediaTypes = listOf(MediaTypeNew.All),
+                withCategories = listOf(),
                 withText = query.toString()
             )
         }
@@ -54,8 +54,8 @@ interface MediaRequirementsFactory {
             if (forceFailure) throw Exception("Forced Failure")
             return MediaRequirements(
                 withTitle = Title(value = ""),
-                mediaType = category.appliesToTypes(),
-                categories = listOf(),
+                withMediaTypes = category.appliesToTypes(),
+                withCategories = listOf(),
                 withText = ""
             )
         }
@@ -64,8 +64,8 @@ interface MediaRequirementsFactory {
             if (forceFailure) throw Exception("Forced Failure")
             return MediaRequirements(
                 withTitle = Title(value = "Suggested Media"),
-                mediaType = listOf(MediaTypeNew.All),
-                categories = listOf(),
+                withMediaTypes = listOf(MediaTypeNew.All),
+                withCategories = listOf(),
                 withText = ""
             )
         }

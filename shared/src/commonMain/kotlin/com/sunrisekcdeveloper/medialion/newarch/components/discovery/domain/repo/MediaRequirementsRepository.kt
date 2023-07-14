@@ -26,8 +26,8 @@ interface MediaRequirementsRepository {
             return categories.map {
                 MediaRequirements(
                     withTitle = Title(value = it.name()),
-                    mediaType = listOf(MediaTypeNew.All),
-                    categories = listOf(it),
+                    withMediaTypes = listOf(MediaTypeNew.All),
+                    withCategories = listOf(it),
                     withText = ""
                 )
             }
@@ -38,8 +38,8 @@ interface MediaRequirementsRepository {
             return categories.map {
                 MediaRequirements(
                     withTitle = Title(value = it.name()),
-                    mediaType = listOf(MediaTypeNew.All),
-                    categories = listOf(it),
+                    withMediaTypes = listOf(MediaTypeNew.All),
+                    withCategories = listOf(it),
                     withText = ""
                 )
             }
@@ -50,8 +50,8 @@ interface MediaRequirementsRepository {
             return categories.map {
                 MediaRequirements(
                     withTitle = Title(value = it.name()),
-                    mediaType = listOf(MediaTypeNew.All),
-                    categories = listOf(it),
+                    withMediaTypes = listOf(MediaTypeNew.All),
+                    withCategories = listOf(it),
                     withText = ""
                 )
             }
@@ -109,8 +109,8 @@ interface MediaRequirementsRepository {
         private fun createRequirementsFor(mediaType: MediaTypeNew, withCategories: List<MediaCategory>): List<MediaRequirements> {
             return withCategories.map {
                 MediaRequirements(
-                    mediaType = listOf(mediaType),
-                    categories = listOf(it),
+                    withMediaTypes = listOf(mediaType),
+                    withCategories = listOf(it),
                     withText = "",
                     withTitle = Title("Title")
                 )

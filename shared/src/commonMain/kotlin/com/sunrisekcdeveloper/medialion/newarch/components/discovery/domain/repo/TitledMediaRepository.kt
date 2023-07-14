@@ -24,7 +24,9 @@ interface TitledMediaRepository {
         private var media: Flow<SingleMediaItem> = flow {
             var counter = 0
             while (true) {
-                emit(SingleMediaItem.Def("Item #${++counter}"))
+                if (counter % 5 == 0)
+                    emit(SingleMediaItem.TVShow("Item #${++counter}"))
+                else emit(SingleMediaItem.Movie("Item #${++counter}"))
             }
         }
 
@@ -37,8 +39,8 @@ interface TitledMediaRepository {
             return MediaWithTitle.Def(
                 title = mediaReq.withTitle,
                 content = media
-                    .filterNot { mediaReq.mediaIdsToExclude.contains(it.identifier()) }
-                    .take(mediaReq.amountOfItems)
+                    .filterNot { mediaReq.withoutMedia.contains(it.identifier()) }
+                    .take(mediaReq.amountOfMedia)
                     .toList()
             )
         }

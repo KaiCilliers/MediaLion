@@ -27,7 +27,7 @@ interface FetchSuggestedMediaUseCase {
                     .getOr(emptyList())
                     .flatMap { it.media() }
                     .map { it.identifier() }
-                val titledMedia = titledMediaRepository.withRequirement(requirements.copy(mediaIdsToExclude = excludedIds))
+                val titledMedia = titledMediaRepository.withRequirement(requirements.copy(withoutMedia = excludedIds))
                 titledMedia
             }
                 .mapError {Exception(it).printStack()
