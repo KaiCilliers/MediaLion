@@ -7,7 +7,6 @@ import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.mode
 import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.models.MediaRequirementsFactory
 import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.repo.TitledMediaRepository
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.MediaWithTitle
-import io.ktor.utils.io.printStack
 
 interface FetchMediaWithCategoryUseCase {
     suspend operator fun invoke(category: MediaCategory): Result<MediaWithTitle, FetchMediaWithCategoryError>
@@ -21,8 +20,7 @@ interface FetchMediaWithCategoryUseCase {
                 val mediaRequirements = mediaRequirementsFactory.fromCategory(category)
                 titledMediaRepo.withRequirement(mediaRequirements)
             }
-                .mapError {Exception(it).printStack()
-                    FetchMediaWithCategoryFailure }
+                .mapError { FetchMediaWithCategoryFailure }
         }
     }
 }

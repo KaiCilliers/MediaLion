@@ -8,7 +8,6 @@ import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.mode
 import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.repo.TitledMediaRepository
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.MediaWithTitle
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.repos.CollectionRepositoryNew
-import io.ktor.utils.io.printStack
 
 interface FetchSuggestedMediaUseCase {
     suspend operator fun invoke(): Result<MediaWithTitle, FetchSuggestedMediaError>
@@ -30,8 +29,7 @@ interface FetchSuggestedMediaUseCase {
                 val titledMedia = titledMediaRepository.withRequirement(requirements.copy(withoutMedia = excludedIds))
                 titledMedia
             }
-                .mapError {Exception(it).printStack()
-                    FailedToFetchFeatureMedia }
+                .mapError { FailedToFetchFeatureMedia }
         }
     }
 }

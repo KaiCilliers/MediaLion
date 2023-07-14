@@ -9,7 +9,6 @@ import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.repo
 import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.repo.TitledMediaRepository
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.MediaWithTitle
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.TitledMediaList
-import io.ktor.utils.io.printStack
 
 interface FetchDiscoveryContentUseCase {
     suspend operator fun invoke(page: DiscoveryPage): Result<TitledMediaList, FetchDiscoveryContentError>
@@ -26,9 +25,7 @@ interface FetchDiscoveryContentUseCase {
                     titledMedia
                 }
                 TitledMediaList.Def(allMedia)
-            }.mapError {
-                println(Exception(it).printStack())
-                FailureToFetchDiscContent }
+            }.mapError { FailureToFetchDiscContent }
         }
     }
 }
