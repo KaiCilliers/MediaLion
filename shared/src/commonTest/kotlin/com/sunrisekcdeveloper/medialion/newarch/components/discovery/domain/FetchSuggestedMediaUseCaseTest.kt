@@ -8,9 +8,12 @@ import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.get
 import com.github.michaelbull.result.getError
+import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.models.MediaRequirementsFactory
+import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.repo.TitledMediaRepository
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.CollectionNew
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.SingleMediaItem
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.repos.CollectionRepositoryNew
+import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.repos.SingleMediaItemRepository
 import io.ktor.util.reflect.instanceOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -22,15 +25,18 @@ class FetchSuggestedMediaUseCaseTest {
 
     private lateinit var fetchSuggestedMediaUseCase: FetchSuggestedMediaUseCase
     private lateinit var collectionRepository: CollectionRepositoryNew.Fake
-    private lateinit var singleMediaItemRepository: SingleMediaItemRepository.Fake
+    private lateinit var mediaRequirementsFactory: MediaRequirementsFactory.Fake
+    private lateinit var titledMediaRepository: TitledMediaRepository.Fake
 
     @BeforeTest
     fun setup() {
+        mediaRequirementsFactory = MediaRequirementsFactory.Fake()
         collectionRepository = CollectionRepositoryNew.Fake()
-        singleMediaItemRepository = SingleMediaItemRepository.Fake()
+        titledMediaRepository = TitledMediaRepository.Fake()
         fetchSuggestedMediaUseCase = FetchSuggestedMediaUseCase.Def(
-            singleMediaItemRepository = singleMediaItemRepository,
             collectionRepository = collectionRepository,
+            mediaRequirementsFactory = mediaRequirementsFactory,
+            titledMediaRepository = titledMediaRepository
         )
     }
 
@@ -55,7 +61,7 @@ class FetchSuggestedMediaUseCaseTest {
             }
         )
 
-        singleMediaItemRepository.providePoolOfMedia(mediaItems)
+        titledMediaRepository.providePoolOfMedia(mediaItems)
 
         val (success, _) = fetchSuggestedMediaUseCase()
 
@@ -73,7 +79,7 @@ class FetchSuggestedMediaUseCaseTest {
     @Test
     fun `return a failure when an exception occurs when invoked`() = runTest {
         collectionRepository.forceFailure = false
-        singleMediaItemRepository.forceFailure = true
+        titledMediaRepository.forceFailure = true
 
         val result = fetchSuggestedMediaUseCase()
         assertThat(result.getError()).isNotNull()

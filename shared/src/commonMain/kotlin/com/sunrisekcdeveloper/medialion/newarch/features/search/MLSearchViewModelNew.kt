@@ -4,8 +4,10 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
 import com.sunrisekcdeveloper.medialion.flow.CStateFlow
 import com.sunrisekcdeveloper.medialion.flow.cStateFlow
+import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.Failure
 import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.NoMediaFound
 import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.SearchForMediaUseCase
+import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.SearchQueryNotReady
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,6 +45,8 @@ interface MLSearchViewModelNew {
                                 .onFailure {  error ->
                                     when (error) {
                                         NoMediaFound -> _screenState.update { SearchUIState.NoResults }
+                                        is Failure -> TODO()
+                                        SearchQueryNotReady -> TODO()
                                     }
                                 }
                         }

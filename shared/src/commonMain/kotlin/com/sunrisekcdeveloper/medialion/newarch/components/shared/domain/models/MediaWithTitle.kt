@@ -19,5 +19,13 @@ interface MediaWithTitle {
             return content
         }
     }
+
+    data class LimitedMediaSizeWithTitle(
+        private val origin: MediaWithTitle
+    ) : MediaWithTitle by origin {
+        init {
+            require(origin.media().size == 32)
+        }
+    }
 }
 

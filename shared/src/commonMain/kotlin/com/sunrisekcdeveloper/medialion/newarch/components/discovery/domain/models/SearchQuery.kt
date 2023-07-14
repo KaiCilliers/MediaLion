@@ -38,5 +38,9 @@ interface SearchQuery {
             millisSinceLastUpdate = clock.now() - lastUpdateTimeStamp
             lastUpdateTimeStamp = clock.now()
         }
+
+        override fun toString(): String {
+            return value
+        }
     }
 }
