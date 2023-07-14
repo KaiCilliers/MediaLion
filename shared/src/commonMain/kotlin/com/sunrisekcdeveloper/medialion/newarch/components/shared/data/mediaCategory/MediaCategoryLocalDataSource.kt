@@ -1,0 +1,43 @@
+package com.sunrisekcdeveloper.medialion.newarch.components.shared.data.mediaCategory
+
+import com.sunrisekcdeveloper.medialion.newarch.components.shared.utils.infiniteFlowOf
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.toList
+import kotlin.properties.Delegates
+
+interface MediaCategoryLocalDataSource {
+    suspend fun all(): List<MediaCategoryEntityDto>
+    suspend fun add(item: MediaCategoryEntityDto)
+
+    class Fake : MediaCategoryLocalDataSource {
+
+        private val categoriesSource: Flow<MediaCategoryEntityDto> = infiniteFlowOf {
+            MediaCategoryEntityDto(it)
+        }
+
+        private val categoriesAdded: MutableList<MediaCategoryEntityDto> = mutableListOf(
+            MediaCategoryEntityDto(1),
+            MediaCategoryEntityDto(1),
+            MediaCategoryEntityDto(2),
+            MediaCategoryEntityDto(2),
+        )
+
+        var clearCache by Delegates.observable(false)  { _, _, newValue ->
+            if (newValue.equals(true)) {
+                categoriesAdded.clear()
+            }
+        }
+        var forceFailure = false
+
+        override suspend fun all(): List<MediaCategoryEntityDto> {
+            if (forceFailure) throw Exception("Forced a failure")
+            return categoriesAdded + if (!clearCache) categoriesSource.take(14).toList() else listOf()
+        }
+
+        override suspend fun add(item: MediaCategoryEntityDto) {
+            if (forceFailure) throw Exception("Forced a failure")
+            categoriesAdded.add(item)
+        }
+    }
+}

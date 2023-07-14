@@ -34,7 +34,7 @@ class FetchMediaWithCategoryUseCaseTest {
 
     @Test
     fun `when invoked return success with a list of media`() = runTest {
-        val (success, _) = fetchMediaWithCategoryUseCase(mediaCategoryRepository.getRandom(1).first())
+        val (success, _) = fetchMediaWithCategoryUseCase(mediaCategoryRepository.getRandomOrAll(1).first())
 
         assertThat(success).isNotNull()
         assertThat(success).instanceOf(Ok::class)
@@ -43,7 +43,7 @@ class FetchMediaWithCategoryUseCaseTest {
     @Test
     fun `when an exception occurs when creating a requirements object return a failure object`() = runTest {
         mediaRequirementsFactory.forceFailure = true
-        val (_, failure) = fetchMediaWithCategoryUseCase(mediaCategoryRepository.getRandom(1).first())
+        val (_, failure) = fetchMediaWithCategoryUseCase(mediaCategoryRepository.getRandomOrAll(1).first())
 
         assertThat(failure).isNotNull()
         assertThat(failure).instanceOf(Err::class)
@@ -52,7 +52,7 @@ class FetchMediaWithCategoryUseCaseTest {
     @Test
     fun `when an exception occurs when fetching titled media object return a failure object`() = runTest {
         titledMediaRepository.forceFailure = true
-        val (_, failure) = fetchMediaWithCategoryUseCase(mediaCategoryRepository.getRandom(1).first())
+        val (_, failure) = fetchMediaWithCategoryUseCase(mediaCategoryRepository.getRandomOrAll(1).first())
 
         assertThat(failure).isNotNull()
         assertThat(failure).instanceOf(Err::class)

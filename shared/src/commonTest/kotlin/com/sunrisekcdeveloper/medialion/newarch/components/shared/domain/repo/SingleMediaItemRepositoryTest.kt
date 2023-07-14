@@ -5,8 +5,8 @@ import assertk.assertions.isEqualTo
 import com.sunrisekcdeveloper.medialion.domain.value.Title
 import com.sunrisekcdeveloper.medialion.mappers.Mapper
 import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.models.MediaRequirements
-import com.sunrisekcdeveloper.medialion.newarch.components.shared.data.SingleMediaNetworkDTO
-import com.sunrisekcdeveloper.medialion.newarch.components.shared.data.SingleMediaRemoteDataSource
+import com.sunrisekcdeveloper.medialion.newarch.components.shared.data.singleMedia.SingleMediaNetworkDto
+import com.sunrisekcdeveloper.medialion.newarch.components.shared.data.singleMedia.SingleMediaRemoteDataSource
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.SingleMediaItem
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.repos.SingleMediaItemRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -35,8 +35,8 @@ class SingleMediaItemRepositoryTest {
         remoteDataSource = SingleMediaRemoteDataSource.Fake()
         singleMediaItemRepository = SingleMediaItemRepository.D(
             remoteDataSource = remoteDataSource,
-            dtoMapper = object : Mapper<SingleMediaNetworkDTO, SingleMediaItem> {
-                override fun map(input: SingleMediaNetworkDTO): SingleMediaItem {
+            dtoMapper = object : Mapper<SingleMediaNetworkDto, SingleMediaItem> {
+                override fun map(input: SingleMediaNetworkDto): SingleMediaItem {
                     return SingleMediaItem.Movie(name = input.placeholder.toString())
                 }
             }

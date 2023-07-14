@@ -1,5 +1,7 @@
 package com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.repo
 
+import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.runCatching
 import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.models.MediaRequirements
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.MediaWithTitle
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.SingleMediaItem
@@ -10,13 +12,19 @@ import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
+import org.koin.ext.getFullName
 
 interface TitledMediaRepository {
     suspend fun withRequirement(mediaReq: MediaRequirements): MediaWithTitle
 
     class D(
-        private val singleMediaRepo: SingleMediaItemRepository
-    )
+        private val singleMediaItemRepository: SingleMediaItemRepository
+    ) : TitledMediaRepository {
+        override suspend fun withRequirement(mediaReq: MediaRequirements): MediaWithTitle = runCatching {
+            val media = singleMediaItemRepository.media(mediaReq)
+            MediaWithTitle.Def(mediaReq.withTitle, media)
+        }.getOrElse { throw Exception("Failed to create ${MediaWithTitle.Def::class.getFullName()}", it) }
+    }
 
     class Fake : TitledMediaRepository {
         var forceFailure = false

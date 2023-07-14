@@ -13,16 +13,16 @@ interface MediaRequirementsRepository {
         private val mediaCategoryRepository: MediaCategoryRepository
     ) : MediaRequirementsRepository {
 
-        override suspend fun getForPage(page: DiscoveryPage): List<MediaRequirements> {
+        override suspend fun getForPage(page: DiscoveryPage): List<MediaRequirements> = runCatching {
             return when (page) {
                 DiscoveryPage.All -> allPageRequirements()
                 DiscoveryPage.Movies -> moviePageRequirements()
                 DiscoveryPage.TVShows -> tvShowPageRequirements()
             }
-        }
+        }.getOrElse { throw Exception("Failed to get media requirements for discovery page $page", it) }
 
         private suspend fun allPageRequirements(): List<MediaRequirements> {
-            val categories: List<MediaCategory> = mediaCategoryRepository.getRandom(amount = 6)
+            val categories: List<MediaCategory> = mediaCategoryRepository.getRandomOrAll(amount = 6)
             return categories.map {
                 MediaRequirements(
                     withTitle = Title(value = it.name()),
@@ -34,7 +34,7 @@ interface MediaRequirementsRepository {
         }
 
         private suspend fun moviePageRequirements(): List<MediaRequirements> {
-            val categories: List<MediaCategory> = mediaCategoryRepository.getRandom(amount = 6, mediaType = MediaTypeNew.Movie)
+            val categories: List<MediaCategory> = mediaCategoryRepository.getRandomOrAll(amount = 6, mediaType = MediaTypeNew.Movie)
             return categories.map {
                 MediaRequirements(
                     withTitle = Title(value = it.name()),
@@ -46,7 +46,7 @@ interface MediaRequirementsRepository {
         }
 
         private suspend fun tvShowPageRequirements(): List<MediaRequirements> {
-            val categories: List<MediaCategory> = mediaCategoryRepository.getRandom(amount = 6, mediaType = MediaTypeNew.TVShow)
+            val categories: List<MediaCategory> = mediaCategoryRepository.getRandomOrAll(amount = 6, mediaType = MediaTypeNew.TVShow)
             return categories.map {
                 MediaRequirements(
                     withTitle = Title(value = it.name()),
@@ -87,6 +87,7 @@ interface MediaRequirementsRepository {
                         .shuffled()
                         .take(6)
                 )
+
                 DiscoveryPage.Movies -> createRequirementsFor(
                     mediaType = MediaTypeNew.Movie,
                     withCategories = allCategories
@@ -96,6 +97,7 @@ interface MediaRequirementsRepository {
                         .shuffled()
                         .take(6)
                 )
+
                 DiscoveryPage.TVShows -> createRequirementsFor(
                     mediaType = MediaTypeNew.TVShow,
                     withCategories = allCategories

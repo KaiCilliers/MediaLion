@@ -4,8 +4,8 @@ import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
 import com.sunrisekcdeveloper.medialion.mappers.Mapper
 import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.models.MediaRequirements
-import com.sunrisekcdeveloper.medialion.newarch.components.shared.data.SingleMediaNetworkDTO
-import com.sunrisekcdeveloper.medialion.newarch.components.shared.data.SingleMediaRemoteDataSource
+import com.sunrisekcdeveloper.medialion.newarch.components.shared.data.singleMedia.SingleMediaNetworkDto
+import com.sunrisekcdeveloper.medialion.newarch.components.shared.data.singleMedia.SingleMediaRemoteDataSource
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.SingleMediaItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
@@ -19,11 +19,11 @@ interface SingleMediaItemRepository {
 
     class D(
         private val remoteDataSource: SingleMediaRemoteDataSource,
-        private val dtoMapper: Mapper<SingleMediaNetworkDTO, SingleMediaItem>
+        private val dtoMapper: Mapper<SingleMediaNetworkDto, SingleMediaItem>
     ) : SingleMediaItemRepository {
 
         override suspend fun media(mediaReq: MediaRequirements): List<SingleMediaItem> = runCatching {
-            val remoteFlow: Flow<SingleMediaNetworkDTO> = remoteDataSource.mediaFlow(mediaReq)
+            val remoteFlow: Flow<SingleMediaNetworkDto> = remoteDataSource.mediaFlow(mediaReq)
             remoteFlow
                 .take(mediaReq.amountOfMedia)
                 .map { dtoMapper.map(it) }
@@ -46,7 +46,10 @@ interface SingleMediaItemRepository {
         }
 
         override suspend fun media(mediaReq: MediaRequirements): List<SingleMediaItem> {
-            TODO("Not yet implemented")
+            if (forceFailure) throw Exception("Forced a Failure")
+            return media
+                .take(mediaReq.amountOfMedia)
+                .toList()
         }
 
         fun providePoolOfMedia(media: List<SingleMediaItem>) {
