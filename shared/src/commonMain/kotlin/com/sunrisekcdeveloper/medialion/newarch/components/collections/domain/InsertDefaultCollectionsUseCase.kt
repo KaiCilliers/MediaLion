@@ -1,10 +1,10 @@
 package com.sunrisekcdeveloper.medialion.newarch.components.collections.domain
 
-import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.mapError
+import com.github.michaelbull.result.runCatching
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.CollectionNew
-import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.LocalCacheError
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.repos.CollectionRepositoryNew
 
 interface InsertDefaultCollectionsUseCase {
@@ -13,19 +13,16 @@ interface InsertDefaultCollectionsUseCase {
     class Def(
         private val collectionRepository: CollectionRepositoryNew
     ) : InsertDefaultCollectionsUseCase {
-        override suspend fun invoke(): Result<Unit, InsertDefaultCollectionsError> {
+        override suspend fun invoke(): Result<Unit, InsertDefaultCollectionsError> = runCatching {
             val defaultCollections = listOf(
                 CollectionNew.Def("Favorites")
             )
-            val insertResults = defaultCollections.map {
+            defaultCollections.map {
                 collectionRepository.upsert(it)
             }
-            return if (insertResults.filterIsInstance<Err<LocalCacheError>>().isNotEmpty()) {
-                Err(FailedToInsertAllCollections)
-            } else {
-                Ok(Unit)
-            }
+            Unit
         }
+            .mapError { FailedToInsertAllCollections }
     }
 
     class Fake : InsertDefaultCollectionsUseCase {

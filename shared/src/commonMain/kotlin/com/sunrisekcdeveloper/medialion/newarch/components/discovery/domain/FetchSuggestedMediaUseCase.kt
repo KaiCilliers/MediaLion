@@ -21,11 +21,12 @@ interface FetchSuggestedMediaUseCase {
         override suspend fun invoke(): Result<MediaWithTitle, FetchSuggestedMediaError> {
             return runCatching {
                 val requirements = mediaRequirementsFactory.suggestedMediaRequirements()
-                val excludedIds = collectionRepository
-                    .all()
-                    .getOr(emptyList())
-                    .flatMap { it.media() }
-                    .map { it.identifier() }
+                val excludedIds = runCatching {
+                    collectionRepository
+                        .all()
+                        .flatMap { singleCollection -> singleCollection.media() }
+                        .map { it.identifier() }
+                }.getOr(emptyList())
                 val titledMedia = titledMediaRepository.withRequirement(requirements.copy(withoutMedia = excludedIds))
                 titledMedia
             }

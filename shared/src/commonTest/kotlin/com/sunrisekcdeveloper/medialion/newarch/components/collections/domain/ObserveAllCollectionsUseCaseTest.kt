@@ -30,13 +30,15 @@ class ObserveAllCollectionsUseCaseTest {
 
     @Test
     fun `return all collections when invoked`() = runTest {
-        observeAllCollectionsUseCase().test {
-            val (success,_) = awaitItem()
+        val (collectionsFlow, _) = observeAllCollectionsUseCase()
 
-            assertThat(success).isNotNull()
-            assertThat(success).instanceOf(Ok::class)
-            assertThat(success!!.collectionNames().size).isGreaterThan(0)
+        assertThat(collectionsFlow).isNotNull()
+        assertThat(collectionsFlow).instanceOf(Ok::class)
 
+        collectionsFlow!!.test {
+            val titledMediaList = awaitItem()
+
+            assertThat(titledMediaList.collectionNames().size).isGreaterThan(0)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -44,51 +46,29 @@ class ObserveAllCollectionsUseCaseTest {
     @Test
     fun `return a failure when an unexpected error occurs while observing collections`() = runTest {
         collectionRepository.forceFailure = true
-        observeAllCollectionsUseCase().test {
-            val (_, failure) = awaitItem()
 
-            assertThat(failure).isNotNull()
-            assertThat(failure).instanceOf(UnableToObserveCollections::class)
+        val (_, failure) = observeAllCollectionsUseCase()
 
-            cancelAndIgnoreRemainingEvents()
-        }
+        assertThat(failure).isNotNull()
+        assertThat(failure).instanceOf(UnableToObserveCollections::class)
     }
 
     @Test
     fun `emit an updated list when list data changes`() = runTest {
-        observeAllCollectionsUseCase().test {
-            val (success,_) = awaitItem()
+        val (collectionsFlow, _) = observeAllCollectionsUseCase()
 
-            assertThat(success).isNotNull()
-            assertThat(success).instanceOf(Ok::class)
-            assertThat(success!!.collectionNames().size).isEqualTo(1)
+        assertThat(collectionsFlow).isNotNull()
+        assertThat(collectionsFlow).instanceOf(Ok::class)
+
+        collectionsFlow!!.test {
+
+            var titledMediaList = awaitItem()
+            assertThat(titledMediaList.collectionNames().size).isEqualTo(1)
 
             collectionRepository.upsert(CollectionNew.Def("New Collection"))
 
-            val (success2,_) = awaitItem()
-
-            assertThat(success2).isNotNull()
-            assertThat(success2).instanceOf(Ok::class)
-            assertThat(success2!!.collectionNames().size).isEqualTo(2)
-
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `emit a failure when an error occurs after an initial successful collections emission`() = runTest {
-        observeAllCollectionsUseCase().test {
-            val (success,_) = awaitItem()
-
-            assertThat(success).isNotNull()
-            assertThat(success).instanceOf(Ok::class)
-            assertThat(success!!.collectionNames().size).isGreaterThan(0)
-
-            collectionRepository.forceFailure = true
-
-            val (_, failure) = awaitItem()
-            assertThat(failure).isNotNull()
-            assertThat(failure).instanceOf(UnableToObserveCollections::class)
+            titledMediaList = awaitItem()
+            assertThat(titledMediaList.collectionNames().size).isEqualTo(2)
 
             cancelAndIgnoreRemainingEvents()
         }

@@ -1,9 +1,8 @@
 package com.sunrisekcdeveloper.medialion.newarch.components.collections.domain
 
 import assertk.assertThat
-import assertk.assertions.isInstanceOf
+import assertk.assertions.isEqualTo
 import assertk.assertions.isNull
-import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.sunrisekcdeveloper.medialion.domain.value.Title
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.CollectionNew
@@ -13,6 +12,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class DeleteCollectionUseCaseTest {
@@ -35,7 +35,7 @@ class DeleteCollectionUseCaseTest {
         val (success, _) = deleteCollectionUseCase(newCollection)
 
         assertThat(success).instanceOf(Ok::class)
-        assertThat(collectionRepository.collection(Title("Holiday Specials"))).isInstanceOf(Err::class)
+        assertTrue(collectionRepository.collection(Title("Holiday Specials")).isEmpty())
     }
 
     @Test
@@ -44,7 +44,7 @@ class DeleteCollectionUseCaseTest {
         val (_, failure) = deleteCollectionUseCase(newCollection)
 
         assertThat(failure).instanceOf(CollectionDoesNotExist::class)
-        assertThat(collectionRepository.collection(Title("Holiday Specials"))).isInstanceOf(Err::class)
+        assertTrue(collectionRepository.collection(Title("Holiday Specials")).isEmpty())
     }
 
     @Test
@@ -57,6 +57,6 @@ class DeleteCollectionUseCaseTest {
 
         assertThat(success).isNull()
         assertThat(failure).instanceOf(FailedToDeleteCollection::class)
-        assertThat(collectionRepository.collection(Title("Holiday Specials"))).isInstanceOf(Ok::class)
+        assertThat(collectionRepository.collection(Title("Holiday Specials")).size).isEqualTo(1)
     }
 }

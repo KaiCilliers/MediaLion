@@ -2,9 +2,8 @@ package com.sunrisekcdeveloper.medialion.newarch.components.collections.domain
 
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.mapError
+import com.github.michaelbull.result.runCatching
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.CollectionNew
-import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.DatabaseAccessError
-import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.ResourceDoesNotExist
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.repos.CollectionRepositoryNew
 
 interface DeleteCollectionUseCaseNew {
@@ -13,15 +12,10 @@ interface DeleteCollectionUseCaseNew {
     class Def(
         private val collectionRepository: CollectionRepositoryNew,
     ) : DeleteCollectionUseCaseNew {
-        override suspend fun invoke(collection: CollectionNew): Result<Unit, DeleteCollectionError> {
-            return collectionRepository.delete(collection)
-                .mapError {
-                    when (it) {
-                        DatabaseAccessError -> FailedToDeleteCollection
-                        ResourceDoesNotExist -> CollectionDoesNotExist
-                    }
-                }
+        override suspend fun invoke(collection: CollectionNew): Result<Unit, DeleteCollectionError> = runCatching {
+            collectionRepository.delete(collection)
         }
+            .mapError { FailedToDeleteCollection }
     }
 
 }
