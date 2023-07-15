@@ -5,7 +5,7 @@ import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.
 
 data class MediaRequirements(
     val withTitle: Title,
-    val withMediaTypes: List<MediaTypeNew> = listOf(MediaTypeNew.All),
+    val withMediaType: MediaTypeNew = MediaTypeNew.All,
     val withCategories: List<MediaCategory> = emptyList(),
     val withText: String = "",
     val withoutMedia: List<ID> = emptyList(),
@@ -13,7 +13,7 @@ data class MediaRequirements(
 ) {
     constructor(withTitle: Title, singleMediaType: MediaTypeNew) : this(
         withTitle = withTitle,
-        withMediaTypes = listOf(singleMediaType)
+        withMediaType = singleMediaType
     )
 
     constructor(withTitle: Title, singleCategory: MediaCategory) : this(

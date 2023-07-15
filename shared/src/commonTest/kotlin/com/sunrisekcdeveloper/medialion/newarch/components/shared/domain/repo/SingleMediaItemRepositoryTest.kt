@@ -5,6 +5,7 @@ import assertk.assertions.isEqualTo
 import com.sunrisekcdeveloper.medialion.domain.value.Title
 import com.sunrisekcdeveloper.medialion.mappers.Mapper
 import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.models.MediaRequirements
+import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.models.MediaTypeNew
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.data.singleMedia.SingleMediaLocalDataSource
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.data.singleMedia.SingleMediaNetworkDto
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.data.singleMedia.SingleMediaRemoteDataSource
@@ -24,7 +25,7 @@ class SingleMediaItemRepositoryTest {
     private lateinit var localDataSource: SingleMediaLocalDataSource.Fake
     private val mediaRequirements = MediaRequirements(
         withTitle = Title(value = ""),
-        withMediaTypes = listOf(),
+        withMediaType = MediaTypeNew.All,
         withCategories = listOf(),
         withText = "",
         withoutMedia = listOf(),
@@ -41,7 +42,10 @@ class SingleMediaItemRepositoryTest {
             localDataSource = localDataSource,
             dtoMapper = object : Mapper<SingleMediaNetworkDto, SingleMediaItem> {
                 override fun map(input: SingleMediaNetworkDto): SingleMediaItem {
-                    return SingleMediaItem.Movie(name = input.placeholder.toString())
+                    return when (input) {
+                        is SingleMediaNetworkDto.MovieNetworkDto -> SingleMediaItem.Movie(name = input.title)
+                        is SingleMediaNetworkDto.TVShow -> SingleMediaItem.TVShow(name = input.title)
+                    }
                 }
             }
         )

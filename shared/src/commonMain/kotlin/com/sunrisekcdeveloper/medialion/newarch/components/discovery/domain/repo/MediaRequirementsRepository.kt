@@ -26,7 +26,7 @@ interface MediaRequirementsRepository {
             return categories.map {
                 MediaRequirements(
                     withTitle = Title(value = it.name()),
-                    withMediaTypes = listOf(MediaTypeNew.All),
+                    withMediaType = MediaTypeNew.All,
                     withCategories = listOf(it),
                     withText = ""
                 )
@@ -38,7 +38,7 @@ interface MediaRequirementsRepository {
             return categories.map {
                 MediaRequirements(
                     withTitle = Title(value = it.name()),
-                    withMediaTypes = listOf(MediaTypeNew.All),
+                    withMediaType = MediaTypeNew.All,
                     withCategories = listOf(it),
                     withText = ""
                 )
@@ -50,7 +50,7 @@ interface MediaRequirementsRepository {
             return categories.map {
                 MediaRequirements(
                     withTitle = Title(value = it.name()),
-                    withMediaTypes = listOf(MediaTypeNew.All),
+                    withMediaType = MediaTypeNew.All,
                     withCategories = listOf(it),
                     withText = ""
                 )
@@ -63,19 +63,19 @@ interface MediaRequirementsRepository {
         var forceFailure = false
 
         private val allCategories: List<MediaCategory> = listOf(
-            MediaCategory.D(appliesToTypes = listOf(MediaTypeNew.Movie, MediaTypeNew.TVShow)),
-            MediaCategory.D(appliesToTypes = listOf(MediaTypeNew.Movie)),
-            MediaCategory.D(appliesToTypes = listOf(MediaTypeNew.Movie, MediaTypeNew.TVShow)),
-            MediaCategory.D(appliesToTypes = listOf(MediaTypeNew.Movie, MediaTypeNew.TVShow)),
-            MediaCategory.D(appliesToTypes = listOf(MediaTypeNew.TVShow)),
-            MediaCategory.D(appliesToTypes = listOf(MediaTypeNew.Movie, MediaTypeNew.TVShow)),
-            MediaCategory.D(appliesToTypes = listOf(MediaTypeNew.Movie, MediaTypeNew.TVShow)),
-            MediaCategory.D(appliesToTypes = listOf(MediaTypeNew.Movie, MediaTypeNew.TVShow)),
-            MediaCategory.D(appliesToTypes = listOf(MediaTypeNew.Movie, MediaTypeNew.TVShow)),
-            MediaCategory.D(appliesToTypes = listOf(MediaTypeNew.Movie, MediaTypeNew.TVShow)),
-            MediaCategory.D(appliesToTypes = listOf(MediaTypeNew.Movie, MediaTypeNew.TVShow)),
-            MediaCategory.D(appliesToTypes = listOf(MediaTypeNew.Movie, MediaTypeNew.TVShow)),
-            MediaCategory.D(appliesToTypes = listOf(MediaTypeNew.Movie, MediaTypeNew.TVShow)),
+            MediaCategory.D(appliesToType = MediaTypeNew.TVShow),
+            MediaCategory.D(appliesToType = MediaTypeNew.Movie),
+            MediaCategory.D(appliesToType = MediaTypeNew.Movie),
+            MediaCategory.D(appliesToType = MediaTypeNew.Movie),
+            MediaCategory.D(appliesToType = MediaTypeNew.TVShow),
+            MediaCategory.D(appliesToType = MediaTypeNew.Movie),
+            MediaCategory.D(appliesToType = MediaTypeNew.Movie),
+            MediaCategory.D(appliesToType = MediaTypeNew.Movie),
+            MediaCategory.D(appliesToType = MediaTypeNew.Movie),
+            MediaCategory.D(appliesToType = MediaTypeNew.Movie),
+            MediaCategory.D(appliesToType = MediaTypeNew.Movie),
+            MediaCategory.D(appliesToType = MediaTypeNew.Movie),
+            MediaCategory.D(appliesToType = MediaTypeNew.Movie),
         )
 
         override suspend fun getForPage(page: DiscoveryPage): List<MediaRequirements> {
@@ -111,7 +111,7 @@ interface MediaRequirementsRepository {
         private fun createRequirementsFor(mediaType: MediaTypeNew, withCategories: List<MediaCategory>): List<MediaRequirements> {
             return withCategories.map {
                 MediaRequirements(
-                    withMediaTypes = listOf(mediaType),
+                    withMediaType = mediaType,
                     withCategories = listOf(it),
                     withText = "",
                     withTitle = Title("Title")

@@ -2,10 +2,25 @@ package com.sunrisekcdeveloper.medialion.newarch.components.shared.data.singleMe
 
 import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.models.MediaRequirements
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 
 interface SingleMediaRemoteDataSource {
     fun mediaFlow(requirements: MediaRequirements): Flow<SingleMediaNetworkDto>
+
+    class D(
+        private val mediaApiClient: MediaRemoteClient,
+    ) : SingleMediaRemoteDataSource {
+        override fun mediaFlow(requirements: MediaRequirements): Flow<SingleMediaNetworkDto> = flow {
+            val mediaFlow = if (requirements.withText.trim().isNotEmpty()) {
+                mediaApiClient.search(requirements)
+            } else {
+                mediaApiClient.discover(requirements)
+            }
+
+            emitAll(mediaFlow)
+        }
+    }
 
     class Fake : SingleMediaRemoteDataSource {
         var forceFailure = false
@@ -13,7 +28,11 @@ interface SingleMediaRemoteDataSource {
         private var media: Flow<SingleMediaNetworkDto> = flow {
             var counter = 0
             while (true) {
-                emit(SingleMediaNetworkDto(++counter))
+                val asString = "${++counter}"
+                if (counter % 2 == 0)
+                    emit(SingleMediaNetworkDto.TVShow(asString, asString, asString))
+                else
+                    emit(SingleMediaNetworkDto.MovieNetworkDto(asString, asString, asString))
             }
         }
 
