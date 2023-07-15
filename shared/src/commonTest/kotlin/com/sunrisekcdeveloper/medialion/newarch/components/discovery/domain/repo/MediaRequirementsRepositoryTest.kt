@@ -2,7 +2,9 @@ package com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.rep
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.models.DiscoveryPage
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.DiscoveryPage
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.repo.MediaCategoryRepository
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.repo.MediaRequirementsRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest

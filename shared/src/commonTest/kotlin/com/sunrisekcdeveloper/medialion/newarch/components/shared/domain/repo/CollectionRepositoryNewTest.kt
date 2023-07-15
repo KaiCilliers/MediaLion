@@ -1,4 +1,4 @@
-package com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.repo
+package com.sunrisekcdeveloper.medialion.components.shared.domain.repo
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -6,11 +6,11 @@ import assertk.assertions.isGreaterThan
 import assertk.assertions.isNotNull
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
 import com.sunrisekcdeveloper.medialion.oldArch.mappers.Mapper
-import com.sunrisekcdeveloper.medialion.newarch.components.shared.data.collection.CollectionEntityDto
-import com.sunrisekcdeveloper.medialion.newarch.components.shared.data.collection.CollectionLocalDataSource
-import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.CollectionNew
-import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.SingleMediaItem
-import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.repos.CollectionRepositoryNew
+import com.sunrisekcdeveloper.medialion.components.shared.data.collection.CollectionEntityDto
+import com.sunrisekcdeveloper.medialion.components.shared.data.collection.CollectionLocalDataSource
+import com.sunrisekcdeveloper.medialion.components.shared.domain.models.CollectionNew
+import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem
+import com.sunrisekcdeveloper.medialion.components.shared.domain.repos.CollectionRepositoryNew
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest

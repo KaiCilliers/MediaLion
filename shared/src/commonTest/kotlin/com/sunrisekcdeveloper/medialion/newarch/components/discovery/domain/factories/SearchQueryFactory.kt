@@ -1,7 +1,7 @@
 package com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.factories
 
-import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.models.Clock
-import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.models.SearchQuery
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.Clock
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.SearchQuery
 
 class SearchQueryFactory(
     private var query: String = "default",

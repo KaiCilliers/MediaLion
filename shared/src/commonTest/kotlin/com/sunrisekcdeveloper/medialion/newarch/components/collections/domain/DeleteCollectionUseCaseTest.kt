@@ -5,8 +5,8 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isNull
 import com.github.michaelbull.result.Ok
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
-import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.CollectionNew
-import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.repos.CollectionRepositoryNew
+import com.sunrisekcdeveloper.medialion.components.shared.domain.models.CollectionNew
+import com.sunrisekcdeveloper.medialion.components.shared.domain.repos.CollectionRepositoryNew
 import io.ktor.util.reflect.instanceOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -17,13 +17,13 @@ import kotlin.test.assertTrue
 @OptIn(ExperimentalCoroutinesApi::class)
 class DeleteCollectionUseCaseTest {
 
-    private lateinit var deleteCollectionUseCase: DeleteCollectionUseCaseNew
+    private lateinit var deleteCollectionUseCase: com.sunrisekcdeveloper.medialion.components.collections.domain.DeleteCollectionUseCaseNew
     private lateinit var collectionRepository: CollectionRepositoryNew.Fake
 
     @BeforeTest
     fun setup() {
         collectionRepository = CollectionRepositoryNew.Fake()
-        deleteCollectionUseCase = DeleteCollectionUseCaseNew.Def(
+        deleteCollectionUseCase = com.sunrisekcdeveloper.medialion.components.collections.domain.DeleteCollectionUseCaseNew.Def(
             collectionRepository = collectionRepository
         )
     }
@@ -43,7 +43,7 @@ class DeleteCollectionUseCaseTest {
         val newCollection = CollectionNew.Def("Holiday Specials")
         val (_, failure) = deleteCollectionUseCase(newCollection)
 
-        assertThat(failure).instanceOf(CollectionDoesNotExist::class)
+        assertThat(failure).instanceOf(com.sunrisekcdeveloper.medialion.components.collections.domain.CollectionDoesNotExist::class)
         assertTrue(collectionRepository.collection(Title("Holiday Specials")).isEmpty())
     }
 
@@ -56,7 +56,7 @@ class DeleteCollectionUseCaseTest {
         val (success, failure) = deleteCollectionUseCase(newCollection)
 
         assertThat(success).isNull()
-        assertThat(failure).instanceOf(FailedToDeleteCollection::class)
+        assertThat(failure).instanceOf(com.sunrisekcdeveloper.medialion.components.collections.domain.FailedToDeleteCollection::class)
         assertThat(collectionRepository.collection(Title("Holiday Specials")).size).isEqualTo(1)
     }
 }

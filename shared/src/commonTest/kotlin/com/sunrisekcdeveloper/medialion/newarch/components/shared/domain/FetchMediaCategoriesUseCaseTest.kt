@@ -4,7 +4,8 @@ import assertk.assertThat
 import assertk.assertions.isNotNull
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
-import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.repo.MediaCategoryRepository
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.repo.MediaCategoryRepository
+import com.sunrisekcdeveloper.medialion.components.shared.domain.FetchAllMediaCategoriesUseCase
 import io.ktor.util.reflect.instanceOf
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest

@@ -4,9 +4,11 @@ import assertk.assertThat
 import assertk.assertions.isGreaterThan
 import assertk.assertions.isNotNull
 import com.github.michaelbull.result.Ok
-import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.models.DiscoveryPage
-import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.repo.MediaRequirementsRepository
-import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.repo.TitledMediaRepository
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.FetchDiscoveryContentError
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.FetchDiscoveryContentUseCase
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.DiscoveryPage
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.repo.MediaRequirementsRepository
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.repo.TitledMediaRepository
 import io.ktor.util.reflect.instanceOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest

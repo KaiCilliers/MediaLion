@@ -3,7 +3,10 @@ package com.sunrisekcdeveloper.medialion.newarch.features.search
 import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isInstanceOf
-import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.SearchForMediaUseCase
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.SearchForMediaUseCase
+import com.sunrisekcdeveloper.medialion.features.search.MLSearchViewModelNew
+import com.sunrisekcdeveloper.medialion.features.search.SearchScreenAction
+import com.sunrisekcdeveloper.medialion.features.search.SearchUIState
 import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.factories.SearchQueryFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

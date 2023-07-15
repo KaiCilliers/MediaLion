@@ -5,8 +5,8 @@ import assertk.assertions.containsExactly
 import assertk.assertions.isInstanceOf
 import assertk.assertions.isNotNull
 import com.github.michaelbull.result.Ok
+import com.sunrisekcdeveloper.medialion.components.shared.domain.repos.CollectionRepositoryNew
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
-import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.repos.CollectionRepositoryNew
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
@@ -15,13 +15,13 @@ import kotlin.test.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class FetchAllCollectionsUseCaseTest {
 
-    private lateinit var useCase: FetchAllCollectionsUseCaseNew
+    private lateinit var useCase: com.sunrisekcdeveloper.medialion.components.collections.domain.FetchAllCollectionsUseCaseNew
     private lateinit var collectionRepository: CollectionRepositoryNew.Fake
 
     @BeforeTest
     fun setup() {
         collectionRepository = CollectionRepositoryNew.Fake()
-        useCase = FetchAllCollectionsUseCaseNew.Default(
+        useCase = com.sunrisekcdeveloper.medialion.components.collections.domain.FetchAllCollectionsUseCaseNew.Default(
             collectionRepository = collectionRepository
         )
     }

@@ -3,6 +3,8 @@ package com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.mod
 import assertk.assertThat
 import assertk.assertions.isFalse
 import assertk.assertions.isTrue
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.Clock
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.SearchQuery
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.time.Duration.Companion.milliseconds

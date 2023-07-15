@@ -3,8 +3,9 @@ package com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.rep
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
-import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.models.MediaRequirements
-import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.repos.SingleMediaItemRepository
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaRequirements
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.repo.TitledMediaRepository
+import com.sunrisekcdeveloper.medialion.components.shared.domain.repos.SingleMediaItemRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest

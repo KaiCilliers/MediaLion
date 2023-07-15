@@ -5,7 +5,8 @@ import assertk.assertions.isGreaterThan
 import assertk.assertions.isNotNull
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
-import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.repos.CollectionRepositoryNew
+import com.sunrisekcdeveloper.medialion.components.collections.domain.InsertDefaultCollectionsUseCase
+import com.sunrisekcdeveloper.medialion.components.shared.domain.repos.CollectionRepositoryNew
 import io.ktor.util.reflect.instanceOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest

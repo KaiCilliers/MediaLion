@@ -1,0 +1,4 @@
+package com.sunrisekcdeveloper.medialion.features.mycollection
+
+sealed interface MyCollectionsAction
+object FetchMyCollectionsMedia : MyCollectionsAction

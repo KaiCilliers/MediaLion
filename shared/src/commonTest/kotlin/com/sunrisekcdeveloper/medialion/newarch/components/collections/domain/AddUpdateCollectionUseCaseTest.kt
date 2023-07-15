@@ -3,10 +3,10 @@ package com.sunrisekcdeveloper.medialion.newarch.components.collections.domain
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
+import com.sunrisekcdeveloper.medialion.components.shared.domain.models.CollectionNew
+import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem
+import com.sunrisekcdeveloper.medialion.components.shared.domain.repos.CollectionRepositoryNew
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
-import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.CollectionNew
-import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.SingleMediaItem
-import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.repos.CollectionRepositoryNew
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
@@ -15,13 +15,13 @@ import kotlin.test.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class AddUpdateCollectionUseCaseTest {
 
-    private lateinit var useCase: AddUpdateCollectionUseCase
+    private lateinit var useCase: com.sunrisekcdeveloper.medialion.components.collections.domain.AddUpdateCollectionUseCase
     private lateinit var collectionRepository: CollectionRepositoryNew.Fake
 
     @BeforeTest
     fun setup() {
         collectionRepository = CollectionRepositoryNew.Fake()
-        useCase = AddUpdateCollectionUseCase.Def(
+        useCase = com.sunrisekcdeveloper.medialion.components.collections.domain.AddUpdateCollectionUseCase.Def(
             collectionRepository = collectionRepository
         )
     }
