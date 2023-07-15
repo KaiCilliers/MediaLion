@@ -50,20 +50,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.sunrisekcdeveloper.medialion.MediaItemUI
-import com.sunrisekcdeveloper.medialion.SimpleMediaItem
+import com.sunrisekcdeveloper.medialion.oldArch.MediaItemUI
+import com.sunrisekcdeveloper.medialion.oldArch.SimpleMediaItem
 import com.sunrisekcdeveloper.medialion.android.R
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.components.ui.MLProgress
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLMediaPoster
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLTitledMediaRow
-import com.sunrisekcdeveloper.medialion.domain.MediaType
-import com.sunrisekcdeveloper.medialion.domain.collection.CollectionAction
-import com.sunrisekcdeveloper.medialion.domain.collection.CollectionState
-import com.sunrisekcdeveloper.medialion.domain.entities.CollectionWithMediaUI
-import com.sunrisekcdeveloper.medialion.domain.search.usecases.SetupInitialCollectionUseCase
-import com.sunrisekcdeveloper.medialion.domain.value.ID
-import com.sunrisekcdeveloper.medialion.domain.value.Title
+import com.sunrisekcdeveloper.medialion.oldArch.domain.MediaType
+import com.sunrisekcdeveloper.medialion.oldArch.domain.collection.CollectionAction
+import com.sunrisekcdeveloper.medialion.oldArch.domain.collection.CollectionState
+import com.sunrisekcdeveloper.medialion.oldArch.domain.entities.CollectionWithMediaUI
+import com.sunrisekcdeveloper.medialion.oldArch.domain.search.usecases.SetupInitialCollectionUseCase
+import com.sunrisekcdeveloper.medialion.oldArch.domain.value.ID
+import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)

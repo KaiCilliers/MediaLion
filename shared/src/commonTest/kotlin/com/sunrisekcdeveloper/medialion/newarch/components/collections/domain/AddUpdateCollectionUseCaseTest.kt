@@ -3,7 +3,7 @@ package com.sunrisekcdeveloper.medialion.newarch.components.collections.domain
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
-import com.sunrisekcdeveloper.medialion.domain.value.Title
+import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.CollectionNew
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.SingleMediaItem
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.repos.CollectionRepositoryNew

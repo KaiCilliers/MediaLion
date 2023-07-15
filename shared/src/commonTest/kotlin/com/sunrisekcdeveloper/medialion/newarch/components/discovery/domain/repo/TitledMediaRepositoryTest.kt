@@ -2,7 +2,7 @@ package com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.rep
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.sunrisekcdeveloper.medialion.domain.value.Title
+import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
 import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.models.MediaRequirements
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.repos.SingleMediaItemRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi

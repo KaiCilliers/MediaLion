@@ -1,6 +1,6 @@
 package com.sunrisekcdeveloper.medialion.newarch.components.shared.data.collection
 
-import com.sunrisekcdeveloper.medialion.domain.value.Title
+import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.ID
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.SingleMediaItem
 

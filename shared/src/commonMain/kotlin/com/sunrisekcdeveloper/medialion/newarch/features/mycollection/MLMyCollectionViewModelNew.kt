@@ -2,8 +2,8 @@ package com.sunrisekcdeveloper.medialion.newarch.features.mycollection
 
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
-import com.sunrisekcdeveloper.medialion.flow.CStateFlow
-import com.sunrisekcdeveloper.medialion.flow.cStateFlow
+import com.sunrisekcdeveloper.medialion.oldArch.flow.CStateFlow
+import com.sunrisekcdeveloper.medialion.oldArch.flow.cStateFlow
 import com.sunrisekcdeveloper.medialion.newarch.components.collections.domain.FetchAllCollectionsUseCaseNew
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

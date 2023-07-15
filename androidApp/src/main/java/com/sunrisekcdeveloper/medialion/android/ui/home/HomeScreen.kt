@@ -24,8 +24,8 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.sunrisekcdeveloper.medialion.SimpleMediaItem
-import com.sunrisekcdeveloper.medialion.TitledMedia
+import com.sunrisekcdeveloper.medialion.oldArch.SimpleMediaItem
+import com.sunrisekcdeveloper.medialion.oldArch.TitledMedia
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.about.ui.AboutScreen
 import com.sunrisekcdeveloper.medialion.android.ui.collections.CollectionScreen
@@ -36,15 +36,15 @@ import com.sunrisekcdeveloper.medialion.android.ui.discovery.DiscoveryScreen
 import com.sunrisekcdeveloper.medialion.android.ui.discovery.ui.FilterCategory
 import com.sunrisekcdeveloper.medialion.android.ui.saveToCollection.ui.CollectionItem
 import com.sunrisekcdeveloper.medialion.android.ui.saveToCollection.ui.SaveToCollectionScreen
-import com.sunrisekcdeveloper.medialion.domain.collection.CollectionAction
-import com.sunrisekcdeveloper.medialion.domain.collection.CollectionState
-import com.sunrisekcdeveloper.medialion.domain.collection.GenreState
-import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryAction
-import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryState
-import com.sunrisekcdeveloper.medialion.domain.entities.CollectionWithMedia
-import com.sunrisekcdeveloper.medialion.domain.search.SearchAction
-import com.sunrisekcdeveloper.medialion.domain.value.ID
-import com.sunrisekcdeveloper.medialion.domain.value.Title
+import com.sunrisekcdeveloper.medialion.oldArch.domain.collection.CollectionAction
+import com.sunrisekcdeveloper.medialion.oldArch.domain.collection.CollectionState
+import com.sunrisekcdeveloper.medialion.oldArch.domain.collection.GenreState
+import com.sunrisekcdeveloper.medialion.oldArch.domain.discovery.DiscoveryAction
+import com.sunrisekcdeveloper.medialion.oldArch.domain.discovery.DiscoveryState
+import com.sunrisekcdeveloper.medialion.oldArch.domain.entities.CollectionWithMedia
+import com.sunrisekcdeveloper.medialion.oldArch.domain.search.SearchAction
+import com.sunrisekcdeveloper.medialion.oldArch.domain.value.ID
+import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
 import kotlinx.coroutines.launch
 
 @Composable

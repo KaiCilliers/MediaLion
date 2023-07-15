@@ -18,12 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sunrisekcdeveloper.medialion.MediaItemUI
+import com.sunrisekcdeveloper.medialion.oldArch.MediaItemUI
 import com.sunrisekcdeveloper.medialion.R
-import com.sunrisekcdeveloper.medialion.SimpleMediaItem
-import com.sunrisekcdeveloper.medialion.TitledMedia
+import com.sunrisekcdeveloper.medialion.oldArch.SimpleMediaItem
+import com.sunrisekcdeveloper.medialion.oldArch.TitledMedia
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
-import com.sunrisekcdeveloper.medialion.domain.MediaType
+import com.sunrisekcdeveloper.medialion.oldArch.domain.MediaType
 
 @Composable
 fun MLTitledMediaGrid(

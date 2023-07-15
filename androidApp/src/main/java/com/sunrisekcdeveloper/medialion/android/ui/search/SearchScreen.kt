@@ -36,9 +36,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sunrisekcdeveloper.medialion.MediaItemUI
-import com.sunrisekcdeveloper.medialion.SimpleMediaItem
-import com.sunrisekcdeveloper.medialion.StringRes
+import com.sunrisekcdeveloper.medialion.oldArch.MediaItemUI
+import com.sunrisekcdeveloper.medialion.oldArch.SimpleMediaItem
+import com.sunrisekcdeveloper.medialion.oldArch.StringRes
 import com.sunrisekcdeveloper.medialion.android.R
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.about.ui.AboutScreen
@@ -50,12 +50,12 @@ import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLSearchBar
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLTitledMediaGrid
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.SearchEmptyState
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.SearchIdleState
-import com.sunrisekcdeveloper.medialion.domain.MediaType
-import com.sunrisekcdeveloper.medialion.domain.entities.CollectionWithMedia
-import com.sunrisekcdeveloper.medialion.domain.search.SearchAction
-import com.sunrisekcdeveloper.medialion.domain.search.SearchState
-import com.sunrisekcdeveloper.medialion.domain.value.ID
-import com.sunrisekcdeveloper.medialion.domain.value.Title
+import com.sunrisekcdeveloper.medialion.oldArch.domain.MediaType
+import com.sunrisekcdeveloper.medialion.oldArch.domain.entities.CollectionWithMedia
+import com.sunrisekcdeveloper.medialion.oldArch.domain.search.SearchAction
+import com.sunrisekcdeveloper.medialion.oldArch.domain.search.SearchState
+import com.sunrisekcdeveloper.medialion.oldArch.domain.value.ID
+import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
 import com.zhuinden.simplestack.Backstack
 import kotlinx.coroutines.launch
 

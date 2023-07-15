@@ -5,7 +5,7 @@ import assertk.assertions.containsExactly
 import assertk.assertions.isInstanceOf
 import assertk.assertions.isNotNull
 import com.github.michaelbull.result.Ok
-import com.sunrisekcdeveloper.medialion.domain.value.Title
+import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.repos.CollectionRepositoryNew
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest

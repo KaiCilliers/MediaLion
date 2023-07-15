@@ -7,7 +7,7 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.res.colorResource
-import com.sunrisekcdeveloper.medialion.ColorRes
+import com.sunrisekcdeveloper.medialion.oldArch.ColorRes
 
 @Composable
 fun MediaLionTheme(

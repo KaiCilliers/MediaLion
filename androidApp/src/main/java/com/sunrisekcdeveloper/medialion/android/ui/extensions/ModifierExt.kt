@@ -7,7 +7,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import com.sunrisekcdeveloper.medialion.ColorRes
+import com.sunrisekcdeveloper.medialion.oldArch.ColorRes
 import kotlin.math.cos
 import kotlin.math.pow
 import kotlin.math.sin

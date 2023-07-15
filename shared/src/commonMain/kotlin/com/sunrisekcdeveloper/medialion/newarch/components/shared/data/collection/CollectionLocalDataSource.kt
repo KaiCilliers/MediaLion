@@ -3,8 +3,8 @@ package com.sunrisekcdeveloper.medialion.newarch.components.shared.data.collecti
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.sunrisekcdeveloper.medialion.database.MediaLionDatabase
-import com.sunrisekcdeveloper.medialion.domain.value.Title
-import com.sunrisekcdeveloper.medialion.mappers.Mapper
+import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
+import com.sunrisekcdeveloper.medialion.oldArch.mappers.Mapper
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.ID
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.SingleMediaItem
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.utils.ForcedException

@@ -25,11 +25,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.sunrisekcdeveloper.medialion.SimpleMediaItem
+import com.sunrisekcdeveloper.medialion.oldArch.SimpleMediaItem
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.extensions.gradientBlue
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLMediaPoster
-import com.sunrisekcdeveloper.medialion.domain.MediaType
+import com.sunrisekcdeveloper.medialion.oldArch.domain.MediaType
 
 @Composable
 fun DetailPreviewScreen(

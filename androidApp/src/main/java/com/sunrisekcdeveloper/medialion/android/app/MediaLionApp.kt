@@ -2,7 +2,7 @@ package com.sunrisekcdeveloper.medialion.android.app
 
 import android.app.Application
 import android.content.Context
-import com.sunrisekcdeveloper.medialion.di.sharedModule
+import com.sunrisekcdeveloper.medialion.oldArch.di.sharedModule
 import com.zhuinden.simplestack.GlobalServices
 import com.zhuinden.simplestackextensions.servicesktx.add
 import com.zhuinden.simplestackextensions.servicesktx.rebind

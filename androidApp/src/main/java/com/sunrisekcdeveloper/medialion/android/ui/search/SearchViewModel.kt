@@ -1,19 +1,19 @@
 package com.sunrisekcdeveloper.medialion.android.ui.search
 
-import com.sunrisekcdeveloper.medialion.di.MapperNames
-import com.sunrisekcdeveloper.medialion.di.MapperNames.mediaDomainToUI
-import com.sunrisekcdeveloper.medialion.domain.collection.MLCollectionViewModel
-import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryAction
-import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryState
-import com.sunrisekcdeveloper.medialion.domain.discovery.MLDiscoveryViewModel
-import com.sunrisekcdeveloper.medialion.domain.entities.CollectionWithMedia
-import com.sunrisekcdeveloper.medialion.domain.search.CollectionComponent
-import com.sunrisekcdeveloper.medialion.domain.search.MLSearchViewModel
-import com.sunrisekcdeveloper.medialion.domain.search.SearchAction
-import com.sunrisekcdeveloper.medialion.domain.search.SearchComponent
-import com.sunrisekcdeveloper.medialion.domain.search.SearchState
-import com.sunrisekcdeveloper.medialion.domain.search.usecases.FetchDiscoveryContent
-import com.sunrisekcdeveloper.medialion.mappers.ListMapper
+import FetchDiscoveryContent
+import com.sunrisekcdeveloper.medialion.oldArch.di.MapperNames
+import com.sunrisekcdeveloper.medialion.oldArch.di.MapperNames.mediaDomainToUI
+import com.sunrisekcdeveloper.medialion.oldArch.domain.collection.MLCollectionViewModel
+import com.sunrisekcdeveloper.medialion.oldArch.domain.discovery.DiscoveryAction
+import com.sunrisekcdeveloper.medialion.oldArch.domain.discovery.DiscoveryState
+import com.sunrisekcdeveloper.medialion.oldArch.domain.discovery.MLDiscoveryViewModel
+import com.sunrisekcdeveloper.medialion.oldArch.domain.entities.CollectionWithMedia
+import com.sunrisekcdeveloper.medialion.oldArch.domain.search.CollectionComponent
+import com.sunrisekcdeveloper.medialion.oldArch.domain.search.MLSearchViewModel
+import com.sunrisekcdeveloper.medialion.oldArch.domain.search.SearchAction
+import com.sunrisekcdeveloper.medialion.oldArch.domain.search.SearchComponent
+import com.sunrisekcdeveloper.medialion.oldArch.domain.search.SearchState
+import com.sunrisekcdeveloper.medialion.oldArch.mappers.ListMapper
 import com.zhuinden.simplestack.Backstack
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +36,7 @@ class SearchViewModel(
         MLSearchViewModel(
             searchComponent = searchComponent,
             collectionComponent = collectionComponent,
-            mediaItemMapper = get(named(MapperNames.mediaDomainToUI)),
+            mediaItemMapper = get(named(mediaDomainToUI)),
             movieListMapper = ListMapper.Impl(get(named(MapperNames.movieDomainToUI))),
             tvListMapper = ListMapper.Impl(get(named(MapperNames.tvDomainToUI))),
             coroutineScope = viewModelScope,

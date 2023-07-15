@@ -23,8 +23,8 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.extensions.gradientOrange
-import com.sunrisekcdeveloper.medialion.SimpleMediaItem
-import com.sunrisekcdeveloper.medialion.domain.MediaType
+import com.sunrisekcdeveloper.medialion.oldArch.SimpleMediaItem
+import com.sunrisekcdeveloper.medialion.oldArch.domain.MediaType
 
 @Composable
 fun MLMediaBanner(

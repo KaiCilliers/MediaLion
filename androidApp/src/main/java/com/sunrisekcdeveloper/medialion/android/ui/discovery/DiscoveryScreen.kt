@@ -30,8 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.sunrisekcdeveloper.medialion.SimpleMediaItem
-import com.sunrisekcdeveloper.medialion.TitledMedia
+import com.sunrisekcdeveloper.medialion.oldArch.SimpleMediaItem
+import com.sunrisekcdeveloper.medialion.oldArch.TitledMedia
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.components.ui.MLProgress
 import com.sunrisekcdeveloper.medialion.android.ui.discovery.ui.CategoriesDialog
@@ -40,11 +40,11 @@ import com.sunrisekcdeveloper.medialion.android.ui.discovery.ui.MLFilterCategori
 import com.sunrisekcdeveloper.medialion.android.ui.discovery.ui.MLTopBar
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLMediaPoster
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLTitledMediaRow
-import com.sunrisekcdeveloper.medialion.domain.MediaType
-import com.sunrisekcdeveloper.medialion.domain.collection.GenreState
-import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryAction
-import com.sunrisekcdeveloper.medialion.domain.discovery.DiscoveryState
-import com.sunrisekcdeveloper.medialion.domain.value.ID
+import com.sunrisekcdeveloper.medialion.oldArch.domain.MediaType
+import com.sunrisekcdeveloper.medialion.oldArch.domain.collection.GenreState
+import com.sunrisekcdeveloper.medialion.oldArch.domain.discovery.DiscoveryAction
+import com.sunrisekcdeveloper.medialion.oldArch.domain.discovery.DiscoveryState
+import com.sunrisekcdeveloper.medialion.oldArch.domain.value.ID
 
 @Composable
 fun DiscoveryScreen(

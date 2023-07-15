@@ -1,11 +1,11 @@
 package com.sunrisekcdeveloper.medialion.newarch.components.shared
 
-import com.sunrisekcdeveloper.medialion.clients.models.GenreResponse
-import com.sunrisekcdeveloper.medialion.clients.models.GenreWrapper
-import com.sunrisekcdeveloper.medialion.clients.models.MediaResponse
-import com.sunrisekcdeveloper.medialion.clients.models.PagedMediaResponse
-import com.sunrisekcdeveloper.medialion.clients.standardParameters
-import com.sunrisekcdeveloper.medialion.mappers.Mapper
+import com.sunrisekcdeveloper.medialion.oldArch.clients.models.GenreResponse
+import com.sunrisekcdeveloper.medialion.oldArch.clients.models.GenreWrapper
+import com.sunrisekcdeveloper.medialion.oldArch.clients.models.MediaResponse
+import com.sunrisekcdeveloper.medialion.oldArch.clients.models.PagedMediaResponse
+import com.sunrisekcdeveloper.medialion.oldArch.clients.standardParameters
+import com.sunrisekcdeveloper.medialion.oldArch.mappers.Mapper
 import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.models.MediaRequirements
 import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.models.MediaTypeNew
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.data.mediaCategory.CategoryRemoteClient

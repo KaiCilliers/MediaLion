@@ -1,6 +1,6 @@
 package com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models
 
-import com.sunrisekcdeveloper.medialion.domain.value.Title
+import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
 
 interface CollectionNew {
     fun asMediaWithTitle(): MediaWithTitle

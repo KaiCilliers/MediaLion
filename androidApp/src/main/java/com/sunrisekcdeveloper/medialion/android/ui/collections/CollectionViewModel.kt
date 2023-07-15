@@ -1,12 +1,12 @@
 package com.sunrisekcdeveloper.medialion.android.ui.collections
 
-import com.sunrisekcdeveloper.medialion.di.MapperNames
-import com.sunrisekcdeveloper.medialion.domain.collection.CollectionAction
-import com.sunrisekcdeveloper.medialion.domain.collection.CollectionState
-import com.sunrisekcdeveloper.medialion.domain.collection.MLCollectionViewModel
-import com.sunrisekcdeveloper.medialion.domain.search.CollectionComponent
-import com.sunrisekcdeveloper.medialion.domain.search.SearchComponent
-import com.sunrisekcdeveloper.medialion.mappers.ListMapper
+import com.sunrisekcdeveloper.medialion.oldArch.di.MapperNames
+import com.sunrisekcdeveloper.medialion.oldArch.domain.collection.CollectionAction
+import com.sunrisekcdeveloper.medialion.oldArch.domain.collection.CollectionState
+import com.sunrisekcdeveloper.medialion.oldArch.domain.collection.MLCollectionViewModel
+import com.sunrisekcdeveloper.medialion.oldArch.domain.search.CollectionComponent
+import com.sunrisekcdeveloper.medialion.oldArch.domain.search.SearchComponent
+import com.sunrisekcdeveloper.medialion.oldArch.mappers.ListMapper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

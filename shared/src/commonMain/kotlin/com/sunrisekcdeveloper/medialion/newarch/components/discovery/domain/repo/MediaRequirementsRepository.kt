@@ -1,6 +1,6 @@
 package com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.repo
 
-import com.sunrisekcdeveloper.medialion.domain.value.Title
+import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
 import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.models.DiscoveryPage
 import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.models.MediaCategory
 import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.models.MediaRequirements

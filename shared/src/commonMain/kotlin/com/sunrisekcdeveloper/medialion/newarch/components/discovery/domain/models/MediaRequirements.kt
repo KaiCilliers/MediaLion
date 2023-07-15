@@ -1,6 +1,6 @@
 package com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.models
 
-import com.sunrisekcdeveloper.medialion.domain.value.Title
+import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.ID
 
 data class MediaRequirements(
