@@ -1,6 +1,9 @@
 package com.sunrisekcdeveloper.medialion.newarch.components.shared.data.mediaCategory
 
+import com.sunrisekcdeveloper.medialion.database.MediaLionDatabase
+import com.sunrisekcdeveloper.medialion.mappers.Mapper
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.utils.infiniteFlowOf
+import database.CategoryCache
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
@@ -9,6 +12,26 @@ import kotlin.properties.Delegates
 interface MediaCategoryLocalDataSource {
     suspend fun all(): List<MediaCategoryEntityDto>
     suspend fun add(item: MediaCategoryEntityDto)
+
+    class D(
+        db: MediaLionDatabase,
+        private val cacheMapper: Mapper<CategoryCache, MediaCategoryEntityDto>,
+        private val entityMapper: Mapper<MediaCategoryEntityDto, CategoryCache>,
+    ) : MediaCategoryLocalDataSource {
+
+        private val categoriesDao = db.tbl_categoriesQueries
+
+        override suspend fun all(): List<MediaCategoryEntityDto> {
+            return categoriesDao
+                .all()
+                .executeAsList()
+                .map { item -> cacheMapper.map(item) }
+        }
+
+        override suspend fun add(item: MediaCategoryEntityDto) {
+            entityMapper.map(item).also { categoriesDao.insert(it) }
+        }
+    }
 
     class Fake : MediaCategoryLocalDataSource {
 

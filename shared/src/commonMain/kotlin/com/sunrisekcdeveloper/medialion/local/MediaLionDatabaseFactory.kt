@@ -13,7 +13,6 @@ class MediaLionDatabaseFactory(
             driver = driver.create(),
             MovieCacheAdapter = MovieCache.Adapter(genre_idsAdapter = listOfStringsAdapter),
             TVShowCacheAdapter = TVShowCache.Adapter(genre_idsAdapter = listOfStringsAdapter),
-
         )
     }
 }
