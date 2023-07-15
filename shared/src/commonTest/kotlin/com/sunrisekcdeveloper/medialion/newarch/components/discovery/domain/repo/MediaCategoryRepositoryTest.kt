@@ -25,12 +25,12 @@ class MediaCategoryRepositoryTest {
 
     private val apiMapper = object : Mapper<MediaCategoryApiDto, MediaCategory> {
         override fun map(input: MediaCategoryApiDto): MediaCategory {
-            val mediaType = when (input.placeholder % 3) {
+            val mediaType = when ((0..100).random() % 3) {
                 0 -> MediaTypeNew.TVShow
                 1 -> MediaTypeNew.Movie
                 else -> MediaTypeNew.All
             }
-            return MediaCategory.D(name = input.placeholder.toString(), appliesToType = mediaType)
+            return MediaCategory.D(name = input.id, appliesToType = mediaType)
         }
     }
     private val entityMapper = object : Mapper<MediaCategoryEntityDto, MediaCategory> {
