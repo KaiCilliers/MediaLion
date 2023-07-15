@@ -44,37 +44,39 @@ interface Mapper<I, O> {
 
         class DomainToCache : Mapper<Movie, MovieCache> {
             override fun map(input: Movie): MovieCache {
-                return MovieCache(
-                    id = input.id.value,
-                    adult = input.adult,
-                    backdrop_path = input.backdropPath.value,
-                    genre_ids = input.genreIds.map { it.value },
-                    overview = input.overview.value,
-                    popularity = input.popularity.value,
-                    poster_path = input.posterPath.value,
-                    release_date = input.releaseDate.value,
-                    title = input.title.value,
-                    vote_average = input.voteAverage.value,
-                    vote_count = input.voteCount
-                )
+//                return MovieCache(
+//                    id = input.id.value,
+//                    adult = input.adult,
+//                    backdrop_path = input.backdropPath.value,
+//                    genre_ids = input.genreIds.map { it.value },
+//                    overview = input.overview.value,
+//                    popularity = input.popularity.value,
+//                    poster_path = input.posterPath.value,
+//                    release_date = input.releaseDate.value,
+//                    title = input.title.value,
+//                    vote_average = input.voteAverage.value,
+//                    vote_count = input.voteCount
+//                )
+                TODO()
             }
         }
 
         class CacheToDomain : Mapper<MovieCache, Movie> {
             override fun map(input: MovieCache): Movie {
-                return Movie(
-                    adult = input.adult,
-                    backdropPath = ImageURL(value = input.backdrop_path),
-                    genreIds = input.genre_ids.map { ID(it) },
-                    id = ID(value = input.id),
-                    overview = Overview(value = input.overview),
-                    popularity = Rating(value = input.popularity),
-                    posterPath = ImageURL(value = input.poster_path),
-                    releaseDate = Date(value = input.release_date.orEmpty()),
-                    title = Title(value = input.title),
-                    voteAverage = Rating(value = input.vote_average),
-                    voteCount = input.vote_count
-                )
+//                return Movie(
+//                    adult = input.adult,
+//                    backdropPath = ImageURL(value = input.backdrop_path),
+//                    genreIds = input.genre_ids.map { ID(it) },
+//                    id = ID(value = input.id),
+//                    overview = Overview(value = input.overview),
+//                    popularity = Rating(value = input.popularity),
+//                    posterPath = ImageURL(value = input.poster_path),
+//                    releaseDate = Date(value = input.release_date.orEmpty()),
+//                    title = Title(value = input.title),
+//                    voteAverage = Rating(value = input.vote_average),
+//                    voteCount = input.vote_count
+//                )
+                TODO()
             }
         }
 
@@ -130,37 +132,39 @@ interface Mapper<I, O> {
 
         class DomainToCache : Mapper<TVShow, TVShowCache> {
             override fun map(input: TVShow): TVShowCache {
-                return TVShowCache(
-                    id = input.id.value,
-                    name = input.name.value,
-                    backdropPath = input.backdropPath.value,
-                    genre_ids = input.genreIds.map { it.value },
-                    overview = input.overview.value,
-                    popularity = input.popularity.value,
-                    poster_path = input.posterPath.value,
-                    vote_average = input.voteAverage.value,
-                    vote_count = input.voteCount,
-                    first_air_date = input.firstAirDate.value,
-                    adult = input.adult,
-                )
+//                return TVShowCache(
+//                    id = input.id.value,
+//                    name = input.name.value,
+//                    backdropPath = input.backdropPath.value,
+//                    genre_ids = input.genreIds.map { it.value },
+//                    overview = input.overview.value,
+//                    popularity = input.popularity.value,
+//                    poster_path = input.posterPath.value,
+//                    vote_average = input.voteAverage.value,
+//                    vote_count = input.voteCount,
+//                    first_air_date = input.firstAirDate.value,
+//                    adult = input.adult,
+//                )
+                TODO()
             }
         }
 
         class CacheToDomain : Mapper<TVShowCache, TVShow> {
             override fun map(input: TVShowCache): TVShow {
-                return TVShow(
-                    adult = input.adult,
-                    backdropPath = ImageURL(value = input.backdropPath),
-                    genreIds = input.genre_ids.map { ID(it) },
-                    id = ID(value = input.id),
-                    overview = Overview(value = input.overview),
-                    popularity = Rating(value = input.popularity),
-                    posterPath = ImageURL(value = input.poster_path),
-                    name = Title(value = input.name),
-                    voteAverage = Rating(value = input.vote_average),
-                    voteCount = input.vote_count,
-                    firstAirDate = Date(value = input.first_air_date)
-                )
+//                return TVShow(
+//                    adult = input.adult,
+//                    backdropPath = ImageURL(value = input.backdropPath),
+//                    genreIds = input.genre_ids.map { ID(it) },
+//                    id = ID(value = input.id),
+//                    overview = Overview(value = input.overview),
+//                    popularity = Rating(value = input.popularity),
+//                    posterPath = ImageURL(value = input.poster_path),
+//                    name = Title(value = input.name),
+//                    voteAverage = Rating(value = input.vote_average),
+//                    voteCount = input.vote_count,
+//                    firstAirDate = Date(value = input.first_air_date)
+//                )
+                TODO()
             }
         }
 

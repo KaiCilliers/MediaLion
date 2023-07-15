@@ -57,12 +57,13 @@ interface CollectionRepository {
         }
 
         override suspend fun insertCollection(name: String) {
-            suspendRunReThrowable("Failed to inset a collection [name=$name]") {
-                withContext(dispatcherProvider.io) {
-                    collectionQueries.insert(id = null, name = name)
-                }
-            }
-                .onFailure { throw it }
+//            suspendRunReThrowable("Failed to inset a collection [name=$name]") {
+//                withContext(dispatcherProvider.io) {
+//                    collectionQueries.insert(id = null, name = name)
+//                }
+//            }
+//                .onFailure { throw it }
+            TODO()
         }
 
         override fun getCollection(name: String): Flow<CollectionWithMedia> {
@@ -102,49 +103,51 @@ interface CollectionRepository {
         }
 
         override suspend fun addMediaToCollection(collection: String, mediaItem: MediaItem) {
-            withContext(dispatcherProvider.io) {
-                when(mediaItem) {
-                    is Movie -> {
-                        database.transaction {
-                            collectionQueries.insert(null, collection)
-                            collectionQueries.findCollection(collection).executeAsOne().also {
-                                database.xref_movie_collectionQueries.addToCollection(it.id, mediaItem.id.value)
-                            }
-                        }
-                    }
-                    is TVShow -> {
-                        database.transaction {
-                            collectionQueries.insert(null, collection)
-                            collectionQueries.findCollection(collection).executeAsOne().also {
-                                database.xref_tvshow_collectionQueries.addToCollection(it.id, mediaItem.id.value)
-                            }
-                        }
-                    }
-                }
-            }
+//            withContext(dispatcherProvider.io) {
+//                when(mediaItem) {
+//                    is Movie -> {
+//                        database.transaction {
+//                            collectionQueries.insert(null, collection)
+//                            collectionQueries.findCollection(collection).executeAsOne().also {
+//                                database.xref_movie_collectionQueries.addToCollection(it.id, mediaItem.id.value)
+//                            }
+//                        }
+//                    }
+//                    is TVShow -> {
+//                        database.transaction {
+//                            collectionQueries.insert(null, collection)
+//                            collectionQueries.findCollection(collection).executeAsOne().also {
+//                                database.xref_tvshow_collectionQueries.addToCollection(it.id, mediaItem.id.value)
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+            TODO()
         }
 
         override suspend fun removeMediaFromCollection(collection: String, mediaId: ID, mediaType: MediaType) {
-            withContext(dispatcherProvider.io) {
-                when(mediaType) {
-                    MediaType.MOVIE -> {
-                        database.transaction {
-                            collectionQueries.insert(null, collection)
-                            collectionQueries.findCollection(collection).executeAsOne().also {
-                                database.xref_movie_collectionQueries.removeFromCollection(it.id, mediaId.value)
-                            }
-                        }
-                    }
-                    MediaType.TV -> {
-                        database.transaction {
-                            collectionQueries.insert(null, collection)
-                            collectionQueries.findCollection(collection).executeAsOne().also {
-                                database.xref_tvshow_collectionQueries.removeFromCollection(it.id, mediaId.value)
-                            }
-                        }
-                    }
-                }
-            }
+//            withContext(dispatcherProvider.io) {
+//                when(mediaType) {
+//                    MediaType.MOVIE -> {
+//                        database.transaction {
+//                            collectionQueries.insert(null, collection)
+//                            collectionQueries.findCollection(collection).executeAsOne().also {
+//                                database.xref_movie_collectionQueries.removeFromCollection(it.id, mediaId.value)
+//                            }
+//                        }
+//                    }
+//                    MediaType.TV -> {
+//                        database.transaction {
+//                            collectionQueries.insert(null, collection)
+//                            collectionQueries.findCollection(collection).executeAsOne().also {
+//                                database.xref_tvshow_collectionQueries.removeFromCollection(it.id, mediaId.value)
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+            TODO()
         }
 
         override suspend fun deleteCollection(collection: Title) {

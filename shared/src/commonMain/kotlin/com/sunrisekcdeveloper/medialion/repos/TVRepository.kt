@@ -37,24 +37,25 @@ interface TVRepository {
         private val tvShowQueries = database.tbl_tvshowQueries
 
         override suspend fun tvDetails(id: ID): Result<TVShow> {
-            return withContext(dispatcherProvider.io) {
-                return@withContext suspendRunReThrowable("Unable to retrieve TV show details [id=$id]") {
-                    var cacheTVShow = tvShowQueries.findTVShow(id.value).executeAsOneOrNull()
-
-                    if (cacheTVShow == null) {
-                        client.tvDetails(id.value)
-                            .onSuccess {
-                                val tvShow = responseToDomain.map(it)
-                                domainToCache.map(tvShow).apply {
-                                    tvShowQueries.insert(this)
-                                    cacheTVShow = this
-                                }
-                            }
-                            .onFailure { throw Exception("Unable to fetch tv details from API [id=$id]", it.cause) }
-                    }
-                    cacheToDomain.map(cacheTVShow!!)
-                }
-            }
+//            return withContext(dispatcherProvider.io) {
+//                return@withContext suspendRunReThrowable("Unable to retrieve TV show details [id=$id]") {
+//                    var cacheTVShow = tvShowQueries.findTVShow(id.value).executeAsOneOrNull()
+//
+//                    if (cacheTVShow == null) {
+//                        client.tvDetails(id.value)
+//                            .onSuccess {
+//                                val tvShow = responseToDomain.map(it)
+//                                domainToCache.map(tvShow).apply {
+//                                    tvShowQueries.insert(this)
+//                                    cacheTVShow = this
+//                                }
+//                            }
+//                            .onFailure { throw Exception("Unable to fetch tv details from API [id=$id]", it.cause) }
+//                    }
+//                    cacheToDomain.map(cacheTVShow!!)
+//                }
+//            }
+            TODO()
         }
 
         override fun withGenre(id: ID): Flow<TVShow> = flow {

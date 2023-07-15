@@ -59,24 +59,25 @@ interface MovieRepository {
             .flowOn(dispatcherProvider.io)
 
         override suspend fun movieDetails(id: ID): Result<Movie> {
-            return withContext(dispatcherProvider.io) {
-                return@withContext suspendRunReThrowable("Unable to retrieve TV show details [id=$id]") {
-                    var cacheMovie = movieQueries.findMovie(id.value).executeAsOneOrNull()
-
-                    if (cacheMovie == null) {
-                        client.movieDetails(id.value)
-                            .onSuccess {
-                                val movie = responseToDomain.map(it)
-                                domainToCache.map(movie).apply {
-                                    movieQueries.insert(this)
-                                    cacheMovie = this
-                                }
-                            }
-                            .onFailure { throw Exception("Unable to fetch movie details from API [id=$id]", it.cause) }
-                    }
-                    cacheToDomain.map(cacheMovie!!)
-                }
-            }
+//            return withContext(dispatcherProvider.io) {
+//                return@withContext suspendRunReThrowable("Unable to retrieve TV show details [id=$id]") {
+//                    var cacheMovie = movieQueries.findMovie(id.value).executeAsOneOrNull()
+//
+//                    if (cacheMovie == null) {
+//                        client.movieDetails(id.value)
+//                            .onSuccess {
+//                                val movie = responseToDomain.map(it)
+//                                domainToCache.map(movie).apply {
+//                                    movieQueries.insert(this)
+//                                    cacheMovie = this
+//                                }
+//                            }
+//                            .onFailure { throw Exception("Unable to fetch movie details from API [id=$id]", it.cause) }
+//                    }
+//                    cacheToDomain.map(cacheMovie!!)
+//                }
+//            }
+            TODO()
         }
 
         override fun recommendationsForMovie(id: ID): Flow<Movie> = flow {

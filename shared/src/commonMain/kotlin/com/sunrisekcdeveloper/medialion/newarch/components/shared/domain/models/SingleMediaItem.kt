@@ -2,7 +2,7 @@ package com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models
 
 import com.sunrisekcdeveloper.medialion.domain.value.Title
 
-interface SingleMediaItem {
+sealed interface SingleMediaItem {
     fun name(): Title
     fun identifier(): ID
 
@@ -21,7 +21,7 @@ interface SingleMediaItem {
     data class Movie(
         override val id: ID,
         override val title: Title
-    ) : SingleMediaItem.D(id, title) {
+    ) : SingleMediaItem.D(id, title), SingleMediaItem {
         constructor(name: String) : this(
             id = ID.Def(),
             title = Title(name)
@@ -31,7 +31,7 @@ interface SingleMediaItem {
     data class TVShow(
         override val id: ID,
         override val title: Title
-    ) : SingleMediaItem.D(id, title) {
+    ) : SingleMediaItem.D(id, title), SingleMediaItem {
         constructor(name: String) : this(
             id = ID.Def(),
             title = Title(name)

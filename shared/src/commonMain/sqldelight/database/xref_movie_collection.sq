@@ -1,6 +1,6 @@
 CREATE TABLE xref_movie_collection (
-    collection_id INTEGER AS Int NOT NULL,
-    movie_id INTEGER AS Int NOT NULL,
+    collection_id TEXT NOT NULL,
+    movie_id TEXT NOT NULL,
     FOREIGN KEY (collection_id) REFERENCES CollectionCache(id),
     FOREIGN KEY (movie_id) REFERENCES MovieCache(id),
     UNIQUE (collection_id, movie_id)

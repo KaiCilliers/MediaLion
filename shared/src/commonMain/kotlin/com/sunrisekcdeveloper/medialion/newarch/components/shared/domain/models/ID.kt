@@ -9,5 +9,9 @@ interface ID {
         override fun uniqueIdentifier(): String {
             return value
         }
+
+        override fun toString(): String {
+            return uniqueIdentifier()
+        }
     }
 }
