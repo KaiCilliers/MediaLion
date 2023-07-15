@@ -5,6 +5,7 @@ import assertk.assertions.isEqualTo
 import com.sunrisekcdeveloper.medialion.domain.value.Title
 import com.sunrisekcdeveloper.medialion.mappers.Mapper
 import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.models.MediaRequirements
+import com.sunrisekcdeveloper.medialion.newarch.components.shared.data.singleMedia.SingleMediaLocalDataSource
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.data.singleMedia.SingleMediaNetworkDto
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.data.singleMedia.SingleMediaRemoteDataSource
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.SingleMediaItem
@@ -20,6 +21,7 @@ class SingleMediaItemRepositoryTest {
 
     private lateinit var singleMediaItemRepository: SingleMediaItemRepository
     private lateinit var remoteDataSource: SingleMediaRemoteDataSource.Fake
+    private lateinit var localDataSource: SingleMediaLocalDataSource.Fake
     private val mediaRequirements = MediaRequirements(
         withTitle = Title(value = ""),
         withMediaTypes = listOf(),
@@ -33,8 +35,10 @@ class SingleMediaItemRepositoryTest {
     @BeforeTest
     fun setup() {
         remoteDataSource = SingleMediaRemoteDataSource.Fake()
+        localDataSource = SingleMediaLocalDataSource.Fake()
         singleMediaItemRepository = SingleMediaItemRepository.D(
             remoteDataSource = remoteDataSource,
+            localDataSource = localDataSource,
             dtoMapper = object : Mapper<SingleMediaNetworkDto, SingleMediaItem> {
                 override fun map(input: SingleMediaNetworkDto): SingleMediaItem {
                     return SingleMediaItem.Movie(name = input.placeholder.toString())
@@ -53,6 +57,13 @@ class SingleMediaItemRepositoryTest {
     fun `throw an exception when remote datasource throws an exception`() = runTest {
         remoteDataSource.forceFailure = true
         assertFailsWith<Exception> { singleMediaItemRepository.media(mediaRequirements) }
+    }
+
+    @Test
+    fun `do not throw an exception when an error occurs when calling local datasource`() = runTest {
+        localDataSource.forceFailure = true
+        val media = singleMediaItemRepository.media(mediaRequirements)
+        assertThat(media.size).isEqualTo(mediaRequirements.amountOfMedia)
     }
 
 }

@@ -1,9 +1,11 @@
 package com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.repos
 
 import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.sunrisekcdeveloper.medialion.mappers.Mapper
 import com.sunrisekcdeveloper.medialion.newarch.components.discovery.domain.models.MediaRequirements
+import com.sunrisekcdeveloper.medialion.newarch.components.shared.data.singleMedia.SingleMediaLocalDataSource
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.data.singleMedia.SingleMediaNetworkDto
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.data.singleMedia.SingleMediaRemoteDataSource
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.SingleMediaItem
@@ -11,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 
@@ -19,7 +22,8 @@ interface SingleMediaItemRepository {
 
     class D(
         private val remoteDataSource: SingleMediaRemoteDataSource,
-        private val dtoMapper: Mapper<SingleMediaNetworkDto, SingleMediaItem>
+        private val localDataSource: SingleMediaLocalDataSource,
+        private val dtoMapper: Mapper<SingleMediaNetworkDto, SingleMediaItem>,
     ) : SingleMediaItemRepository {
 
         override suspend fun media(mediaReq: MediaRequirements): List<SingleMediaItem> = runCatching {
@@ -27,8 +31,16 @@ interface SingleMediaItemRepository {
             remoteFlow
                 .take(mediaReq.amountOfMedia)
                 .map { dtoMapper.map(it) }
+                .onEach { singleMediaItem ->  saveItemLocally(singleMediaItem) }
                 .toList()
         }.getOrElse { throw Exception("Failed to fetch media from remote datasource with requirements $mediaReq", it) }
+
+        private suspend fun saveItemLocally(item: SingleMediaItem) = runCatching {
+            localDataSource.upsert(item)
+        }.onFailure {
+            // ignore failure, just log
+            println(Exception("Failed in saving media item to local storage --> $item", it))
+        }
 
     }
 
