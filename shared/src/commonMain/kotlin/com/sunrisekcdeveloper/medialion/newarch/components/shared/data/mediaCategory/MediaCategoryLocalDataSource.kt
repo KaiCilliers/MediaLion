@@ -23,8 +23,8 @@ interface MediaCategoryLocalDataSource {
             MediaCategoryEntityDto(2),
         )
 
-        var clearCache by Delegates.observable(false)  { _, _, newValue ->
-            if (newValue.equals(true)) {
+        var clearCache by Delegates.observable(false)  { _, _, clearIt ->
+            if (clearIt) {
                 categoriesAdded.clear()
             }
         }

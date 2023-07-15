@@ -14,7 +14,6 @@ fun <T> infiniteFlowOf(generator: (Int) -> T): Flow<T> = flow {
 
 fun <T> T.wrapInList(): List<T> = listOf(this)
 
-fun <T> Flow<List<T>>.unwrapList(): Flow<T> = transform { value ->
-    flow { value.forEach { emit(it) } }
-        .onEach { emit(it) }
+fun <T, R> Flow<List<T>>.mapList(transform: (T) -> R): Flow<List<R>> = transform { value ->
+    emit(value.map { transform(it) })
 }

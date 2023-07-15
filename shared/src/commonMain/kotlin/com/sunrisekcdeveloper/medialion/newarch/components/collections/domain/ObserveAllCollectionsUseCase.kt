@@ -5,11 +5,9 @@ import com.github.michaelbull.result.mapError
 import com.github.michaelbull.result.runCatching
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.TitledMediaList
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.repos.CollectionRepositoryNew
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-@OptIn(ExperimentalCoroutinesApi::class)
 interface ObserveAllCollectionsUseCase {
     suspend operator fun invoke(): Result<Flow<TitledMediaList>, ObserveAllCollectionsError>
 

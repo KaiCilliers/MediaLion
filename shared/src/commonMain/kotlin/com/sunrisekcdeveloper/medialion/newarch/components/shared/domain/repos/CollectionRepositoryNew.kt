@@ -1,20 +1,61 @@
 package com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.repos
 
 import com.sunrisekcdeveloper.medialion.domain.value.Title
+import com.sunrisekcdeveloper.medialion.mappers.Mapper
+import com.sunrisekcdeveloper.medialion.newarch.components.shared.data.collection.CollectionEntityDto
+import com.sunrisekcdeveloper.medialion.newarch.components.shared.data.collection.CollectionLocalDataSource
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.domain.models.CollectionNew
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.utils.ForcedException
+import com.sunrisekcdeveloper.medialion.newarch.components.shared.utils.mapList
 import com.sunrisekcdeveloper.medialion.newarch.components.shared.utils.wrapInList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.flow.update
 
 interface CollectionRepositoryNew {
-    suspend fun observe(): Flow<List<CollectionNew>>
+    fun observe(): Flow<List<CollectionNew>>
     suspend fun all(): List<CollectionNew>
     suspend fun collection(title: Title): List<CollectionNew>
     suspend fun upsert(collection: CollectionNew)
     suspend fun delete(collection: CollectionNew)
+
+    class D(
+        private val localDataSource: CollectionLocalDataSource,
+        private val entityMapper: Mapper<CollectionEntityDto, CollectionNew>,
+        private val domainMapper: Mapper<CollectionNew, CollectionEntityDto>
+    ) : CollectionRepositoryNew {
+        override fun observe(): Flow<List<CollectionNew>> {
+            return localDataSource
+                .observeCollections()
+                .mapList { entity -> entityMapper.map(entity) }
+        }
+
+        override suspend fun all(): List<CollectionNew> {
+            return localDataSource
+                .observeCollections()
+                .mapList { entity -> entityMapper.map(entity) }
+                .first()
+        }
+
+        override suspend fun collection(title: Title): List<CollectionNew> {
+            return localDataSource
+                .findWithTitle(title)
+                .map { entity -> entityMapper.map(entity) }
+        }
+
+        override suspend fun upsert(collection: CollectionNew) {
+            domainMapper.map(collection).also { entity ->
+                localDataSource.upsert(entity)
+            }
+        }
+
+        override suspend fun delete(collection: CollectionNew) {
+            localDataSource.delete(domainMapper.map(collection))
+        }
+    }
 
     class Fake : CollectionRepositoryNew {
 
@@ -34,7 +75,7 @@ interface CollectionRepositoryNew {
             }
         }
 
-        override suspend fun observe(): Flow<List<CollectionNew>> {
+        override fun observe(): Flow<List<CollectionNew>> {
             if (forceFailure) throw ForcedException()
             return cacheFlow.map { it.toList() }
         }
