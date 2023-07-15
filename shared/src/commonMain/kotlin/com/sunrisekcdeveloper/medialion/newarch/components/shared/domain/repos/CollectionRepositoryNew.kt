@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.flow.update
 
 interface CollectionRepositoryNew {
@@ -22,6 +21,7 @@ interface CollectionRepositoryNew {
     suspend fun upsert(collection: CollectionNew)
     suspend fun delete(collection: CollectionNew)
 
+    // todo inject dispatcher
     class D(
         private val localDataSource: CollectionLocalDataSource,
         private val entityMapper: Mapper<CollectionEntityDto, CollectionNew>,
