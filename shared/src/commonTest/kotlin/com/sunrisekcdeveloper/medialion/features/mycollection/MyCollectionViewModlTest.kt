@@ -3,12 +3,7 @@ package com.sunrisekcdeveloper.medialion.features.mycollection
 import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isInstanceOf
-import com.sunrisekcdeveloper.medialion.components.collections.domain.FetchAllCollectionsUseCaseNew
-import com.sunrisekcdeveloper.medialion.features.mycollection.FailedToFetchCollections
-import com.sunrisekcdeveloper.medialion.features.mycollection.FetchMyCollectionsMedia
-import com.sunrisekcdeveloper.medialion.features.mycollection.Loading
-import com.sunrisekcdeveloper.medialion.features.mycollection.MLMyCollectionViewModelNew
-import com.sunrisekcdeveloper.medialion.features.mycollection.MyCollectionsContent
+import com.sunrisekcdeveloper.medialion.components.collections.domain.FetchAllCollectionsAsTitledMediaUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -21,18 +16,18 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class MLMyCollectionViewModelTest {
+class MyCollectionViewModlTest {
 
 
     private lateinit var sut: MLMyCollectionViewModelNew
-    private lateinit var fetchMyCollectionsUseCase: com.sunrisekcdeveloper.medialion.components.collections.domain.FetchAllCollectionsUseCaseNew.Fake
+    private lateinit var fetchMyCollectionsUseCase: FetchAllCollectionsAsTitledMediaUseCase.Fake
 
     private val scope = TestScope()
 
     @BeforeTest
     fun setup() {
         Dispatchers.setMain(StandardTestDispatcher(scope.testScheduler))
-        fetchMyCollectionsUseCase = com.sunrisekcdeveloper.medialion.components.collections.domain.FetchAllCollectionsUseCaseNew.Fake()
+        fetchMyCollectionsUseCase = FetchAllCollectionsAsTitledMediaUseCase.Fake()
         sut = MLMyCollectionViewModelNew.Default(
             fetchMyCollectionsUseCase = fetchMyCollectionsUseCase,
             coroutineScope = scope,

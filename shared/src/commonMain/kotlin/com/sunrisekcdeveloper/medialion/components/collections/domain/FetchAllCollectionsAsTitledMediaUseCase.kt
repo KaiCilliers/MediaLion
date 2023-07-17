@@ -8,13 +8,13 @@ import com.github.michaelbull.result.runCatching
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.TitledMediaList
 import com.sunrisekcdeveloper.medialion.components.shared.domain.repos.CollectionRepositoryNew
 
-interface FetchAllCollectionsUseCaseNew {
-    suspend operator fun invoke(): Result<TitledMediaList, FetchAllCollectionsError>
+interface FetchAllCollectionsAsTitledMediaUseCase {
+    suspend operator fun invoke(): Result<TitledMediaList, FetchAllCollectionsAsTitledMediaError>
 
     class Default(
         private val collectionRepository: CollectionRepositoryNew
-    ) : FetchAllCollectionsUseCaseNew {
-        override suspend fun invoke(): Result<TitledMediaList, FetchAllCollectionsError> = runCatching {
+    ) : FetchAllCollectionsAsTitledMediaUseCase {
+        override suspend fun invoke(): Result<TitledMediaList, FetchAllCollectionsAsTitledMediaError> = runCatching {
             val collections = collectionRepository
                 .all()
                 .map { singleCollection -> singleCollection.asMediaWithTitle() }
@@ -23,9 +23,9 @@ interface FetchAllCollectionsUseCaseNew {
             .mapError { UnableToRetrieveCollections }
     }
 
-    class Fake : FetchAllCollectionsUseCaseNew {
+    class Fake : FetchAllCollectionsAsTitledMediaUseCase {
         var hinder = false
-        override suspend fun invoke(): Result<TitledMediaList, FetchAllCollectionsError> {
+        override suspend fun invoke(): Result<TitledMediaList, FetchAllCollectionsAsTitledMediaError> {
             return if (!hinder) {
                 Ok(TitledMediaList.Def(emptyList()))
             } else {
@@ -35,5 +35,5 @@ interface FetchAllCollectionsUseCaseNew {
     }
 }
 
-sealed interface FetchAllCollectionsError
-object UnableToRetrieveCollections : FetchAllCollectionsError
+sealed interface FetchAllCollectionsAsTitledMediaError
+object UnableToRetrieveCollections : FetchAllCollectionsAsTitledMediaError

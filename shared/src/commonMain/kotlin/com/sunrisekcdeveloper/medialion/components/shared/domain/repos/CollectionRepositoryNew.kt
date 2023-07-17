@@ -1,18 +1,17 @@
 package com.sunrisekcdeveloper.medialion.components.shared.domain.repos
 
-import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
-import com.sunrisekcdeveloper.medialion.oldArch.mappers.Mapper
 import com.sunrisekcdeveloper.medialion.components.shared.data.collection.CollectionEntityDto
 import com.sunrisekcdeveloper.medialion.components.shared.data.collection.CollectionLocalDataSource
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.CollectionNew
 import com.sunrisekcdeveloper.medialion.components.shared.utils.ForcedException
 import com.sunrisekcdeveloper.medialion.components.shared.utils.mapList
 import com.sunrisekcdeveloper.medialion.components.shared.utils.wrapInList
+import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
+import com.sunrisekcdeveloper.medialion.oldArch.mappers.Mapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
 
 interface CollectionRepositoryNew {
     fun observe(): Flow<List<CollectionNew>>
@@ -59,14 +58,19 @@ interface CollectionRepositoryNew {
 
     class Fake : CollectionRepositoryNew {
 
+        // used to pass the equality check from distinctUntilChanged implemented by state flow
+        private data class Container(
+            val list: List<CollectionNew>
+        )
+
         private var cache: Set<CollectionNew> = mutableSetOf(CollectionNew.Def("Favorite"))
             set(value) {
-                cacheFlow.update { value }
+                cacheFlow.tryEmit(Container(value.toList()))
                 field = value
             }
 
         var forceFailure = false
-        private val cacheFlow = MutableStateFlow<Set<CollectionNew>>(cache)
+        private val cacheFlow = MutableStateFlow<Container>(Container(cache.toList()))
 
         fun clearCache() {
             cache.toMutableSet().run {
@@ -77,7 +81,7 @@ interface CollectionRepositoryNew {
 
         override fun observe(): Flow<List<CollectionNew>> {
             if (forceFailure) throw ForcedException()
-            return cacheFlow.map { it.toList() }
+            return cacheFlow.map { it.list.toList() }
         }
 
         override suspend fun all(): List<CollectionNew> {

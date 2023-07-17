@@ -2,9 +2,9 @@ package com.sunrisekcdeveloper.medialion.features.mycollection
 
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
+import com.sunrisekcdeveloper.medialion.components.collections.domain.FetchAllCollectionsAsTitledMediaUseCase
 import com.sunrisekcdeveloper.medialion.oldArch.flow.CStateFlow
 import com.sunrisekcdeveloper.medialion.oldArch.flow.cStateFlow
-import com.sunrisekcdeveloper.medialion.components.collections.domain.FetchAllCollectionsUseCaseNew
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +16,7 @@ interface MLMyCollectionViewModelNew {
     fun submit(action: MyCollectionsAction)
 
     class Default(
-        private val fetchMyCollectionsUseCase: com.sunrisekcdeveloper.medialion.components.collections.domain.FetchAllCollectionsUseCaseNew,
+        private val fetchMyCollectionsUseCase: FetchAllCollectionsAsTitledMediaUseCase,
         coroutineScope: CoroutineScope? = null // // nullable due to iOS
     ) : MLMyCollectionViewModelNew {
 

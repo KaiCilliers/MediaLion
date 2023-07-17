@@ -7,17 +7,17 @@ import com.sunrisekcdeveloper.medialion.components.shared.domain.models.Collecti
 import com.sunrisekcdeveloper.medialion.components.shared.domain.repos.CollectionRepositoryNew
 
 interface AddUpdateCollectionUseCase {
-    suspend operator fun invoke(collection: CollectionNew): Result<Unit, com.sunrisekcdeveloper.medialion.components.collections.domain.AddUpdateCollectionError>
+    suspend operator fun invoke(collection: CollectionNew): Result<Unit, AddUpdateCollectionError>
 
     class Def(
         private val collectionRepository: CollectionRepositoryNew
-    ) : com.sunrisekcdeveloper.medialion.components.collections.domain.AddUpdateCollectionUseCase {
-        override suspend fun invoke(collection: CollectionNew): Result<Unit, com.sunrisekcdeveloper.medialion.components.collections.domain.AddUpdateCollectionError> = runCatching {
+    ) : AddUpdateCollectionUseCase {
+        override suspend fun invoke(collection: CollectionNew): Result<Unit, AddUpdateCollectionError> = runCatching {
             collectionRepository.upsert(collection)
         }
-            .mapError { com.sunrisekcdeveloper.medialion.components.collections.domain.FailedToAddCollection }
+            .mapError { FailedToAddCollection }
     }
 }
 
 sealed interface AddUpdateCollectionError
-object FailedToAddCollection : com.sunrisekcdeveloper.medialion.components.collections.domain.AddUpdateCollectionError
+object FailedToAddCollection : AddUpdateCollectionError

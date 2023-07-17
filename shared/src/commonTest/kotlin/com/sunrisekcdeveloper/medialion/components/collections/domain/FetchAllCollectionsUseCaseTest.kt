@@ -15,13 +15,13 @@ import kotlin.test.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class FetchAllCollectionsUseCaseTest {
 
-    private lateinit var useCase: com.sunrisekcdeveloper.medialion.components.collections.domain.FetchAllCollectionsUseCaseNew
+    private lateinit var useCase: com.sunrisekcdeveloper.medialion.components.collections.domain.FetchAllCollectionsAsTitledMediaUseCase
     private lateinit var collectionRepository: CollectionRepositoryNew.Fake
 
     @BeforeTest
     fun setup() {
         collectionRepository = CollectionRepositoryNew.Fake()
-        useCase = com.sunrisekcdeveloper.medialion.components.collections.domain.FetchAllCollectionsUseCaseNew.Default(
+        useCase = com.sunrisekcdeveloper.medialion.components.collections.domain.FetchAllCollectionsAsTitledMediaUseCase.Default(
             collectionRepository = collectionRepository
         )
     }
