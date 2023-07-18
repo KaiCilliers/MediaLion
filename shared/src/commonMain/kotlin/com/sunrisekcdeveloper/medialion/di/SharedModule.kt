@@ -7,4 +7,5 @@ val sharedModule = listOf(
     factoryModule,
     repositoryModule,
     useCaseModule,
+    viewModelModule,
 )

@@ -7,6 +7,7 @@ import assertk.assertions.doesNotContain
 import assertk.assertions.isNotNull
 import com.sunrisekcdeveloper.medialion.components.collections.domain.AddUpdateCollectionUseCase
 import com.sunrisekcdeveloper.medialion.components.collections.domain.DeleteCollectionUseCaseNew
+import com.sunrisekcdeveloper.medialion.components.shared.domain.FetchAllCollectionsUseCaseNew
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.CollectionNew
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem
 import com.sunrisekcdeveloper.medialion.components.shared.domain.repos.CollectionRepositoryNew

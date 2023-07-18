@@ -15,7 +15,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.collections.CollectionViewModel
-import com.sunrisekcdeveloper.medialion.android.ui.search.DiscoveryViewModel
+import com.sunrisekcdeveloper.medialion.android.ui.discovery.DiscoveryViewModel
 import com.sunrisekcdeveloper.medialion.android.ui.search.SearchKey
 import com.sunrisekcdeveloper.medialion.android.ui.search.SearchViewModel
 import com.zhuinden.simplestackextensions.fragmentsktx.backstack
@@ -24,9 +24,6 @@ import com.zhuinden.simplestackextensions.fragmentsktx.lookup
 class HomeFragment : Fragment() {
 
     private val discoveryViewModel by lazy { lookup<DiscoveryViewModel>() }
-    private val searchViewModel by lazy { lookup<SearchViewModel>() }
-    private val collectionViewModel by lazy { lookup<CollectionViewModel>() }
-    private val homeViewModel by lazy { lookup<HomeViewModel>() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,17 +40,13 @@ class HomeFragment : Fragment() {
                     ) {
 
                         val discoveryState by discoveryViewModel.state.collectAsState()
-                        val genreState by discoveryViewModel.genres.genres.collectAsState()
                         val collectionState by searchViewModel.collectionState.collectAsState()
-                        val otherCollectionState by collectionViewModel.state.collectAsState()
-                        val selectedTab by homeViewModel.currentTab.collectAsState()
-                        val selectedDiscoveryTopTab by homeViewModel.currentTopTab.collectAsState()
 
                         HomeScreen(
                             discoveryState = discoveryState,
                             genreState = genreState,
                             collectionsState = collectionState,
-                            submitSearchAction = { searchViewModel.submitAction(it) },
+                            submitSearchAction = { searchViewModel.submit(it) },
                             submitDiscoveryAction = { discoveryViewModel.submitAction(it) },
                             onNavigateToSearchScreen = { backstack.goTo(SearchKey) },
                             collectionState = otherCollectionState,

@@ -16,10 +16,8 @@ import kotlinx.coroutines.launch
 
 // todo this class has to separated from the domain "search component"
 interface MLSearchViewModelNew {
-
-    val state: CStateFlow<SearchUIState>
-
-    fun submitAction(action: SearchScreenAction)
+    val searchState: CStateFlow<SearchUIState>
+    fun submit(action: SearchScreenAction)
 
     class Default(
         private val searchForMediaUseCase: SearchForMediaUseCase,
@@ -29,10 +27,10 @@ interface MLSearchViewModelNew {
         private val viewModelScope = coroutineScope ?: CoroutineScope(Dispatchers.Main.immediate)
 
         private val _screenState = MutableStateFlow<SearchUIState>(SearchUIState.TopSuggestions)
-        override val state: CStateFlow<SearchUIState>
+        override val searchState: CStateFlow<SearchUIState>
             get() = _screenState.cStateFlow()
 
-        override fun submitAction(action: SearchScreenAction) {
+        override fun submit(action: SearchScreenAction) {
             when (action) {
                 is SearchScreenAction.SubmitSearchQuery -> {
                     viewModelScope.launch {

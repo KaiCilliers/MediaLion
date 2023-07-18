@@ -42,7 +42,6 @@ import com.sunrisekcdeveloper.medialion.oldArch.domain.collection.GenreState
 import com.sunrisekcdeveloper.medialion.oldArch.domain.discovery.DiscoveryAction
 import com.sunrisekcdeveloper.medialion.oldArch.domain.discovery.DiscoveryState
 import com.sunrisekcdeveloper.medialion.oldArch.domain.entities.CollectionWithMedia
-import com.sunrisekcdeveloper.medialion.oldArch.domain.search.SearchAction
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.ID
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
 import kotlinx.coroutines.launch
@@ -124,8 +123,8 @@ fun HomeScreen(
             ) {
                 when (selectedTab) {
                     BottomBarOption.DISCOVERY -> DiscoveryScreen(
-                        state = discoveryState,
-                        genreState = genreState,
+                        discoveryUIState = discoveryState,
+                        categoriesUIState = genreState,
                         submitAction = submitDiscoveryAction,
                         onInfoIconClicked = { showAboutDialog = true },
                         onSearchIconClicked = { onNavigateToSearchScreen() },

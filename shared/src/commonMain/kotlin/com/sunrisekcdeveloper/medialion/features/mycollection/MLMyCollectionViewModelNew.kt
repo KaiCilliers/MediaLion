@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 interface MLMyCollectionViewModelNew {
-    val state: CStateFlow<MyCollectionsUIState>
+    val collectionState: CStateFlow<MyCollectionsUIState>
     fun submit(action: MyCollectionsAction)
 
     class Default(
@@ -23,7 +23,7 @@ interface MLMyCollectionViewModelNew {
         private val viewModelScope = coroutineScope ?: CoroutineScope(Dispatchers.Main.immediate)
 
         private val _screenState = MutableStateFlow<MyCollectionsUIState>(Loading)
-        override val state: CStateFlow<MyCollectionsUIState>
+        override val collectionState: CStateFlow<MyCollectionsUIState>
             get() = _screenState.cStateFlow()
 
         override fun submit(action: MyCollectionsAction) {

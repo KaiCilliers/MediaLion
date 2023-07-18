@@ -36,9 +36,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sunrisekcdeveloper.medialion.oldArch.MediaItemUI
-import com.sunrisekcdeveloper.medialion.oldArch.SimpleMediaItem
-import com.sunrisekcdeveloper.medialion.oldArch.StringRes
 import com.sunrisekcdeveloper.medialion.android.R
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.about.ui.AboutScreen
@@ -50,23 +47,28 @@ import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLSearchBar
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLTitledMediaGrid
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.SearchEmptyState
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.SearchIdleState
+import com.sunrisekcdeveloper.medialion.features.search.SearchScreenAction
+import com.sunrisekcdeveloper.medialion.features.search.SearchUIState
+import com.sunrisekcdeveloper.medialion.features.shared.MiniCollectionAction
+import com.sunrisekcdeveloper.medialion.features.shared.MiniCollectionUIState
+import com.sunrisekcdeveloper.medialion.oldArch.MediaItemUI
+import com.sunrisekcdeveloper.medialion.oldArch.SimpleMediaItem
 import com.sunrisekcdeveloper.medialion.oldArch.domain.MediaType
 import com.sunrisekcdeveloper.medialion.oldArch.domain.entities.CollectionWithMedia
-import com.sunrisekcdeveloper.medialion.oldArch.domain.search.SearchAction
-import com.sunrisekcdeveloper.medialion.oldArch.domain.search.SearchState
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.ID
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
+import com.sunrisekcdeveloper.medialion.utils.StringRes
 import com.zhuinden.simplestack.Backstack
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun SearchScreen(
-    state: SearchState,
-    collectionState: List<CollectionWithMedia>,
-    submitAction: (SearchAction) -> Unit,
+    searchState: SearchUIState,
+    collectionState: MiniCollectionUIState,
+    submitSearchAction: (SearchScreenAction) -> Unit,
+    submitCollectionsAction: (MiniCollectionAction) -> Unit,
     onNavigateBack: () -> Unit,
-    backstack: Backstack,
 ) {
     val context = LocalContext.current
     var showAboutDialog by remember { mutableStateOf(false) }
@@ -104,17 +106,17 @@ fun SearchScreen(
             onAddToCollection = { collectionName ->
                 val selectedMedia = selectedMediaItem
                 if (selectedMedia != null) {
-                    submitAction(SearchAction.AddToCollection(Title(collectionName), ID(selectedMedia.id.toInt()), selectedMedia.mediaType))
+                    submitSearchAction(SearchAction.AddToCollection(Title(collectionName), ID(selectedMedia.id.toInt()), selectedMedia.mediaType))
                 }
             },
             onRemoveFromCollection = { collectionName ->
                 val selectedMedia = selectedMediaItem
                 if (selectedMedia != null) {
-                    submitAction(SearchAction.RemoveFromCollection(Title(collectionName), ID(selectedMedia.id.toInt()), selectedMedia.mediaType))
+                    submitSearchAction(SearchAction.RemoveFromCollection(Title(collectionName), ID(selectedMedia.id.toInt()), selectedMedia.mediaType))
                 }
             },
             onSaveList = {
-                submitAction(SearchAction.CreateCollection(Title(it)))
+                submitSearchAction(SearchAction.CreateCollection(Title(it)))
             }
         )
     }
@@ -180,14 +182,14 @@ fun SearchScreen(
             }
 
             MLSearchBar(
-                searchQuery = state.searchQuery,
+                searchQuery = searchState.searchQuery,
                 labelText = stringResource(id = StringRes.emptySearch.resourceId),
                 onSearchQueryTextChange = {
-                    submitAction(SearchAction.SubmitSearchQuery(it))
+                    submitSearchAction(SearchAction.SubmitSearchQuery(it))
                 },
-                onClearSearchText = { submitAction(SearchAction.ClearSearchText) },
+                onClearSearchText = { submitSearchAction(SearchAction.ClearSearchText) },
             )
-            when (state) {
+            when (searchState) {
                 is SearchState.Empty -> {
                     SearchEmptyState()
                 }
@@ -195,9 +197,9 @@ fun SearchScreen(
                 is SearchState.Idle -> {
                     SearchIdleState(
                         rowTitle = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.top_suggestions),
-                        media = state.suggestedMedia,
+                        media = searchState.suggestedMedia,
                         onMediaClicked = {
-                            submitAction(SearchAction.GetMediaDetails(ID(it.id), it.mediaType))
+                            submitSearchAction(SearchAction.GetMediaDetails(ID(it.id), it.mediaType))
                             selectedMediaItem = SimpleMediaItem(
                                 id = it.id.toString(),
                                 title = it.title,
@@ -210,8 +212,8 @@ fun SearchScreen(
                         },
                         onFavoriteToggle = { mediaItem: MediaItemUI, favorited: Boolean ->
                             when (favorited) {
-                                true -> submitAction(SearchAction.AddToFavorites(ID(mediaItem.id), mediaItem.mediaType))
-                                false -> submitAction(SearchAction.RemoveFromFavorites(ID(mediaItem.id), mediaItem.mediaType))
+                                true -> submitSearchAction(SearchAction.AddToFavorites(ID(mediaItem.id), mediaItem.mediaType))
+                                false -> submitSearchAction(SearchAction.RemoveFromFavorites(ID(mediaItem.id), mediaItem.mediaType))
                             }
                         },
                     )
@@ -222,13 +224,13 @@ fun SearchScreen(
                 }
 
                 is SearchState.Results -> {
-                    println("deadpool - $state")
+                    println("deadpool - $searchState")
                     MLTitledMediaGrid(
                         gridTitle = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.top_results),
-                        media = state.searchResults,
+                        media = searchState.searchResults,
                         suggestedMedia = listOf(
-                            state.relatedTitles[0],
-                            state.relatedTitles[1],
+                            searchState.relatedTitles[0],
+                            searchState.relatedTitles[1],
                         ),
                         onMediaClicked = {
                             selectedMediaItem = SimpleMediaItem(
@@ -264,8 +266,8 @@ private fun SearchScreenPreview() {
 
             SearchScreen(
                 collectionState = collectionState,
-                state = screenState,
-                submitAction = { action ->
+                searchState = screenState,
+                submitSearchAction = { action ->
                     when (action) {
                         SearchAction.ClearSearchText -> {
                             screenState = SearchState.Idle(

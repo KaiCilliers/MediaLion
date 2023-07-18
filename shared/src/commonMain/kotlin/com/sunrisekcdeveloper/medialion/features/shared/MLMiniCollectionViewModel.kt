@@ -4,6 +4,7 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
 import com.sunrisekcdeveloper.medialion.components.collections.domain.AddUpdateCollectionUseCase
 import com.sunrisekcdeveloper.medialion.components.collections.domain.DeleteCollectionUseCaseNew
+import com.sunrisekcdeveloper.medialion.components.shared.domain.FetchAllCollectionsUseCaseNew
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.CollectionNew
 import com.sunrisekcdeveloper.medialion.utils.flow.CStateFlow
 import com.sunrisekcdeveloper.medialion.utils.flow.cStateFlow

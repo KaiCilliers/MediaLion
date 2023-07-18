@@ -15,8 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -40,19 +38,21 @@ import com.sunrisekcdeveloper.medialion.android.ui.discovery.ui.MLFilterCategori
 import com.sunrisekcdeveloper.medialion.android.ui.discovery.ui.MLTopBar
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLMediaPoster
 import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLTitledMediaRow
+import com.sunrisekcdeveloper.medialion.features.discovery.CategoriesAction
+import com.sunrisekcdeveloper.medialion.features.discovery.CategoriesUIState
+import com.sunrisekcdeveloper.medialion.features.discovery.DiscoveryNewActions
+import com.sunrisekcdeveloper.medialion.features.discovery.DiscoveryUIState
 import com.sunrisekcdeveloper.medialion.oldArch.domain.MediaType
 import com.sunrisekcdeveloper.medialion.oldArch.domain.collection.GenreState
-import com.sunrisekcdeveloper.medialion.oldArch.domain.discovery.DiscoveryAction
-import com.sunrisekcdeveloper.medialion.oldArch.domain.discovery.DiscoveryState
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.ID
 
 @Composable
 fun DiscoveryScreen(
-    state: DiscoveryState,
-    genreState: GenreState,
+    discoveryUIState: DiscoveryUIState,
+    categoriesUIState: CategoriesUIState,
     contentFilter: FilterCategory,
     onChangeContentFilter: (FilterCategory) -> Unit,
-    submitAction: (DiscoveryAction) -> Unit,
+    submitAction: (DiscoveryNewActions) -> Unit,
     onSearchIconClicked: () -> Unit,
     onInfoIconClicked: () -> Unit,
     showDetailPreviewDialogWithMedia: (SimpleMediaItem) -> Unit,
@@ -63,9 +63,9 @@ fun DiscoveryScreen(
     var selectedMediaItem by remember { mutableStateOf<SimpleMediaItem?>(null) }
 
     if (showGenreSelectionDialog) {
-        if (genreState is GenreState.Genres) {
+        if (categoriesUIState is GenreState.Genres) {
             CategoriesDialog(
-                categories = genreState.all,
+                categories = categoriesUIState.all,
                 onDismiss = { showGenreSelectionDialog = false },
                 onSelection = {
                     submitAction(
@@ -139,13 +139,13 @@ fun DiscoveryScreen(
                     }
                 )
 
-                when (state) {
+                when (discoveryUIState) {
                     is DiscoveryState.Content -> {
-                        if (state.media.size > 1) {
+                        if (discoveryUIState.media.size > 1) {
                             LazyColumn(
                                 verticalArrangement = Arrangement.spacedBy(20.dp)
                             ) {
-                                items(state.media) {
+                                items(discoveryUIState.media) {
                                     MLTitledMediaRow(
                                         rowTitle = it.title,
                                         media = it.content,
@@ -163,7 +163,7 @@ fun DiscoveryScreen(
                                         })
                                 }
                             }
-                        } else if (state.media.size == 1) {
+                        } else if (discoveryUIState.media.size == 1) {
                             LazyVerticalGrid(
                                 columns = GridCells.Fixed(3),
                                 modifier = modifier
@@ -176,13 +176,13 @@ fun DiscoveryScreen(
                             ) {
                                 item(span = { GridItemSpan(3) }) {
                                     Text(
-                                        text = state.media.first().title,
+                                        text = discoveryUIState.media.first().title,
                                         style = MaterialTheme.typography.h3,
                                         color = MaterialTheme.colors.secondary,
                                         modifier = modifier.padding(top = 8.dp, bottom = 6.dp),
                                     )
                                 }
-                                items(state.media.first().content) { singleMovie ->
+                                items(discoveryUIState.media.first().content) { singleMovie ->
                                     MLMediaPoster(
                                         mediaItem = SimpleMediaItem(
                                             id = singleMovie.id.toString(),
@@ -208,7 +208,7 @@ fun DiscoveryScreen(
                         }
                     }
 
-                    is DiscoveryState.Error -> Text("Something went wrong ${state.msg} - ${state.exception}")
+                    is DiscoveryState.Error -> Text("Something went wrong ${discoveryUIState.msg} - ${discoveryUIState.exception}")
 
                     DiscoveryState.Loading -> MLProgress()
                 }
@@ -223,7 +223,7 @@ fun DiscoveryScreen(
 private fun DiscoveryScreenPreview() {
     MediaLionTheme {
         DiscoveryScreen(
-            state = DiscoveryState.Content(
+            discoveryUIState = DiscoveryState.Content(
                 listOf(
                     TitledMedia("Content #1", listOf()),
                     TitledMedia("Content #2", listOf()),
@@ -233,7 +233,7 @@ private fun DiscoveryScreenPreview() {
             submitAction = {},
             onSearchIconClicked = {},
             onInfoIconClicked = {},
-            genreState = GenreState.Genres(listOf()),
+            categoriesUIState = GenreState.Genres(listOf()),
             showDetailPreviewDialogWithMedia = {},
             contentFilter = FilterCategory.All,
             onChangeContentFilter = {},

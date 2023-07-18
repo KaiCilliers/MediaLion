@@ -11,7 +11,7 @@ import com.sunrisekcdeveloper.medialion.features.discovery.MLCategoriesViewModel
 import com.sunrisekcdeveloper.medialion.features.discovery.MLDiscoveryViewModelNew
 import com.sunrisekcdeveloper.medialion.features.mycollection.MLMyCollectionViewModelNew
 import com.sunrisekcdeveloper.medialion.features.search.MLSearchViewModelNew
-import com.sunrisekcdeveloper.medialion.features.shared.FetchAllCollectionsUseCaseNew
+import com.sunrisekcdeveloper.medialion.components.shared.domain.FetchAllCollectionsUseCaseNew
 import com.sunrisekcdeveloper.medialion.features.shared.MLMiniCollectionViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get

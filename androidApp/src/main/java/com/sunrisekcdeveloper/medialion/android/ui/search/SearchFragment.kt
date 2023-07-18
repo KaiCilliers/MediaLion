@@ -20,7 +20,6 @@ import com.zhuinden.simplestackextensions.navigatorktx.backstack
 class SearchFragment : Fragment() {
 
     private val viewModel by lazy { lookup<SearchViewModel>() }
-    private val viewModelDiscovery by lazy { lookup<DiscoveryViewModel>() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -33,19 +32,14 @@ class SearchFragment : Fragment() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colors.background
                     ) {
-                        val state by viewModel.state.collectAsState()
-                        val discState by viewModelDiscovery.state.collectAsState()
-                        val collectionState by viewModel.collectionState.collectAsState()
-                        val genreSta by viewModelDiscovery.genres.genres.collectAsState()
-
-                        println("deadpool - got state $discState")
-                        println("deadpool - got genres $genreSta")
+                        val searchState by viewModel.searchState.collectAsState()
+                        val collectionState by viewModel.collectionDialogState.collectAsState()
 
                         SearchScreen(
-                            state = state,
+                            searchState = searchState,
                             collectionState = collectionState,
-                            submitAction = { viewModel.submitAction(it) },
-                            backstack = backstack,
+                            submitSearchAction = { viewModel.submit(it) },
+                            submitCollectionsAction = { viewModel.submit(it) },
                             onNavigateBack = { backstack.goBack() },
                         )
                     }

@@ -41,7 +41,7 @@ class MyCollectionViewModelTest {
 
     @Test
     fun `when instantiated start at the loading state while fetching content`() = runTest {
-        sut.state.test {
+        sut.collectionState.test {
             assertThat(awaitItem()).isInstanceOf(Loading::class)
             cancelAndIgnoreRemainingEvents()
         }
@@ -49,7 +49,7 @@ class MyCollectionViewModelTest {
 
     @Test
     fun `when collection content is available change state to display the collection content`() = runTest {
-        sut.state.test {
+        sut.collectionState.test {
             assertThat(awaitItem()).isInstanceOf(Loading::class)
 
             sut.submit(FetchMyCollectionsMedia)
@@ -60,7 +60,7 @@ class MyCollectionViewModelTest {
 
     @Test
     fun `when there is some problem fetching collection content show an error state`() = runTest {
-        sut.state.test {
+        sut.collectionState.test {
             assertThat(awaitItem()).isInstanceOf(Loading::class)
 
             fetchMyCollectionsUseCase.hinder = true

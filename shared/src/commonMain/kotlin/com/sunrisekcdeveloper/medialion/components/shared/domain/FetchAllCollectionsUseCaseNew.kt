@@ -1,4 +1,4 @@
-package com.sunrisekcdeveloper.medialion.features.shared
+package com.sunrisekcdeveloper.medialion.components.shared.domain
 
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
