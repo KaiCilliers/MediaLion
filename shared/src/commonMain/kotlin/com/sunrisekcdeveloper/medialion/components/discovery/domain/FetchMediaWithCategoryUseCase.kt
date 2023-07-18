@@ -1,5 +1,7 @@
 package com.sunrisekcdeveloper.medialion.components.discovery.domain
 
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.mapError
 import com.github.michaelbull.result.runCatching
@@ -10,6 +12,17 @@ import com.sunrisekcdeveloper.medialion.components.shared.domain.models.MediaWit
 
 interface FetchMediaWithCategoryUseCase {
     suspend operator fun invoke(category: MediaCategory): Result<MediaWithTitle, FetchMediaWithCategoryError>
+
+    class Fake : FetchMediaWithCategoryUseCase {
+        var forceFailure  = false
+        override suspend fun invoke(category: MediaCategory): Result<MediaWithTitle, FetchMediaWithCategoryError> {
+            return if (!forceFailure) {
+                Ok(MediaWithTitle.Def("title #1"))
+            } else {
+                Err(FetchMediaWithCategoryFailure)
+            }
+        }
+    }
 
     class D(
         private val titledMediaRepo: TitledMediaRepository,

@@ -1,5 +1,7 @@
 package com.sunrisekcdeveloper.medialion.components.discovery.domain
 
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.mapError
 import com.github.michaelbull.result.runCatching
@@ -12,6 +14,23 @@ import com.sunrisekcdeveloper.medialion.components.shared.domain.models.TitledMe
 
 interface FetchDiscoveryContentUseCase {
     suspend operator fun invoke(page: DiscoveryPage): Result<TitledMediaList, FetchDiscoveryContentError>
+
+    class Fake : FetchDiscoveryContentUseCase {
+        var forceFailure = false
+        override suspend fun invoke(page: DiscoveryPage): Result<TitledMediaList, FetchDiscoveryContentError> {
+            return if (!forceFailure) {
+                Ok(TitledMediaList.Def(listOf(
+                 MediaWithTitle.Def("title #1"),
+                 MediaWithTitle.Def("title #2"),
+                 MediaWithTitle.Def("title #3"),
+                 MediaWithTitle.Def("title #4"),
+                 MediaWithTitle.Def("title #5"),
+                )))
+            } else {
+                Err(FailureToFetchDiscContent)
+            }
+        }
+    }
 
     class D (
         private val mediaRequirementsRepo: MediaRequirementsRepository,

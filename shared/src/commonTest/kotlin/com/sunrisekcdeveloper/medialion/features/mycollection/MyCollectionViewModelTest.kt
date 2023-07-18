@@ -16,7 +16,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class MyCollectionViewModlTest {
+class MyCollectionViewModelTest {
 
 
     private lateinit var sut: MLMyCollectionViewModelNew
