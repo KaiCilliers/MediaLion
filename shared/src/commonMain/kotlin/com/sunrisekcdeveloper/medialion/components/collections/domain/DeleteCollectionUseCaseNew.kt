@@ -7,12 +7,12 @@ import com.sunrisekcdeveloper.medialion.components.shared.domain.models.Collecti
 import com.sunrisekcdeveloper.medialion.components.shared.domain.repos.CollectionRepositoryNew
 
 interface DeleteCollectionUseCaseNew {
-    suspend operator fun invoke(collection: CollectionNew): Result<Unit, com.sunrisekcdeveloper.medialion.components.collections.domain.DeleteCollectionError>
+    suspend operator fun invoke(collection: CollectionNew): Result<Unit, DeleteCollectionError>
 
     class Def(
         private val collectionRepository: CollectionRepositoryNew,
-    ) : com.sunrisekcdeveloper.medialion.components.collections.domain.DeleteCollectionUseCaseNew {
-        override suspend fun invoke(collection: CollectionNew): Result<Unit, com.sunrisekcdeveloper.medialion.components.collections.domain.DeleteCollectionError> = runCatching {
+    ) : DeleteCollectionUseCaseNew {
+        override suspend fun invoke(collection: CollectionNew): Result<Unit, DeleteCollectionError> = runCatching {
             collectionRepository.delete(collection)
         }
             .mapError { com.sunrisekcdeveloper.medialion.components.collections.domain.FailedToDeleteCollection }
@@ -21,5 +21,5 @@ interface DeleteCollectionUseCaseNew {
 }
 
 sealed interface DeleteCollectionError
-object FailedToDeleteCollection : com.sunrisekcdeveloper.medialion.components.collections.domain.DeleteCollectionError
-object CollectionDoesNotExist : com.sunrisekcdeveloper.medialion.components.collections.domain.DeleteCollectionError
+object FailedToDeleteCollection : DeleteCollectionError
+object CollectionDoesNotExist : DeleteCollectionError

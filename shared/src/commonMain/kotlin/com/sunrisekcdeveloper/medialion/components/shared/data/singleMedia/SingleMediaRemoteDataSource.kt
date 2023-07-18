@@ -6,12 +6,12 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 
 interface SingleMediaRemoteDataSource {
-    fun mediaFlow(requirements: MediaRequirements): Flow<SingleMediaNetworkDto>
+    fun mediaFlow(requirements: MediaRequirements): Flow<SingleMediaApiDto>
 
     class D(
         private val mediaApiClient: MediaRemoteClient,
     ) : SingleMediaRemoteDataSource {
-        override fun mediaFlow(requirements: MediaRequirements): Flow<SingleMediaNetworkDto> = flow {
+        override fun mediaFlow(requirements: MediaRequirements): Flow<SingleMediaApiDto> = flow {
             val mediaFlow = if (requirements.withText.trim().isNotEmpty()) {
                 mediaApiClient.search(requirements)
             } else {
@@ -25,18 +25,18 @@ interface SingleMediaRemoteDataSource {
     class Fake : SingleMediaRemoteDataSource {
         var forceFailure = false
 
-        private var media: Flow<SingleMediaNetworkDto> = flow {
+        private var media: Flow<SingleMediaApiDto> = flow {
             var counter = 0
             while (true) {
                 val asString = "${++counter}"
                 if (counter % 2 == 0)
-                    emit(SingleMediaNetworkDto.TVShow(asString, asString, asString))
+                    emit(SingleMediaApiDto.TVShow(asString, asString, asString))
                 else
-                    emit(SingleMediaNetworkDto.MovieNetworkDto(asString, asString, asString))
+                    emit(SingleMediaApiDto.Movie(asString, asString, asString))
             }
         }
 
-        override fun mediaFlow(requirements: MediaRequirements): Flow<SingleMediaNetworkDto> {
+        override fun mediaFlow(requirements: MediaRequirements): Flow<SingleMediaApiDto> {
             if (forceFailure) throw Exception("Forced Failure")
             return media
         }

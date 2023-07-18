@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 interface MLCategoriesViewModel {
-    val state: CStateFlow<CategoriesUIState>
+    val catState: CStateFlow<CategoriesUIState>
     fun submit(action: CategoriesAction)
 
     class D(
@@ -24,7 +24,7 @@ interface MLCategoriesViewModel {
         private val viewModelScope = coroutineScope ?: CoroutineScope(Dispatchers.Main.immediate)
 
         private val _state: MutableStateFlow<CategoriesUIState> = MutableStateFlow(CategoriesUIState.Loading)
-        override val state: CStateFlow<CategoriesUIState>
+        override val catState: CStateFlow<CategoriesUIState>
             get() = _state.cStateFlow()
 
         override fun submit(action: CategoriesAction) {

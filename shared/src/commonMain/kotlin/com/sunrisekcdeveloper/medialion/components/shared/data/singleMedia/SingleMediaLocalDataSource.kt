@@ -14,10 +14,10 @@ interface SingleMediaLocalDataSource  {
 
     class D(
         db: MediaLionDatabase,
-        private val domainMovieMapper: Mapper<SingleMediaItem, MovieCache>,
-        private val domainTVShowMapper: Mapper<SingleMediaItem, TVShowCache>,
-        private val cacheMovieMapper: Mapper<MovieCache, SingleMediaItem>,
-        private val cacheTVShowMapper: Mapper<TVShowCache, SingleMediaItem>,
+        private val domainMovieMapper: Mapper<SingleMediaItem.Movie, MovieCache>,
+        private val domainTVShowMapper: Mapper<SingleMediaItem.TVShow, TVShowCache>,
+        private val cacheMovieMapper: Mapper<MovieCache, SingleMediaItem.Movie>,
+        private val cacheTVShowMapper: Mapper<TVShowCache, SingleMediaItem.TVShow>,
     ) : SingleMediaLocalDataSource {
 
         private val movieDao = db.tbl_movieQueries

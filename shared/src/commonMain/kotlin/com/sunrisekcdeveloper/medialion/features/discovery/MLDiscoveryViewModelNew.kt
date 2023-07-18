@@ -7,9 +7,6 @@ import com.sunrisekcdeveloper.medialion.components.discovery.domain.FetchMediaWi
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.DiscoveryPage
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaCategory
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.TitledMediaList
-import com.sunrisekcdeveloper.medialion.oldArch.domain.MediaType
-import com.sunrisekcdeveloper.medialion.oldArch.domain.discovery.DiscoveryAction
-import com.sunrisekcdeveloper.medialion.oldArch.domain.discovery.DiscoveryState
 import com.sunrisekcdeveloper.medialion.oldArch.flow.CStateFlow
 import com.sunrisekcdeveloper.medialion.oldArch.flow.cStateFlow
 import kotlinx.coroutines.CoroutineScope
@@ -19,7 +16,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 interface MLDiscoveryViewModelNew {
-    val state: CStateFlow<DiscoveryUIState>
+    val discState: CStateFlow<DiscoveryUIState>
     fun submit(action: DiscoveryNewActions)
 
     class D(
@@ -31,7 +28,7 @@ interface MLDiscoveryViewModelNew {
         private val viewModelScope = coroutineScope ?: CoroutineScope(Dispatchers.Main.immediate)
 
         private val _state = MutableStateFlow<DiscoveryUIState>(Loading)
-        override val state: CStateFlow<DiscoveryUIState>
+        override val discState: CStateFlow<DiscoveryUIState>
             get() = _state.cStateFlow()
 
         override fun submit(action: DiscoveryNewActions) {

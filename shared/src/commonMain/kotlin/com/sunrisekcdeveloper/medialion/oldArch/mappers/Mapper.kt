@@ -1,237 +1,179 @@
 package com.sunrisekcdeveloper.medialion.oldArch.mappers
 
-import com.sunrisekcdeveloper.medialion.oldArch.MediaItemUI
-import com.sunrisekcdeveloper.medialion.oldArch.data.NetworkConstants
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaCategory
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaTypeNew
+import com.sunrisekcdeveloper.medialion.components.shared.data.collection.CollectionEntityDto
+import com.sunrisekcdeveloper.medialion.components.shared.data.mediaCategory.MediaCategoryApiDto
+import com.sunrisekcdeveloper.medialion.components.shared.data.mediaCategory.MediaCategoryEntityDto
+import com.sunrisekcdeveloper.medialion.components.shared.data.singleMedia.SingleMediaApiDto
+import com.sunrisekcdeveloper.medialion.components.shared.domain.models.CollectionNew
+import com.sunrisekcdeveloper.medialion.components.shared.domain.models.ID
+import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem
 import com.sunrisekcdeveloper.medialion.oldArch.clients.models.MediaResponse
-import com.sunrisekcdeveloper.medialion.oldArch.domain.MediaType
-import com.sunrisekcdeveloper.medialion.oldArch.domain.entities.MediaItem
-import com.sunrisekcdeveloper.medialion.oldArch.domain.entities.Movie
-import com.sunrisekcdeveloper.medialion.oldArch.domain.entities.TVShow
-import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Date
-import com.sunrisekcdeveloper.medialion.oldArch.domain.value.ID
-import com.sunrisekcdeveloper.medialion.oldArch.domain.value.ImageURL
-import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Overview
-import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Rating
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
+import database.CategoryCache
 import database.MovieCache
 import database.TVShowCache
 
 interface Mapper<I, O> {
     fun map(input: I): O
 
-    object MovieEntity {
-        class ResponseToDomain : Mapper<MediaResponse, Movie> {
-            override fun map(input: MediaResponse): Movie {
-                return try {
-                    Movie(
-                        adult = input.adult ?: false,
-                        backdropPath = ImageURL(value = NetworkConstants.BASE_IMAGE_BACKDROP_URL_TMDB + input.backdropPath.orEmpty()),
-                        genreIds = input.genreIds?.map { ID(it) } ?: emptyList(),
-                        id = ID(value = input.id!!),
-                        overview = Overview(value = input.overview.orEmpty()),
-                        popularity = Rating(value = input.popularity ?: 0.0),
-                        posterPath = ImageURL(value = NetworkConstants.BASE_IMAGE_POSTER_URL_TMDB + input.posterPath.orEmpty()),
-                        releaseDate = Date(value = input.releaseDate.orEmpty()),
-                        title = Title(value = input.title ?: input.originalTitle.orEmpty()),
-                        voteAverage = Rating(value = input.voteAverage ?: 0.0),
-                        voteCount = input.voteCount ?: 0
+    object MediaCategoryMappers {
+        class CacheToEntityDto : Mapper<CategoryCache, MediaCategoryEntityDto> {
+            override fun map(input: CategoryCache): MediaCategoryEntityDto {
+                return MediaCategoryEntityDto(input.id)
+            }
+
+        }
+
+        class EntityDtoToCache : Mapper<MediaCategoryEntityDto, CategoryCache> {
+            override fun map(input: MediaCategoryEntityDto): CategoryCache {
+                return CategoryCache(
+                    id = input.placeholder, name = input.placeholder, appliesToMedia = input.placeholder
+                )
+            }
+
+        }
+
+        class ApiDtoToDomain : Mapper<MediaCategoryApiDto, MediaCategory> {
+            override fun map(input: MediaCategoryApiDto): MediaCategory {
+                return MediaCategory.D(name = input.name, appliesToType = input.appliesTo)
+            }
+
+        }
+
+        class EntityDtoToDomain : Mapper<MediaCategoryEntityDto, MediaCategory> {
+            override fun map(input: MediaCategoryEntityDto): MediaCategory {
+                return MediaCategory.D(name = input.placeholder, appliesToType = MediaTypeNew.All)
+            }
+
+        }
+
+        class DomainToEntityDto : Mapper<MediaCategory, MediaCategoryEntityDto> {
+            override fun map(input: MediaCategory): MediaCategoryEntityDto {
+                return MediaCategoryEntityDto(input.name())
+            }
+
+        }
+    }
+
+    object SingleMediaItemMappers {
+        class ResponseToApiDto : Mapper<MediaResponse, SingleMediaApiDto> {
+            override fun map(input: MediaResponse): SingleMediaApiDto {
+                return if (input.firstAirDate != null) {
+                    SingleMediaApiDto.TVShow(
+                        id = input.id!!.toString(),
+                        title = input.title!!,
+                        firstAirDate = input.firstAirDate
                     )
-                } catch (e: Exception) {
-                    throw Exception("Failed to map $input to domain", e)
+                } else {
+                    SingleMediaApiDto.Movie(
+                        id = input.id!!.toString(),
+                        title = input.title!!,
+                        releaseDate = input.releaseDate!!
+                    )
                 }
             }
+
         }
 
-        class DomainToCache : Mapper<Movie, MovieCache> {
-            override fun map(input: Movie): MovieCache {
-//                return MovieCache(
-//                    id = input.id.value,
-//                    adult = input.adult,
-//                    backdrop_path = input.backdropPath.value,
-//                    genre_ids = input.genreIds.map { it.value },
-//                    overview = input.overview.value,
-//                    popularity = input.popularity.value,
-//                    poster_path = input.posterPath.value,
-//                    release_date = input.releaseDate.value,
-//                    title = input.title.value,
-//                    vote_average = input.voteAverage.value,
-//                    vote_count = input.voteCount
-//                )
-                TODO()
+        class ApiDtoToDomain : Mapper<SingleMediaApiDto, SingleMediaItem> {
+            override fun map(input: SingleMediaApiDto): SingleMediaItem {
+                return when (input) {
+                    is SingleMediaApiDto.Movie -> SingleMediaItem.Movie(
+                        id = ID.Def(input.id),
+                        title = Title(input.title)
+                    )
+
+                    is SingleMediaApiDto.TVShow -> SingleMediaItem.TVShow(
+                        id = ID.Def(input.id),
+                        title = Title(input.title)
+                    )
+                }
             }
+
         }
 
-        class CacheToDomain : Mapper<MovieCache, Movie> {
-            override fun map(input: MovieCache): Movie {
-//                return Movie(
-//                    adult = input.adult,
-//                    backdropPath = ImageURL(value = input.backdrop_path),
-//                    genreIds = input.genre_ids.map { ID(it) },
-//                    id = ID(value = input.id),
-//                    overview = Overview(value = input.overview),
-//                    popularity = Rating(value = input.popularity),
-//                    posterPath = ImageURL(value = input.poster_path),
-//                    releaseDate = Date(value = input.release_date.orEmpty()),
-//                    title = Title(value = input.title),
-//                    voteAverage = Rating(value = input.vote_average),
-//                    voteCount = input.vote_count
-//                )
-                TODO()
+        class MovieCacheToDomain : Mapper<MovieCache, SingleMediaItem.Movie> {
+            override fun map(input: MovieCache): SingleMediaItem.Movie {
+                return SingleMediaItem.Movie(
+                    id = ID.Def(input.id),
+                    title = Title(input.title)
+                )
             }
+
         }
 
-        class DomainToMediaDomain : Mapper<Movie, MediaItem> {
-            override fun map(input: Movie): MediaItem {
-                return input
+        class TVShowCacheToDomain : Mapper<TVShowCache, SingleMediaItem.TVShow> {
+            override fun map(input: TVShowCache): SingleMediaItem.TVShow {
+                return SingleMediaItem.TVShow(
+                    id = ID.Def(input.id),
+                    title = Title(input.name),
+                )
             }
+
         }
 
-        class DomainToUI : Mapper<Movie, MediaItemUI> {
-            override fun map(input: Movie): MediaItemUI {
-                return MediaItemUI(
-                    id = input.id.value,
+        class DomainToMovieCache : Mapper<SingleMediaItem.Movie, MovieCache> {
+            override fun map(input: SingleMediaItem.Movie): MovieCache {
+                return MovieCache(
+                    id = input.id.uniqueIdentifier(),
+                    adult = false,
+                    backdrop_path = "",
+                    genre_ids = listOf(),
+                    overview = "",
+                    popularity = 0.0,
+                    poster_path = "",
+                    release_date = null,
                     title = input.title.value,
-                    isFavorited = false,
-                    posterUrl = input.posterPath.value,
-                    bannerUrl = input.backdropPath.value,
-                    genreIds = input.genreIds.map { it.value },
-                    overview = input.overview.value,
-                    popularity = input.popularity.value,
-                    voteAverage = input.voteAverage.value,
-                    voteCount = input.voteCount,
-                    releaseYear = input.releaseDate.value,
-                    mediaType = MediaType.MOVIE,
+                    vote_average = 0.0,
+                    vote_count = 0
                 )
             }
+
+        }
+
+        class DomainToTVShowCache : Mapper<SingleMediaItem.TVShow, TVShowCache> {
+            override fun map(input: SingleMediaItem.TVShow): TVShowCache {
+                return TVShowCache(
+                    id = input.id.uniqueIdentifier(),
+                    name = input.title.value,
+                    backdropPath = "",
+                    genre_ids = listOf(),
+                    overview = "",
+                    popularity = 0.0,
+                    poster_path = "",
+                    vote_average = 0.0,
+                    vote_count = 0,
+                    first_air_date = "",
+                    adult = false
+                )
+            }
+
         }
     }
 
-    object TVShowEntity {
-        class ResponseToDomain : Mapper<MediaResponse, TVShow> {
-            override fun map(input: MediaResponse): TVShow {
-                println("I am going to map $input")
-                try {
-                    return TVShow(
-                        adult = input.adult ?: false,
-                        backdropPath = ImageURL(value = NetworkConstants.BASE_IMAGE_BACKDROP_URL_TMDB + input.backdropPath.orEmpty()),
-                        genreIds = input.genreIds?.map { ID(it) } ?: emptyList(),
-                        id = ID(value = input.id!!),
-                        overview = Overview(value = input.overview.orEmpty()),
-                        popularity = Rating(value = input.popularity ?: 0.0),
-                        posterPath = ImageURL(value = NetworkConstants.BASE_IMAGE_POSTER_URL_TMDB + input.posterPath.orEmpty()),
-                        name = Title(value = input.name ?: input.originalName.orEmpty()),
-                        voteAverage = Rating(value = input.voteAverage ?: 0.0),
-                        voteCount = input.voteCount ?: 0,
-                        firstAirDate = Date(value = input.firstAirDate.orEmpty()),
-                    )
-                } catch (e: Exception) {
-                    throw Exception("Failed to map $input to domain", e)
-                }
-            }
-        }
-
-        class DomainToCache : Mapper<TVShow, TVShowCache> {
-            override fun map(input: TVShow): TVShowCache {
-//                return TVShowCache(
-//                    id = input.id.value,
-//                    name = input.name.value,
-//                    backdropPath = input.backdropPath.value,
-//                    genre_ids = input.genreIds.map { it.value },
-//                    overview = input.overview.value,
-//                    popularity = input.popularity.value,
-//                    poster_path = input.posterPath.value,
-//                    vote_average = input.voteAverage.value,
-//                    vote_count = input.voteCount,
-//                    first_air_date = input.firstAirDate.value,
-//                    adult = input.adult,
-//                )
-                TODO()
-            }
-        }
-
-        class CacheToDomain : Mapper<TVShowCache, TVShow> {
-            override fun map(input: TVShowCache): TVShow {
-//                return TVShow(
-//                    adult = input.adult,
-//                    backdropPath = ImageURL(value = input.backdropPath),
-//                    genreIds = input.genre_ids.map { ID(it) },
-//                    id = ID(value = input.id),
-//                    overview = Overview(value = input.overview),
-//                    popularity = Rating(value = input.popularity),
-//                    posterPath = ImageURL(value = input.poster_path),
-//                    name = Title(value = input.name),
-//                    voteAverage = Rating(value = input.vote_average),
-//                    voteCount = input.vote_count,
-//                    firstAirDate = Date(value = input.first_air_date)
-//                )
-                TODO()
-            }
-        }
-
-        class DomainToMediaDomain : Mapper<TVShow, MediaItem> {
-            override fun map(input: TVShow): MediaItem {
-                return input
-            }
-        }
-
-        class DomainToUI: Mapper<TVShow, MediaItemUI> {
-            override fun map(input: TVShow): MediaItemUI {
-                return MediaItemUI(
-                    id = input.id.value,
-                    title = input.name.value,
-                    isFavorited = false,
-                    posterUrl = input.posterPath.value,
-                    bannerUrl = input.backdropPath.value,
-                    genreIds = input.genreIds.map { it.value },
-                    overview = input.overview.value,
-                    popularity = input.popularity.value,
-                    voteAverage = input.voteAverage.value,
-                    voteCount = input.voteCount,
-                    releaseYear = input.firstAirDate.value,
-                    mediaType = MediaType.TV,
-
+    object CollectionMappers {
+        class EntityDtoToDomain : Mapper<CollectionEntityDto, CollectionNew> {
+            override fun map(input: CollectionEntityDto): CollectionNew {
+                return CollectionNew.Def(
+                    id = input.id,
+                    title = input.title,
+                    media = input.media,
                 )
             }
+
         }
-    }
 
-    class DomainToUI : Mapper<MediaItem, MediaItemUI> {
-        override fun map(input: MediaItem): MediaItemUI {
-            return when (input) {
-                is Movie -> {
-                    MediaItemUI(
-                        id = input.id.value,
-                        title = input.title.value,
-                        isFavorited = false,
-                        posterUrl = input.posterPath.value,
-                        bannerUrl = input.backdropPath.value,
-                        genreIds = input.genreIds.map { it.value },
-                        overview = input.overview.value,
-                        popularity = input.popularity.value,
-                        voteAverage = input.voteAverage.value,
-                        voteCount = input.voteCount,
-                        releaseYear = input.releaseDate.value,
-                        mediaType = MediaType.MOVIE,
-                    )
-                }
-
-                is TVShow -> {
-                    MediaItemUI(
-                        id = input.id.value,
-                        title = input.name.value,
-                        isFavorited = false,
-                        posterUrl = input.posterPath.value,
-                        bannerUrl = input.backdropPath.value,
-                        genreIds = input.genreIds.map { it.value },
-                        overview = input.overview.value,
-                        popularity = input.popularity.value,
-                        voteAverage = input.voteAverage.value,
-                        voteCount = input.voteCount,
-                        releaseYear = input.firstAirDate.value,
-                        mediaType = MediaType.TV,
-                    )
-                }
+        class DomainToEntityDto : Mapper<CollectionNew, CollectionEntityDto> {
+            override fun map(input: CollectionNew): CollectionEntityDto {
+                return CollectionEntityDto(
+                    id = input.identifier(),
+                    title = input.title(),
+                    media = input.media(),
+                )
             }
+
         }
     }
 }

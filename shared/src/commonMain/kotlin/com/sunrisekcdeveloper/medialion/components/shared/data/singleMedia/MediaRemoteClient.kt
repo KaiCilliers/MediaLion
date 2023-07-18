@@ -4,6 +4,6 @@ import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.Media
 import kotlinx.coroutines.flow.Flow
 
 interface MediaRemoteClient {
-    fun search(requirements: MediaRequirements): Flow<SingleMediaNetworkDto>
-    fun discover(requirements: MediaRequirements): Flow<SingleMediaNetworkDto>
+    fun search(requirements: MediaRequirements): Flow<SingleMediaApiDto>
+    fun discover(requirements: MediaRequirements): Flow<SingleMediaApiDto>
 }

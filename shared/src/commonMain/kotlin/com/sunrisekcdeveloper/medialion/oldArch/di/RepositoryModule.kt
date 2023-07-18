@@ -1,51 +1,51 @@
 package com.sunrisekcdeveloper.medialion.oldArch.di
 
-import com.sunrisekcdeveloper.medialion.oldArch.di.MapperNames.movieCacheToDomain
-import com.sunrisekcdeveloper.medialion.oldArch.di.MapperNames.movieDomainToCache
-import com.sunrisekcdeveloper.medialion.oldArch.di.MapperNames.movieDomainToMediaDomain
-import com.sunrisekcdeveloper.medialion.oldArch.di.MapperNames.movieResponseToDomain
-import com.sunrisekcdeveloper.medialion.oldArch.di.MapperNames.tvCacheToDomain
-import com.sunrisekcdeveloper.medialion.oldArch.di.MapperNames.tvDomainToCache
-import com.sunrisekcdeveloper.medialion.oldArch.di.MapperNames.tvDomainToMediaDomain
-import com.sunrisekcdeveloper.medialion.oldArch.di.MapperNames.tvResponseToDomain
-import com.sunrisekcdeveloper.medialion.oldArch.mappers.ListMapper
-import com.sunrisekcdeveloper.medialion.oldArch.repos.CollectionRepository
-import com.sunrisekcdeveloper.medialion.oldArch.repos.MovieRepository
-import com.sunrisekcdeveloper.medialion.oldArch.repos.TVRepository
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.repo.MediaCategoryRepository
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.repo.MediaRequirementsRepository
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.repo.TitledMediaRepository
+import com.sunrisekcdeveloper.medialion.components.shared.data.collection.CollectionLocalDataSource
+import com.sunrisekcdeveloper.medialion.components.shared.data.mediaCategory.MediaCategoryLocalDataSource
+import com.sunrisekcdeveloper.medialion.components.shared.data.mediaCategory.MediaCategoryRemoteDataSource
+import com.sunrisekcdeveloper.medialion.components.shared.data.singleMedia.SingleMediaLocalDataSource
+import com.sunrisekcdeveloper.medialion.components.shared.data.singleMedia.SingleMediaRemoteDataSource
+import com.sunrisekcdeveloper.medialion.components.shared.domain.repos.CollectionRepositoryNew
+import com.sunrisekcdeveloper.medialion.components.shared.domain.repos.SingleMediaItemRepository
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    single<MovieRepository> {
-        MovieRepository.Default(
-            database = get(),
-            client = get(),
-            dispatcherProvider = get(),
-            responseToDomain = get(named(movieResponseToDomain)),
-            domainToCache = get(named(movieDomainToCache)),
-            cacheToDomain = get(named(movieCacheToDomain)),
-            responseToDomainListMapper = ListMapper.Impl(get(named(movieResponseToDomain))),
+
+    single<MediaCategoryRepository> {
+        MediaCategoryRepository.D(
+            localDataSource = get<MediaCategoryLocalDataSource>(),
+            remoteDataSource = get<MediaCategoryRemoteDataSource>(),
+            apiMapper = get(named(MapperNames.MediaCategoryMapperNames.apiDtoToDomain)),
+            entityMapper = get(named(MapperNames.MediaCategoryMapperNames.entityDtoToDomain)),
+            domainMapper = get(named(MapperNames.MediaCategoryMapperNames.domainToEntityDto))
         )
     }
-    single<TVRepository> {
-        TVRepository.Default(
-            database = get(),
-            client = get(),
-            dispatcherProvider = get(),
-            responseToDomain = get(named(tvResponseToDomain)),
-            domainToCache = get(named(tvDomainToCache)),
-            cacheToDomain = get(named(tvCacheToDomain)),
-            responseToDomainListMapper = ListMapper.Impl(get(named(tvResponseToDomain)))
+
+    single<MediaRequirementsRepository> {
+        MediaRequirementsRepository.D(get<MediaCategoryRepository>())
+    }
+
+    single<SingleMediaItemRepository> {
+        SingleMediaItemRepository.D(
+            remoteDataSource = get<SingleMediaRemoteDataSource>(),
+            localDataSource = get<SingleMediaLocalDataSource>(),
+            dtoMapper = get(named(MapperNames.SingleMediaItemNames.apiDtoToDomain)),
         )
     }
-    single<CollectionRepository> {
-        CollectionRepository.Default(
-            database = get(),
-            dispatcherProvider = get(),
-            movieCacheToDomainList = ListMapper.Impl(get(named(movieCacheToDomain))),
-            tvShowCacheToDomainList = ListMapper.Impl(get(named(tvCacheToDomain))),
-            movieDomainToMediaDomain = ListMapper.Impl(get(named(movieDomainToMediaDomain))),
-            tvShowDomainToMediaDomain = ListMapper.Impl(get(named(tvDomainToMediaDomain))),
+
+    single<CollectionRepositoryNew> {
+        CollectionRepositoryNew.D(
+            localDataSource = get<CollectionLocalDataSource>(),
+            entityMapper = get(named(MapperNames.CollectionNames.entityDtoToDomain)),
+            domainMapper = get(named(MapperNames.CollectionNames.domainToEntityDto)),
         )
+    }
+
+    single<TitledMediaRepository> {
+        TitledMediaRepository.D(get<SingleMediaItemRepository>())
     }
 }

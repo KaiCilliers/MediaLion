@@ -6,7 +6,7 @@ import com.github.michaelbull.result.runCatching
 import com.sunrisekcdeveloper.medialion.oldArch.mappers.Mapper
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaRequirements
 import com.sunrisekcdeveloper.medialion.components.shared.data.singleMedia.SingleMediaLocalDataSource
-import com.sunrisekcdeveloper.medialion.components.shared.data.singleMedia.SingleMediaNetworkDto
+import com.sunrisekcdeveloper.medialion.components.shared.data.singleMedia.SingleMediaApiDto
 import com.sunrisekcdeveloper.medialion.components.shared.data.singleMedia.SingleMediaRemoteDataSource
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem
 import kotlinx.coroutines.flow.Flow
@@ -23,11 +23,11 @@ interface SingleMediaItemRepository {
     class D(
         private val remoteDataSource: SingleMediaRemoteDataSource,
         private val localDataSource: SingleMediaLocalDataSource,
-        private val dtoMapper: Mapper<SingleMediaNetworkDto, SingleMediaItem>,
+        private val dtoMapper: Mapper<SingleMediaApiDto, SingleMediaItem>,
     ) : SingleMediaItemRepository {
 
         override suspend fun media(mediaReq: MediaRequirements): List<SingleMediaItem> = runCatching {
-            val remoteFlow: Flow<SingleMediaNetworkDto> = remoteDataSource.mediaFlow(mediaReq)
+            val remoteFlow: Flow<SingleMediaApiDto> = remoteDataSource.mediaFlow(mediaReq)
             remoteFlow
                 .take(mediaReq.amountOfMedia)
                 .map { dtoMapper.map(it) }

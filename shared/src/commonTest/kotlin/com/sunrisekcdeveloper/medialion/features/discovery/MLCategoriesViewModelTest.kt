@@ -41,14 +41,14 @@ class MLCategoriesViewModelTest {
 
     @Test
     fun `initial state is loading when observing state`() = runTest {
-        sut.state.test {
+        sut.catState.test {
             assertThat(awaitItem() is CategoriesUIState.Loading).isTrue()
         }
     }
 
     @Test
     fun `return a list of categories after submitting an action to fetch them`() = runTest {
-        sut.state.test {
+        sut.catState.test {
             awaitItem()
 
             sut.submit(FetchAllCategories)
@@ -62,7 +62,7 @@ class MLCategoriesViewModelTest {
     @Test
     fun `return an error if an exception occurs while fetching the categories`() = runTest {
         fetchAllMediaCategoriesUseCase.forceFailure = true
-        sut.state.test {
+        sut.catState.test {
             awaitItem()
 
             sut.submit(FetchAllCategories)

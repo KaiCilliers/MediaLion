@@ -1,18 +1,18 @@
 package com.sunrisekcdeveloper.medialion.components.shared
 
-import com.sunrisekcdeveloper.medialion.oldArch.clients.models.GenreResponse
-import com.sunrisekcdeveloper.medialion.oldArch.clients.models.GenreWrapper
-import com.sunrisekcdeveloper.medialion.oldArch.clients.models.MediaResponse
-import com.sunrisekcdeveloper.medialion.oldArch.clients.models.PagedMediaResponse
-import com.sunrisekcdeveloper.medialion.oldArch.clients.standardParameters
-import com.sunrisekcdeveloper.medialion.oldArch.mappers.Mapper
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaRequirements
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaTypeNew
 import com.sunrisekcdeveloper.medialion.components.shared.data.mediaCategory.CategoryRemoteClient
 import com.sunrisekcdeveloper.medialion.components.shared.data.mediaCategory.MediaCategoryApiDto
 import com.sunrisekcdeveloper.medialion.components.shared.data.models.TMDBUrl
 import com.sunrisekcdeveloper.medialion.components.shared.data.singleMedia.MediaRemoteClient
-import com.sunrisekcdeveloper.medialion.components.shared.data.singleMedia.SingleMediaNetworkDto
+import com.sunrisekcdeveloper.medialion.components.shared.data.singleMedia.SingleMediaApiDto
+import com.sunrisekcdeveloper.medialion.oldArch.clients.models.GenreResponse
+import com.sunrisekcdeveloper.medialion.oldArch.clients.models.GenreWrapper
+import com.sunrisekcdeveloper.medialion.oldArch.clients.models.MediaResponse
+import com.sunrisekcdeveloper.medialion.oldArch.clients.models.PagedMediaResponse
+import com.sunrisekcdeveloper.medialion.oldArch.clients.standardParameters
+import com.sunrisekcdeveloper.medialion.oldArch.mappers.Mapper
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.merge
 
 class TMDBClientNew(
     private val httpClient: HttpClient,
-    private val mapper: Mapper<MediaResponse, SingleMediaNetworkDto>,
+    private val mapper: Mapper<MediaResponse, SingleMediaApiDto>,
 ) : CategoryRemoteClient , MediaRemoteClient {
     override suspend fun allCategories(): List<MediaCategoryApiDto> {
         val movieGenresEndpoint = TMDBUrl("/genre/movie/list")
@@ -55,7 +55,7 @@ class TMDBClientNew(
         }
     }
 
-    override fun search(requirements: MediaRequirements): Flow<SingleMediaNetworkDto> = flow {
+    override fun search(requirements: MediaRequirements): Flow<SingleMediaApiDto> = flow {
         val searchRequest = TMDBUrl(
             origin = when(requirements.withMediaType) {
                 MediaTypeNew.All -> "/search/multi"
@@ -86,7 +86,7 @@ class TMDBClientNew(
         } while (page <= totalPages)
     }
 
-    override fun discover(requirements: MediaRequirements): Flow<SingleMediaNetworkDto> = flow {
+    override fun discover(requirements: MediaRequirements): Flow<SingleMediaApiDto> = flow {
         when(requirements.withMediaType) {
             MediaTypeNew.All -> {
                 val movieDiscoveryFlow = discoverEndpoint(MediaTypeNew.Movie, requirements)
@@ -102,7 +102,7 @@ class TMDBClientNew(
         }
     }
 
-    private suspend fun discoverEndpoint(typeNew: MediaTypeNew, requirements: MediaRequirements): Flow<SingleMediaNetworkDto> = flow {
+    private suspend fun discoverEndpoint(typeNew: MediaTypeNew, requirements: MediaRequirements): Flow<SingleMediaApiDto> = flow {
         val requestUrl = when(typeNew) {
             MediaTypeNew.Movie -> TMDBUrl("/discover/movie")
             MediaTypeNew.TVShow -> TMDBUrl("/discover/tv")

@@ -4,12 +4,11 @@ import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isGreaterThan
-import com.github.michaelbull.result.Err
+import assertk.assertions.isTrue
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.FetchDiscoveryContentUseCase
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.FetchMediaWithCategoryUseCase
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.DiscoveryPage
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaCategory
-import io.ktor.util.reflect.instanceOf
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -49,19 +48,19 @@ class MLDiscoveryViewModelNewTest {
 
     @Test
     fun `initial state is loading when observing state`() = runTest {
-        sut.state.test {
-            assertThat(awaitItem()).instanceOf(Loading::class)
+        sut.discState.test {
+            assertThat(awaitItem() is Loading).isTrue()
         }
     }
 
     @Test
     fun `return a list of titled media when submitting a discovery page`() = runTest {
-        sut.state.test {
+        sut.discState.test {
             awaitItem()
             sut.submit(FetchPageMediaContent(DiscoveryPage.Movies))
 
             val result = awaitItem()
-            assertThat(result).instanceOf(Content::class)
+            assertThat(result is Content).isTrue()
             assertThat((result as Content).media.collectionNames().size).isGreaterThan(0)
         }
     }
@@ -69,23 +68,22 @@ class MLDiscoveryViewModelNewTest {
     @Test
     fun `return an error when an exception occurs while fetching discovery page content`() = runTest {
         fetchDiscoveryContentUseCase.forceFailure = true
-        sut.state.test {
+        sut.discState.test {
             awaitItem()
             sut.submit(FetchPageMediaContent(DiscoveryPage.Movies))
 
-            val result = awaitItem()
-            assertThat(result).instanceOf(Err::class)
+            assertThat(awaitItem() is Error).isTrue()
         }
     }
 
     @Test
     fun `return a single titled media when submitting a media category`() = runTest {
-        sut.state.test {
+        sut.discState.test {
             awaitItem()
             sut.submit(FetchMediaForCategory(MediaCategory.D("fantasy")))
 
             val result = awaitItem()
-            assertThat(result).instanceOf(Content::class)
+            assertThat(result is Content).isTrue()
             assertThat((result as Content).media.collectionNames().size).isEqualTo(1)
         }
     }
@@ -93,12 +91,11 @@ class MLDiscoveryViewModelNewTest {
     @Test
     fun `return an error when an exception occurs while fetching media category content`() = runTest {
         fetchMediaForCategoryUseCase.forceFailure = true
-        sut.state.test {
+        sut.discState.test {
             awaitItem()
             sut.submit(FetchMediaForCategory(MediaCategory.D("fantasy")))
 
-            val result = awaitItem()
-            assertThat(result).instanceOf(Err::class)
+            assertThat(awaitItem() is Error).isTrue()
         }
     }
 

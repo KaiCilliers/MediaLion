@@ -7,7 +7,7 @@ import com.sunrisekcdeveloper.medialion.oldArch.mappers.Mapper
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaRequirements
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaTypeNew
 import com.sunrisekcdeveloper.medialion.components.shared.data.singleMedia.SingleMediaLocalDataSource
-import com.sunrisekcdeveloper.medialion.components.shared.data.singleMedia.SingleMediaNetworkDto
+import com.sunrisekcdeveloper.medialion.components.shared.data.singleMedia.SingleMediaApiDto
 import com.sunrisekcdeveloper.medialion.components.shared.data.singleMedia.SingleMediaRemoteDataSource
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem
 import com.sunrisekcdeveloper.medialion.components.shared.domain.repos.SingleMediaItemRepository
@@ -40,11 +40,11 @@ class SingleMediaItemRepositoryTest {
         singleMediaItemRepository = SingleMediaItemRepository.D(
             remoteDataSource = remoteDataSource,
             localDataSource = localDataSource,
-            dtoMapper = object : Mapper<SingleMediaNetworkDto, SingleMediaItem> {
-                override fun map(input: SingleMediaNetworkDto): SingleMediaItem {
+            dtoMapper = object : Mapper<SingleMediaApiDto, SingleMediaItem> {
+                override fun map(input: SingleMediaApiDto): SingleMediaItem {
                     return when (input) {
-                        is SingleMediaNetworkDto.MovieNetworkDto -> SingleMediaItem.Movie(name = input.title)
-                        is SingleMediaNetworkDto.TVShow -> SingleMediaItem.TVShow(name = input.title)
+                        is SingleMediaApiDto.Movie -> SingleMediaItem.Movie(name = input.title)
+                        is SingleMediaApiDto.TVShow -> SingleMediaItem.TVShow(name = input.title)
                     }
                 }
             }
