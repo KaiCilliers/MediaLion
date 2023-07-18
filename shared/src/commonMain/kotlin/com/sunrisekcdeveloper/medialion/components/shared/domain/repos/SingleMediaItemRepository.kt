@@ -3,7 +3,7 @@ package com.sunrisekcdeveloper.medialion.components.shared.domain.repos
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
-import com.sunrisekcdeveloper.medialion.oldArch.mappers.Mapper
+import com.sunrisekcdeveloper.medialion.utils.mappers.Mapper
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaRequirements
 import com.sunrisekcdeveloper.medialion.components.shared.data.singleMedia.SingleMediaLocalDataSource
 import com.sunrisekcdeveloper.medialion.components.shared.data.singleMedia.SingleMediaApiDto

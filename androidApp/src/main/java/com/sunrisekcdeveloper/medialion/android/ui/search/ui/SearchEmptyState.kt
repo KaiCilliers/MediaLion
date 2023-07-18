@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sunrisekcdeveloper.medialion.oldArch.StringRes
+import com.sunrisekcdeveloper.medialion.utils.StringRes
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 
 @Composable

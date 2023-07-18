@@ -5,7 +5,7 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isGreaterThan
 import assertk.assertions.isNotNull
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
-import com.sunrisekcdeveloper.medialion.oldArch.mappers.Mapper
+import com.sunrisekcdeveloper.medialion.utils.mappers.Mapper
 import com.sunrisekcdeveloper.medialion.components.shared.data.collection.CollectionEntityDto
 import com.sunrisekcdeveloper.medialion.components.shared.data.collection.CollectionLocalDataSource
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.CollectionNew

@@ -7,8 +7,8 @@ import com.sunrisekcdeveloper.medialion.components.discovery.domain.FetchMediaWi
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.DiscoveryPage
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaCategory
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.TitledMediaList
-import com.sunrisekcdeveloper.medialion.oldArch.flow.CStateFlow
-import com.sunrisekcdeveloper.medialion.oldArch.flow.cStateFlow
+import com.sunrisekcdeveloper.medialion.utils.flow.CStateFlow
+import com.sunrisekcdeveloper.medialion.utils.flow.cStateFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

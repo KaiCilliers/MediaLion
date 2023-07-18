@@ -7,7 +7,7 @@ import com.sunrisekcdeveloper.medialion.components.shared.utils.ForcedException
 import com.sunrisekcdeveloper.medialion.components.shared.utils.mapList
 import com.sunrisekcdeveloper.medialion.components.shared.utils.wrapInList
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
-import com.sunrisekcdeveloper.medialion.oldArch.mappers.Mapper
+import com.sunrisekcdeveloper.medialion.utils.mappers.Mapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first

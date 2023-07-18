@@ -4,7 +4,7 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.sunrisekcdeveloper.medialion.database.MediaLionDatabase
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
-import com.sunrisekcdeveloper.medialion.oldArch.mappers.Mapper
+import com.sunrisekcdeveloper.medialion.utils.mappers.Mapper
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.ID
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem
 import com.sunrisekcdeveloper.medialion.components.shared.utils.ForcedException

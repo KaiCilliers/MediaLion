@@ -2,8 +2,8 @@ package com.sunrisekcdeveloper.medialion.features.search
 
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
-import com.sunrisekcdeveloper.medialion.oldArch.flow.CStateFlow
-import com.sunrisekcdeveloper.medialion.oldArch.flow.cStateFlow
+import com.sunrisekcdeveloper.medialion.utils.flow.CStateFlow
+import com.sunrisekcdeveloper.medialion.utils.flow.cStateFlow
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.Failure
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.NoMediaFound
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.SearchForMediaUseCase

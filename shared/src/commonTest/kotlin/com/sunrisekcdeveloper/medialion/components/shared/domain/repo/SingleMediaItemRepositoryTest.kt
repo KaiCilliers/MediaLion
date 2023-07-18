@@ -3,7 +3,7 @@ package com.sunrisekcdeveloper.medialion.components.shared.domain.repo
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
-import com.sunrisekcdeveloper.medialion.oldArch.mappers.Mapper
+import com.sunrisekcdeveloper.medialion.utils.mappers.Mapper
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaRequirements
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaTypeNew
 import com.sunrisekcdeveloper.medialion.components.shared.data.singleMedia.SingleMediaLocalDataSource

@@ -1,7 +1,7 @@
 package com.sunrisekcdeveloper.medialion.components.shared.data.singleMedia
 
 import com.sunrisekcdeveloper.medialion.database.MediaLionDatabase
-import com.sunrisekcdeveloper.medialion.oldArch.mappers.Mapper
+import com.sunrisekcdeveloper.medialion.utils.mappers.Mapper
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.ID
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem
 import com.sunrisekcdeveloper.medialion.components.shared.utils.ForcedException

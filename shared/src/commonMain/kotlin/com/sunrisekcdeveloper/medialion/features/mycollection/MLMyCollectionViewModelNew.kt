@@ -3,8 +3,8 @@ package com.sunrisekcdeveloper.medialion.features.mycollection
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
 import com.sunrisekcdeveloper.medialion.components.collections.domain.FetchAllCollectionsAsTitledMediaUseCase
-import com.sunrisekcdeveloper.medialion.oldArch.flow.CStateFlow
-import com.sunrisekcdeveloper.medialion.oldArch.flow.cStateFlow
+import com.sunrisekcdeveloper.medialion.utils.flow.CStateFlow
+import com.sunrisekcdeveloper.medialion.utils.flow.cStateFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

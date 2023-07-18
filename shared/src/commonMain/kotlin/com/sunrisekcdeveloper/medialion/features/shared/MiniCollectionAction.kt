@@ -4,7 +4,7 @@ import com.sunrisekcdeveloper.medialion.components.shared.domain.models.Collecti
 import com.sunrisekcdeveloper.medialion.features.mycollection.MyCollectionsAction
 import com.sunrisekcdeveloper.medialion.features.mycollection.MyCollectionsUIState
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
-import com.sunrisekcdeveloper.medialion.oldArch.flow.CStateFlow
+import com.sunrisekcdeveloper.medialion.utils.flow.CStateFlow
 
 sealed interface MiniCollectionAction
 data class UpdateCollection(val collection: CollectionNew) : MiniCollectionAction

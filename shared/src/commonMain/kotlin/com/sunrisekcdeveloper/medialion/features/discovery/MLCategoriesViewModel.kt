@@ -4,8 +4,8 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaCategory
 import com.sunrisekcdeveloper.medialion.components.shared.domain.FetchAllMediaCategoriesUseCase
-import com.sunrisekcdeveloper.medialion.oldArch.flow.CStateFlow
-import com.sunrisekcdeveloper.medialion.oldArch.flow.cStateFlow
+import com.sunrisekcdeveloper.medialion.utils.flow.CStateFlow
+import com.sunrisekcdeveloper.medialion.utils.flow.cStateFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

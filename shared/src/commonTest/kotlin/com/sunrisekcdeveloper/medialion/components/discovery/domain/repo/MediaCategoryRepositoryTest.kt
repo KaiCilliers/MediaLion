@@ -2,7 +2,7 @@ package com.sunrisekcdeveloper.medialion.components.discovery.domain.repo
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.sunrisekcdeveloper.medialion.oldArch.mappers.Mapper
+import com.sunrisekcdeveloper.medialion.utils.mappers.Mapper
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaCategory
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaTypeNew
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.repo.MediaCategoryRepository
