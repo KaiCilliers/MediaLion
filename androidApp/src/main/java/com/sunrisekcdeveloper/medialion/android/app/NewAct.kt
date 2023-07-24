@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.fragment.app.FragmentActivity
-import com.sunrisekcdeveloper.medialion.android.features.home.HomeKey
+import com.sunrisekcdeveloper.medialion.android.features.root.RootKey
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.zhuinden.simplestack.History
 import com.zhuinden.simplestackcomposeintegration.core.ComposeNavigator

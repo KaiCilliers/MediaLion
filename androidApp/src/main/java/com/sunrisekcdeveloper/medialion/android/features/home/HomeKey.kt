@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import com.sunrisekcdeveloper.medialion.android.app.ComposeKey
-import com.sunrisekcdeveloper.medialion.android.app.EvenMoreRoot
+import com.sunrisekcdeveloper.medialion.android.features.root.RootScreen
 import com.zhuinden.simplestack.ServiceBinder
 import com.zhuinden.simplestackextensions.servicesktx.add
 import kotlinx.parcelize.Parcelize
@@ -30,6 +30,6 @@ data class HomeKey(
 
 @Parcelize
 data class GlobalRouter(
-    val infoDialogRouter: @RawValue EvenMoreRoot.InfoDialogRouter,
-    val detailPreviewSheetRouter: @RawValue EvenMoreRoot.DetailPreviewSheetRouter,
+    val infoRouter: @RawValue RootScreen.InfoRouter,
+    val mediaPreviewRouter: @RawValue RootScreen.MediaPreviewRouter,
 ) : Parcelable

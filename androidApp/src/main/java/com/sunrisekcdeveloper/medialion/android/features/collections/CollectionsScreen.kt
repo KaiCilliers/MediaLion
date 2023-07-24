@@ -47,7 +47,7 @@ fun CollectionsScreen() {
         Button(
             modifier = Modifier.align(Alignment.CenterHorizontally),
             onClick = {
-                globalRouter.infoDialogRouter.show()
+                globalRouter.infoRouter.show()
             },
             content = {
                 Text("Show Dialog")
@@ -56,7 +56,7 @@ fun CollectionsScreen() {
         Button(
             modifier = Modifier.align(Alignment.CenterHorizontally),
             onClick = {
-                globalRouter.detailPreviewSheetRouter.show(MediaItemUI(
+                globalRouter.mediaPreviewRouter.show(MediaItemUI(
                     id = "vivamus",
                     title = "From Collections",
                     isFavorited = false,

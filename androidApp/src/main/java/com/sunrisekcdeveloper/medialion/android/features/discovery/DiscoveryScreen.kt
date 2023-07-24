@@ -51,7 +51,7 @@ fun DiscoveryScreen() {
             modifier = Modifier.align(Alignment.CenterHorizontally),
             onClick = {
                 println("deadpool - $key")
-                globalRouter.infoDialogRouter.show()
+                globalRouter.infoRouter.show()
             },
             content = {
                 Text("Open Info Dialog")
@@ -62,7 +62,7 @@ fun DiscoveryScreen() {
             onClick = {
                 println("deadpool - $key")
 
-                    globalRouter.infoDialogRouter.showWithResult {
+                    globalRouter.infoRouter.showWithResult {
                         println("got result $it")
                         context.showToast("got result $it")
                     }
@@ -75,7 +75,7 @@ fun DiscoveryScreen() {
             modifier = Modifier.align(Alignment.CenterHorizontally),
             onClick = {
                 println("deadpool - $key")
-                globalRouter.detailPreviewSheetRouter.show(MediaItemUI(
+                globalRouter.mediaPreviewRouter.show(MediaItemUI(
                     id = "tristique",
                     title = "From Discovery",
                     isFavorited = false,

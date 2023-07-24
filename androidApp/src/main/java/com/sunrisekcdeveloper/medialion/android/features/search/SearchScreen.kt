@@ -38,7 +38,6 @@ import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.components.ui.MLProgress
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.SearchQuery
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.CollectionNew
-import com.sunrisekcdeveloper.medialion.components.shared.domain.models.MediaWithTitle
 import com.sunrisekcdeveloper.medialion.features.search.SearchScreenAction
 import com.sunrisekcdeveloper.medialion.features.search.SearchUIState
 import com.sunrisekcdeveloper.medialion.features.shared.Content
@@ -49,7 +48,6 @@ import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
 import com.sunrisekcdeveloper.medialion.utils.StringRes
 import com.sunrisekcdeveloper.medialion.utils.rememberService
 import com.zhuinden.simplestackcomposeintegration.core.LocalBackstack
-import io.github.aakira.napier.Napier
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class)
 @Composable
@@ -72,8 +70,8 @@ fun SearchScreen() {
         searchState = searchState,
         miniCollectionState = miniCollectionState,
         navigateBack = { backstack.goBack() },
-        openInfoDialog = { globalRouter.infoDialogRouter.show() },
-        openMediaPreviewSheet = { mediaItem -> globalRouter.detailPreviewSheetRouter.show(mediaItem) },
+        openInfoDialog = { globalRouter.infoRouter.show() },
+        openMediaPreviewSheet = { mediaItem -> globalRouter.mediaPreviewRouter.show(mediaItem) },
         submitSearchQuery = { newQuery -> searchViewModel.submit(SearchScreenAction.SubmitSearchQuery(newQuery)) },
         updateFavorites = { newCollection -> searchViewModel.submit(UpdateCollection(newCollection)) }
     )

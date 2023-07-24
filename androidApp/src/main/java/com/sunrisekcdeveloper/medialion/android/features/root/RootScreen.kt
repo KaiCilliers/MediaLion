@@ -1,20 +1,16 @@
-package com.sunrisekcdeveloper.medialion.android.app
+package com.sunrisekcdeveloper.medialion.android.features.root
 
 import android.annotation.SuppressLint
 import android.os.Parcelable
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,14 +35,22 @@ import kotlinx.parcelize.RawValue
 import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class)
-class EvenMoreRoot private constructor() {
-    interface InfoDialogRouter {
+class RootScreen private constructor() {
+    interface InfoRouter {
         fun show()
         fun showWithResult(onResult: (String) -> Unit)
     }
 
-    interface DetailPreviewSheetRouter {
+    interface MediaPreviewRouter {
         fun show(media: MediaItemUI)
+    }
+
+    sealed interface SheetContent : Parcelable {
+        @Parcelize
+        data object NoContent : SheetContent
+
+        @Parcelize
+        data class Content(val id: String = UUID.randomUUID().toString(), val media: @RawValue MediaItemUI) : Parcelable, SheetContent
     }
 
     companion object {
@@ -59,7 +63,14 @@ class EvenMoreRoot private constructor() {
             var showMediaDetailSheet: SheetContent by rememberSaveable { mutableStateOf(SheetContent.NoContent) }
             var onDialogResult: Foo by rememberSaveable { mutableStateOf(Foo()) }
 
-            val dialog = object : InfoDialogRouter {
+            val mediaPreviewSheet = rememberModalBottomSheetState(
+                initialValue = ModalBottomSheetValue.Hidden,
+                confirmValueChange = { it != ModalBottomSheetValue.HalfExpanded },
+                skipHalfExpanded = true,
+                animationSpec = spring(1.4f)
+            )
+
+            val infoRouter = object : InfoRouter {
                 override fun show() {
                     println("deadpool - showing dialog ($showInfoDialog) to true")
                     showInfoDialog = true
@@ -71,15 +82,7 @@ class EvenMoreRoot private constructor() {
                     showInfoDialog = true
                 }
             }
-
-            val sheetState = rememberModalBottomSheetState(
-                initialValue = ModalBottomSheetValue.Hidden,
-                confirmValueChange = { it != ModalBottomSheetValue.HalfExpanded },
-                skipHalfExpanded = true,
-                animationSpec = spring(1.4f)
-            )
-
-            val sheet = object : DetailPreviewSheetRouter {
+            val mediaPreviewRouter = object : MediaPreviewRouter {
                 override fun show(media: MediaItemUI) {
                     showMediaDetailSheet = SheetContent.Content(media = media)
                 }
@@ -89,14 +92,13 @@ class EvenMoreRoot private constructor() {
             LaunchedEffect(showMediaDetailSheet) {
                 scope.launch {
                     when (showMediaDetailSheet) {
-                        is SheetContent.Content -> sheetState.show()
-                        SheetContent.NoContent -> sheetState.hide()
+                        is SheetContent.Content -> mediaPreviewSheet.show()
+                        SheetContent.NoContent -> mediaPreviewSheet.hide()
                     }
                 }
             }
-
-            LaunchedEffect(sheetState) {
-                snapshotFlow { sheetState.isVisible }.collect { isVisible ->
+            LaunchedEffect(mediaPreviewSheet) {
+                snapshotFlow { mediaPreviewSheet.isVisible }.collect { isVisible ->
                     println("is visiblie $isVisible")
                     if (!isVisible) {
                         showMediaDetailSheet = SheetContent.NoContent
@@ -118,19 +120,19 @@ class EvenMoreRoot private constructor() {
             }
 
             val globalRouter = GlobalRouter(
-                infoDialogRouter = dialog,
-                detailPreviewSheetRouter = sheet
+                infoRouter = infoRouter,
+                mediaPreviewRouter = mediaPreviewRouter
             )
 
             ModalBottomSheetLayout(
-                sheetState = sheetState,
+                sheetState = mediaPreviewSheet,
                 sheetShape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
                 sheetContent = {
                     when (val currentMediaToShow = showMediaDetailSheet) {
                         is SheetContent.Content -> {
                             DetailPreviewScreen(
                                 mediaItem = SimpleMediaItem.from(currentMediaToShow.media),
-                                onCloseClick = { scope.launch { sheetState.hide() } },
+                                onCloseClick = { scope.launch { mediaPreviewSheet.hide() } },
                                 onMyListClick = {},
                             )
                         }
@@ -150,28 +152,5 @@ class EvenMoreRoot private constructor() {
                 }
             }
         }
-    }
-}
-
-sealed interface SheetContent : Parcelable {
-    @Parcelize
-    data object NoContent : SheetContent
-
-    @Parcelize
-    data class Content(val id: String = UUID.randomUUID().toString(), val media: @RawValue MediaItemUI) : Parcelable, SheetContent
-}
-
-@Parcelize
-data class Foo(
-    val s: (String) -> Unit = {}
-) : Parcelable
-
-
-@Immutable
-@Parcelize
-data object RootKey : ComposeKey() {
-    @Composable
-    override fun ScreenComposable(modifier: Modifier) {
-        EvenMoreRoot()
     }
 }
