@@ -81,13 +81,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
     implementation("io.coil-kt:coil-compose:2.3.0")
 
-    implementation("com.github.Zhuinden:simple-stack:2.7.0")
-    implementation("com.github.Zhuinden.simple-stack-extensions:core-ktx:2.3.0")
-    implementation("com.github.Zhuinden.simple-stack-extensions:fragments:2.3.0")
-    implementation("com.github.Zhuinden.simple-stack-extensions:fragments-ktx:2.3.0")
-    implementation("com.github.Zhuinden.simple-stack-extensions:navigator-ktx:2.3.0")
-    implementation("com.github.Zhuinden.simple-stack-extensions:services:2.3.0")
-    implementation("com.github.Zhuinden.simple-stack-extensions:services-ktx:2.3.0")
+    implementation("com.github.Zhuinden:simple-stack-extensions:2.3.3")
+    implementation("com.github.KaiCilliers.simple-stack-compose-integration:core:0.2.0")
+
+    implementation("io.github.aakira:napier:2.6.1")
 
     implementation("com.github.Zhuinden:flow-combinetuple-kt:1.1.1")
 

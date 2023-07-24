@@ -1,4 +1,4 @@
-package com.sunrisekcdeveloper.medialion.android.ui.search.ui
+package com.sunrisekcdeveloper.medialion.android.features.search.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,7 +45,7 @@ fun MLMediaBanner(
                 .clip(RoundedCornerShape(4.dp))
                 .fillMaxSize(),
             contentDescription = null,
-            loading = { PosterPlaceholder(mediaTitle = mediaItem.title)},
+            loading = { PosterPlaceholder(mediaTitle = mediaItem.title) },
             error = {
                 // todo log logs here about posters not loading
                 PosterPlaceholder(mediaTitle = mediaItem.title) },

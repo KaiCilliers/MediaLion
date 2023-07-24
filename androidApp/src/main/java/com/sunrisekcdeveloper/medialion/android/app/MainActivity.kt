@@ -4,8 +4,7 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.FragmentActivity
 import com.sunrisekcdeveloper.medialion.android.R
-import com.sunrisekcdeveloper.medialion.android.ui.home.HomeKey
-import com.sunrisekcdeveloper.medialion.android.ui.search.SearchKey
+import com.sunrisekcdeveloper.medialion.android.features.discovery.DiscoveryKey
 import com.zhuinden.simplestack.AheadOfTimeWillHandleBackChangedListener
 import com.zhuinden.simplestack.BackHandlingModel
 import com.zhuinden.simplestack.Backstack
@@ -39,13 +38,6 @@ class MainActivity : FragmentActivity(), SimpleStateChanger.NavigationHandler {
 
         val app = application as com.sunrisekcdeveloper.medialion.android.app.MediaLionApp
         val globalServices = app.globalServices
-
-        backstack = Navigator.configure()
-            .setBackHandlingModel(BackHandlingModel.AHEAD_OF_TIME)
-            .setStateChanger(SimpleStateChanger(this))
-            .setScopedServices(DefaultServiceProvider())
-            .setGlobalServices(globalServices)
-            .install(this, findViewById(R.id.container_fragment), History.single(HomeKey))
 
         backPressedCallback.isEnabled = backstack.willHandleAheadOfTimeBack()
         backstack.addAheadOfTimeWillHandleBackChangedListener(updateBackPressedCallback)

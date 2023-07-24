@@ -5,6 +5,7 @@ import com.sunrisekcdeveloper.medialion.components.collections.domain.DeleteColl
 import com.sunrisekcdeveloper.medialion.components.collections.domain.FetchAllCollectionsAsTitledMediaUseCase
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.FetchDiscoveryContentUseCase
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.FetchMediaWithCategoryUseCase
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.FetchSuggestedMediaUseCase
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.SearchForMediaUseCase
 import com.sunrisekcdeveloper.medialion.components.shared.domain.FetchAllMediaCategoriesUseCase
 import com.sunrisekcdeveloper.medialion.features.discovery.MLCategoriesViewModel
@@ -35,6 +36,7 @@ class WrappedMLMiniCollectionViewModel : KoinComponent {
 class WrappedMLSearchViewModelNew : KoinComponent {
     fun instance() = MLSearchViewModelNew.Default(
         get<SearchForMediaUseCase>(),
+        get<FetchSuggestedMediaUseCase>(),
         coroutineScope = null,
     )
 }

@@ -7,18 +7,12 @@ import android.view.ViewGroup
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
-import com.sunrisekcdeveloper.medialion.android.ui.collections.CollectionViewModel
 import com.sunrisekcdeveloper.medialion.android.ui.discovery.DiscoveryViewModel
-import com.sunrisekcdeveloper.medialion.android.ui.search.SearchKey
-import com.sunrisekcdeveloper.medialion.android.ui.search.SearchViewModel
-import com.zhuinden.simplestackextensions.fragmentsktx.backstack
 import com.zhuinden.simplestackextensions.fragmentsktx.lookup
 
 class HomeFragment : Fragment() {
@@ -38,24 +32,24 @@ class HomeFragment : Fragment() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colors.background
                     ) {
+//
+//                        val discoveryState by discoveryViewModel.state.collectAsState()
+//                        val collectionState by searchViewModel.collectionState.collectAsState()
 
-                        val discoveryState by discoveryViewModel.state.collectAsState()
-                        val collectionState by searchViewModel.collectionState.collectAsState()
-
-                        HomeScreen(
-                            discoveryState = discoveryState,
-                            genreState = genreState,
-                            collectionsState = collectionState,
-                            submitSearchAction = { searchViewModel.submit(it) },
-                            submitDiscoveryAction = { discoveryViewModel.submitAction(it) },
-                            onNavigateToSearchScreen = { backstack.goTo(SearchKey) },
-                            collectionState = otherCollectionState,
-                            submitCollectionAction = { collectionViewModel.submitAction(it) },
-                            selectedTab = selectedTab,
-                            selectedTopTab = selectedDiscoveryTopTab,
-                            onSelectedTabChange = { homeViewModel.setCurrentTab(it) },
-                            onSelectedTopTabChange = { homeViewModel.setTopTab(it) }
-                        )
+//                        HomeScreen(
+//                            discoveryState = discoveryState,
+//                            genreState = genreState,
+//                            collectionsState = collectionState,
+//                            submitSearchAction = { searchViewModel.submit(it) },
+//                            submitDiscoveryAction = { discoveryViewModel.submitAction(it) },
+//                            onNavigateToSearchScreen = { backstack.goTo(SearchKey) },
+//                            collectionState = otherCollectionState,
+//                            submitCollectionAction = { collectionViewModel.submitAction(it) },
+//                            selectedTab = selectedTab,
+//                            selectedTopTab = selectedDiscoveryTopTab,
+//                            onSelectedTabChange = { homeViewModel.setCurrentTab(it) },
+//                            onSelectedTopTabChange = { homeViewModel.setTopTab(it) }
+//                        )
                     }
                 }
             }

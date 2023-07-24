@@ -1,4 +1,4 @@
-package com.sunrisekcdeveloper.medialion.android.ui.search.ui
+package com.sunrisekcdeveloper.medialion.android.features.search.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +17,7 @@ import com.sunrisekcdeveloper.medialion.utils.StringRes
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 
 @Composable
-fun SearchEmptyState(modifier: Modifier = Modifier) {
+fun EmptySearch(modifier: Modifier = Modifier) {
   Column(
       modifier = modifier
           .fillMaxSize()
@@ -44,7 +44,7 @@ fun SearchEmptyState(modifier: Modifier = Modifier) {
 private fun SearchEmptyStatePreview() {
     MediaLionTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            SearchEmptyState()
+            EmptySearch()
         }
     }
 }

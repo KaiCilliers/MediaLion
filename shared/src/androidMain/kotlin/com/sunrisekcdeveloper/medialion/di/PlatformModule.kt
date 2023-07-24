@@ -19,8 +19,6 @@ actual val platformModule = module {
             mapper = get(named(MapperNames.SingleMediaItemNames.responseToSingleMediaApiDto))
         )
     }
-
-    single<TMDBClient> { TMDBClient.Default(HttpClientFactory().create()) }
     single<MediaLionDatabase> { MediaLionDatabaseFactory(DatabaseDriverFactory(get<Context>())).create() }
     single<DispatcherProvider> { DefaultDispatcherProvider() }
 }

@@ -9,4 +9,18 @@ data class SimpleMediaItem(
     val year: String = "",
     val posterUrl: String,
     val mediaType: MediaType,
-)
+) {
+    companion object {
+        fun from(item: MediaItemUI): SimpleMediaItem {
+            return SimpleMediaItem(
+                id = item.id,
+                title = item.title,
+                description = item.overview,
+                year = item.releaseYear,
+                posterUrl = item.posterUrl,
+                mediaType = item.mediaType
+
+            )
+        }
+    }
+}

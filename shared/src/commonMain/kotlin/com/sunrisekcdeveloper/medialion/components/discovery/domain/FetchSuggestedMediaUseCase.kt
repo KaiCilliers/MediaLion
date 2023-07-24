@@ -8,6 +8,7 @@ import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.Media
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.repo.TitledMediaRepository
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.MediaWithTitle
 import com.sunrisekcdeveloper.medialion.components.shared.domain.repos.CollectionRepositoryNew
+import io.github.aakira.napier.Napier
 
 interface FetchSuggestedMediaUseCase {
     suspend operator fun invoke(): Result<MediaWithTitle, FetchSuggestedMediaError>
@@ -30,7 +31,10 @@ interface FetchSuggestedMediaUseCase {
                 val titledMedia = titledMediaRepository.withRequirement(requirements.copy(withoutMedia = excludedIds))
                 titledMedia
             }
-                .mapError { FailedToFetchFeatureMedia }
+                .mapError {
+                    Napier.w(it) { "Failed to fetch suggested media" }
+                    FailedToFetchFeatureMedia
+                }
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.sunrisekcdeveloper.medialion.android.ui.search.ui
+package com.sunrisekcdeveloper.medialion.android.features.search.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -85,7 +85,7 @@ private fun MLMediaFavoriteListItemPreview() {
         var mediaItem: MediaItemUI by remember {
             mutableStateOf(
                 MediaItemUI(
-                    id = 1,
+                    id = "asdad",
                     title = "",
                     isFavorited = false,
                     posterUrl = "",

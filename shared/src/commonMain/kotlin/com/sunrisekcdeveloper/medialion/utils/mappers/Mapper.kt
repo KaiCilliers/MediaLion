@@ -14,6 +14,7 @@ import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
 import database.CategoryCache
 import database.MovieCache
 import database.TVShowCache
+import io.github.aakira.napier.Napier
 
 interface Mapper<I, O> {
     fun map(input: I): O
@@ -63,18 +64,17 @@ interface Mapper<I, O> {
                 return if (input.firstAirDate != null) {
                     SingleMediaApiDto.TVShow(
                         id = input.id!!.toString(),
-                        title = input.title!!,
+                        title = input.title ?: input.originalTitle!!,
                         firstAirDate = input.firstAirDate
                     )
                 } else {
                     SingleMediaApiDto.Movie(
                         id = input.id!!.toString(),
-                        title = input.title!!,
+                        title = input.title ?: input.originalTitle!!,
                         releaseDate = input.releaseDate!!
                     )
                 }
             }
-
         }
 
         class ApiDtoToDomain : Mapper<SingleMediaApiDto, SingleMediaItem> {

@@ -28,6 +28,7 @@ interface MLCategoriesViewModel {
             get() = _state.cStateFlow()
 
         override fun submit(action: CategoriesAction) {
+            println("Processing $action")
             when (action) {
                 FetchAllCategories -> viewModelScope.launch {
                     fetchAllMediaCategoriesUseCase()

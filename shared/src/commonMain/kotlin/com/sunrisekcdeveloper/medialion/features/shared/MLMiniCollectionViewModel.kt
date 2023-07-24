@@ -42,6 +42,7 @@ interface MLMiniCollectionViewModel {
             get() = _minCollectionState.cStateFlow()
 
         override fun submit(action: MiniCollectionAction) {
+            println("Processing $action")
             when(action) {
                 is CreateCollection -> viewModelScope.launch {
                     // do not create objects like this - use factory

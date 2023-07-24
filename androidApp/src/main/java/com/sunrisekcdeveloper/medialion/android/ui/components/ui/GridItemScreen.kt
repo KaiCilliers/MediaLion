@@ -22,7 +22,6 @@ import com.sunrisekcdeveloper.medialion.oldArch.MediaItemUI
 import com.sunrisekcdeveloper.medialion.oldArch.TitledMedia
 import com.sunrisekcdeveloper.medialion.android.R
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
-import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLTitledMediaGrid
 import com.sunrisekcdeveloper.medialion.oldArch.domain.MediaType
 
 @Composable
@@ -78,48 +77,48 @@ fun GridItemScreen(
                     )
 
                 }
-                MLTitledMediaGrid(
-                    gridTitle = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.top_results),
-                    media = (1..20).map {
-                        MediaItemUI(
-                            id = 7660,
-                            title = "delectus",
-                            isFavorited = false,
-                            posterUrl = "http://www.bing.com/search?q=mentitum",
-                            bannerUrl = "https://www.google.com/#q=tincidunt",
-                            genreIds = listOf(),
-                            overview = "has",
-                            popularity = 16.17,
-                            voteAverage = 18.19,
-                            voteCount = 5603,
-                            releaseYear = "curae",
-                            mediaType = MediaType.MOVIE
-                        )
-                    }.toList(),
-                    suggestedMedia = (1..3).map {
-                        TitledMedia(
-                            title = "Suggested Heading #$it",
-                            content = (1..20).map {
-                                MediaItemUI(
-                                    id = 7969,
-                                    title = "errem",
-                                    isFavorited = false,
-                                    posterUrl = "https://duckduckgo.com/?q=per",
-                                    bannerUrl = "http://www.bing.com/search?q=viderer",
-                                    genreIds = listOf(),
-                                    overview = "oratio",
-                                    popularity = 36.37,
-                                    voteAverage = 38.39,
-                                    voteCount = 2534,
-                                    releaseYear = "vel",
-                                    mediaType = MediaType.MOVIE,
-                                )
-                            }
-                                .toList()
-                        )
-                    },
-                    onMediaClicked = {},
-                )
+//                MLTitledMediaGrid(
+//                    gridTitle = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.top_results),
+//                    media = (1..20).map {
+//                        MediaItemUI(
+//                            id = 7660,
+//                            title = "delectus",
+//                            isFavorited = false,
+//                            posterUrl = "http://www.bing.com/search?q=mentitum",
+//                            bannerUrl = "https://www.google.com/#q=tincidunt",
+//                            genreIds = listOf(),
+//                            overview = "has",
+//                            popularity = 16.17,
+//                            voteAverage = 18.19,
+//                            voteCount = 5603,
+//                            releaseYear = "curae",
+//                            mediaType = MediaType.MOVIE
+//                        )
+//                    }.toList(),
+//                    suggestedMedia = (1..3).map {
+//                        TitledMedia(
+//                            title = "Suggested Heading #$it",
+//                            content = (1..20).map {
+//                                MediaItemUI(
+//                                    id = 7969,
+//                                    title = "errem",
+//                                    isFavorited = false,
+//                                    posterUrl = "https://duckduckgo.com/?q=per",
+//                                    bannerUrl = "http://www.bing.com/search?q=viderer",
+//                                    genreIds = listOf(),
+//                                    overview = "oratio",
+//                                    popularity = 36.37,
+//                                    voteAverage = 38.39,
+//                                    voteCount = 2534,
+//                                    releaseYear = "vel",
+//                                    mediaType = MediaType.MOVIE,
+//                                )
+//                            }
+//                                .toList()
+//                        )
+//                    },
+//                    onMediaClicked = {},
+//                )
 
             }
         }

@@ -1,4 +1,4 @@
-package com.sunrisekcdeveloper.medialion.android.ui.search
+package com.sunrisekcdeveloper.medialion.android.features.search
 
 import com.sunrisekcdeveloper.medialion.features.search.MLSearchViewModelNew
 import com.sunrisekcdeveloper.medialion.features.search.SearchUIState

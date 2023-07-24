@@ -1,4 +1,4 @@
-package com.sunrisekcdeveloper.medialion.android.ui.detailPreview.ui
+package com.sunrisekcdeveloper.medialion.android.features.shared
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -28,7 +28,7 @@ import androidx.constraintlayout.compose.Dimension
 import com.sunrisekcdeveloper.medialion.oldArch.SimpleMediaItem
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.extensions.gradientBlue
-import com.sunrisekcdeveloper.medialion.android.ui.search.ui.MLMediaPoster
+import com.sunrisekcdeveloper.medialion.android.features.search.components.MLMediaPoster
 import com.sunrisekcdeveloper.medialion.oldArch.domain.MediaType
 
 @Composable

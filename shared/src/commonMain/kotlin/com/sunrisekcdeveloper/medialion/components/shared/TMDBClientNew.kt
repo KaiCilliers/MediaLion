@@ -13,6 +13,7 @@ import com.sunrisekcdeveloper.medialion.network.models.MediaResponse
 import com.sunrisekcdeveloper.medialion.network.models.PagedMediaResponse
 import com.sunrisekcdeveloper.medialion.utils.standardParameters
 import com.sunrisekcdeveloper.medialion.utils.mappers.Mapper
+import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -80,7 +81,12 @@ class TMDBClientNew(
             totalPages = pagedMediaResponse.totalPages
             pagedMediaResponse
                 .results
-                .map { mapper.map(it) }
+                .mapNotNull { mediaResponse ->
+                    runCatching { mapper.map(mediaResponse) }.getOrElse {
+                        Napier.w(it) { "Failed to map remote media model to api model [$mediaResponse]" }
+                        null
+                    }
+                }
                 .forEach { singleMediaNetworkDto ->  emit(singleMediaNetworkDto) }
 
         } while (page <= totalPages)
@@ -124,7 +130,12 @@ class TMDBClientNew(
             totalPages = pagedMediaResponse.totalPages
             pagedMediaResponse
                 .results
-                .map { mapper.map(it) }
+                .mapNotNull {  mediaResponse ->
+                    runCatching { mapper.map(mediaResponse) }.getOrElse {
+                        Napier.w(it) { "Failed to map response media item to api model [$mediaResponse]" }
+                        null
+                    }
+                }
                 .forEach { singleMediaNetworkDto ->  emit(singleMediaNetworkDto) }
 
         } while (page <= totalPages)

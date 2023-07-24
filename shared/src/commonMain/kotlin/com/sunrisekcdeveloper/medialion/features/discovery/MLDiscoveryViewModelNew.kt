@@ -32,6 +32,7 @@ interface MLDiscoveryViewModelNew {
             get() = _state.cStateFlow()
 
         override fun submit(action: DiscoveryNewActions) {
+            println("Processing $action")
             when (action) {
                 is FetchMediaForCategory -> viewModelScope.launch {
                     fetchMediaForCategoryUseCase(action.category)

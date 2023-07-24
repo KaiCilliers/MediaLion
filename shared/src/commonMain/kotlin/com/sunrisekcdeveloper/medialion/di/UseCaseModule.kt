@@ -13,6 +13,7 @@ import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.Media
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.repo.MediaCategoryRepository
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.repo.MediaRequirementsRepository
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.repo.TitledMediaRepository
+import com.sunrisekcdeveloper.medialion.components.shared.domain.FetchAllCollectionsUseCaseNew
 import com.sunrisekcdeveloper.medialion.components.shared.domain.FetchAllMediaCategoriesUseCase
 import com.sunrisekcdeveloper.medialion.components.shared.domain.repos.CollectionRepositoryNew
 import org.koin.dsl.module
@@ -59,8 +60,9 @@ val useCaseModule = module {
         )
     }
     factory<FetchAllMediaCategoriesUseCase> {
-        FetchAllMediaCategoriesUseCase.D(
-            get<MediaCategoryRepository>()
-        )
+        FetchAllMediaCategoriesUseCase.D(get<MediaCategoryRepository>())
+    }
+    factory<FetchAllCollectionsUseCaseNew> {
+        FetchAllCollectionsUseCaseNew.Default(get<CollectionRepositoryNew>())
     }
 }

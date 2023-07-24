@@ -4,4 +4,5 @@ import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.Searc
 
 sealed class SearchScreenAction {
     data class SubmitSearchQuery(val query: SearchQuery) : SearchScreenAction()
+    data class FetchSuggestedMedia(val query: SearchQuery) : SearchScreenAction()
 }

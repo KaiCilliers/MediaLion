@@ -1,4 +1,4 @@
-package com.sunrisekcdeveloper.medialion.android.ui.search.ui
+package com.sunrisekcdeveloper.medialion.android.features.search.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -83,7 +83,7 @@ private fun MLTitledMediaGridPreview() {
             MLTitledMediaGrid(
                 gridTitle = stringResource(id = R.string.top_results),
                 media = (1..20).map { MediaItemUI(
-                    id = 9201,
+                    id = "9201",
                     title = "luptatum",
                     isFavorited = false,
                     posterUrl = "http://www.bing.com/search?q=nonumes",
@@ -101,7 +101,7 @@ private fun MLTitledMediaGridPreview() {
                         title = "Suggested Heading #$it",
                         content = (1..20).map {
                             MediaItemUI(
-                                id = 7969,
+                                id = "7969",
                                 title = "errem",
                                 isFavorited = false,
                                 posterUrl = "https://duckduckgo.com/?q=per",

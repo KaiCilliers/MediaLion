@@ -27,7 +27,7 @@ interface MLMyCollectionViewModelNew {
             get() = _screenState.cStateFlow()
 
         override fun submit(action: MyCollectionsAction) {
-            println(action)
+            println("Processing $action")
             when (action) {
                 FetchMyCollectionsMedia -> {
                     viewModelScope.launch {

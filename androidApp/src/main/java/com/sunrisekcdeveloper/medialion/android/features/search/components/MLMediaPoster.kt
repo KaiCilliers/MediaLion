@@ -1,4 +1,4 @@
-package com.sunrisekcdeveloper.medialion.android.ui.search.ui
+package com.sunrisekcdeveloper.medialion.android.features.search.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

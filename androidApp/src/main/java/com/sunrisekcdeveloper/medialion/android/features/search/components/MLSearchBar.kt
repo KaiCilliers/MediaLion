@@ -1,4 +1,4 @@
-package com.sunrisekcdeveloper.medialion.android.ui.search.ui
+package com.sunrisekcdeveloper.medialion.android.features.search.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -14,12 +14,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,21 +24,24 @@ import androidx.compose.ui.unit.dp
 import com.sunrisekcdeveloper.medialion.android.R
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.extensions.gradientOrange
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.SearchQuery
 
 @Composable
 fun MLSearchBar(
-    searchQuery: String,
+    searchQuery: SearchQuery,
     labelText: String,
-    onSearchQueryTextChange: (String) -> Unit,
-    onClearSearchText: () -> Unit,
     modifier: Modifier = Modifier,
+    onSearchQueryTextChange: (SearchQuery) -> Unit,
     keyboardOptions: KeyboardOptions = KeyboardOptions(
         keyboardType = KeyboardType.Text
     ),
 ) {
     TextField(
-        value = searchQuery,
-        onValueChange = { onSearchQueryTextChange(it) },
+        value = searchQuery.toString(),
+        onValueChange = { searchText ->
+            searchQuery.update(searchText)
+            onSearchQueryTextChange(searchQuery)
+        },
         colors = TextFieldDefaults.textFieldColors(
             textColor = MaterialTheme.colors.secondary,
             cursorColor = MaterialTheme.colors.secondary
@@ -67,19 +65,22 @@ fun MLSearchBar(
             Image(
                 painter = painterResource(id = R.drawable.search_icon),
                 contentDescription = "",
-                modifier = modifier
+                modifier = Modifier
                     .padding(15.dp)
                     .size(28.dp)
             )
         },
         trailingIcon = {
             when {
-                searchQuery.isNotEmpty() -> Image(painter = painterResource(id = R.drawable.cancel_text),
+                searchQuery.toString().isNotEmpty() -> Image(painter = painterResource(id = R.drawable.cancel_text),
                     contentDescription = "",
-                    modifier = modifier
+                    modifier = Modifier
                         .padding(15.dp)
                         .size(28.dp)
-                        .clickable { onClearSearchText() })
+                        .clickable {
+                            searchQuery.clear()
+                            onSearchQueryTextChange(searchQuery)
+                        })
             }
         })
 }
@@ -88,15 +89,14 @@ fun MLSearchBar(
 @Composable
 private fun MLSearchBarPreview() {
     MediaLionTheme {
-        var text by remember {
-            mutableStateOf("")
-        }
         Surface(modifier = Modifier.fillMaxSize()) {
+
+            var searchQuery: SearchQuery = SearchQuery.Default("")
+
             MLSearchBar(
-                searchQuery = text,
+                searchQuery = searchQuery,
                 labelText = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.empty_search),
-                onSearchQueryTextChange = { text = it },
-                onClearSearchText = { text = "" },
+                onSearchQueryTextChange = { searchQuery = it },
             )
         }
     }

@@ -6,6 +6,7 @@ import kotlin.time.Duration.Companion.milliseconds
 interface SearchQuery {
     fun update(query: String)
     fun canPerformQuery(): Boolean
+    fun clear()
 
     class Default(
         private var value: String,
@@ -32,6 +33,11 @@ interface SearchQuery {
         override fun canPerformQuery(): Boolean {
             return value.trim().length > MIN_CHARACTERS_FOR_EXECUTABLE_QUERY
                     && millisSinceLastUpdate >= 400.milliseconds
+        }
+
+        override fun clear() {
+            trackUpdates()
+            value = ""
         }
 
         private fun trackUpdates() {

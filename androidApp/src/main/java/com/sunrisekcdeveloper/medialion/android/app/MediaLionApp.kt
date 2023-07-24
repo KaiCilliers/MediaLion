@@ -6,6 +6,8 @@ import com.sunrisekcdeveloper.medialion.di.sharedModule
 import com.zhuinden.simplestack.GlobalServices
 import com.zhuinden.simplestackextensions.servicesktx.add
 import com.zhuinden.simplestackextensions.servicesktx.rebind
+import io.github.aakira.napier.DebugAntilog
+import io.github.aakira.napier.Napier
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.GlobalContext.startKoin
@@ -16,6 +18,8 @@ class MediaLionApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        Napier.base(DebugAntilog())
 
         globalServices = GlobalServices.builder()
             .add(this)
