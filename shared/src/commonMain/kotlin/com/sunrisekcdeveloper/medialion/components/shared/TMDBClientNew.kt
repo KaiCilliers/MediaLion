@@ -11,8 +11,8 @@ import com.sunrisekcdeveloper.medialion.network.models.GenreResponse
 import com.sunrisekcdeveloper.medialion.network.models.GenreWrapper
 import com.sunrisekcdeveloper.medialion.network.models.MediaResponse
 import com.sunrisekcdeveloper.medialion.network.models.PagedMediaResponse
-import com.sunrisekcdeveloper.medialion.utils.standardParameters
 import com.sunrisekcdeveloper.medialion.utils.mappers.Mapper
+import com.sunrisekcdeveloper.medialion.utils.standardParameters
 import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -69,7 +69,6 @@ class TMDBClientNew(
         var totalPages: Int
 
         do {
-
             val pagedMediaResponse = httpClient.get(searchRequest.toString()) {
                 url {
                     parameters.standardParameters()

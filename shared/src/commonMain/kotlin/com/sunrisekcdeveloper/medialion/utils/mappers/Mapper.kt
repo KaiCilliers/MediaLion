@@ -64,7 +64,7 @@ interface Mapper<I, O> {
                 return if (input.firstAirDate != null) {
                     SingleMediaApiDto.TVShow(
                         id = input.id!!.toString(),
-                        title = input.title ?: input.originalTitle!!,
+                        title = input.name ?: input.originalName!!,
                         firstAirDate = input.firstAirDate
                     )
                 } else {

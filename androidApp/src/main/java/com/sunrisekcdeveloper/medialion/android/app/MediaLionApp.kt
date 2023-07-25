@@ -36,3 +36,7 @@ class MediaLionApp : Application() {
         }
     }
 }
+
+fun Napier.debug(msg: () -> String) {
+    this.d(tag = "deadpool") { msg() }
+}

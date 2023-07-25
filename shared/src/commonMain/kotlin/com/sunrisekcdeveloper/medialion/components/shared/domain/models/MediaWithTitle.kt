@@ -5,7 +5,7 @@ import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
 interface MediaWithTitle {
     fun title(): Title
     fun media(): List<SingleMediaItem>
-    class Def(
+    data class Def(
         private val title: Title,
         private val content: List<SingleMediaItem> = emptyList(),
     ) : MediaWithTitle {

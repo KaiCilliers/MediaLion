@@ -18,12 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sunrisekcdeveloper.medialion.oldArch.MediaItemUI
 import com.sunrisekcdeveloper.medialion.R
-import com.sunrisekcdeveloper.medialion.oldArch.SimpleMediaItem
-import com.sunrisekcdeveloper.medialion.oldArch.TitledMedia
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
+import com.sunrisekcdeveloper.medialion.oldArch.MediaItemUI
+import com.sunrisekcdeveloper.medialion.oldArch.TitledMedia
 import com.sunrisekcdeveloper.medialion.oldArch.domain.MediaType
+import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
 
 @Composable
 fun MLTitledMediaGrid(
@@ -33,46 +33,42 @@ fun MLTitledMediaGrid(
     onMediaClicked: (MediaItemUI) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-//    LazyVerticalGrid(
-//        columns = GridCells.Fixed(3),
-//        modifier = modifier
-//            .background(MaterialTheme.colors.background)
-//            .fillMaxSize(),
-//        contentPadding = PaddingValues(22.dp),
-//        verticalArrangement = Arrangement.spacedBy(24.dp),
-//        horizontalArrangement = Arrangement.spacedBy(24.dp)
-//
-//    ) {
-//        item(span = { GridItemSpan(3) }) {
-//            Text(
-//                text = gridTitle,
-//                style = MaterialTheme.typography.h3,
-//                color = MaterialTheme.colors.secondary,
-//                modifier = modifier.padding(top = 8.dp, bottom = 6.dp),
-//
-//                )
-//        }
-//        items(media) { singleMovie ->
-//            MLMediaPoster(
-//                mediaItem = SimpleMediaItem(
-//                    id = singleMovie.id.toString(),
-//                    title = singleMovie.title,
-//                    posterUrl = singleMovie.posterUrl,
-//                    mediaType = singleMovie.mediaType,
-//                ),
-//                modifier = Modifier.clickable { onMediaClicked(singleMovie) }
-//            )
-//        }
-//        items(suggestedMedia, span = { GridItemSpan(3) }) {
-//            if (it.content.isNotEmpty()) {
-//                MLTitledMediaRow(
-//                    rowTitle = it.title,
-//                    media = it.content,
-//                    onMediaItemClicked = { onMediaClicked(it) }
-//                )
-//            }
-//        }
-//    }
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        modifier = modifier
+            .background(MaterialTheme.colors.background)
+            .fillMaxSize(),
+        contentPadding = PaddingValues(22.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
+        horizontalArrangement = Arrangement.spacedBy(24.dp)
+
+    ) {
+        item(span = { GridItemSpan(3) }) {
+            Text(
+                text = gridTitle,
+                style = MaterialTheme.typography.h3,
+                color = MaterialTheme.colors.secondary,
+                modifier = modifier.padding(top = 8.dp, bottom = 6.dp),
+
+                )
+        }
+        items(media) { singleMovie ->
+            MLMediaPoster(
+                posterUrl = singleMovie.posterUrl,
+                title = Title(singleMovie.title),
+                modifier = Modifier.clickable { onMediaClicked(singleMovie) }
+            )
+        }
+        items(suggestedMedia, span = { GridItemSpan(3) }) {
+            if (it.content.isNotEmpty()) {
+                MLTitledMediaRow(
+                    rowTitle = it.title,
+                    media = it.content,
+                    onMediaItemClicked = { onMediaClicked(it) }
+                )
+            }
+        }
+    }
 }
 
 @Preview
