@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -33,17 +32,24 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.sunrisekcdeveloper.medialion.R
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
+import com.sunrisekcdeveloper.medialion.android.ui.components.ui.MLProgress
+import com.sunrisekcdeveloper.medialion.components.shared.domain.models.CollectionNew
+import com.sunrisekcdeveloper.medialion.components.shared.domain.models.ID
+import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem
+import com.sunrisekcdeveloper.medialion.features.shared.Content
+import com.sunrisekcdeveloper.medialion.features.shared.FailedToLoadCollections
+import com.sunrisekcdeveloper.medialion.features.shared.Loading
+import com.sunrisekcdeveloper.medialion.features.shared.MiniCollectionUIState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
 fun SaveToCollectionScreen(
     onDismiss: () -> Unit,
-    collections: List<CollectionItem>,
-    onCollectionItemClicked: (String) -> Unit,
-    onAddToCollection: (String) -> Unit = {},
-    onRemoveFromCollection: (String) -> Unit = {},
-    onSaveList: (String) -> Unit,
+    targetedMediaItem: SingleMediaItem,
+    miniCollectionUIState: MiniCollectionUIState,
+    onUpdateCollection: (CollectionNew) -> Unit,
+    onCreateCollection: (CollectionNew) -> Unit,
 ) {
     var text by remember {
         mutableStateOf("")
@@ -54,12 +60,12 @@ fun SaveToCollectionScreen(
         onDismissRequest = { onDismiss() },
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
-        Card(
+        Surface(
             elevation = 5.dp,
             shape = RoundedCornerShape(15.dp),
             modifier = Modifier
                 .fillMaxWidth(0.75f),
-            backgroundColor = MaterialTheme.colors.onSecondary
+            color = MaterialTheme.colors.onSecondary,
         ) {
 
             Column(
@@ -82,58 +88,69 @@ fun SaveToCollectionScreen(
                     )
                 }
 
-                LazyColumn(
-                    modifier = Modifier
-                        .size(height = 160.dp, width = 500.dp),
-                ) {
-                    items(collections) { collectionItem ->
-                        MLCollectionListItem(
-                            collectionName = collectionItem.name,
-                            checkMarkVisible = collectionItem.checked,
-                            onItemClick = {
-                                if (it) {
-                                    onAddToCollection(collectionItem.name)
-                                } else onRemoveFromCollection(collectionItem.name)
-                            },
+                when (miniCollectionUIState) {
+                    is Content -> {
+                        LazyColumn(
+                            modifier = Modifier
+                                .size(height = 160.dp, width = 500.dp),
+                        ) {
+                            items(miniCollectionUIState.collections) { collectionItem ->
+                                MLCollectionListItem(
+                                    collectionName = collectionItem.title().toString(),
+                                    checkMarkVisible = collectionItem.media().contains(targetedMediaItem),
+                                    onItemClick = { isChecked ->
+                                        if (isChecked) {
+                                            collectionItem.add(targetedMediaItem)
+                                        } else collectionItem.remove(targetedMediaItem)
+                                        onUpdateCollection(collectionItem)
+                                    },
+                                )
+                            }
+
+                        }
+
+                        MLCollectionTextField(
+                            textQuery = text,
+                            labelText = stringResource(id = R.string.empty_add_to_list_text),
+                            onTextQueryTextChange = { text = it },
+                            onCreateCollection = {
+                                val newCollection = CollectionNew.Def(
+                                    name = text,
+                                    mediaItem = targetedMediaItem
+                                )
+                                onCreateCollection(newCollection)
+                                text = ""
+                            }
                         )
+
+                        Row {
+                            Spacer(modifier = Modifier.weight(1f))
+
+                            Button(
+                                onClick = { onDismiss() },
+                                modifier = Modifier
+                                    .background(MaterialTheme.colors.primaryVariant)
+                                    .size(width = 80.dp, height = 40.dp),
+                                shape = RoundedCornerShape(8.dp),
+                                elevation = ButtonDefaults.elevation(
+                                    defaultElevation = 6.dp,
+                                    pressedElevation = 8.dp
+                                )
+                            ) {
+                                Text(
+                                    text = "Done",
+                                    color = MaterialTheme.colors.secondary,
+                                    style = MaterialTheme.typography.h5,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.weight(1f))
+                        }
                     }
 
-                }
-
-                MLCollectionTextField(
-                    textQuery = text,
-                    labelText = stringResource(id = R.string.empty_add_to_list_text),
-                    onTextQueryTextChange = { text = it },
-                    onSaveList = {
-                        onSaveList(text)
-                        onAddToCollection(text)
-                        text = ""
-                    }
-                )
-
-                Row {
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Button(
-                        onClick = { onDismiss() },
-                        modifier = Modifier
-                            .background(MaterialTheme.colors.primaryVariant)
-                            .size(width = 80.dp, height = 40.dp),
-                        shape = RoundedCornerShape(8.dp),
-                        elevation = ButtonDefaults.elevation(
-                            defaultElevation = 6.dp,
-                            pressedElevation = 8.dp
-                        )
-                    ) {
-                        Text(
-                            text = "Done",
-                            color = MaterialTheme.colors.secondary,
-                            style = MaterialTheme.typography.h5,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.weight(1f))
+                    FailedToLoadCollections -> TODO()
+                    Loading -> MLProgress()
                 }
 
             }
@@ -144,16 +161,17 @@ fun SaveToCollectionScreen(
 @Preview
 @Composable
 private fun SaveToCollectionScreenPreview() {
-    var collections: List<CollectionItem> by remember {
+    val savedMovie = SingleMediaItem.Movie("Harry")
+    var collections: List<CollectionNew> by remember {
         mutableStateOf(
             listOf(
-                CollectionItem(name = "Favorites List", checked = false),
-                CollectionItem(name = "Must Watch", checked = false),
-                CollectionItem(name = "Watch Again", checked = false),
-                CollectionItem(name = "Horror", checked = false),
-                CollectionItem(name = "Comedies", checked = false),
-                CollectionItem(name = "Best of Robbin Williams", checked = false),
-                CollectionItem(name = "Harry Potter", checked = false),
+                CollectionNew.Def(name = "Favorites List", mediaItem = savedMovie),
+                CollectionNew.Def(name = "Must Watch"),
+                CollectionNew.Def(name = "Watch Again", mediaItem = savedMovie),
+                CollectionNew.Def(name = "Horror"),
+                CollectionNew.Def(name = "Comedies"),
+                CollectionNew.Def(name = "Best of Robbin Williams"),
+                CollectionNew.Def(name = "Harry Potter"),
             )
         )
     }
@@ -170,20 +188,21 @@ private fun SaveToCollectionScreenPreview() {
                             showAboutDialog = true
                         }
                     },
-                    collections = collections,
-                    onCollectionItemClicked = { collectionName ->
-                        val listCopy = collections.toMutableList()
-                        val mediaIndex = listCopy.indexOfFirst { it.name == collectionName }
-                        listCopy[mediaIndex] =
-                            listCopy[mediaIndex].copy(checked = !listCopy[mediaIndex].checked)
-
-                        collections = listCopy
+                    targetedMediaItem = savedMovie,
+                    miniCollectionUIState = Content(ID.Def("asdad"), collections),
+                    onUpdateCollection = { newCollection ->
+                        collections.toMutableList().apply {
+                            val indexOfMatchingCollection = indexOfFirst { it == newCollection }
+                            this[indexOfMatchingCollection] = newCollection
+                            collections = this
+                        }
                     },
-                    onSaveList = {
-                        val listCopy = collections.toMutableList()
-                        listCopy.add(CollectionItem(it, true))
-                        collections = listCopy
-                    }
+                    onCreateCollection = { newCollection ->
+                        collections.toMutableList().apply {
+                            add(newCollection)
+                            collections = this
+                        }
+                    },
                 )
             }
         }

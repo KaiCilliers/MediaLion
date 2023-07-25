@@ -22,34 +22,34 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import com.sunrisekcdeveloper.medialion.oldArch.SimpleMediaItem
-import com.sunrisekcdeveloper.medialion.utils.StringRes
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.extensions.gradientOrange
-import com.sunrisekcdeveloper.medialion.oldArch.domain.MediaType
+import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
+import com.sunrisekcdeveloper.medialion.utils.StringRes
 
 @Composable
 fun MLMediaPoster(
-    mediaItem: SimpleMediaItem?,
+    posterUrl: String?,
+    title: Title,
     modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
             .aspectRatio(0.6f)
     ) {
-        if (mediaItem != null) {
-            PosterPlaceholder(mediaTitle = mediaItem.title)
+        if (posterUrl != null) {
+            PosterPlaceholder(mediaTitle = title.toString())
             SubcomposeAsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(mediaItem.posterUrl)
+                    .data(posterUrl)
                     .crossfade(true)
                     .build(),
                 contentScale = ContentScale.FillHeight,
                 modifier = Modifier
                     .clip(RoundedCornerShape(4.dp)),
                 contentDescription = null,
-                loading = { PosterPlaceholder(mediaTitle = mediaItem.title) },
-                error = { PosterPlaceholder(mediaTitle = mediaItem.title) },
+                loading = { PosterPlaceholder(mediaTitle = title.toString()) },
+                error = { PosterPlaceholder(mediaTitle = title.toString()) },
             )
         } else {
             PosterPlaceholder(mediaTitle = stringResource(id = StringRes.textPlaceholder.resourceId))
@@ -88,12 +88,8 @@ private fun MLMediaPosterPreview() {
             modifier = Modifier.fillMaxSize()
         ) {
             MLMediaPoster(
-                mediaItem = SimpleMediaItem(
-                    id = "1234",
-                    title = "Harry Potter and the Philosopher's stone",
-                    posterUrl = "https://image.tmdb.org/t/p/original/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg",
-                    mediaType = MediaType.MOVIE,
-                ),
+                posterUrl = "https://image.tmdb.org/t/p/original/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg",
+                title = Title("Harry Potter and the Philosopher's stone"),
                 modifier = Modifier.height(200.dp),
             )
         }

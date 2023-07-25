@@ -94,6 +94,8 @@ dependencies {
 
     implementation("io.insert-koin:koin-android:3.4.0")
 
+    implementation("com.michael-bull.kotlin-result:kotlin-result:1.1.18")
+
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:32.1.1"))
     implementation("com.google.firebase:firebase-analytics-ktx")

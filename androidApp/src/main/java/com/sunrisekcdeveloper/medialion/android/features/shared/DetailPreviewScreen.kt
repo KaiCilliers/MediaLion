@@ -25,17 +25,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.sunrisekcdeveloper.medialion.oldArch.SimpleMediaItem
+import com.sunrisekcdeveloper.medialion.android.features.search.components.MLMediaPoster
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.extensions.gradientBlue
-import com.sunrisekcdeveloper.medialion.android.features.search.components.MLMediaPoster
+import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem
+import com.sunrisekcdeveloper.medialion.oldArch.MediaItemUI
 import com.sunrisekcdeveloper.medialion.oldArch.domain.MediaType
+import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
 
 @Composable
 fun DetailPreviewScreen(
-    mediaItem: SimpleMediaItem,
+    mediaItem: MediaItemUI,
     onCloseClick: () -> Unit,
-    onMyListClick: (SimpleMediaItem) -> Unit,
+    onMyListClick: (SingleMediaItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
@@ -57,7 +59,8 @@ fun DetailPreviewScreen(
             }
         ) {
             MLMediaPoster(
-                mediaItem = mediaItem,
+                posterUrl = mediaItem.posterUrl,
+                title = Title(mediaItem.title),
                 modifier = Modifier
                     .height(170.dp)
                     .width(100.dp)
@@ -94,7 +97,7 @@ fun DetailPreviewScreen(
                     }
             )
             Text(
-                text = mediaItem.year.take(4),
+                text = mediaItem.releaseYear.take(4),
                 color = MaterialTheme.colors.secondary,
                 style = MaterialTheme.typography.h1,
                 modifier = modifier
@@ -104,7 +107,7 @@ fun DetailPreviewScreen(
                     }
             )
             Text(
-                text = mediaItem.description,
+                text = mediaItem.overview,
                 color = MaterialTheme.colors.secondary,
                 style = MaterialTheme.typography.body2,
                 modifier = modifier
@@ -142,7 +145,7 @@ fun DetailPreviewScreen(
                     top.linkTo(containerTop.bottom, 20.dp)
                     bottom.linkTo(parent.bottom, 20.dp)
                 }
-                .clickable { onMyListClick(mediaItem) }
+                .clickable { onMyListClick(mediaItem.toDomain()) }
         ) {
             Image(
                 painter = painterResource(id = com.sunrisekcdeveloper.medialion.android.R.drawable.add_to_list_icon),
@@ -168,11 +171,18 @@ private fun DetailPreviewScreenPreview() {
     MediaLionTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             DetailPreviewScreen(
-                mediaItem = SimpleMediaItem(
-                    id = "duis",
-                    description = "ad lakda lkdjakld jaldj asklç djlajdçasjdlkasjdla dlaj kldalkdalkdajdla jsdlkajsld aj",
+                mediaItem = MediaItemUI(
+                    id = "partiendo",
                     title = "This is a two line movie title",
+                    isFavorited = false,
                     posterUrl = "https://image.tmdb.org/t/p/original/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg",
+                    bannerUrl = "https://duckduckgo.com/?q=cum",
+                    genreIds = listOf(),
+                    overview = "ad lakda lkdjakld jaldj asklç djlajdçasjdlkasjdla dlaj kldalkdalkdajdla jsdlkajsld aj",
+                    popularity = 4.5,
+                    voteAverage = 6.7,
+                    voteCount = 9259,
+                    releaseYear = "1996",
                     mediaType = MediaType.MOVIE,
                 ),
                 onCloseClick = {},

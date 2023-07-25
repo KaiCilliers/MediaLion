@@ -30,14 +30,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sunrisekcdeveloper.medialion.android.R
 import com.sunrisekcdeveloper.medialion.android.features.home.GlobalRouter
-import com.sunrisekcdeveloper.medialion.android.features.search.components.MLSearchBar
 import com.sunrisekcdeveloper.medialion.android.features.search.components.EmptySearch
+import com.sunrisekcdeveloper.medialion.android.features.search.components.MLSearchBar
 import com.sunrisekcdeveloper.medialion.android.features.search.components.SearchResults
 import com.sunrisekcdeveloper.medialion.android.features.search.components.TopSuggestions
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.components.ui.MLProgress
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.SearchQuery
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.CollectionNew
+import com.sunrisekcdeveloper.medialion.components.shared.domain.models.ID
 import com.sunrisekcdeveloper.medialion.features.search.SearchScreenAction
 import com.sunrisekcdeveloper.medialion.features.search.SearchUIState
 import com.sunrisekcdeveloper.medialion.features.shared.Content
@@ -61,9 +62,7 @@ fun SearchScreen() {
     val searchState by searchViewModel.searchScreenState.collectAsState()
     val miniCollectionState by searchViewModel.miniCollectionState.collectAsState()
 
-//    var showCollectionDialog by remember { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
-
 
     SearchScreenContent(
         keyboardController = keyboardController,
@@ -75,39 +74,6 @@ fun SearchScreen() {
         submitSearchQuery = { newQuery -> searchViewModel.submit(SearchScreenAction.SubmitSearchQuery(newQuery)) },
         updateFavorites = { newCollection -> searchViewModel.submit(UpdateCollection(newCollection)) }
     )
-
-//    if (showCollectionDialog) {
-//        SaveToCollectionScreen(
-//            onDismiss = { showCollectionDialog = false },
-//            collections = collectionState
-//                .map { it.name to it.contents.map { it.id.value } }
-//                .map {
-//                    val selectedMedia = selectedMediaItem
-//                    val checked = if (selectedMedia != null) {
-//                        it.second.contains(selectedMedia.id.toInt())
-//                    } else false
-//                    CollectionItem(it.first.value, checked)
-//                },
-//            onCollectionItemClicked = { collectionName -> },
-//            onAddToCollection = { collectionName ->
-//                val selectedMedia = selectedMediaItem
-//                if (selectedMedia != null) {
-//                    submitSearchAction(SearchAction.AddToCollection(Title(collectionName), ID(selectedMedia.id.toInt()), selectedMedia.mediaType))
-//                }
-//            },
-//            onRemoveFromCollection = { collectionName ->
-//                val selectedMedia = selectedMediaItem
-//                if (selectedMedia != null) {
-//                    submitSearchAction(SearchAction.RemoveFromCollection(Title(collectionName), ID(selectedMedia.id.toInt()), selectedMedia.mediaType))
-//                }
-//            },
-//            onSaveList = {
-//                submitSearchAction(SearchAction.CreateCollection(Title(it)))
-//            }
-//        )
-//    }
-//
-
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -216,7 +182,7 @@ fun SearchScreenContentPreview() {
         val searchState = SearchUIState.TopSuggestions(
             media = listOf()
         )
-        val miniCollectionState = Content(listOf(CollectionNew.Def("Favorites")))
+        val miniCollectionState = Content(ID.Def("ada"),listOf(CollectionNew.Def("Favorites")))
         val keyboardController = LocalSoftwareKeyboardController.current
 
         Surface(modifier = Modifier.fillMaxSize()) {

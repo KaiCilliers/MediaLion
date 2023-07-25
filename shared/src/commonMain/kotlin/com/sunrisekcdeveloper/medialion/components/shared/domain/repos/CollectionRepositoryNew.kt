@@ -63,7 +63,7 @@ interface CollectionRepositoryNew {
             val list: List<CollectionNew>
         )
 
-        private var cache: Set<CollectionNew> = mutableSetOf(CollectionNew.Def("Favorite"))
+        private var cache: List<CollectionNew> = mutableListOf(CollectionNew.Def("Favorite"))
             set(value) {
                 cacheFlow.tryEmit(Container(value.toList()))
                 field = value
@@ -73,7 +73,7 @@ interface CollectionRepositoryNew {
         private val cacheFlow = MutableStateFlow<Container>(Container(cache.toList()))
 
         fun clearCache() {
-            cache.toMutableSet().run {
+            cache.toMutableList().run {
                 clear()
                 cache = this
             }
@@ -100,16 +100,17 @@ interface CollectionRepositoryNew {
 
         override suspend fun upsert(collection: CollectionNew) {
             if (forceFailure) throw ForcedException()
-            cache.toMutableSet().run {
-                remove(collection)
-                add(collection)
+            cache.toMutableList().run {
+                val index = indexOfFirst { collection == it }
+                if (index == -1) add(collection)
+                else this[index] = CollectionNew.Def(title = collection.title(), media = collection.media())
                 cache = this
             }
         }
 
         override suspend fun delete(collection: CollectionNew) {
             if (forceFailure) throw ForcedException()
-            cache.toMutableSet().run {
+            cache.toMutableList().run {
                 remove(collection)
                 cache = this
             }

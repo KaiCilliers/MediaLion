@@ -14,15 +14,19 @@ interface InsertDefaultCollectionsUseCase {
         private val collectionRepository: CollectionRepositoryNew
     ) : InsertDefaultCollectionsUseCase {
         override suspend fun invoke(): Result<Unit, InsertDefaultCollectionsError> = runCatching {
-            val defaultCollections = listOf(
-                CollectionNew.Def("Favorites")
-            )
-            defaultCollections.map {
-                collectionRepository.upsert(it)
+            val defaultCollections = CollectionNew.Def("Favorites")
+            if (collectionRepository.all().map { it.title() }.contains(defaultCollections.title())) {
+                throw IllegalArgumentException("Default collection already exists")
+            } else {
+                collectionRepository.upsert(defaultCollections)
             }
             Unit
         }
-            .mapError { FailedToInsertAllCollections }
+            .mapError {
+                if (it is IllegalArgumentException) {
+                    DefaultCollectionAlreadyExist
+                } else FailedToInsertAllCollections
+            }
     }
 
     class Fake : InsertDefaultCollectionsUseCase {
@@ -33,4 +37,5 @@ interface InsertDefaultCollectionsUseCase {
 }
 
 sealed interface InsertDefaultCollectionsError
+object DefaultCollectionAlreadyExist : InsertDefaultCollectionsError
 object FailedToInsertAllCollections : InsertDefaultCollectionsError

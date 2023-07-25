@@ -1,5 +1,6 @@
 package com.sunrisekcdeveloper.medialion.components.discovery.domain
 
+import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.getOr
 import com.github.michaelbull.result.mapError
@@ -35,6 +36,12 @@ interface FetchSuggestedMediaUseCase {
                     Napier.w(it) { "Failed to fetch suggested media" }
                     FailedToFetchFeatureMedia
                 }
+        }
+    }
+
+    class Fake : FetchSuggestedMediaUseCase {
+        override suspend fun invoke(): Result<MediaWithTitle, FetchSuggestedMediaError> {
+            return Ok(MediaWithTitle.Def("a"))
         }
     }
 }

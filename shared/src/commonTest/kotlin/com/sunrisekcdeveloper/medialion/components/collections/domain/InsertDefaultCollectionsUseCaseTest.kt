@@ -1,11 +1,11 @@
 package com.sunrisekcdeveloper.medialion.components.collections.domain
 
 import assertk.assertThat
+import assertk.assertions.isEqualTo
 import assertk.assertions.isGreaterThan
 import assertk.assertions.isNotNull
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
-import com.sunrisekcdeveloper.medialion.components.collections.domain.InsertDefaultCollectionsUseCase
 import com.sunrisekcdeveloper.medialion.components.shared.domain.repos.CollectionRepositoryNew
 import io.ktor.util.reflect.instanceOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -43,6 +43,27 @@ class InsertDefaultCollectionsUseCaseTest {
         val currentCollections = collectionRepository.all()
 
         assertThat(currentCollections.size).isGreaterThan(0)
+    }
+
+    @Test
+    fun `return failure indicating that the collection already exists when it does`() = runTest {
+        collectionRepository.clearCache()
+        val allCollections = collectionRepository.all()
+        assertTrue(allCollections.isEmpty())
+
+        val (insertSuccess, _) = insertDefaultCollectionsUseCase()
+        assertThat(insertSuccess).isNotNull()
+        assertThat(insertSuccess).instanceOf(Ok::class)
+
+        var currentCollections = collectionRepository.all()
+        assertThat(currentCollections.size).isEqualTo(1)
+
+        val (_, insertFailure) = insertDefaultCollectionsUseCase()
+        assertThat(insertFailure).isNotNull()
+        assertThat(insertFailure).instanceOf(DefaultCollectionAlreadyExist::class)
+
+        currentCollections = collectionRepository.all()
+        assertThat(currentCollections.size).isEqualTo(1)
     }
 
     @Test

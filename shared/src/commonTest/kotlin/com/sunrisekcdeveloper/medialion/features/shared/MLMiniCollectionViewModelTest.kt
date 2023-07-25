@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.doesNotContain
+import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import com.sunrisekcdeveloper.medialion.components.collections.domain.AddUpdateCollectionUseCase
 import com.sunrisekcdeveloper.medialion.components.collections.domain.DeleteCollectionUseCaseNew
@@ -23,6 +24,7 @@ import kotlinx.coroutines.test.setMain
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MLMiniCollectionViewModelTest {
@@ -114,7 +116,7 @@ class MLMiniCollectionViewModelTest {
             content = awaitItem()
 
             assertThat(content).instanceOf(Content::class)
-            assertThat((content as Content).collections.first { it == collectionToUpdate }.media()).contains(movieToAdd)
+            assertThat((content as Content).collections.first { it.title() == collectionToUpdate.title() }.media()).contains(movieToAdd)
         }
     }
 
@@ -131,6 +133,51 @@ class MLMiniCollectionViewModelTest {
 
             assertThat(content).instanceOf(Content::class)
             assertThat((content as Content).collections.first { it.title() == Title("New Collection") }).isNotNull()
+        }
+    }
+
+    @Test
+    fun `when inserting a new collection it is to appear as the first item in the new state`() = runTest {
+        sut.miniCollectionState.test {
+            awaitItem()
+
+            var content = awaitItem()
+            assertThat(content).instanceOf(Content::class)
+
+            sut.submit(CreateCollection(Title("New Collection")))
+            content = awaitItem()
+
+            assertThat(content).instanceOf(Content::class)
+            assertEquals((content as Content).collections[0].title(), Title("New Collection"))
+        }
+    }
+
+    @Test
+    fun `when updating the collection content the new state that is received is in the same order as the previous state`() = runTest {
+        sut.miniCollectionState.test {
+            awaitItem()
+
+            var content = awaitItem()
+            assertThat(content).instanceOf(Content::class)
+
+            val collectionToUpdate = CollectionNew.Def("Collection to be updated")
+            sut.submit(InsertCollection(collectionToUpdate))
+            content = awaitItem()
+
+            sut.submit(CreateCollection(Title("Latest Collection")))
+            content = awaitItem()
+
+            assertThat(content).instanceOf(Content::class)
+            assertEquals((content as Content).collections[0].title(), Title("Latest Collection"))
+
+            collectionToUpdate.add(SingleMediaItem.Movie("A new movie"))
+
+            sut.submit(UpdateCollection(collectionToUpdate))
+            content = awaitItem()
+
+            assertThat(content).instanceOf(Content::class)
+            assertEquals(Title("Collection to be updated"), (content as Content).collections[1].title())
+            assertThat((content as Content).collections[1].media().size).isEqualTo(1)
         }
     }
 

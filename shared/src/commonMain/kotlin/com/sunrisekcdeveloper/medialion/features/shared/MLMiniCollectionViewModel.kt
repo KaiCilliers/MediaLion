@@ -1,13 +1,16 @@
 package com.sunrisekcdeveloper.medialion.features.shared
 
+import com.github.michaelbull.result.map
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
 import com.sunrisekcdeveloper.medialion.components.collections.domain.AddUpdateCollectionUseCase
 import com.sunrisekcdeveloper.medialion.components.collections.domain.DeleteCollectionUseCaseNew
 import com.sunrisekcdeveloper.medialion.components.shared.domain.FetchAllCollectionsUseCaseNew
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.CollectionNew
+import com.sunrisekcdeveloper.medialion.components.shared.domain.models.ID
 import com.sunrisekcdeveloper.medialion.utils.flow.CStateFlow
 import com.sunrisekcdeveloper.medialion.utils.flow.cStateFlow
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,7 +24,7 @@ interface MLMiniCollectionViewModel {
     fun submit(action: MiniCollectionAction)
 
     class D(
-        private val fetchAllCollectionsUseCase: FetchAllCollectionsUseCaseNew,
+        fetchAllCollectionsUseCase: FetchAllCollectionsUseCaseNew,
         private val deleteCollectionUseCase: DeleteCollectionUseCaseNew,
         private val addUpdateCollectionUseCase: AddUpdateCollectionUseCase,
         coroutineScope: CoroutineScope? = null // // nullable due to iOS
@@ -33,7 +36,7 @@ interface MLMiniCollectionViewModel {
             .map { result ->
                 var state: MiniCollectionUIState = Loading
                 result
-                    .onSuccess { state = Content(it) }
+                    .onSuccess { state = Content(ID.Def(), it) }
                     .onFailure { state = FailedToLoadCollections }
                 state
             }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000L), Loading)
@@ -42,7 +45,7 @@ interface MLMiniCollectionViewModel {
             get() = _minCollectionState.cStateFlow()
 
         override fun submit(action: MiniCollectionAction) {
-            println("Processing $action")
+            Napier.d { "Processing $action" }
             when(action) {
                 is CreateCollection -> viewModelScope.launch {
                     // do not create objects like this - use factory
@@ -50,6 +53,7 @@ interface MLMiniCollectionViewModel {
                 }
                 is DeleteCollection -> viewModelScope.launch { deleteCollectionUseCase(action.collection) }
                 is UpdateCollection -> viewModelScope.launch { addUpdateCollectionUseCase(action.collection) }
+                is InsertCollection -> viewModelScope.launch { addUpdateCollectionUseCase(action.collection) }
             }
         }
     }

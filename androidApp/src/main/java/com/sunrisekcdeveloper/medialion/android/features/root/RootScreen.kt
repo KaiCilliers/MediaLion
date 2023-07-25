@@ -12,6 +12,7 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -24,8 +25,13 @@ import com.sunrisekcdeveloper.medialion.android.features.home.GlobalRouter
 import com.sunrisekcdeveloper.medialion.android.features.home.HomeKey
 import com.sunrisekcdeveloper.medialion.android.features.home.components.CustomDialog
 import com.sunrisekcdeveloper.medialion.android.features.shared.DetailPreviewScreen
+import com.sunrisekcdeveloper.medialion.android.ui.collections.CollectionViewModel
+import com.sunrisekcdeveloper.medialion.android.ui.saveToCollection.ui.SaveToCollectionScreen
+import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem
+import com.sunrisekcdeveloper.medialion.features.shared.InsertCollection
+import com.sunrisekcdeveloper.medialion.features.shared.UpdateCollection
 import com.sunrisekcdeveloper.medialion.oldArch.MediaItemUI
-import com.sunrisekcdeveloper.medialion.oldArch.SimpleMediaItem
+import com.sunrisekcdeveloper.medialion.utils.rememberService
 import com.zhuinden.simplestack.History
 import com.zhuinden.simplestackcomposeintegration.core.ComposeNavigator
 import com.zhuinden.simplestackextensions.services.DefaultServiceProvider
@@ -45,12 +51,16 @@ class RootScreen private constructor() {
         fun show(media: MediaItemUI)
     }
 
-    sealed interface SheetContent : Parcelable {
+    interface QuickCollectionsRouter {
+        fun show(media: SingleMediaItem)
+    }
+
+    sealed interface MediaContent : Parcelable {
         @Parcelize
-        data object NoContent : SheetContent
+        data object NoContent : MediaContent
 
         @Parcelize
-        data class Content(val id: String = UUID.randomUUID().toString(), val media: @RawValue MediaItemUI) : Parcelable, SheetContent
+        data class Content(val id: String = UUID.randomUUID().toString(), val media: @RawValue MediaItemUI) : Parcelable, MediaContent
     }
 
     companion object {
@@ -58,9 +68,14 @@ class RootScreen private constructor() {
         @SuppressLint("ComposableNaming")
         operator fun invoke() {
 
+            val collectionsViewModel = rememberService<CollectionViewModel>()
+            val collectionDialogState by collectionsViewModel.collectionDialogState.collectAsState()
+
             val scope = rememberCoroutineScope()
             var showInfoDialog by rememberSaveable { mutableStateOf(false) }
-            var showMediaDetailSheet: SheetContent by rememberSaveable { mutableStateOf(SheetContent.NoContent) }
+            var showMiniCollectionsDialog by rememberSaveable { mutableStateOf(false) }
+            var showMediaDetailSheet: MediaContent by rememberSaveable { mutableStateOf(MediaContent.NoContent) }
+            var quickCollectionDialog: MediaContent by rememberSaveable { mutableStateOf(MediaContent.NoContent) }
             var onDialogResult: Foo by rememberSaveable { mutableStateOf(Foo()) }
 
             val mediaPreviewSheet = rememberModalBottomSheetState(
@@ -84,16 +99,22 @@ class RootScreen private constructor() {
             }
             val mediaPreviewRouter = object : MediaPreviewRouter {
                 override fun show(media: MediaItemUI) {
-                    showMediaDetailSheet = SheetContent.Content(media = media)
+                    showMediaDetailSheet = MediaContent.Content(media = media)
                 }
             }
 
+            val miniCollectionRouter = object : QuickCollectionsRouter {
+                override fun show(media: SingleMediaItem) {
+                    quickCollectionDialog = MediaContent.Content(media = MediaItemUI.from(media))
+                    showMiniCollectionsDialog = true
+                }
+            }
 
             LaunchedEffect(showMediaDetailSheet) {
                 scope.launch {
                     when (showMediaDetailSheet) {
-                        is SheetContent.Content -> mediaPreviewSheet.show()
-                        SheetContent.NoContent -> mediaPreviewSheet.hide()
+                        is MediaContent.Content -> mediaPreviewSheet.show()
+                        MediaContent.NoContent -> mediaPreviewSheet.hide()
                     }
                 }
             }
@@ -101,7 +122,7 @@ class RootScreen private constructor() {
                 snapshotFlow { mediaPreviewSheet.isVisible }.collect { isVisible ->
                     println("is visiblie $isVisible")
                     if (!isVisible) {
-                        showMediaDetailSheet = SheetContent.NoContent
+                        showMediaDetailSheet = MediaContent.NoContent
                     }
                 }
             }
@@ -119,9 +140,25 @@ class RootScreen private constructor() {
                 )
             }
 
+            if (showMiniCollectionsDialog) {
+                when (val currentState = quickCollectionDialog) {
+                    is MediaContent.Content -> {
+                        SaveToCollectionScreen(
+                            onDismiss = { showMiniCollectionsDialog = false },
+                            miniCollectionUIState = collectionDialogState,
+                            onCreateCollection = { collectionName -> collectionsViewModel.submit(InsertCollection(collectionName)) },
+                            onUpdateCollection = { newCollection -> collectionsViewModel.submit(UpdateCollection(newCollection)) },
+                            targetedMediaItem = currentState.media.toDomain()
+                        )
+                    }
+                    MediaContent.NoContent -> {}
+                }
+            }
+
             val globalRouter = GlobalRouter(
                 infoRouter = infoRouter,
-                mediaPreviewRouter = mediaPreviewRouter
+                mediaPreviewRouter = mediaPreviewRouter,
+                quickCollectionRouter = miniCollectionRouter,
             )
 
             ModalBottomSheetLayout(
@@ -129,14 +166,15 @@ class RootScreen private constructor() {
                 sheetShape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
                 sheetContent = {
                     when (val currentMediaToShow = showMediaDetailSheet) {
-                        is SheetContent.Content -> {
+                        is MediaContent.Content -> {
                             DetailPreviewScreen(
-                                mediaItem = SimpleMediaItem.from(currentMediaToShow.media),
+                                mediaItem = currentMediaToShow.media,
                                 onCloseClick = { scope.launch { mediaPreviewSheet.hide() } },
-                                onMyListClick = {},
+                                onMyListClick = { miniCollectionRouter.show(it) },
                             )
                         }
-                        SheetContent.NoContent -> {}
+
+                        MediaContent.NoContent -> {}
                     }
                 }
             ) {

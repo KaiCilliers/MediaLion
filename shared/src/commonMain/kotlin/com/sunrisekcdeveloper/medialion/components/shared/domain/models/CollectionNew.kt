@@ -17,7 +17,10 @@ interface CollectionNew {
         private var media: List<SingleMediaItem>,
     ) : CollectionNew {
         constructor(name: String) : this(ID.Def(), Title(name), emptyList())
+        constructor(id: ID, name: String) : this(id, Title(name), emptyList())
+        constructor(title: Title, media: List<SingleMediaItem>) : this(ID.Def(), title, media)
         constructor(name: String, media: List<SingleMediaItem>) : this(ID.Def(), Title(name), media)
+        constructor(name: String, mediaItem: SingleMediaItem) : this(ID.Def(), Title(name), listOf(mediaItem))
 
         override fun remove(item: SingleMediaItem) {
             media.toMutableList().run {

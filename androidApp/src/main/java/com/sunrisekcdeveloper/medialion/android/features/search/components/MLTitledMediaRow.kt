@@ -30,52 +30,52 @@ fun MLTitledMediaRow(
     onTitleClicked: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier
-            .background(MaterialTheme.colors.background)
-            .fillMaxSize()
-    ) {
-            Text(
-                text = rowTitle,
-                style = MaterialTheme.typography.h3,
-                color = MaterialTheme.colors.secondary,
-                modifier = modifier
-                    .padding(bottom = 20.dp, top = 6.dp, start = 6.dp)
-                    .clickable { onTitleClicked() }
-            )
-        LazyRow(
-            modifier = modifier
-                .background(MaterialTheme.colors.background)
-                .fillMaxHeight(),
-            horizontalArrangement = Arrangement.spacedBy(24.dp),
-            userScrollEnabled = true
-        ) {
-
-            if (media.isEmpty()) {
-                items(1) {
-                    MLMediaPoster(null,
-                        modifier = modifier
-                            // todo replace hardcoded size
-                            .size(height = 143.dp, width = 92.dp)
-                    )
-                }
-            }
-
-            items(media) { singleMovie ->
-                MLMediaPoster(   mediaItem = SimpleMediaItem(
-                    id = singleMovie.id.toString(),
-                    title = singleMovie.title,
-                    posterUrl = singleMovie.posterUrl,
-                    mediaType = singleMovie.mediaType,
-                ),
-                    modifier = modifier
-                        // todo replace hardcoded size
-                        .size(height = 143.dp, width = 92.dp)
-                        .clickable { onMediaItemClicked(singleMovie) }
-                )
-        }
-            }
-    }
+//    Column(
+//        modifier = modifier
+//            .background(MaterialTheme.colors.background)
+//            .fillMaxSize()
+//    ) {
+//            Text(
+//                text = rowTitle,
+//                style = MaterialTheme.typography.h3,
+//                color = MaterialTheme.colors.secondary,
+//                modifier = modifier
+//                    .padding(bottom = 20.dp, top = 6.dp, start = 6.dp)
+//                    .clickable { onTitleClicked() }
+//            )
+//        LazyRow(
+//            modifier = modifier
+//                .background(MaterialTheme.colors.background)
+//                .fillMaxHeight(),
+//            horizontalArrangement = Arrangement.spacedBy(24.dp),
+//            userScrollEnabled = true
+//        ) {
+//
+//            if (media.isEmpty()) {
+//                items(1) {
+//                    MLMediaPoster(null,
+//                        modifier = modifier
+//                            // todo replace hardcoded size
+//                            .size(height = 143.dp, width = 92.dp)
+//                    )
+//                }
+//            }
+//
+//            items(media) { singleMovie ->
+//                MLMediaPoster(   mediaItem = SimpleMediaItem(
+//                    id = singleMovie.id.toString(),
+//                    title = singleMovie.title,
+//                    posterUrl = singleMovie.posterUrl,
+//                    mediaType = singleMovie.mediaType,
+//                ),
+//                    modifier = modifier
+//                        // todo replace hardcoded size
+//                        .size(height = 143.dp, width = 92.dp)
+//                        .clickable { onMediaItemClicked(singleMovie) }
+//                )
+//        }
+//            }
+//    }
 
 
 }

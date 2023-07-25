@@ -30,6 +30,6 @@ DELETE FROM xref_tvshow_collection
 WHERE collection_id = ?
 AND tvshow_id = ?;
 
-deleteCollection:
+removeAllFromCollection:
 DELETE FROM xref_tvshow_collection
 WHERE collection_id = ?;

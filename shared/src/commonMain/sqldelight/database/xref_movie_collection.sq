@@ -30,6 +30,6 @@ DELETE FROM xref_movie_collection
 WHERE collection_id = ?
 AND movie_id = ?;
 
-deleteCollection:
+removeAllFromCollection:
 DELETE FROM xref_movie_collection
 WHERE collection_id = ?;

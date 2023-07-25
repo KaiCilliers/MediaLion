@@ -3,6 +3,7 @@ package com.sunrisekcdeveloper.medialion.features.search
 import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isInstanceOf
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.FetchSuggestedMediaUseCase
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.SearchForMediaUseCase
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.factories.SearchQueryFactory
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +23,7 @@ class MLSearchViewModelTest {
 
     private lateinit var sut: MLSearchViewModelNew
     private lateinit var searchForMediaUseCase: SearchForMediaUseCase.Fake
+    private lateinit var fetchSuggestedMediaUseCase: FetchSuggestedMediaUseCase.Fake
 
     private val scope = TestScope()
 
@@ -31,6 +33,7 @@ class MLSearchViewModelTest {
         searchForMediaUseCase = SearchForMediaUseCase.Fake()
         sut = MLSearchViewModelNew.Default(
             searchForMediaUseCase = searchForMediaUseCase,
+            fetchSuggestedMediaUseCase = fetchSuggestedMediaUseCase,
             coroutineScope = scope
         )
     }

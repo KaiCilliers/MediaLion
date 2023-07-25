@@ -36,7 +36,7 @@ class MediaCategoryRepositoryTest {
     }
     private val entityMapper = object : Mapper<MediaCategoryEntityDto, MediaCategory> {
         override fun map(input: MediaCategoryEntityDto): MediaCategory {
-            val mediaType = when (input.placeholder % 3) {
+            val mediaType = when (input.placeholder.length % 3) {
                 0 -> MediaTypeNew.TVShow
                 1 -> MediaTypeNew.Movie
                 else -> MediaTypeNew.All
@@ -46,7 +46,7 @@ class MediaCategoryRepositoryTest {
     }
     private val domainMapper = object : Mapper<MediaCategory, MediaCategoryEntityDto> {
         override fun map(input: MediaCategory): MediaCategoryEntityDto {
-            return MediaCategoryEntityDto(placeholder = input.hashCode())
+            return MediaCategoryEntityDto(placeholder = input.name())
         }
     }
     

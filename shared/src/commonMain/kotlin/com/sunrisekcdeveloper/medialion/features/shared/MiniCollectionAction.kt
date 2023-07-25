@@ -9,6 +9,8 @@ import com.sunrisekcdeveloper.medialion.utils.flow.CStateFlow
 sealed interface MiniCollectionAction
 data class UpdateCollection(val collection: CollectionNew) : MiniCollectionAction
 data class CreateCollection(val title: Title) : MiniCollectionAction
+// todo this action has not been tested
+data class InsertCollection(val collection: CollectionNew) : MiniCollectionAction
 data class DeleteCollection(val collection: CollectionNew) : MiniCollectionAction
  // EXAMPLE STRUCTURE
 interface ExampleMyCollectionViewModel {

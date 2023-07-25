@@ -4,6 +4,7 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.CollectionNew
+import com.sunrisekcdeveloper.medialion.components.shared.domain.models.ID
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem
 import com.sunrisekcdeveloper.medialion.components.shared.domain.repos.CollectionRepositoryNew
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
@@ -29,6 +30,20 @@ class AddUpdateCollectionUseCaseTest {
     @Test
     fun `return success if new collection was added successfully`() = runTest {
         val collection = CollectionNew.Def("Weekend Chill")
+        useCase(collection)
+
+        val (savedCollection, _) = collectionRepository.collection(Title("Weekend Chill"))
+
+        assertThat(savedCollection).isNotNull()
+        assertThat(savedCollection!!).isEqualTo(collection)
+    }
+
+    @Test
+    fun `return success if new collection with a UUID was added successfully`() = runTest {
+        val collection = CollectionNew.Def(
+            id = ID.Def("a1a5d9c9-62d0-4d1e-b0a0-463aca60684a"),
+            name = "Weekend Chill"
+        )
         useCase(collection)
 
         val (savedCollection, _) = collectionRepository.collection(Title("Weekend Chill"))

@@ -26,6 +26,18 @@ sealed interface SingleMediaItem {
             id = ID.Def(),
             title = Title(name)
         )
+
+        override fun equals(other: Any?): Boolean {
+            return when {
+                other == null || other !is SingleMediaItem.Movie -> false
+                other.identifier().uniqueIdentifier() == id.uniqueIdentifier() -> true
+                else -> false
+            }
+        }
+
+        override fun hashCode(): Int {
+            return id.uniqueIdentifier().hashCode()
+        }
     }
 
     data class TVShow(
@@ -36,5 +48,17 @@ sealed interface SingleMediaItem {
             id = ID.Def(),
             title = Title(name)
         )
+
+        override fun equals(other: Any?): Boolean {
+            return when {
+                other == null || other !is SingleMediaItem.TVShow -> false
+                other.identifier().uniqueIdentifier() == id.uniqueIdentifier() -> true
+                else -> false
+            }
+        }
+
+        override fun hashCode(): Int {
+            return id.uniqueIdentifier().hashCode()
+        }
     }
 }
