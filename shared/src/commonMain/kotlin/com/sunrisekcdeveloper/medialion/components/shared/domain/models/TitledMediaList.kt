@@ -6,8 +6,9 @@ interface TitledMediaList {
 
     fun collectionNames(): List<Title>
     fun clearMedia()
+    fun all(): List<MediaWithTitle>
 
-  class Def(private var content: List<MediaWithTitle>) : TitledMediaList {
+  data  class Def(private var content: List<MediaWithTitle>) : TitledMediaList {
         constructor(singleItem: MediaWithTitle) : this(listOf(singleItem))
 
         override fun collectionNames(): List<Title> {
@@ -17,5 +18,9 @@ interface TitledMediaList {
         override fun clearMedia() {
             content = emptyList()
         }
+
+      override fun all(): List<MediaWithTitle> {
+          return content
+      }
     }
 }

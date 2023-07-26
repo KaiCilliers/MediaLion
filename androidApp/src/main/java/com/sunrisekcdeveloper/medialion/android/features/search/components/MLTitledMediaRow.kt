@@ -21,63 +21,61 @@ import com.sunrisekcdeveloper.medialion.oldArch.MediaItemUI
 import com.sunrisekcdeveloper.medialion.oldArch.SimpleMediaItem
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.oldArch.domain.MediaType
+import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
+import com.sunrisekcdeveloper.medialion.utils.debug
 
 @Composable
 fun MLTitledMediaRow(
     rowTitle: String,
     media: List<MediaItemUI>,
     onMediaItemClicked: (MediaItemUI) -> Unit,
+    modifier: Modifier = Modifier,
     onTitleClicked: () -> Unit = {},
-    modifier: Modifier = Modifier
 ) {
-//    Column(
-//        modifier = modifier
-//            .background(MaterialTheme.colors.background)
-//            .fillMaxSize()
-//    ) {
-//            Text(
-//                text = rowTitle,
-//                style = MaterialTheme.typography.h3,
-//                color = MaterialTheme.colors.secondary,
-//                modifier = modifier
-//                    .padding(bottom = 20.dp, top = 6.dp, start = 6.dp)
-//                    .clickable { onTitleClicked() }
-//            )
-//        LazyRow(
-//            modifier = modifier
-//                .background(MaterialTheme.colors.background)
-//                .fillMaxHeight(),
-//            horizontalArrangement = Arrangement.spacedBy(24.dp),
-//            userScrollEnabled = true
-//        ) {
-//
-//            if (media.isEmpty()) {
-//                items(1) {
-//                    MLMediaPoster(null,
-//                        modifier = modifier
-//                            // todo replace hardcoded size
-//                            .size(height = 143.dp, width = 92.dp)
-//                    )
-//                }
-//            }
-//
-//            items(media) { singleMovie ->
-//                MLMediaPoster(   mediaItem = SimpleMediaItem(
-//                    id = singleMovie.id.toString(),
-//                    title = singleMovie.title,
-//                    posterUrl = singleMovie.posterUrl,
-//                    mediaType = singleMovie.mediaType,
-//                ),
-//                    modifier = modifier
-//                        // todo replace hardcoded size
-//                        .size(height = 143.dp, width = 92.dp)
-//                        .clickable { onMediaItemClicked(singleMovie) }
-//                )
-//        }
-//            }
-//    }
+    Column(
+        modifier = modifier
+            .background(MaterialTheme.colors.background)
+            .fillMaxSize()
+    ) {
+            Text(
+                text = rowTitle,
+                style = MaterialTheme.typography.h3,
+                color = MaterialTheme.colors.secondary,
+                modifier = modifier
+                    .padding(bottom = 20.dp, top = 6.dp, start = 6.dp)
+                    .clickable { onTitleClicked() }
+            )
+        LazyRow(
+            modifier = modifier
+                .background(MaterialTheme.colors.background)
+                .fillMaxHeight(),
+            horizontalArrangement = Arrangement.spacedBy(24.dp),
+            userScrollEnabled = true
+        ) {
+            if (media.isEmpty()) {
+                items(1) {
+                    MLMediaPoster(
+                        title = Title("No title"),
+                        posterUrl = null,
+                        modifier = modifier
+                            // todo replace hardcoded size
+                            .size(height = 143.dp, width = 92.dp)
+                    )
+                }
+            }
 
-
+            items(media) { singleMovie ->
+                MLMediaPoster(
+                    posterUrl = singleMovie.posterUrl,
+                    title = Title(singleMovie.title),
+                    modifier = modifier
+                        // todo replace hardcoded size
+                        .size(height = 143.dp, width = 92.dp)
+                        .clickable { onMediaItemClicked(singleMovie) }
+                )
+        }
+            }
+    }
 }
 
 @Preview

@@ -8,6 +8,7 @@ import com.github.michaelbull.result.runCatching
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.TitledMediaList
 import com.sunrisekcdeveloper.medialion.components.shared.domain.repos.CollectionRepositoryNew
 
+// todo remove - useless see [FetchAllCollectionsUseCase]
 interface FetchAllCollectionsAsTitledMediaUseCase {
     suspend operator fun invoke(): Result<TitledMediaList, FetchAllCollectionsAsTitledMediaError>
 

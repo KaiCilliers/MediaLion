@@ -44,6 +44,7 @@ class WrappedMLSearchViewModelNew : KoinComponent {
 class WrappedMLCollectionViewModelNew : KoinComponent {
     fun instance() = MLMyCollectionViewModelNew.Default(
         get<FetchAllCollectionsAsTitledMediaUseCase>(),
+        get<FetchAllCollectionsUseCaseNew>(),
         coroutineScope = null,
     )
 }

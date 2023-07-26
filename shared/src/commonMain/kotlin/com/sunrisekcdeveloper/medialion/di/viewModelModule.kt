@@ -40,6 +40,7 @@ val viewModelModule = module {
     factory<MLMyCollectionViewModelNew> {
         MLMyCollectionViewModelNew.Default(
             get<FetchAllCollectionsAsTitledMediaUseCase>(),
+            get<FetchAllCollectionsUseCaseNew>(),
             coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate),
         )
     }

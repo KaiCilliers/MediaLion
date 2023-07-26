@@ -41,7 +41,10 @@ interface CollectionNew {
         }
 
         override fun asMediaWithTitle(): MediaWithTitle {
-            return MediaWithTitle.Def(title)
+            return MediaWithTitle.Def(
+                title = this.title,
+                content = this.media
+            )
         }
 
         override fun title(): Title {

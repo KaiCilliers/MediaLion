@@ -50,7 +50,7 @@ import com.sunrisekcdeveloper.medialion.utils.StringRes
 import com.sunrisekcdeveloper.medialion.utils.rememberService
 import com.zhuinden.simplestackcomposeintegration.core.LocalBackstack
 
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchScreen() {
     val backstack = LocalBackstack.current
@@ -78,7 +78,7 @@ fun SearchScreen() {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SearchScreenContent(
+private fun SearchScreenContent(
     keyboardController: SoftwareKeyboardController?,
     searchState: SearchUIState,
     miniCollectionState: MiniCollectionUIState,
