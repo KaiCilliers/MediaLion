@@ -68,7 +68,10 @@ interface CollectionLocalDataSource {
 
         override suspend fun upsert(entity: CollectionEntityDto) {
             db.transaction {
-                val existingCollection = collectionDao.findCollection(entity.title.value).executeAsOneOrNull()
+                val existingCollection = collectionDao
+                    .fetchAll()
+                    .executeAsList()
+                    .find { it.id == entity.id.uniqueIdentifier() }
                 if (existingCollection == null) {
                     collectionDao.insert(
                         id = entity.id.uniqueIdentifier(),
