@@ -33,4 +33,5 @@ data class GlobalRouter(
     val infoRouter: @RawValue RootScreen.InfoRouter,
     val mediaPreviewRouter: @RawValue RootScreen.MediaPreviewRouter,
     val quickCollectionRouter: @RawValue RootScreen.QuickCollectionsRouter,
+    val fullCollectionRouter: @RawValue RootScreen.FullCollectionsRouter,
 ) : Parcelable

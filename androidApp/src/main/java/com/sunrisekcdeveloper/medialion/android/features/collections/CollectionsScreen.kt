@@ -10,22 +10,17 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -39,22 +34,14 @@ import com.sunrisekcdeveloper.medialion.android.ui.collections.CollectionViewMod
 import com.sunrisekcdeveloper.medialion.android.ui.components.ui.MLProgress
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.CollectionNew
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.ID
-import com.sunrisekcdeveloper.medialion.components.shared.domain.models.MediaWithTitle
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem
-import com.sunrisekcdeveloper.medialion.components.shared.domain.models.TitledMediaList
 import com.sunrisekcdeveloper.medialion.features.mycollection.FailedToFetchCollections
 import com.sunrisekcdeveloper.medialion.features.mycollection.Loading
 import com.sunrisekcdeveloper.medialion.features.mycollection.MyCollectionsContent
 import com.sunrisekcdeveloper.medialion.features.mycollection.MyCollectionsUIState
-import com.sunrisekcdeveloper.medialion.features.shared.Content
-import com.sunrisekcdeveloper.medialion.features.shared.MiniCollectionUIState
 import com.sunrisekcdeveloper.medialion.oldArch.MediaItemUI
-import com.sunrisekcdeveloper.medialion.oldArch.domain.MediaType
-import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
-import com.sunrisekcdeveloper.medialion.utils.debug
 import com.sunrisekcdeveloper.medialion.utils.rememberService
 import com.zhuinden.simplestackcomposeintegration.core.LocalBackstack
-import io.github.aakira.napier.Napier
 
 @Composable
 fun CollectionsScreen() {
@@ -68,6 +55,7 @@ fun CollectionsScreen() {
         collectionState = collectionsState,
         navigateToSearchScreen = { backstack.parentServices?.goTo(SearchKey(globalRouter)) },
         openInfoDialog = { globalRouter.infoRouter.show() },
+        openCollectionDetailSheet = { collection -> globalRouter.fullCollectionRouter.show(collection) },
         openMediaPreviewSheet = { item -> globalRouter.mediaPreviewRouter.show(item) }
     )
 }
@@ -78,6 +66,7 @@ private fun CollectionScreenContent(
     navigateToSearchScreen: () -> Unit,
     openInfoDialog: () -> Unit,
     openMediaPreviewSheet: (MediaItemUI) -> Unit,
+    openCollectionDetailSheet: (CollectionNew) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ConstraintLayout(
@@ -150,13 +139,7 @@ private fun CollectionScreenContent(
                                 rowTitle = collection.title().toString(),
                                 media = collection.media().map { domainModel -> MediaItemUI.from(domainModel) },
                                 onMediaItemClicked = { item -> openMediaPreviewSheet(item) },
-                                onTitleClicked = {
-//                                    currentBottomSheet = BottomSheetScreen.EntireCollection(
-//                                        title = it.name,
-//                                        media = it.contents
-//                                    )
-//                                    coroutineScope.launch { modalSheetState.show() }
-                                }
+                                onTitleClicked = { openCollectionDetailSheet(collection) }
                             )
                         }
                     }
@@ -174,6 +157,7 @@ fun CollectionScreenPreview() {
             navigateToSearchScreen = {},
             openInfoDialog = {},
             openMediaPreviewSheet = {},
+            openCollectionDetailSheet = {},
             collectionState = MyCollectionsContent(
                 id = ID.Def(),
                 collections = listOf(
