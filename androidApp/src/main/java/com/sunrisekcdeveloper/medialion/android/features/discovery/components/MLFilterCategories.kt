@@ -1,4 +1,4 @@
-package com.sunrisekcdeveloper.medialion.android.ui.discovery.ui
+package com.sunrisekcdeveloper.medialion.android.features.discovery.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

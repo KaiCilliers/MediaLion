@@ -1,4 +1,4 @@
-package com.sunrisekcdeveloper.medialion.android.ui.discovery
+package com.sunrisekcdeveloper.medialion.android.features.discovery
 
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.DiscoveryPage
 import com.sunrisekcdeveloper.medialion.features.discovery.CategoriesUIState

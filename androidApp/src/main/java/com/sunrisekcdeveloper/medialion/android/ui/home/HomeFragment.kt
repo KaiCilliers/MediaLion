@@ -12,7 +12,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
-import com.sunrisekcdeveloper.medialion.android.ui.discovery.DiscoveryViewModel
+import com.sunrisekcdeveloper.medialion.android.features.discovery.DiscoveryViewModel
 import com.zhuinden.simplestackextensions.fragmentsktx.lookup
 
 class HomeFragment : Fragment() {
