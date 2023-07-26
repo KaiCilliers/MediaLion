@@ -1,4 +1,4 @@
-package com.sunrisekcdeveloper.medialion.android.ui.collections
+package com.sunrisekcdeveloper.medialion.android.features.collections
 
 import com.sunrisekcdeveloper.medialion.features.mycollection.MLMyCollectionViewModelNew
 import com.sunrisekcdeveloper.medialion.features.mycollection.MyCollectionsUIState

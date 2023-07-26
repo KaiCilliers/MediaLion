@@ -26,7 +26,7 @@ import com.sunrisekcdeveloper.medialion.android.features.home.HomeKey
 import com.sunrisekcdeveloper.medialion.android.features.home.components.CustomDialog
 import com.sunrisekcdeveloper.medialion.android.features.root.components.MLCollectionDetail
 import com.sunrisekcdeveloper.medialion.android.features.shared.DetailPreviewScreen
-import com.sunrisekcdeveloper.medialion.android.ui.collections.CollectionViewModel
+import com.sunrisekcdeveloper.medialion.android.features.collections.CollectionViewModel
 import com.sunrisekcdeveloper.medialion.android.ui.saveToCollection.ui.SaveToCollectionScreen
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.CollectionNew
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem

@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import com.sunrisekcdeveloper.medialion.android.app.ComposeKey
-import com.sunrisekcdeveloper.medialion.android.ui.collections.CollectionViewModel
 import com.sunrisekcdeveloper.medialion.features.mycollection.MLMyCollectionViewModelNew
 import com.sunrisekcdeveloper.medialion.features.shared.MLMiniCollectionViewModel
 import com.zhuinden.simplestack.ServiceBinder

@@ -30,7 +30,6 @@ import com.sunrisekcdeveloper.medialion.android.features.home.GlobalRouter
 import com.sunrisekcdeveloper.medialion.android.features.search.SearchKey
 import com.sunrisekcdeveloper.medialion.android.features.search.components.MLTitledMediaRow
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
-import com.sunrisekcdeveloper.medialion.android.ui.collections.CollectionViewModel
 import com.sunrisekcdeveloper.medialion.android.ui.components.ui.MLProgress
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.CollectionNew
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.ID
