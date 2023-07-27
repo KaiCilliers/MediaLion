@@ -32,7 +32,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.sunrisekcdeveloper.medialion.R
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
-import com.sunrisekcdeveloper.medialion.android.ui.components.ui.MLProgress
+import com.sunrisekcdeveloper.medialion.android.features.shared.MLProgress
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.CollectionNew
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.ID
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem

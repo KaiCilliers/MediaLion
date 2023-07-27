@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -35,7 +34,7 @@ import com.sunrisekcdeveloper.medialion.android.features.search.components.MLSea
 import com.sunrisekcdeveloper.medialion.android.features.search.components.SearchResults
 import com.sunrisekcdeveloper.medialion.android.features.search.components.TopSuggestions
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
-import com.sunrisekcdeveloper.medialion.android.ui.components.ui.MLProgress
+import com.sunrisekcdeveloper.medialion.android.features.shared.MLProgress
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.SearchQuery
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.CollectionNew
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.ID

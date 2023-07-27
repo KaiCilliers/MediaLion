@@ -1,4 +1,4 @@
-package com.sunrisekcdeveloper.medialion.android.ui.components.ui
+package com.sunrisekcdeveloper.medialion.android.features.shared
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

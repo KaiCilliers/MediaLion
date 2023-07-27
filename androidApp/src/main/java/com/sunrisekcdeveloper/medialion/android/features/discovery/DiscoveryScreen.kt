@@ -30,7 +30,7 @@ import com.sunrisekcdeveloper.medialion.android.features.home.GlobalRouter
 import com.sunrisekcdeveloper.medialion.android.features.search.SearchKey
 import com.sunrisekcdeveloper.medialion.android.features.search.components.MLMediaPoster
 import com.sunrisekcdeveloper.medialion.android.features.search.components.MLTitledMediaRow
-import com.sunrisekcdeveloper.medialion.android.ui.components.ui.MLProgress
+import com.sunrisekcdeveloper.medialion.android.features.shared.MLProgress
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.DiscoveryPage
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.MediaWithTitle
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem
