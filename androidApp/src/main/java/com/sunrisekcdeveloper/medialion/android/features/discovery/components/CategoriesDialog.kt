@@ -20,9 +20,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -34,14 +31,15 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.sunrisekcdeveloper.medialion.android.R
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
-import com.sunrisekcdeveloper.medialion.oldArch.domain.MediaType
-import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Genre
+import com.sunrisekcdeveloper.medialion.android.ui.components.ui.MLProgress
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaCategory
+import com.sunrisekcdeveloper.medialion.features.discovery.CategoriesUIState
 
 @Composable
 fun CategoriesDialog(
-    categories : List<Genre>,
+    state : CategoriesUIState,
     onDismiss: () -> Unit,
-    onSelection: (Genre) -> Unit,
+    onSelection: (MediaCategory) -> Unit,
 ) {
     Dialog(
         onDismissRequest = { onDismiss() },
@@ -84,27 +82,33 @@ fun CategoriesDialog(
                             .clickable { onDismiss() }
                     )
                 }
-                LazyColumn(
-                    modifier = Modifier
-                        .size(height = 160.dp, width = 500.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    items(categories) {
-                        Text(
-                            text = "${it.name} - ${it.mediaType}",
-                            style = MaterialTheme.typography.h4,
-                            color = MaterialTheme.colors.secondaryVariant,
-                            textAlign = TextAlign.Center,
+                when (state) {
+                    is CategoriesUIState.Content -> {
+                        LazyColumn(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    onSelection(it)
-                                    onDismiss()
-                                }
-                        )
-                    }
+                                .size(height = 160.dp, width = 500.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            items(state.categories) { category ->
+                                Text(
+                                    text = category.name(),
+                                    style = MaterialTheme.typography.h4,
+                                    color = MaterialTheme.colors.secondaryVariant,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            onSelection(category)
+                                            onDismiss()
+                                        }
+                                )
+                            }
 
+                        }
+                    }
+                    CategoriesUIState.Error -> TODO()
+                    CategoriesUIState.Loading -> MLProgress()
                 }
             }
         }
@@ -114,30 +118,28 @@ fun CategoriesDialog(
 @Preview
 @Composable
 private fun CategoriesDialogPreview() {
-    val categories: List<Genre> by remember {
-        mutableStateOf(
-            listOf(
-                Genre(id = 1, name = "Horror", mediaType = MediaType.TV),
-                Genre(id = 1, name = "Romance", mediaType = MediaType.TV),
-                Genre(id = 1, name = "Thriller", mediaType = MediaType.MOVIE),
-                Genre(id = 1, name = "Crime", mediaType = MediaType.MOVIE),
-                Genre(id = 1, name = "Comedy", mediaType = MediaType.MOVIE),
-                Genre(id = 1, name = "Drama", mediaType = MediaType.MOVIE),
-                Genre(id = 1, name = "Fantasy", mediaType = MediaType.MOVIE),
-                Genre(id = 1, name = "RomCom", mediaType = MediaType.MOVIE),
-                Genre(id = 1, name = "Action", mediaType = MediaType.MOVIE),
-                Genre(id = 1, name = "Adventure", mediaType = MediaType.MOVIE),
-                Genre(id = 1, name = "Animation", mediaType = MediaType.MOVIE),
-                Genre(id = 1, name = "Sci-Fi", mediaType = MediaType.MOVIE),
-            )
+    val state = CategoriesUIState.Content(
+        listOf(
+            MediaCategory.D(name = "Horror"),
+            MediaCategory.D(name = "Romance"),
+            MediaCategory.D(name = "Thriller"),
+            MediaCategory.D(name = "Crime"),
+            MediaCategory.D(name = "Comedy"),
+            MediaCategory.D(name = "Drama"),
+            MediaCategory.D(name = "Fantasy"),
+            MediaCategory.D(name = "RomCom"),
+            MediaCategory.D(name = "Action"),
+            MediaCategory.D(name = "Adventure"),
+            MediaCategory.D(name = "Animation"),
+            MediaCategory.D(name = "Sci-F"),
         )
-    }
+    )
     MediaLionTheme {
         Surface(
             modifier = Modifier.fillMaxSize()
         ) {
             CategoriesDialog(
-                categories = categories,
+                state = state,
                 onDismiss = {},
                 onSelection = {}
             )

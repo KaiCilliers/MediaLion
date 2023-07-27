@@ -23,11 +23,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.sunrisekcdeveloper.medialion.android.features.home.GlobalRouter
 import com.sunrisekcdeveloper.medialion.android.features.home.HomeKey
-import com.sunrisekcdeveloper.medialion.android.features.home.components.CustomDialog
+import com.sunrisekcdeveloper.medialion.android.features.home.components.MLAppInfoDialog
 import com.sunrisekcdeveloper.medialion.android.features.root.components.MLCollectionDetail
 import com.sunrisekcdeveloper.medialion.android.features.shared.DetailPreviewScreen
 import com.sunrisekcdeveloper.medialion.android.features.collections.CollectionViewModel
+import com.sunrisekcdeveloper.medialion.android.features.discovery.DiscoveryViewModel
+import com.sunrisekcdeveloper.medialion.android.features.discovery.components.CategoriesDialog
 import com.sunrisekcdeveloper.medialion.android.ui.saveToCollection.ui.SaveToCollectionScreen
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaCategory
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.CollectionNew
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem
 import com.sunrisekcdeveloper.medialion.features.mycollection.MyCollectionsContent
@@ -48,7 +51,6 @@ import java.util.UUID
 class RootScreen private constructor() {
     interface InfoRouter {
         fun show()
-        fun showWithResult(onResult: (String) -> Unit)
     }
 
     interface MediaPreviewRouter {
@@ -61,6 +63,10 @@ class RootScreen private constructor() {
 
     interface FullCollectionsRouter {
         fun show(collection: CollectionNew)
+    }
+
+    interface CategoriesDialogRouter {
+        fun showWithResult(onResult: (MediaCategory) -> Unit)
     }
 
     sealed interface MediaContent : Parcelable {
@@ -85,17 +91,27 @@ class RootScreen private constructor() {
         operator fun invoke() {
 
             val collectionsViewModel = rememberService<CollectionViewModel>()
+            // TODO to be removed in future - used only to access media categories
+            val discoveryViewModel = rememberService<DiscoveryViewModel>()
+
             val collectionDialogState by collectionsViewModel.collectionDialogState.collectAsState()
             val collectionsState by collectionsViewModel.collectionsState.collectAsState()
+            val mediaCategoriesState by discoveryViewModel.categoriesState.collectAsState()
 
             val scope = rememberCoroutineScope()
 
             var showInfoDialog by rememberSaveable { mutableStateOf(false) }
+
             var showMiniCollectionsDialog by rememberSaveable { mutableStateOf(false) }
+
             var showMediaDetailSheet: MediaContent by rememberSaveable { mutableStateOf(MediaContent.NoContent) }
+
             var quickCollectionDialog: MediaContent by rememberSaveable { mutableStateOf(MediaContent.NoContent) }
+
             var showFullCollectionsSheet: CollectionContent by rememberSaveable { mutableStateOf(CollectionContent.NoContent) }
-            var onDialogResult: Foo by rememberSaveable { mutableStateOf(Foo()) }
+
+            var showCategoriesDialog by rememberSaveable { mutableStateOf(false) }
+            var categoriesDialogResult: CategorySelection by rememberSaveable { mutableStateOf(CategorySelection()) }
 
             val mediaPreviewSheet = rememberModalBottomSheetState(
                 initialValue = ModalBottomSheetValue.Hidden,
@@ -111,16 +127,18 @@ class RootScreen private constructor() {
                 animationSpec = spring(1.4f)
             )
 
+            val categoriesRouter = object : CategoriesDialogRouter {
+                override fun showWithResult(onResult: (MediaCategory) -> Unit) {
+                    showCategoriesDialog = true
+                    categoriesDialogResult = CategorySelection(onResult)
+                }
+            }
+
             val infoRouter = object : InfoRouter {
                 override fun show() {
                     println("deadpool - showing dialog ($showInfoDialog) to true")
                     showInfoDialog = true
                     println("deadpool - new dialog value is ($showInfoDialog)")
-                }
-
-                override fun showWithResult(onResult: (String) -> Unit) {
-                    onDialogResult = Foo(onResult)
-                    showInfoDialog = true
                 }
             }
             val mediaPreviewRouter = object : MediaPreviewRouter {
@@ -174,15 +192,14 @@ class RootScreen private constructor() {
             }
 
             if (showInfoDialog) {
-                CustomDialog(
-                    onDismiss = {
-                        showInfoDialog = false
-                    },
-                    onResult = {
-                        println("got result $it")
-                        onDialogResult.s.invoke(it)
-                        onDialogResult = Foo({})
-                    }
+                MLAppInfoDialog(onDismiss = { showInfoDialog = false })
+            }
+
+            if (showCategoriesDialog) {
+                CategoriesDialog(
+                    state = mediaCategoriesState,
+                    onDismiss = { showCategoriesDialog = false },
+                    onSelection = { categorySelection -> categoriesDialogResult.result.invoke(categorySelection) }
                 )
             }
 
@@ -207,6 +224,7 @@ class RootScreen private constructor() {
                 mediaPreviewRouter = mediaPreviewRouter,
                 quickCollectionRouter = miniCollectionRouter,
                 fullCollectionRouter = fullCollectionRouter,
+                categoryDialogRouter = categoriesRouter,
             )
 
             ModalBottomSheetLayout(

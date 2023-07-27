@@ -22,9 +22,7 @@ val dataSourceModule = module {
     }
 
     factory<MediaCategoryRemoteDataSource> {
-        MediaCategoryRemoteDataSource.D(
-            apiClient = get()
-        )
+        MediaCategoryRemoteDataSource.D(apiClient = get<TMDBClientNew>())
     }
     // endregion
 

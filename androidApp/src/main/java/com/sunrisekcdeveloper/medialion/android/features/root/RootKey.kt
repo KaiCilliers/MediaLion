@@ -5,7 +5,10 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import com.sunrisekcdeveloper.medialion.android.app.ComposeKey
 import com.sunrisekcdeveloper.medialion.android.features.collections.CollectionViewModel
+import com.sunrisekcdeveloper.medialion.android.features.discovery.DiscoveryViewModel
 import com.sunrisekcdeveloper.medialion.components.collections.domain.InsertDefaultCollectionsUseCase
+import com.sunrisekcdeveloper.medialion.features.discovery.MLCategoriesViewModel
+import com.sunrisekcdeveloper.medialion.features.discovery.MLDiscoveryViewModelNew
 import com.sunrisekcdeveloper.medialion.features.mycollection.MLMyCollectionViewModelNew
 import com.sunrisekcdeveloper.medialion.features.shared.MLMiniCollectionViewModel
 import com.zhuinden.simplestack.ServiceBinder
@@ -25,6 +28,14 @@ data object RootKey : ComposeKey(), KoinComponent {
     override fun bindServices(serviceBinder: ServiceBinder) {
         with(serviceBinder) {
             add(CollectionViewModel(get<MLMyCollectionViewModelNew>(), get<MLMiniCollectionViewModel>()))
+
+            // used only for categories state - remove dependency on DiscoveryViewModel in future
+            add(DiscoveryViewModel(
+                get<MLDiscoveryViewModelNew>(),
+                get<MLCategoriesViewModel>(),
+                get<MLMiniCollectionViewModel>()
+            ))
+
             add(get<InsertDefaultCollectionsUseCase>())
         }
     }

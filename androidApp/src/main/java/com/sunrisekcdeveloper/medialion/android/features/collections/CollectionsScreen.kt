@@ -150,7 +150,7 @@ private fun CollectionScreenContent(
 
 @Preview
 @Composable
-fun CollectionScreenPreview() {
+private fun CollectionScreenPreview() {
     PreviewWrapper {
         CollectionScreenContent(
             navigateToSearchScreen = {},

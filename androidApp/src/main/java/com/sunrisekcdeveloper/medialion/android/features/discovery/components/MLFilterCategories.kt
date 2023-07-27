@@ -19,7 +19,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 
-
 enum class FilterCategory { All, MOVIES, SERIES, CATEGORIES }
 
 @Composable
@@ -92,9 +91,7 @@ fun MLFilterCategories(
                     MaterialTheme.colors.onSecondary
                 },
                 style = MaterialTheme.typography.subtitle2,
-                modifier = modifier
-
-                    .clickable { onNewSelection(FilterCategory.CATEGORIES) }
+                modifier = modifier.clickable { onNewSelection(FilterCategory.CATEGORIES) }
             )
         }
     }

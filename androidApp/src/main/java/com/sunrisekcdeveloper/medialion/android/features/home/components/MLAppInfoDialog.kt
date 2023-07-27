@@ -14,9 +14,8 @@ import androidx.compose.ui.window.Dialog
 
 @Composable
 // todo rename
-fun CustomDialog(
+fun MLAppInfoDialog(
     onDismiss: () -> Unit,
-    onResult: (String) -> Unit,
 ) {
     Dialog(onDismissRequest = { onDismiss() }) {
         Surface(
@@ -27,11 +26,9 @@ fun CustomDialog(
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = "One", modifier = Modifier.clickable {
-                    onResult("One")
                     onDismiss()
                 })
                 Text(text = "Two", Modifier.clickable {
-                    onResult("Two")
                     onDismiss()
                 })
             }
