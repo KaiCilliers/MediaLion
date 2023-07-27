@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
-import com.sunrisekcdeveloper.medialion.android.ui.extensions.gradientOrange
+import com.sunrisekcdeveloper.medialion.utils.gradientOrange
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
 import com.sunrisekcdeveloper.medialion.utils.StringRes
 

@@ -27,14 +27,14 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.sunrisekcdeveloper.medialion.android.features.search.components.MLMediaPoster
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
-import com.sunrisekcdeveloper.medialion.android.ui.extensions.gradientBlue
+import com.sunrisekcdeveloper.medialion.utils.gradientBlue
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem
 import com.sunrisekcdeveloper.medialion.oldArch.MediaItemUI
 import com.sunrisekcdeveloper.medialion.oldArch.domain.MediaType
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
 
 @Composable
-fun DetailPreviewScreen(
+fun MLDetailPreviewSheet(
     mediaItem: MediaItemUI,
     onCloseClick: () -> Unit,
     onMyListClick: (SingleMediaItem) -> Unit,
@@ -170,7 +170,7 @@ fun DetailPreviewScreen(
 private fun DetailPreviewScreenPreview() {
     MediaLionTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            DetailPreviewScreen(
+            MLDetailPreviewSheet(
                 mediaItem = MediaItemUI(
                     id = "partiendo",
                     title = "This is a two line movie title",

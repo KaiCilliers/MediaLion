@@ -1,4 +1,4 @@
-package com.sunrisekcdeveloper.medialion.android.ui.saveToCollection.ui
+package com.sunrisekcdeveloper.medialion.android.features.shared
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -32,7 +32,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.sunrisekcdeveloper.medialion.R
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
-import com.sunrisekcdeveloper.medialion.android.features.shared.MLProgress
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.CollectionNew
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.ID
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem
@@ -44,7 +43,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun SaveToCollectionScreen(
+fun MLQuickCollectionsDialog(
     onDismiss: () -> Unit,
     targetedMediaItem: SingleMediaItem,
     miniCollectionUIState: MiniCollectionUIState,
@@ -180,7 +179,7 @@ private fun SaveToCollectionScreenPreview() {
     MediaLionTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             if (showAboutDialog) {
-                SaveToCollectionScreen(
+                MLQuickCollectionsDialog(
                     onDismiss = {
                         scope.launch {
                             showAboutDialog = false

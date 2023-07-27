@@ -25,11 +25,11 @@ import com.sunrisekcdeveloper.medialion.android.features.home.GlobalRouter
 import com.sunrisekcdeveloper.medialion.android.features.home.HomeKey
 import com.sunrisekcdeveloper.medialion.android.features.home.components.MLAppInfoDialog
 import com.sunrisekcdeveloper.medialion.android.features.root.components.MLCollectionDetail
-import com.sunrisekcdeveloper.medialion.android.features.shared.DetailPreviewScreen
+import com.sunrisekcdeveloper.medialion.android.features.shared.MLDetailPreviewSheet
 import com.sunrisekcdeveloper.medialion.android.features.collections.CollectionViewModel
 import com.sunrisekcdeveloper.medialion.android.features.discovery.DiscoveryViewModel
 import com.sunrisekcdeveloper.medialion.android.features.discovery.components.CategoriesDialog
-import com.sunrisekcdeveloper.medialion.android.ui.saveToCollection.ui.SaveToCollectionScreen
+import com.sunrisekcdeveloper.medialion.android.features.shared.MLQuickCollectionsDialog
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaCategory
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.CollectionNew
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem
@@ -206,7 +206,7 @@ class RootScreen private constructor() {
             if (showMiniCollectionsDialog) {
                 when (val currentState = quickCollectionDialog) {
                     is MediaContent.PreviewMedia -> {
-                        SaveToCollectionScreen(
+                        MLQuickCollectionsDialog(
                             onDismiss = { showMiniCollectionsDialog = false },
                             miniCollectionUIState = collectionDialogState,
                             onCreateCollection = { collectionName -> collectionsViewModel.submit(InsertCollection(collectionName)) },
@@ -233,7 +233,7 @@ class RootScreen private constructor() {
                 sheetContent = {
                     when (val currentMediaToShow = showMediaDetailSheet) {
                         is MediaContent.PreviewMedia -> {
-                            DetailPreviewScreen(
+                            MLDetailPreviewSheet(
                                 mediaItem = currentMediaToShow.media,
                                 onCloseClick = { scope.launch { mediaPreviewSheet.hide() } },
                                 onMyListClick = { miniCollectionRouter.show(it) },

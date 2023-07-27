@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sunrisekcdeveloper.medialion.android.R
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
-import com.sunrisekcdeveloper.medialion.android.ui.extensions.gradientOrange
+import com.sunrisekcdeveloper.medialion.utils.gradientOrange
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.SearchQuery
 
 @Composable

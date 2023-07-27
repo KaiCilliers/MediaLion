@@ -28,7 +28,7 @@ import com.sunrisekcdeveloper.medialion.utils.ColorRes
 import com.sunrisekcdeveloper.medialion.android.R
 import com.sunrisekcdeveloper.medialion.android.features.home.HomeDestinations
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
-import com.sunrisekcdeveloper.medialion.android.ui.extensions.gradientBackground
+import com.sunrisekcdeveloper.medialion.utils.gradientBackground
 
 @Composable
 fun MLBottomNavBar(

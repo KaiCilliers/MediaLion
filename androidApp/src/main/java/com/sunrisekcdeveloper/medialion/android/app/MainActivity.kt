@@ -1,54 +1,45 @@
 package com.sunrisekcdeveloper.medialion.android.app
 
 import android.os.Bundle
-import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.fragment.app.FragmentActivity
-import com.sunrisekcdeveloper.medialion.android.R
-import com.sunrisekcdeveloper.medialion.android.features.discovery.DiscoveryKey
-import com.zhuinden.simplestack.AheadOfTimeWillHandleBackChangedListener
-import com.zhuinden.simplestack.BackHandlingModel
-import com.zhuinden.simplestack.Backstack
+import com.sunrisekcdeveloper.medialion.android.features.root.RootKey
+import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
+import com.sunrisekcdeveloper.medialion.components.collections.domain.InsertDefaultCollectionsUseCase
 import com.zhuinden.simplestack.History
-import com.zhuinden.simplestack.SimpleStateChanger
-import com.zhuinden.simplestack.StateChange
-import com.zhuinden.simplestack.navigator.Navigator
-import com.zhuinden.simplestackextensions.fragments.DefaultFragmentStateChanger
+import com.zhuinden.simplestackcomposeintegration.core.ComposeNavigator
 import com.zhuinden.simplestackextensions.services.DefaultServiceProvider
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
-class MainActivity : FragmentActivity(), SimpleStateChanger.NavigationHandler {
-    private lateinit var fragmentStateChanger: DefaultFragmentStateChanger
-    private lateinit var backstack: Backstack
-    private val backPressedCallback = object : OnBackPressedCallback(false) {
-        override fun handleOnBackPressed() {
-            backstack.goBack()
-        }
-    }
-    private val updateBackPressedCallback = AheadOfTimeWillHandleBackChangedListener {
-        backPressedCallback.isEnabled = it
-    }
+class MainActivity : FragmentActivity() {
+
+    private val insertDefaultCollectionsUseCase by inject<InsertDefaultCollectionsUseCase>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        onBackPressedDispatcher.addCallback(backPressedCallback)
+        val app = application as MediaLionApp
 
-        fragmentStateChanger = DefaultFragmentStateChanger(supportFragmentManager,
-            R.id.container_fragment
-        )
+        MainScope().launch { insertDefaultCollectionsUseCase() }
 
-        val app = application as com.sunrisekcdeveloper.medialion.android.app.MediaLionApp
-        val globalServices = app.globalServices
-
-        backPressedCallback.isEnabled = backstack.willHandleAheadOfTimeBack()
-        backstack.addAheadOfTimeWillHandleBackChangedListener(updateBackPressedCallback)
-    }
-
-    override fun onDestroy() {
-        backstack.removeAheadOfTimeWillHandleBackChangedListener(updateBackPressedCallback)
-        super.onDestroy()
-    }
-
-    override fun onNavigationEvent(stateChange: StateChange) {
-        fragmentStateChanger.handleStateChange(stateChange)
+        setContent {
+            MediaLionTheme {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    ComposeNavigator {
+                        createBackstack(
+                            scopedServices = DefaultServiceProvider(),
+                            globalServices = app.globalServices,
+                            initialKeys = History.of(RootKey)
+                        )
+                    }
+                }
+            }
+        }
     }
 }

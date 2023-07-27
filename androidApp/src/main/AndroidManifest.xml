@@ -11,12 +11,7 @@
         android:label="${appName}"
         android:icon="@mipmap/ml_launcher"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".app.MainActivity"
-            android:exported="true">
-
-        </activity>
-        <activity android:name=".app.NewAct"
+        <activity android:name=".app.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
