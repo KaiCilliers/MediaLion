@@ -2,6 +2,7 @@ package com.sunrisekcdeveloper.medialion.android.features.search.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.sunrisekcdeveloper.medialion.features.search.components.MLTitledMediaGrid
 import com.sunrisekcdeveloper.medialion.oldArch.MediaItemUI
 
 @Composable

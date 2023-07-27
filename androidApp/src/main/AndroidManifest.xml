@@ -5,13 +5,13 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:name=".app.MediaLionApp"
+        android:name="com.sunrisekcdeveloper.medialion.app.MediaLionApp"
         android:allowBackup="false"
         android:supportsRtl="true"
         android:label="${appName}"
         android:icon="@mipmap/ml_launcher"
         android:theme="@style/AppTheme">
-        <activity android:name=".app.MainActivity"
+        <activity android:name="com.sunrisekcdeveloper.medialion.app.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
