@@ -43,20 +43,20 @@ val mapperModule = module {
 object MapperNames {
 
     object MediaCategoryMapperNames {
-        const val cacheToEntityDto = "cacheToEntityDto"
-        const val entityDtoToCache = "entityDtoToCache"
-        const val apiDtoToDomain = "apiDtoToDomain"
-        const val entityDtoToDomain = "entityDtoToDomain"
-        const val domainToEntityDto = "domainToEntityDto"
+        const val cacheToEntityDto = "MC_cacheToEntityDto"
+        const val entityDtoToCache = "MC_entityDtoToCache"
+        const val apiDtoToDomain = "MC_apiDtoToDomain"
+        const val entityDtoToDomain = "MC_entityDtoToDomain"
+        const val domainToEntityDto = "MC_domainToEntityDto"
     }
 
     object SingleMediaItemNames {
-        const val responseToSingleMediaApiDto = "responseToSingleMediaApiDto"
-        const val apiDtoToDomain = "apiDtoToDomain"
-        const val movieCacheToDomain = "movieCacheToDomain"
-        const val tvShowCacheToDomain = "tvShowCacheToDomain"
-        const val domainToMovieCache = "domainToMovieCache"
-        const val domainToTVShowCache = "domainToTVShowCache"
+        const val responseToSingleMediaApiDto = "SMI_responseToSingleMediaApiDto"
+        const val apiDtoToDomain = "SMI_apiDtoToDomain"
+        const val movieCacheToDomain = "SMI_movieCacheToDomain"
+        const val tvShowCacheToDomain = "SMI_tvShowCacheToDomain"
+        const val domainToMovieCache = "SMI_domainToMovieCache"
+        const val domainToTVShowCache = "SMI_domainToTVShowCache"
     }
 
     object CollectionNames {
