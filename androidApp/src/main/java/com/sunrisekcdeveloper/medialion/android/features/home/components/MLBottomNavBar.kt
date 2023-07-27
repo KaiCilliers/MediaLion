@@ -1,4 +1,4 @@
-package com.sunrisekcdeveloper.medialion.android.ui.components.ui
+package com.sunrisekcdeveloper.medialion.android.features.home.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -26,15 +26,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sunrisekcdeveloper.medialion.utils.ColorRes
 import com.sunrisekcdeveloper.medialion.android.R
+import com.sunrisekcdeveloper.medialion.android.features.home.HomeDestinations
 import com.sunrisekcdeveloper.medialion.android.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.android.ui.extensions.gradientBackground
 
-enum class BottomBarOption { DISCOVERY, COLLECTION }
-
 @Composable
-fun BottomBar(
-    selectedTab: BottomBarOption,
-    onNewSelection: (BottomBarOption) -> Unit,
+fun MLBottomNavBar(
+    selectedTab: HomeDestinations,
+    onDestinationChange: (HomeDestinations) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -70,7 +69,7 @@ fun BottomBar(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.clickable {
-                    onNewSelection(BottomBarOption.DISCOVERY)
+                    onDestinationChange(HomeDestinations.Discovery)
                 }
 
             ) {
@@ -79,7 +78,7 @@ fun BottomBar(
                 Image(
                     painter = painterResource(id = R.drawable.home_icon),
                     contentDescription = "",
-                    colorFilter = if (selectedTab == BottomBarOption.DISCOVERY) {
+                    colorFilter = if (selectedTab == HomeDestinations.Discovery) {
                         ColorFilter.tint(MaterialTheme.colors.onSecondary)
                     } else {
                         ColorFilter.tint(MaterialTheme.colors.primaryVariant)
@@ -93,7 +92,7 @@ fun BottomBar(
                 Text(
                     text = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.bottom_bar_home),
                     style = MaterialTheme.typography.h1,
-                    color = if (selectedTab == BottomBarOption.DISCOVERY) {
+                    color = if (selectedTab == HomeDestinations.Discovery) {
                         MaterialTheme.colors.onSecondary
                     } else {
                         MaterialTheme.colors.primaryVariant
@@ -109,14 +108,14 @@ fun BottomBar(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.clickable {
-                    onNewSelection(BottomBarOption.COLLECTION)
+                    onDestinationChange(HomeDestinations.Collections)
                 }
 
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.slide_orange_cog_icon),
                     contentDescription = "",
-                    colorFilter = if (selectedTab == BottomBarOption.COLLECTION) {
+                    colorFilter = if (selectedTab == HomeDestinations.Collections) {
                         ColorFilter.tint(MaterialTheme.colors.onSecondary)
                     } else {
                         ColorFilter.tint(MaterialTheme.colors.primaryVariant)
@@ -130,7 +129,7 @@ fun BottomBar(
                 Text(
                     text = stringResource(id = com.sunrisekcdeveloper.medialion.R.string.bottom_bar_collection),
                     style = MaterialTheme.typography.h1,
-                    color = if (selectedTab == BottomBarOption.COLLECTION) {
+                    color = if (selectedTab == HomeDestinations.Collections) {
                         MaterialTheme.colors.onSecondary
                     } else {
                         MaterialTheme.colors.primaryVariant
@@ -148,9 +147,9 @@ fun BottomBar(
 @Composable
 private fun BottomBarPreview() {
     MediaLionTheme {
-        BottomBar(
-            selectedTab = BottomBarOption.DISCOVERY,
-            onNewSelection = {}
+        MLBottomNavBar(
+            selectedTab = HomeDestinations.Discovery,
+            onDestinationChange = {}
         )
     }
 
