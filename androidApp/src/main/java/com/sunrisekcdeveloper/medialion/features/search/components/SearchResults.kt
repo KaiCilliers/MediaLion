@@ -1,4 +1,4 @@
-package com.sunrisekcdeveloper.medialion.android.features.search.components
+package com.sunrisekcdeveloper.medialion.features.search.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

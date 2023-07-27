@@ -20,7 +20,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInteropFilter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -28,7 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sunrisekcdeveloper.medialion.android.R
-import com.sunrisekcdeveloper.medialion.android.features.search.components.SearchResults
+import com.sunrisekcdeveloper.medialion.features.search.components.SearchResults
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.SearchQuery
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.CollectionNew
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.ID
