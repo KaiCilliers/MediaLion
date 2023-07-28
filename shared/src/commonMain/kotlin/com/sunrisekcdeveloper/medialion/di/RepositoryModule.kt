@@ -34,6 +34,7 @@ val repositoryModule = module {
             remoteDataSource = get<SingleMediaRemoteDataSource>(),
             localDataSource = get<SingleMediaLocalDataSource>(),
             dtoMapper = get(named(MapperNames.SingleMediaItemNames.apiDtoToDomain)),
+            categoryRepository = get<MediaCategoryRepository>(),
         )
     }
 

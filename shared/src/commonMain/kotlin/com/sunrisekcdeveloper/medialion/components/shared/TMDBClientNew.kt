@@ -33,15 +33,35 @@ class TMDBClientNew(
         val tvShowGenresEndpoint = TMDBUrl("/genre/tv/list")
 
         return coroutineScope {
-            val movieGenresResponse = async { exeRequest(movieGenresEndpoint) }
-            val tvShowGenresResponse = async { exeRequest(tvShowGenresEndpoint) }
+            val movieGenresRequest = async { exeRequest(movieGenresEndpoint) }
+            val tvShowGenresRequest = async { exeRequest(tvShowGenresEndpoint) }
 
-            val allGenres: MutableList<MediaCategoryApiDto> = movieGenresResponse
-                .await()
-                .map { response -> mapToDto(response, MediaTypeNew.Movie) }
-                .toMutableList()
+            val allGenres: MutableList<MediaCategoryApiDto> = mutableListOf<MediaCategoryApiDto>().apply {
 
-            tvShowGenresResponse
+                var movieGenreResponse = movieGenresRequest.await()
+                var tvShowGenreResponse = tvShowGenresRequest.await()
+
+                val commonGenres = movieGenreResponse.filter { tvShowGenreResponse.contains(it) }
+                movieGenreResponse = movieGenreResponse.filterNot { commonGenres.contains(it) }
+                tvShowGenreResponse = tvShowGenreResponse.filterNot { commonGenres.contains(it) }
+
+                commonGenres
+                    .map { genre -> mapToDto(genre, MediaTypeNew.All) }
+                    .also { addAll(it) }
+
+                movieGenreResponse
+                    .map { response -> mapToDto(response, MediaTypeNew.Movie) }
+                    .also { addAll(it) }
+
+                tvShowGenreResponse
+                    .map { response -> mapToDto(response, MediaTypeNew.TVShow) }
+                    .also { addAll(it) }
+
+                sortBy { it.name }
+            }
+
+
+            tvShowGenresRequest
                 .await()
                 .map { response -> mapToDto(response, MediaTypeNew.TVShow) }
                 .forEach { mediaCategoryApiDto ->

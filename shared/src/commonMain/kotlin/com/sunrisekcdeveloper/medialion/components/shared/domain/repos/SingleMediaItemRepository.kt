@@ -4,6 +4,7 @@ import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaRequirements
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.repo.MediaCategoryRepository
 import com.sunrisekcdeveloper.medialion.components.shared.data.singleMedia.SingleMediaApiDto
 import com.sunrisekcdeveloper.medialion.components.shared.data.singleMedia.SingleMediaLocalDataSource
 import com.sunrisekcdeveloper.medialion.components.shared.data.singleMedia.SingleMediaRemoteDataSource
@@ -13,6 +14,7 @@ import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
@@ -25,14 +27,22 @@ interface SingleMediaItemRepository {
         private val remoteDataSource: SingleMediaRemoteDataSource,
         private val localDataSource: SingleMediaLocalDataSource,
         private val dtoMapper: Mapper<SingleMediaApiDto, SingleMediaItem>,
+        private val categoryRepository: MediaCategoryRepository,
     ) : SingleMediaItemRepository {
 
         override suspend fun media(mediaReq: MediaRequirements): List<SingleMediaItem> = runCatching {
+            val mediaCategories = categoryRepository.all()
             val remoteFlow: Flow<SingleMediaApiDto> = remoteDataSource.mediaFlow(mediaReq)
             remoteFlow
                 .mapNotNull { mediaApiDto ->
                     try {
-                        dtoMapper.map(mediaApiDto)
+                        var singleMediaItem = dtoMapper.map(mediaApiDto)
+                        val categoriesFromGenres = mediaApiDto.genreIds.mapNotNull { genreId -> mediaCategories.find { it.identifier().uniqueIdentifier() == genreId.toString() } }
+                        singleMediaItem = when(singleMediaItem) {
+                            is SingleMediaItem.Movie -> singleMediaItem.copy(categories = categoriesFromGenres)
+                            is SingleMediaItem.TVShow -> singleMediaItem.copy(categories = categoriesFromGenres)
+                        }
+                        singleMediaItem
                     } catch (e: Exception) {
                         Napier.w(e) { "Failed to map remote media model to domain model [$mediaApiDto]" }
                         null
@@ -41,7 +51,7 @@ interface SingleMediaItemRepository {
                 .take(mediaReq.amountOfMedia)
                 .onEach { singleMediaItem -> saveItemLocally(singleMediaItem) }
                 .toList()
-        }.getOrElse{ throw Exception("Failed to fetch media from remote datasource with requirements $mediaReq", it) }
+        }.getOrElse { throw Exception("Failed to fetch media from remote datasource with requirements $mediaReq", it) }
 
         private suspend fun saveItemLocally(item: SingleMediaItem) = runCatching {
             localDataSource.upsert(item)

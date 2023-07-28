@@ -10,11 +10,12 @@ import com.sunrisekcdeveloper.medialion.components.shared.domain.models.Collecti
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.ID
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem
 import com.sunrisekcdeveloper.medialion.network.models.MediaResponse
+import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Overview
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
+import com.sunrisekcdeveloper.medialion.utils.debug
 import database.CategoryCache
 import database.MovieCache
 import database.TVShowCache
-import io.github.aakira.napier.Napier
 
 interface Mapper<I, O> {
     fun map(input: I): O
@@ -22,7 +23,12 @@ interface Mapper<I, O> {
     object MediaCategoryMappers {
         class CacheToEntityDto : Mapper<CategoryCache, MediaCategoryEntityDto> {
             override fun map(input: CategoryCache): MediaCategoryEntityDto {
-                return MediaCategoryEntityDto(input.id)
+                val appliedMedia = when (input.appliesToMedia) {
+                    "Movies" -> MediaTypeNew.Movie
+                    "TV Shows" -> MediaTypeNew.TVShow
+                    else -> MediaTypeNew.All
+                }
+                return MediaCategoryEntityDto(id = ID.Def(input.id), name = input.name, appliesToMedia = appliedMedia)
             }
 
         }
@@ -30,7 +36,13 @@ interface Mapper<I, O> {
         class EntityDtoToCache : Mapper<MediaCategoryEntityDto, CategoryCache> {
             override fun map(input: MediaCategoryEntityDto): CategoryCache {
                 return CategoryCache(
-                    id = input.placeholder, name = input.placeholder, appliesToMedia = input.placeholder
+                    id = input.id.uniqueIdentifier(),
+                    name = input.name,
+                    appliesToMedia = when(input.appliesToMedia) {
+                        MediaTypeNew.All -> "All Media"
+                        MediaTypeNew.Movie -> "Movies"
+                        MediaTypeNew.TVShow -> "TV Shows"
+                    }
                 )
             }
 
@@ -38,21 +50,21 @@ interface Mapper<I, O> {
 
         class ApiDtoToDomain : Mapper<MediaCategoryApiDto, MediaCategory> {
             override fun map(input: MediaCategoryApiDto): MediaCategory {
-                return MediaCategory.D(name = input.name, appliesToType = input.appliesTo)
+                return MediaCategory.D(id = ID.Def(input.id), name = input.name, appliesToType = input.appliesTo)
             }
 
         }
 
         class EntityDtoToDomain : Mapper<MediaCategoryEntityDto, MediaCategory> {
             override fun map(input: MediaCategoryEntityDto): MediaCategory {
-                return MediaCategory.D(name = input.placeholder, appliesToType = MediaTypeNew.All)
+                return MediaCategory.D(id = input.id, name = input.name, appliesToType = input.appliesToMedia)
             }
 
         }
 
         class DomainToEntityDto : Mapper<MediaCategory, MediaCategoryEntityDto> {
             override fun map(input: MediaCategory): MediaCategoryEntityDto {
-                return MediaCategoryEntityDto(input.name())
+                return MediaCategoryEntityDto(id = input.identifier(), name = input.name(), appliesToMedia = input.typeAppliedTo())
             }
 
         }
@@ -65,13 +77,29 @@ interface Mapper<I, O> {
                     SingleMediaApiDto.TVShow(
                         id = input.id!!.toString(),
                         title = input.name ?: input.originalName!!,
-                        firstAirDate = input.firstAirDate
+                        firstAirDate = input.firstAirDate,
+                        backdropPath = input.backdropPath!!,
+                        posterPath = input.posterPath!!,
+                        popularity = input.popularity ?: 0.0,
+                        voteAverage = input.voteAverage ?: 0.0,
+                        adult = input.adult ?: false,
+                        overview = input.overview!!,
+                        genreIds = input.genreIds!!,
+                        voteCount = input.voteCount ?: 0,
                     )
                 } else {
                     SingleMediaApiDto.Movie(
                         id = input.id!!.toString(),
                         title = input.title ?: input.originalTitle!!,
-                        releaseDate = input.releaseDate!!
+                        releaseDate = input.releaseDate!!,
+                        backdropPath = input.backdropPath!!,
+                        posterPath = input.posterPath!!,
+                        popularity = input.popularity ?: 0.0,
+                        voteAverage = input.voteAverage ?: 0.0,
+                        adult = input.adult!!,
+                        overview = input.overview!!,
+                        genreIds = input.genreIds!!,
+                        voteCount = input.voteCount ?: 0,
                     )
                 }
             }
@@ -82,12 +110,30 @@ interface Mapper<I, O> {
                 return when (input) {
                     is SingleMediaApiDto.Movie -> SingleMediaItem.Movie(
                         id = ID.Def(input.id),
-                        title = Title(input.title)
+                        title = Title(input.title),
+                        backdropPath = input.backdropPath,
+                        posterPath = input.posterPath,
+                        categories = listOf(),
+                        popularity = input.popularity,
+                        voteAverage = input.voteAverage,
+                        adult = input.adult,
+                        overview = Overview(input.overview),
+                        voteCount = input.voteCount,
+                        releaseDate = input.releaseDate,
                     )
 
                     is SingleMediaApiDto.TVShow -> SingleMediaItem.TVShow(
                         id = ID.Def(input.id),
-                        title = Title(input.title)
+                        title = Title(input.title),
+                        backdropPath = input.backdropPath,
+                        posterPath = input.posterPath,
+                        categories = listOf(),
+                        popularity = input.popularity,
+                        voteAverage = input.voteAverage,
+                        adult = input.adult,
+                        overview = Overview(input.overview),
+                        voteCount = input.voteCount,
+                        firstAirDate = input.firstAirDate,
                     )
                 }
             }
@@ -98,7 +144,16 @@ interface Mapper<I, O> {
             override fun map(input: MovieCache): SingleMediaItem.Movie {
                 return SingleMediaItem.Movie(
                     id = ID.Def(input.id),
-                    title = Title(input.title)
+                    title = Title(input.title),
+                    backdropPath = input.backdrop_path,
+                    posterPath = input.poster_path,
+                    categories = input.genre_ids.map { MediaCategory.D(name = "$it") },
+                    popularity = input.popularity,
+                    voteAverage = input.vote_average,
+                    adult = input.adult,
+                    overview = Overview(input.overview),
+                    releaseDate = input.release_date.orEmpty(), // todo wrap in object to handle missing release date for unreleased media
+                    voteCount = input.vote_count,
                 )
             }
 
@@ -109,6 +164,15 @@ interface Mapper<I, O> {
                 return SingleMediaItem.TVShow(
                     id = ID.Def(input.id),
                     title = Title(input.name),
+                    backdropPath = input.backdropPath,
+                    posterPath = input.poster_path,
+                    categories = input.genre_ids.map { MediaCategory.D(name = "$it") }, // todo correct the mapping
+                    popularity = input.popularity,
+                    voteAverage = input.vote_average,
+                    adult = input.adult,
+                    overview = Overview(input.overview),
+                    firstAirDate = input.first_air_date,
+                    voteCount = input.vote_count,
                 )
             }
 
@@ -118,16 +182,16 @@ interface Mapper<I, O> {
             override fun map(input: SingleMediaItem.Movie): MovieCache {
                 return MovieCache(
                     id = input.id.uniqueIdentifier(),
-                    adult = false,
-                    backdrop_path = "",
-                    genre_ids = listOf(),
-                    overview = "",
-                    popularity = 0.0,
-                    poster_path = "",
-                    release_date = null,
+                    adult = input.adult,
+                    backdrop_path = input.backdropPath,
+                    genre_ids = input.categories.map { it.identifier().uniqueIdentifier().toInt() },
+                    overview = input.overview.toString(),
+                    popularity = input.popularity,
+                    poster_path = input.posterPath,
+                    release_date = input.releaseDate,
                     title = input.title.value,
-                    vote_average = 0.0,
-                    vote_count = 0
+                    vote_average = input.voteAverage,
+                    vote_count = input.voteCount,
                 )
             }
 
@@ -137,16 +201,16 @@ interface Mapper<I, O> {
             override fun map(input: SingleMediaItem.TVShow): TVShowCache {
                 return TVShowCache(
                     id = input.id.uniqueIdentifier(),
+                    adult = input.adult,
+                    backdropPath = input.backdropPath,
+                    genre_ids = input.categories.map { it.identifier().uniqueIdentifier().toInt() },
+                    overview = input.overview.toString(),
+                    popularity = input.popularity,
+                    poster_path = input.posterPath,
+                    first_air_date = input.firstAirDate,
                     name = input.title.value,
-                    backdropPath = "",
-                    genre_ids = listOf(),
-                    overview = "",
-                    popularity = 0.0,
-                    poster_path = "",
-                    vote_average = 0.0,
-                    vote_count = 0,
-                    first_air_date = "",
-                    adult = false
+                    vote_average = input.voteAverage,
+                    vote_count = input.voteCount,
                 )
             }
 

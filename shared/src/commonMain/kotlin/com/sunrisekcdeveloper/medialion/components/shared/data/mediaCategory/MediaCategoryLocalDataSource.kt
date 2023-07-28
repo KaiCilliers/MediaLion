@@ -36,14 +36,14 @@ interface MediaCategoryLocalDataSource {
     class Fake : MediaCategoryLocalDataSource {
 
         private val categoriesSource: Flow<MediaCategoryEntityDto> = infiniteFlowOf {
-            MediaCategoryEntityDto(it.toString())
+            MediaCategoryEntityDto("it")
         }
 
         private val categoriesAdded: MutableList<MediaCategoryEntityDto> = mutableListOf(
-            MediaCategoryEntityDto(1.toString()),
-            MediaCategoryEntityDto(1.toString()),
-            MediaCategoryEntityDto(2.toString()),
-            MediaCategoryEntityDto(2.toString()),
+            MediaCategoryEntityDto("1"),
+            MediaCategoryEntityDto("1"),
+            MediaCategoryEntityDto("2"),
+            MediaCategoryEntityDto("2"),
         )
 
         var clearCache by Delegates.observable(false)  { _, _, clearIt ->
