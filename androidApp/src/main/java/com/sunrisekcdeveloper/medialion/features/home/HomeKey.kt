@@ -30,9 +30,9 @@ data class HomeKey(
 
 @Parcelize
 data class GlobalRouter(
-    val infoRouter: @RawValue RootScreen.InfoRouter,
-    val mediaPreviewRouter: @RawValue RootScreen.MediaPreviewRouter,
-    val quickCollectionRouter: @RawValue RootScreen.QuickCollectionsRouter,
-    val fullCollectionRouter: @RawValue RootScreen.FullCollectionsRouter,
-    val categoryDialogRouter: @RawValue RootScreen.CategoriesDialogRouter,
+    val infoRouter: RootScreen.InfoRouter,
+    val mediaPreviewRouter: RootScreen.MediaPreviewRouter,
+    val quickCollectionRouter: RootScreen.QuickCollectionsRouter,
+    val fullCollectionRouter: RootScreen.FullCollectionsRouter,
+    val categoryDialogRouter: RootScreen.CategoriesDialogRouter,
 ) : Parcelable

@@ -1,6 +1,7 @@
 package com.sunrisekcdeveloper.medialion.features.root
 
 import android.annotation.SuppressLint
+import android.os.Parcel
 import android.os.Parcelable
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Box
@@ -15,6 +16,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -36,7 +38,6 @@ import com.sunrisekcdeveloper.medialion.features.shared.MLDetailPreviewSheet
 import com.sunrisekcdeveloper.medialion.features.shared.MLQuickCollectionsDialog
 import com.sunrisekcdeveloper.medialion.features.shared.UpdateCollection
 import com.sunrisekcdeveloper.medialion.oldArch.MediaItemUI
-import com.sunrisekcdeveloper.medialion.utils.debug
 import com.sunrisekcdeveloper.medialion.utils.rememberService
 import com.zhuinden.simplestack.History
 import com.zhuinden.simplestackcomposeintegration.core.ComposeNavigator
@@ -48,40 +49,34 @@ import java.util.UUID
 
 @OptIn(ExperimentalMaterialApi::class)
 class RootScreen private constructor() {
-    interface InfoRouter {
+    interface InfoRouter : Parcelable {
         fun show()
     }
 
-    interface MediaPreviewRouter {
+    interface MediaPreviewRouter : Parcelable {
         fun show(media: MediaItemUI)
     }
 
-    interface QuickCollectionsRouter {
+    interface QuickCollectionsRouter : Parcelable {
         fun show(media: SingleMediaItem)
     }
 
-    interface FullCollectionsRouter {
+    interface FullCollectionsRouter : Parcelable {
         fun show(collection: CollectionNew)
     }
 
-    interface CategoriesDialogRouter {
+    interface CategoriesDialogRouter : Parcelable {
         fun showWithResult(onResult: (MediaCategory) -> Unit)
     }
 
-    sealed interface MediaContent : Parcelable {
-        @Parcelize
+    sealed interface MediaContent{
         data object NoContent : MediaContent
-
-        @Parcelize
-        data class PreviewMedia(val id: String = UUID.randomUUID().toString(), val media: @RawValue MediaItemUI) : Parcelable, MediaContent
+        data class PreviewMedia(val id: String = UUID.randomUUID().toString(), val media: MediaItemUI) : MediaContent
     }
 
-    sealed interface CollectionContent : Parcelable {
-        @Parcelize
+    sealed interface CollectionContent{
         data object NoContent : CollectionContent
-
-        @Parcelize
-        data class Content(val id: String = UUID.randomUUID().toString(), val collection: @RawValue CollectionNew) : Parcelable, CollectionContent
+        data class Content(val id: String = UUID.randomUUID().toString(), val collection: CollectionNew) : CollectionContent
     }
 
     companion object {
@@ -103,11 +98,11 @@ class RootScreen private constructor() {
 
             var showMiniCollectionsDialog by rememberSaveable { mutableStateOf(false) }
 
-            var showMediaDetailSheet: MediaContent by rememberSaveable { mutableStateOf(MediaContent.NoContent) }
+            var showMediaDetailSheet: MediaContent by remember { mutableStateOf(MediaContent.NoContent) }
 
-            var quickCollectionDialog: MediaContent by rememberSaveable { mutableStateOf(MediaContent.NoContent) }
+            var quickCollectionDialog: MediaContent by remember { mutableStateOf(MediaContent.NoContent) }
 
-            var showFullCollectionsSheet: CollectionContent by rememberSaveable { mutableStateOf(CollectionContent.NoContent) }
+            var showFullCollectionsSheet: CollectionContent by remember { mutableStateOf(CollectionContent.NoContent) }
 
             var showCategoriesDialog by rememberSaveable { mutableStateOf(false) }
             var categoriesDialogResult: CategorySelection by rememberSaveable { mutableStateOf(CategorySelection()) }
@@ -127,35 +122,83 @@ class RootScreen private constructor() {
             )
 
             val categoriesRouter = object : CategoriesDialogRouter {
+                val id: String = this::class.java.simpleName
+
                 override fun showWithResult(onResult: (MediaCategory) -> Unit) {
                     showCategoriesDialog = true
                     categoriesDialogResult = CategorySelection(onResult)
                 }
+
+                override fun describeContents(): Int {
+                    return 0
+                }
+
+                override fun writeToParcel(dest: Parcel, flags: Int) {
+                    dest.writeString(id)
+                }
             }
 
             val infoRouter = object : InfoRouter {
+                val id: String = this::class.java.simpleName
+
                 override fun show() {
-                    println("deadpool - showing dialog ($showInfoDialog) to true")
                     showInfoDialog = true
-                    println("deadpool - new dialog value is ($showInfoDialog)")
+                }
+
+                override fun describeContents(): Int {
+                    return 0
+                }
+
+                override fun writeToParcel(dest: Parcel, flags: Int) {
+                    dest.writeString(id)
                 }
             }
             val mediaPreviewRouter = object : MediaPreviewRouter {
+                val id: String = this::class.java.simpleName
+
                 override fun show(media: MediaItemUI) {
                     showMediaDetailSheet = MediaContent.PreviewMedia(media = media)
+                }
+
+                override fun describeContents(): Int {
+                    return 0
+                }
+
+                override fun writeToParcel(dest: Parcel, flags: Int) {
+                    dest.writeString(id)
                 }
             }
 
             val fullCollectionRouter = object : FullCollectionsRouter {
+                val id: String = this::class.java.simpleName
+
                 override fun show(collection: CollectionNew) {
                     showFullCollectionsSheet = CollectionContent.Content(collection = collection)
+                }
+
+                override fun describeContents(): Int {
+                    return 0
+                }
+
+                override fun writeToParcel(dest: Parcel, flags: Int) {
+                    dest.writeString(id)
                 }
             }
 
             val miniCollectionRouter = object : QuickCollectionsRouter {
+                val id: String = this::class.java.simpleName
+
                 override fun show(media: SingleMediaItem) {
                     quickCollectionDialog = MediaContent.PreviewMedia(media = MediaItemUI.from(media))
                     showMiniCollectionsDialog = true
+                }
+
+                override fun describeContents(): Int {
+                    return 0
+                }
+
+                override fun writeToParcel(dest: Parcel, flags: Int) {
+                    dest.writeString(id)
                 }
             }
 
