@@ -1,10 +1,10 @@
 package com.sunrisekcdeveloper.medialion.components.discovery.domain.repo
 
-import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.DiscoveryPage
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaCategory
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaRequirements
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaTypeNew
+import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
 
 interface MediaRequirementsRepository {
     suspend fun getForPage(page: DiscoveryPage): List<MediaRequirements>
@@ -35,11 +35,11 @@ interface MediaRequirementsRepository {
 
         private suspend fun moviePageRequirements(): List<MediaRequirements> {
             val categories: List<MediaCategory> = mediaCategoryRepository.getRandomOrAll(amount = 6, mediaType = MediaTypeNew.Movie)
-            return categories.map {
+            return categories.map { mediaCategory ->
                 MediaRequirements(
-                    withTitle = Title(value = it.name()),
-                    withMediaType = MediaTypeNew.All,
-                    withCategories = listOf(it),
+                    withTitle = Title(value = mediaCategory.name()),
+                    withMediaType = MediaTypeNew.Movie,
+                    withCategories = listOf(mediaCategory),
                     withText = ""
                 )
             }
@@ -50,7 +50,7 @@ interface MediaRequirementsRepository {
             return categories.map {
                 MediaRequirements(
                     withTitle = Title(value = it.name()),
-                    withMediaType = MediaTypeNew.All,
+                    withMediaType = MediaTypeNew.TVShow,
                     withCategories = listOf(it),
                     withText = ""
                 )

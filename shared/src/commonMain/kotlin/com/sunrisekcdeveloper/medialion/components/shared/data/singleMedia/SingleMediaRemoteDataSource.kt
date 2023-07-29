@@ -17,7 +17,6 @@ interface SingleMediaRemoteDataSource {
             } else {
                 mediaApiClient.discover(requirements)
             }
-
             emitAll(mediaFlow)
         }
     }

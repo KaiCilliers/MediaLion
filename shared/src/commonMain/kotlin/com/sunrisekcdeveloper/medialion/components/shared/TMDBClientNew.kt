@@ -11,6 +11,7 @@ import com.sunrisekcdeveloper.medialion.network.models.GenreResponse
 import com.sunrisekcdeveloper.medialion.network.models.GenreWrapper
 import com.sunrisekcdeveloper.medialion.network.models.MediaResponse
 import com.sunrisekcdeveloper.medialion.network.models.PagedMediaResponse
+import com.sunrisekcdeveloper.medialion.utils.debug
 import com.sunrisekcdeveloper.medialion.utils.mappers.Mapper
 import com.sunrisekcdeveloper.medialion.utils.standardParameters
 import io.github.aakira.napier.Napier
@@ -23,6 +24,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.take
 
 class TMDBClientNew(
     private val httpClient: HttpClient,
@@ -38,40 +40,28 @@ class TMDBClientNew(
 
             val allGenres: MutableList<MediaCategoryApiDto> = mutableListOf<MediaCategoryApiDto>().apply {
 
-                var movieGenreResponse = movieGenresRequest.await()
-                var tvShowGenreResponse = tvShowGenresRequest.await()
+                val movieGenreResponse = movieGenresRequest.await()
+                val tvShowGenreResponse = tvShowGenresRequest.await()
 
                 val commonGenres = movieGenreResponse.filter { tvShowGenreResponse.contains(it) }
-                movieGenreResponse = movieGenreResponse.filterNot { commonGenres.contains(it) }
-                tvShowGenreResponse = tvShowGenreResponse.filterNot { commonGenres.contains(it) }
+
+                val movieGenreResponseFiltered = movieGenreResponse.filterNot { commonGenres.contains(it) }
+                val tvShowGenreResponseFiltered = tvShowGenreResponse.filterNot { commonGenres.contains(it) }
 
                 commonGenres
                     .map { genre -> mapToDto(genre, MediaTypeNew.All) }
                     .also { addAll(it) }
 
-                movieGenreResponse
+                movieGenreResponseFiltered
                     .map { response -> mapToDto(response, MediaTypeNew.Movie) }
                     .also { addAll(it) }
 
-                tvShowGenreResponse
+                tvShowGenreResponseFiltered
                     .map { response -> mapToDto(response, MediaTypeNew.TVShow) }
                     .also { addAll(it) }
 
                 sortBy { it.name }
             }
-
-
-            tvShowGenresRequest
-                .await()
-                .map { response -> mapToDto(response, MediaTypeNew.TVShow) }
-                .forEach { mediaCategoryApiDto ->
-                    val matchingGenreIndex = allGenres.indexOfFirst { mediaCategoryApiDto == it }
-                    if (matchingGenreIndex >= 0) {
-                        val matchingGenre = allGenres[matchingGenreIndex]
-                        allGenres[matchingGenreIndex] = matchingGenre.copy(appliesTo = MediaTypeNew.All)
-                    } else allGenres.add(mediaCategoryApiDto)
-                }
-
             allGenres
         }
     }
@@ -114,15 +104,21 @@ class TMDBClientNew(
     override fun discover(requirements: MediaRequirements): Flow<SingleMediaApiDto> = flow {
         when(requirements.withMediaType) {
             MediaTypeNew.All -> {
-                val movieDiscoveryFlow = discoverEndpoint(MediaTypeNew.Movie, requirements)
-                val tvShowDiscoveryFlow = discoverEndpoint(MediaTypeNew.TVShow, requirements)
+                val movieDiscoveryFlow = discoverEndpoint(MediaTypeNew.Movie, requirements).take(requirements.amountOfMedia)
+                val tvShowDiscoveryFlow = discoverEndpoint(MediaTypeNew.TVShow, requirements).take(requirements.amountOfMedia)
                 emitAll(merge(movieDiscoveryFlow, tvShowDiscoveryFlow))
             }
             MediaTypeNew.Movie -> {
-                emitAll(discoverEndpoint(MediaTypeNew.Movie, requirements))
+                emitAll(
+                    discoverEndpoint(MediaTypeNew.Movie, requirements)
+                        .take(requirements.amountOfMedia)
+                )
             }
             MediaTypeNew.TVShow -> {
-                discoverEndpoint(MediaTypeNew.TVShow, requirements)
+                emitAll(
+                    discoverEndpoint(MediaTypeNew.TVShow, requirements)
+                        .take(requirements.amountOfMedia)
+                )
             }
         }
     }
@@ -143,6 +139,8 @@ class TMDBClientNew(
                 url {
                     parameters.standardParameters()
                     parameters.append("page", "${page++}")
+                    val genreIds = requirements.withCategories.map { it.identifier().uniqueIdentifier().toInt() }
+                    parameters.append("with_genres", genreIds.joinToString(separator = ","))
                 }
             }.body<PagedMediaResponse>()
 
@@ -155,7 +153,7 @@ class TMDBClientNew(
                         null
                     }
                 }
-                .forEach { singleMediaNetworkDto ->  emit(singleMediaNetworkDto) }
+                .forEach { singleMediaNetworkDto -> emit(singleMediaNetworkDto) }
 
         } while (page <= totalPages)
     }

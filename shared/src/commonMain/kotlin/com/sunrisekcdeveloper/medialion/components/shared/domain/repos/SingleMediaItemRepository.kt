@@ -14,7 +14,6 @@ import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
@@ -57,7 +56,7 @@ interface SingleMediaItemRepository {
             localDataSource.upsert(item)
         }.onFailure {
             // ignore failure, just log
-            println(Exception("Failed in saving media item to local storage --> $item", it))
+            Exception("Failed in saving media item to local storage --> ${item.identifier()}", it).printStackTrace()
         }
 
     }

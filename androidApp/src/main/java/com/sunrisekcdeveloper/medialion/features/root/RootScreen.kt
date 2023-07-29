@@ -142,14 +142,12 @@ class RootScreen private constructor() {
             }
             val mediaPreviewRouter = object : MediaPreviewRouter {
                 override fun show(media: MediaItemUI) {
-                    debug { "clicked with $media" }
                     showMediaDetailSheet = MediaContent.PreviewMedia(media = media)
                 }
             }
 
             val fullCollectionRouter = object : FullCollectionsRouter {
                 override fun show(collection: CollectionNew) {
-                    debug { "got collection $collection" }
                     showFullCollectionsSheet = CollectionContent.Content(collection = collection)
                 }
             }

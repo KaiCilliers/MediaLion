@@ -1,12 +1,12 @@
 package com.sunrisekcdeveloper.medialion.components.discovery.domain.repo
 
-import com.sunrisekcdeveloper.medialion.utils.mappers.Mapper
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaCategory
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaTypeNew
 import com.sunrisekcdeveloper.medialion.components.shared.data.mediaCategory.MediaCategoryApiDto
 import com.sunrisekcdeveloper.medialion.components.shared.data.mediaCategory.MediaCategoryEntityDto
 import com.sunrisekcdeveloper.medialion.components.shared.data.mediaCategory.MediaCategoryLocalDataSource
 import com.sunrisekcdeveloper.medialion.components.shared.data.mediaCategory.MediaCategoryRemoteDataSource
+import com.sunrisekcdeveloper.medialion.utils.mappers.Mapper
 
 interface MediaCategoryRepository {
     suspend fun all(): List<MediaCategory>
@@ -36,6 +36,7 @@ interface MediaCategoryRepository {
         override suspend fun getRandomOrAll(amount: Int, mediaType: MediaTypeNew): List<MediaCategory> = runCatching {
             all()
                 .filter { it.appliesToType(mediaType) }
+                .shuffled()
                 .take(amount)
         }.getOrElse { throw Exception("Failed to retrieve a random amount of media categories [amount=$amount, mediaType=$mediaType]", it) }
     }

@@ -19,9 +19,9 @@ interface MediaRequirementsFactory {
 
         override fun fromCategory(category: MediaCategory): MediaRequirements {
             return MediaRequirements(
-                withTitle = Title(value = ""),
+                withTitle = Title(value = category.name()),
                 withMediaType = category.typeAppliedTo(),
-                withCategories = listOf(),
+                withCategories = listOf(category),
                 withText = ""
             )
         }

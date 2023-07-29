@@ -1,8 +1,8 @@
 package com.sunrisekcdeveloper.medialion.components.shared.data.mediaCategory
 
+import com.sunrisekcdeveloper.medialion.components.shared.utils.infiniteFlowOf
 import com.sunrisekcdeveloper.medialion.database.MediaLionDatabase
 import com.sunrisekcdeveloper.medialion.utils.mappers.Mapper
-import com.sunrisekcdeveloper.medialion.components.shared.utils.infiniteFlowOf
 import database.CategoryCache
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.take

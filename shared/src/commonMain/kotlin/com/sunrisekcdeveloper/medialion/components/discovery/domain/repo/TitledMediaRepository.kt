@@ -6,6 +6,7 @@ import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.Media
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.MediaWithTitle
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem
 import com.sunrisekcdeveloper.medialion.components.shared.domain.repos.SingleMediaItemRepository
+import com.sunrisekcdeveloper.medialion.utils.debug
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.filterNot
@@ -22,6 +23,11 @@ interface TitledMediaRepository {
     ) : TitledMediaRepository {
         override suspend fun withRequirement(mediaReq: MediaRequirements): MediaWithTitle = runCatching {
             val media = singleMediaItemRepository.media(mediaReq)
+            println("wolverine with category ${mediaReq.withCategories.map { it.name() }} ==== ${media.map { when(it) {
+                is SingleMediaItem.Movie -> it.title
+                is SingleMediaItem.TVShow -> it.title
+            }
+            }}")
             MediaWithTitle.Def(mediaReq.withTitle, media)
         }.getOrElse { throw Exception("Failed to create ${MediaWithTitle.Def::class.getFullName()}", it) }
     }

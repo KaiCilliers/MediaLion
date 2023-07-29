@@ -86,8 +86,6 @@ fun DiscoveryScreenContent(
                 onInfoIconClicked = { showInfoDialog() }
             )
 
-            debug { "got state $discoveryState" }
-
             MLFilterCategories(
                 selectedFilter = when (discoveryState.tabSelection) {
                     DiscoveryScreenTabSelection.All -> FilterCategory.All
@@ -153,7 +151,7 @@ fun DiscoveryScreenContent(
                     }
                 }
 
-                is DiscoveryUIState.Error -> TODO()
+                is DiscoveryUIState.Error -> debug { "$discoveryState" }
                 is DiscoveryUIState.Loading -> MLProgress()
             }
 

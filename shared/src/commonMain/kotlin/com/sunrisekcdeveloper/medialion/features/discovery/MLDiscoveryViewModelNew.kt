@@ -7,6 +7,7 @@ import com.sunrisekcdeveloper.medialion.components.discovery.domain.FetchMediaWi
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.DiscoveryPage
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaCategory
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.TitledMediaList
+import com.sunrisekcdeveloper.medialion.utils.debug
 import com.sunrisekcdeveloper.medialion.utils.flow.CStateFlow
 import com.sunrisekcdeveloper.medialion.utils.flow.cStateFlow
 import kotlinx.coroutines.CoroutineScope
@@ -32,7 +33,6 @@ interface MLDiscoveryViewModelNew {
             get() = _state.cStateFlow()
 
         override fun submit(action: DiscoveryNewActions) {
-            println("Processing $action")
             when (action) {
                 is FetchMediaForCategory -> viewModelScope.launch {
                     val selectedTab = DiscoveryScreenTabSelection.Categories
