@@ -18,14 +18,22 @@ interface FetchDiscoveryContentUseCase {
         private val mediaRequirementsRepo: MediaRequirementsRepository,
         private val titledMediaRepo: TitledMediaRepository
     ) : FetchDiscoveryContentUseCase {
+
+        private val pageCache: MutableMap<DiscoveryPage, TitledMediaList> = mutableMapOf()
+
         override suspend fun invoke(page: DiscoveryPage): Result<TitledMediaList, FetchDiscoveryContentError> {
             return runCatching {
-                val requirements: List<MediaRequirements> = mediaRequirementsRepo.getForPage(page)
-                val allMedia: List<MediaWithTitle> = requirements.map {
-                    val titledMedia: MediaWithTitle = titledMediaRepo.withRequirement(it)
-                    titledMedia
-                }
-                TitledMediaList.Def(allMedia)
+                val cachedPage = pageCache[page]
+               if (cachedPage != null) {
+                   cachedPage
+               } else {
+                   val requirements: List<MediaRequirements> = mediaRequirementsRepo.getForPage(page)
+                   val allMedia: List<MediaWithTitle> = requirements.map {
+                       val titledMedia: MediaWithTitle = titledMediaRepo.withRequirement(it)
+                       titledMedia
+                   }
+                   TitledMediaList.Def(allMedia).also { pageCache[page] = it }
+               }
             }.mapError { FailureToFetchDiscContent }
         }
     }

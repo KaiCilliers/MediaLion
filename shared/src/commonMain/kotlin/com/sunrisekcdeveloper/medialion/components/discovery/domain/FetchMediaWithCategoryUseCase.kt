@@ -17,10 +17,21 @@ interface FetchMediaWithCategoryUseCase {
         private val titledMediaRepo: TitledMediaRepository,
         private val mediaRequirementsFactory: MediaRequirementsFactory,
     ) : FetchMediaWithCategoryUseCase {
+
+        // todo cache this in local storage and only fetch again when x hours have passed
+        private val categoryCache: MutableMap<MediaCategory, MediaWithTitle> = mutableMapOf()
+
         override suspend fun invoke(category: MediaCategory): Result<MediaWithTitle, FetchMediaWithCategoryError> {
             return runCatching {
-                val mediaRequirements = mediaRequirementsFactory.fromCategory(category)
-                titledMediaRepo.withRequirement(mediaRequirements)
+                val cachedCategory = categoryCache[category]
+                if (cachedCategory != null) {
+                    cachedCategory
+                } else {
+                    val mediaRequirements = mediaRequirementsFactory.fromCategory(category)
+                    titledMediaRepo
+                        .withRequirement(mediaRequirements)
+                        .also { categoryCache[category] = it }
+                }
             }
                 .mapError { FetchMediaWithCategoryFailure }
         }
