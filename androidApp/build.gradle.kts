@@ -13,7 +13,7 @@ android {
         applicationId = "com.sunrisekcdeveloper.medialion.android"
         minSdk = 28
         targetSdk = 33
-        versionCode = 10
+        versionCode = 20
         versionName = "0.2.0"
     }
 
