@@ -14,6 +14,10 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
@@ -36,9 +40,15 @@ fun MLSearchBar(
         keyboardType = KeyboardType.Text
     ),
 ) {
+
+    var currentSearchQuery: String by rememberSaveable {
+        mutableStateOf("")
+    }
+
     TextField(
-        value = searchQuery.toString(),
+        value = currentSearchQuery,
         onValueChange = { searchText ->
+            currentSearchQuery = searchText
             searchQuery.update(searchText)
             onSearchQueryTextChange(searchQuery)
         },
@@ -78,6 +88,7 @@ fun MLSearchBar(
                         .padding(15.dp)
                         .size(28.dp)
                         .clickable {
+                            currentSearchQuery = ""
                             searchQuery.clear()
                             onSearchQueryTextChange(searchQuery)
                         })

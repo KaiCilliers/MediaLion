@@ -17,6 +17,8 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInteropFilter
@@ -84,6 +86,11 @@ private fun SearchScreenContent(
     updateFavorites: (CollectionNew) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+
+    val currentSearchQuery: String by rememberSaveable {
+        mutableStateOf("")
+    }
+
     Column(
         modifier
             .background(MaterialTheme.colors.background)
@@ -173,7 +180,7 @@ private fun SearchScreenContent(
 @OptIn(ExperimentalComposeUiApi::class)
 @Preview
 @Composable
-fun SearchScreenContentPreview() {
+private fun SearchScreenContentPreview() {
     MediaLionTheme {
 
         val searchState = SearchUIState.TopSuggestions(
