@@ -105,7 +105,7 @@ class RootScreen private constructor() {
             var showFullCollectionsSheet: CollectionContent by remember { mutableStateOf(CollectionContent.NoContent) }
 
             var showCategoriesDialog by rememberSaveable { mutableStateOf(false) }
-            var categoriesDialogResult: CategorySelection by rememberSaveable { mutableStateOf(CategorySelection()) }
+            var categoriesDialogResult: CategorySelection by remember { mutableStateOf(CategorySelection()) }
 
             val mediaPreviewSheet = rememberModalBottomSheetState(
                 initialValue = ModalBottomSheetValue.Hidden,
