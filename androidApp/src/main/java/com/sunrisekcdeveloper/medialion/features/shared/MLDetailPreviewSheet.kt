@@ -174,10 +174,9 @@ private fun DetailPreviewScreenPreview() {
                 mediaItem = MediaItemUI(
                     id = "partiendo",
                     title = "This is a two line movie title",
-                    isFavorited = false,
                     posterUrl = "https://image.tmdb.org/t/p/original/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg",
                     bannerUrl = "https://duckduckgo.com/?q=cum",
-                    genreIds = listOf(),
+                    categories = listOf(),
                     overview = "ad lakda lkdjakld jaldj asklç djlajdçasjdlkasjdla dlaj kldalkdalkdajdla jsdlkajsld aj",
                     popularity = 4.5,
                     voteAverage = 6.7,

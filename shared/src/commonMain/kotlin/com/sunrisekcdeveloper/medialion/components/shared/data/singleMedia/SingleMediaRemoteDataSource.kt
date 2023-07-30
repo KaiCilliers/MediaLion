@@ -3,6 +3,7 @@ package com.sunrisekcdeveloper.medialion.components.shared.data.singleMedia
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaRequirements
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.flow
 
 interface SingleMediaRemoteDataSource {
@@ -12,10 +13,12 @@ interface SingleMediaRemoteDataSource {
         private val mediaApiClient: MediaRemoteClient,
     ) : SingleMediaRemoteDataSource {
         override fun mediaFlow(requirements: MediaRequirements): Flow<SingleMediaApiDto> = flow {
+            val excludedMediaIds = requirements.withoutMedia.map { it.uniqueIdentifier() }
             val mediaFlow = if (requirements.withText.trim().isNotEmpty()) {
                 mediaApiClient.search(requirements)
             } else {
                 mediaApiClient.discover(requirements)
+                    .filterNot { item -> excludedMediaIds.contains(item.id) }
             }
             emitAll(mediaFlow)
         }

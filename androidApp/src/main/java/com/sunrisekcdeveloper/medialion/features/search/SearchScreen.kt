@@ -147,7 +147,9 @@ private fun SearchScreenContent(
             is SearchUIState.TopSuggestions -> {
                 TopSuggestions(
                     rowTitle = stringResource(id = StringRes.topSuggestions.resourceId),
-                    media = searchState.media.map { MediaItemUI.from(it) },
+                    mediaWithFavorites = searchState.media.map { mediaItemWithFavorite ->
+                        Pair(MediaItemUI.from(mediaItemWithFavorite.mediaItem), mediaItemWithFavorite.favorited)
+                    },
                     onMediaClicked = { mediaItem -> openMediaPreviewSheet(mediaItem) },
                     onFavoriteToggle = { mediaItem: MediaItemUI, favorited: Boolean ->
                         val collections = miniCollectionState
@@ -177,7 +179,7 @@ fun SearchScreenContentPreview() {
         val searchState = SearchUIState.TopSuggestions(
             media = listOf()
         )
-        val miniCollectionState = Content(ID.Def("ada"),listOf(CollectionNew.Def("Favorites")))
+        val miniCollectionState = Content(ID.Def("ada"), listOf(CollectionNew.Def("Favorites")))
         val keyboardController = LocalSoftwareKeyboardController.current
 
         Surface(modifier = Modifier.fillMaxSize()) {

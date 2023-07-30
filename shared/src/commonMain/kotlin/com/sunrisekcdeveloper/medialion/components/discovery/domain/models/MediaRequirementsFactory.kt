@@ -31,7 +31,7 @@ interface MediaRequirementsFactory {
                 withTitle = Title(value = "Suggested Media"),
                 withMediaType = MediaTypeNew.All,
                 withCategories = listOf(),
-                withText = ""
+                withText = "",
             )
         }
     }

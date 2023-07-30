@@ -81,10 +81,9 @@ private fun MLTitledMediaGridPreview() {
                 media = (1..20).map { MediaItemUI(
                     id = "9201",
                     title = "luptatum",
-                    isFavorited = false,
                     posterUrl = "http://www.bing.com/search?q=nonumes",
                     bannerUrl = "https://duckduckgo.com/?q=donec",
-                    genreIds = listOf(),
+                    categories = listOf(),
                     overview = "maximus",
                     popularity = 28.29,
                     voteAverage = 30.31,
@@ -99,10 +98,9 @@ private fun MLTitledMediaGridPreview() {
                             MediaItemUI(
                                 id = "7969",
                                 title = "errem",
-                                isFavorited = false,
                                 posterUrl = "https://duckduckgo.com/?q=per",
                                 bannerUrl = "http://www.bing.com/search?q=viderer",
-                                genreIds = listOf(),
+                                categories = listOf(),
                                 overview = "oratio",
                                 popularity = 36.37,
                                 voteAverage = 38.39,

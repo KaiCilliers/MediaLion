@@ -32,6 +32,7 @@ import com.sunrisekcdeveloper.medialion.oldArch.domain.MediaType
 @Composable
 fun MLMediaFavoriteListItem(
     mediaItem: MediaItemUI,
+    isFavorited: Boolean,
     onFavoriteClick: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -62,13 +63,13 @@ fun MLMediaFavoriteListItem(
         )
 
         Image(
-            painter = painterResource(id = if (mediaItem.isFavorited) R.drawable.heart_filled_icon else R.drawable.heart_outline_icon),
+            painter = painterResource(id = if (isFavorited) R.drawable.heart_filled_icon else R.drawable.heart_outline_icon),
             contentDescription = "",
             modifier = modifier
                 .padding(start = 8.dp)
                 .size(24.dp)
                 .clickable {
-                    if (mediaItem.isFavorited) {
+                    if (isFavorited) {
                         onFavoriteClick(false)
                     } else {
                         onFavoriteClick(true)
@@ -82,31 +83,27 @@ fun MLMediaFavoriteListItem(
 @Composable
 private fun MLMediaFavoriteListItemPreview() {
     MediaLionTheme {
-        var mediaItem: MediaItemUI by remember {
-            mutableStateOf(
-                MediaItemUI(
-                    id = "asdad",
-                    title = "",
-                    isFavorited = false,
-                    posterUrl = "",
-                    bannerUrl = "",
-                    genreIds = listOf(),
-                    overview = "",
-                    popularity = 0.0,
-                    voteAverage = 0.0,
-                    voteCount = 0,
-                    releaseYear = "",
-                    mediaType = MediaType.MOVIE
-                )
-            )
-        }
+        val mediaItem = MediaItemUI(
+            id = "asdad",
+            title = "",
+            posterUrl = "",
+            bannerUrl = "",
+            categories = listOf(),
+            overview = "",
+            popularity = 0.0,
+            voteAverage = 0.0,
+            voteCount = 0,
+            releaseYear = "",
+            mediaType = MediaType.MOVIE
+        )
+
+        var isFavorited by remember { mutableStateOf(true) }
 
         Surface(modifier = Modifier.fillMaxSize()) {
             MLMediaFavoriteListItem(
                 mediaItem = mediaItem,
-                onFavoriteClick = {
-                    mediaItem = mediaItem.copy(isFavorited = it)
-                },
+                onFavoriteClick = { isFavorited = it },
+                isFavorited = isFavorited
             )
         }
     }

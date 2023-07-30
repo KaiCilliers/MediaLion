@@ -9,17 +9,24 @@ import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.Media
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.repo.TitledMediaRepository
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.MediaWithTitle
 import com.sunrisekcdeveloper.medialion.components.shared.domain.repos.CollectionRepositoryNew
+import com.sunrisekcdeveloper.medialion.features.search.MediaWithFavorites
 import io.github.aakira.napier.Napier
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 interface FetchSuggestedMediaUseCase {
+    @Deprecated("implementation has been replaced by asFlow - either update this implementation of delete")
     suspend operator fun invoke(): Result<MediaWithTitle, FetchSuggestedMediaError>
+    fun asFlow(): Flow<Result<List<MediaWithFavorites>, FetchSuggestedMediaError>>
 
     class Def(
         private val mediaRequirementsFactory: MediaRequirementsFactory,
         private val titledMediaRepository: TitledMediaRepository,
         private val collectionRepository: CollectionRepositoryNew,
     ) : FetchSuggestedMediaUseCase {
-
+        @Deprecated("implementation has been replaced by asFlow - either update this implementation of delete")
         override suspend fun invoke(): Result<MediaWithTitle, FetchSuggestedMediaError> {
             return runCatching {
                 val requirements = mediaRequirementsFactory.suggestedMediaRequirements()
@@ -37,11 +44,43 @@ interface FetchSuggestedMediaUseCase {
                     FailedToFetchFeatureMedia
                 }
         }
+
+        override fun asFlow(): Flow<Result<List<MediaWithFavorites>, FetchSuggestedMediaError>> = flow {
+            val requirements = mediaRequirementsFactory.suggestedMediaRequirements()
+            val allCollections = collectionRepository.all()
+            val excludedIds = runCatching {
+                allCollections
+                    .flatMap { singleCollection -> singleCollection.media() }
+                    .map { it.identifier() }
+            }.getOr(emptyList())
+            val titledMedia = titledMediaRepository.withRequirement(requirements.copy(withoutMedia = excludedIds))
+
+            emitAll(
+                collectionRepository
+                    .observe()
+                    .map { collections -> collections.find { it.title().value == "Favorites" } }
+                    .map { collection ->
+                        Ok(
+                            titledMedia.media().map { item ->
+                                MediaWithFavorites(
+                                    mediaItem = item,
+                                    favorited = collection?.media()?.contains(item) ?: false
+                                )
+                            }
+                        )
+                    }
+            )
+        }
     }
 
     class Fake : FetchSuggestedMediaUseCase {
+        @Deprecated("implementation has been replaced by asFlow - either update this implementation of delete")
         override suspend fun invoke(): Result<MediaWithTitle, FetchSuggestedMediaError> {
             return Ok(MediaWithTitle.Def("a"))
+        }
+
+        override fun asFlow(): Flow<Result<List<MediaWithFavorites>, FetchSuggestedMediaError>> {
+            TODO("Not yet implemented")
         }
     }
 }

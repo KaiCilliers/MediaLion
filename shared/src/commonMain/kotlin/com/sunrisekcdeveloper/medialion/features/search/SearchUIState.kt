@@ -9,7 +9,7 @@ sealed class SearchUIState(
 ) {
     data class TopSuggestions(
         override val searchQuery: SearchQuery = SearchQuery.Default(""),
-        val media: List<SingleMediaItem>
+        val media: List<MediaWithFavorites>
     ) : SearchUIState(searchQuery)
 
     data class Loading(
@@ -26,3 +26,7 @@ sealed class SearchUIState(
     ) : SearchUIState(searchQuery)
 }
 
+data class MediaWithFavorites(
+    val mediaItem: SingleMediaItem,
+    val favorited: Boolean,
+)

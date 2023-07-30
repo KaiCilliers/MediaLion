@@ -2,19 +2,14 @@ package com.sunrisekcdeveloper.medialion.features.search
 
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
-import com.github.michaelbull.result.runCatching
-import com.sunrisekcdeveloper.medialion.components.discovery.domain.FailedToFetchFeatureMedia
-import com.sunrisekcdeveloper.medialion.utils.flow.CStateFlow
-import com.sunrisekcdeveloper.medialion.utils.flow.cStateFlow
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.Failure
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.FetchSuggestedMediaUseCase
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.NoMediaFound
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.SearchForMediaUseCase
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.SearchQueryNotReady
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.SearchQuery
-import com.sunrisekcdeveloper.medialion.components.shared.domain.models.MediaWithTitle
-import com.sunrisekcdeveloper.medialion.utils.StringRes
-import io.github.aakira.napier.Napier
+import com.sunrisekcdeveloper.medialion.utils.flow.CStateFlow
+import com.sunrisekcdeveloper.medialion.utils.flow.cStateFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -52,11 +47,14 @@ interface MLSearchViewModelNew {
         }
 
         private fun fetchSuggestedMedia(currentQuery: SearchQuery) = viewModelScope.launch {
-            fetchSuggestedMediaUseCase()
-                .onSuccess { mediaWithTitle ->
-                    _screenState.update { SearchUIState.TopSuggestions(currentQuery, mediaWithTitle.media()) }
+            fetchSuggestedMediaUseCase
+                .asFlow()
+                .collect {  result ->
+                    result.onSuccess { mediaWithFavorites ->
+                    _screenState.update { SearchUIState.TopSuggestions(currentQuery,mediaWithFavorites) }
                 }
-                .onFailure { error -> throw Exception("Failed to fetch suggested media") }
+                    .onFailure { error -> throw Exception("Failed to fetch suggested media") }
+                }
         }
 
         private fun search(query: SearchQuery) = viewModelScope.launch {
