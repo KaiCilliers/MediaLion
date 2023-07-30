@@ -29,6 +29,7 @@ import com.sunrisekcdeveloper.medialion.android.R
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.CollectionNew
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.ID
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem
+import com.sunrisekcdeveloper.medialion.features.discovery.components.MLTopBar
 import com.sunrisekcdeveloper.medialion.features.home.GlobalRouter
 import com.sunrisekcdeveloper.medialion.features.mycollection.FailedToFetchCollections
 import com.sunrisekcdeveloper.medialion.features.mycollection.Loading
@@ -68,60 +69,23 @@ private fun CollectionScreenContent(
     openCollectionDetailSheet: (CollectionNew) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    ConstraintLayout(
+    Column(
         modifier = modifier
             .fillMaxSize()
+            .background(MaterialTheme.colors.background)
     ) {
 
-        val (containerTop, content) = createRefs()
-
-        Column(
-            modifier = modifier
-                .background(MaterialTheme.colors.background)
-                .padding(horizontal = 16.dp)
-                .constrainAs(containerTop) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    width = Dimension.fillToConstraints
-                }
-        ) {
-            Row(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colors.background)
-                    .padding(top = 64.dp, bottom = 16.dp),
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.search_icon),
-                    contentDescription = "",
-                    modifier = modifier
-                        .size(30.dp)
-                        .clickable { navigateToSearchScreen() }
-                )
-
-                Spacer(modifier = modifier.weight(1f))
-                Image(
-                    painter = painterResource(id = R.drawable.about_icon),
-                    contentDescription = "",
-                    modifier = modifier
-                        .size(30.dp)
-                        .clickable { openInfoDialog() }
-                )
-            }
-        }
+        MLTopBar(
+            onSearchIconClicked = { navigateToSearchScreen() },
+            onInfoIconClicked = { openInfoDialog() },
+            showLogo = false,
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
 
         Column(
             modifier = Modifier
                 .fillMaxHeight()
                 .background(MaterialTheme.colors.background)
-                .constrainAs(content) {
-                    top.linkTo(containerTop.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                    height = Dimension.fillToConstraints
-                }
         ) {
             when (collectionState) {
                 FailedToFetchCollections -> TODO()

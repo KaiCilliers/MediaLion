@@ -1,7 +1,9 @@
 package com.sunrisekcdeveloper.medialion.features.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,7 +19,7 @@ fun HomeScreen() {
 
     var homeDestination: HomeDestinations by rememberSaveable { mutableStateOf(HomeDestinations.Discovery) }
 
-    Column(Modifier.fillMaxSize()) {
+    Column(Modifier.fillMaxSize().background(MaterialTheme.colors.background)) {
         HomeDestinationContainer(
             selectedTab = homeDestination,
             parentBackStack = currentBackStack,

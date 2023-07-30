@@ -83,7 +83,8 @@ fun DiscoveryScreenContent(
         ) {
             MLTopBar(
                 onSearchIconClicked = { navigateToSearchScreen() },
-                onInfoIconClicked = { showInfoDialog() }
+                onInfoIconClicked = { showInfoDialog() },
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
 
             MLFilterCategories(
