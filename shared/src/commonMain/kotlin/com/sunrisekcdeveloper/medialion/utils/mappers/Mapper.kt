@@ -12,7 +12,6 @@ import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMe
 import com.sunrisekcdeveloper.medialion.network.models.MediaResponse
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Overview
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
-import com.sunrisekcdeveloper.medialion.utils.debug
 import database.CategoryCache
 import database.MovieCache
 import database.TVShowCache
@@ -113,7 +112,7 @@ interface Mapper<I, O> {
                         title = Title(input.title),
                         backdropPath = input.backdropPath,
                         posterPath = input.posterPath,
-                        categories = listOf(),
+                        categories = listOf(), // TODO temporal coupling having to additionally add this data after mapping
                         popularity = input.popularity,
                         voteAverage = input.voteAverage,
                         adult = input.adult,
@@ -127,7 +126,7 @@ interface Mapper<I, O> {
                         title = Title(input.title),
                         backdropPath = input.backdropPath,
                         posterPath = input.posterPath,
-                        categories = listOf(),
+                        categories = listOf(), // TODO temporal coupling having to additionally add this data after mapping
                         popularity = input.popularity,
                         voteAverage = input.voteAverage,
                         adult = input.adult,
@@ -147,7 +146,7 @@ interface Mapper<I, O> {
                     title = Title(input.title),
                     backdropPath = input.backdrop_path,
                     posterPath = input.poster_path,
-                    categories = input.genre_ids.map { MediaCategory.D(name = "$it") },
+                    categories = emptyList(), // TODO temporal coupling having to additionally add this data after mapping
                     popularity = input.popularity,
                     voteAverage = input.vote_average,
                     adult = input.adult,
@@ -166,7 +165,7 @@ interface Mapper<I, O> {
                     title = Title(input.name),
                     backdropPath = input.backdropPath,
                     posterPath = input.poster_path,
-                    categories = input.genre_ids.map { MediaCategory.D(name = "$it") }, // todo correct the mapping
+                    categories = emptyList(), // TODO temporal coupling having to additionally add this data after mapping
                     popularity = input.popularity,
                     voteAverage = input.vote_average,
                     adult = input.adult,

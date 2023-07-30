@@ -34,6 +34,8 @@ val dataSourceModule = module {
             tvCacheMapper = get(named(MapperNames.SingleMediaItemNames.tvShowCacheToDomain)),
             movieDomainMapper = get(named(MapperNames.SingleMediaItemNames.domainToMovieCache)),
             tvDomainMapper = get(named(MapperNames.SingleMediaItemNames.domainToTVShowCache)),
+            mediaCategoryMapper = get(named(MapperNames.MediaCategoryMapperNames.cacheToEntityDto)),
+            mediaCategoryDomainMapper = get(named(MapperNames.MediaCategoryMapperNames.entityDtoToDomain)),
         )
     }
     // endregion
@@ -46,6 +48,8 @@ val dataSourceModule = module {
             domainTVShowMapper = get(named(MapperNames.SingleMediaItemNames.domainToTVShowCache)),
             cacheMovieMapper = get(named(MapperNames.SingleMediaItemNames.movieCacheToDomain)),
             cacheTVShowMapper = get(named(MapperNames.SingleMediaItemNames.tvShowCacheToDomain)),
+            mediaCategoryMapper = get(named(MapperNames.MediaCategoryMapperNames.cacheToEntityDto)),
+            mediaCategoryDomainMapper = get(named(MapperNames.MediaCategoryMapperNames.entityDtoToDomain)),
         )
     }
     factory<SingleMediaRemoteDataSource> {

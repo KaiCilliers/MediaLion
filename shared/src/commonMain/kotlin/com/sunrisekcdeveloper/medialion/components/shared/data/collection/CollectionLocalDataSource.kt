@@ -2,6 +2,8 @@ package com.sunrisekcdeveloper.medialion.components.shared.data.collection
 
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.MediaCategory
+import com.sunrisekcdeveloper.medialion.components.shared.data.mediaCategory.MediaCategoryEntityDto
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.ID
 import com.sunrisekcdeveloper.medialion.components.shared.domain.models.SingleMediaItem
 import com.sunrisekcdeveloper.medialion.components.shared.utils.ForcedException
@@ -10,6 +12,7 @@ import com.sunrisekcdeveloper.medialion.components.shared.utils.wrapInList
 import com.sunrisekcdeveloper.medialion.database.MediaLionDatabase
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
 import com.sunrisekcdeveloper.medialion.utils.mappers.Mapper
+import database.CategoryCache
 import database.CollectionCache
 import database.MovieCache
 import database.TVShowCache
@@ -33,6 +36,8 @@ interface CollectionLocalDataSource {
         private val tvCacheMapper: Mapper<TVShowCache, SingleMediaItem.TVShow>,
         private val movieDomainMapper: Mapper<SingleMediaItem.Movie, MovieCache>,
         private val tvDomainMapper: Mapper<SingleMediaItem.TVShow, TVShowCache>,
+        private val mediaCategoryMapper: Mapper<CategoryCache, MediaCategoryEntityDto>,
+        private val mediaCategoryDomainMapper: Mapper<MediaCategoryEntityDto, MediaCategory>,
     ) : CollectionLocalDataSource {
 
         private val collectionDao = db.tbl_collectionQueries
@@ -40,6 +45,7 @@ interface CollectionLocalDataSource {
         private val moviesXRefDao = db.xref_movie_collectionQueries
         private val tvShowsDao = db.tbl_tvshowQueries
         private val tvShowsXRefDao = db.xref_tvshow_collectionQueries
+        private val categoriesDao = db.tbl_categoriesQueries
 
         override fun observeCollections(): Flow<List<CollectionEntityDto>> {
             return collectionDao
@@ -52,7 +58,15 @@ interface CollectionLocalDataSource {
                     val tvShowsInCollection = tvShowsXRefDao.tvShowsFromCollection(collectionCache.id).asFlow().mapToList()
 
                     combine(moviesInCollection, tvShowsInCollection) { movies, tvShows ->
-                        movies.map { movieCacheMapper.map(it) } + tvShows.map { tvCacheMapper.map(it) }
+                        movies.map {  movieCache ->
+                            var movie = movieCacheMapper.map(movieCache)
+                            movie = movie.copy(categories = categoriesFromIds(movieCache.genre_ids.map { it.toString() }))
+                            movie
+                        } + tvShows.map { tvCache ->
+                            var tvShow = tvCacheMapper.map(tvCache)
+                            tvShow = tvShow.copy(categories = categoriesFromIds(tvCache.genre_ids.map { it.toString() }))
+                            tvShow
+                        }
                             .sortedBy { it.id.uniqueIdentifier() }
                     }
                         .map { media ->
@@ -117,7 +131,15 @@ interface CollectionLocalDataSource {
                 val tvShowsInCollection = tvShowsXRefDao.tvShowsFromCollection(matchingCollection.id).asFlow().mapToList()
 
                 combine(moviesInCollection, tvShowsInCollection) { movies, tvShows ->
-                    movies.map { movieCacheMapper.map(it) } + tvShows.map { tvCacheMapper.map(it) }
+                    movies.map { movieCache ->
+                        var movie = movieCacheMapper.map(movieCache)
+                        movie = movie.copy(categories = categoriesFromIds(movieCache.genre_ids.map { it.toString() }))
+                        movie
+                    } + tvShows.map { tvCache ->
+                        var tvShow = tvCacheMapper.map(tvCache)
+                        tvShow = tvShow.copy(categories = categoriesFromIds(tvCache.genre_ids.map { it.toString() }))
+                        tvShow
+                    }
                         .sortedBy { it.id.uniqueIdentifier() }
                 }
                     .map { media ->
@@ -134,6 +156,15 @@ interface CollectionLocalDataSource {
 
         override suspend fun delete(collection: CollectionEntityDto) {
             collectionDao.delete(collection.id.uniqueIdentifier())
+        }
+
+        private fun categoriesFromIds(categoryIds: List<String>): List<MediaCategory> {
+            return categoriesDao
+                .all()
+                .executeAsList()
+                .map { mediaCategoryMapper.map(it) }
+                .map { mediaCategoryDomainMapper.map(it) }
+                .filter { categoryIds.contains(it.identifier().uniqueIdentifier()) }
         }
     }
 
