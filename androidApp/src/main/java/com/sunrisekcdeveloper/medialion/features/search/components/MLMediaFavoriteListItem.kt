@@ -23,11 +23,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sunrisekcdeveloper.medialion.oldArch.MediaItemUI
-import com.sunrisekcdeveloper.medialion.oldArch.SimpleMediaItem
 import com.sunrisekcdeveloper.medialion.android.R
-import com.sunrisekcdeveloper.medialion.theme.MediaLionTheme
+import com.sunrisekcdeveloper.medialion.oldArch.MediaItemUI
 import com.sunrisekcdeveloper.medialion.oldArch.domain.MediaType
+import com.sunrisekcdeveloper.medialion.theme.MediaLionTheme
 
 @Composable
 fun MLMediaFavoriteListItem(
@@ -45,12 +44,8 @@ fun MLMediaFavoriteListItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         MLMediaBanner(
-            mediaItem = SimpleMediaItem(
-                id = mediaItem.id,
-                title = mediaItem.title,
-                posterUrl = mediaItem.bannerUrl,
-                mediaType = mediaItem.mediaType,
-            ),
+            title = mediaItem.title,
+            bannerUrl = mediaItem.bannerUrl,
             modifier = modifier.width(180.dp),
         )
         Text(
@@ -85,9 +80,9 @@ private fun MLMediaFavoriteListItemPreview() {
     MediaLionTheme {
         val mediaItem = MediaItemUI(
             id = "asdad",
-            title = "",
+            title = "The Movie Title",
             posterUrl = "",
-            bannerUrl = "",
+            bannerUrl = "https://image.tmdb.org/t/p/w500/5YfFibGB0Mjcl2RHUqztlPBCJp8.jpg",
             categories = listOf(),
             overview = "",
             popularity = 0.0,

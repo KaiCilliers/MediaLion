@@ -22,10 +22,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
+import com.sunrisekcdeveloper.medialion.components.shared.data.models.TMDBImageUrl
+import com.sunrisekcdeveloper.medialion.components.shared.data.models.TMDBUrl
 import com.sunrisekcdeveloper.medialion.theme.MediaLionTheme
 import com.sunrisekcdeveloper.medialion.utils.gradientOrange
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
 import com.sunrisekcdeveloper.medialion.utils.StringRes
+import com.sunrisekcdeveloper.medialion.utils.debug
 
 @Composable
 fun MLMediaPoster(
@@ -39,9 +42,10 @@ fun MLMediaPoster(
     ) {
         if (posterUrl != null) {
             PosterPlaceholder(mediaTitle = title.toString())
+            debug { TMDBImageUrl(posterUrl).toString() }
             SubcomposeAsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(posterUrl)
+                    .data(TMDBImageUrl(posterUrl).toString())
                     .crossfade(true)
                     .build(),
                 contentScale = ContentScale.FillHeight,
@@ -49,7 +53,8 @@ fun MLMediaPoster(
                     .clip(RoundedCornerShape(4.dp)),
                 contentDescription = null,
                 loading = { PosterPlaceholder(mediaTitle = title.toString()) },
-                error = { PosterPlaceholder(mediaTitle = title.toString()) },
+                error = { debug { "error $it" }
+                    PosterPlaceholder(mediaTitle = title.toString()) },
             )
         } else {
             PosterPlaceholder(mediaTitle = stringResource(id = StringRes.textPlaceholder.resourceId))

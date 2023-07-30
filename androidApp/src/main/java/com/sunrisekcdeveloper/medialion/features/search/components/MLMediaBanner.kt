@@ -21,23 +21,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
+import com.sunrisekcdeveloper.medialion.components.shared.data.models.TMDBImageUrl
 import com.sunrisekcdeveloper.medialion.theme.MediaLionTheme
+import com.sunrisekcdeveloper.medialion.utils.debug
 import com.sunrisekcdeveloper.medialion.utils.gradientOrange
-import com.sunrisekcdeveloper.medialion.oldArch.SimpleMediaItem
-import com.sunrisekcdeveloper.medialion.oldArch.domain.MediaType
 
 @Composable
 fun MLMediaBanner(
-    mediaItem: SimpleMediaItem,
+    title: String,
+    bannerUrl: String,
     modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
             .aspectRatio(1.8f)
     ) {
+        debug {TMDBImageUrl(bannerUrl).toString() }
         SubcomposeAsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(mediaItem.posterUrl)
+                .data(TMDBImageUrl(bannerUrl).toString())
                 .crossfade(true)
                 .build(),
             contentScale = ContentScale.FillWidth,
@@ -45,10 +47,10 @@ fun MLMediaBanner(
                 .clip(RoundedCornerShape(4.dp))
                 .fillMaxSize(),
             contentDescription = null,
-            loading = { PosterPlaceholder(mediaTitle = mediaItem.title) },
+            loading = { PosterPlaceholder(mediaTitle = title) },
             error = {
                 // todo log logs here about posters not loading
-                PosterPlaceholder(mediaTitle = mediaItem.title) },
+                PosterPlaceholder(mediaTitle = title) },
         )
     }
 }
@@ -84,12 +86,8 @@ private fun MLMediaBannerPreview() {
             modifier = Modifier.fillMaxSize()
         ) {
             MLMediaBanner(
-                mediaItem = SimpleMediaItem(
-                    id = "1234",
-                    title = "Harry Potter and the Philosopher's stone",
-                    posterUrl = "https://image.tmdb.org/t/p/original/hziiv14OpD73u9gAak4XDDfBKa2.jpg",
-                    mediaType = MediaType.MOVIE,
-                ),
+                title = "Harry Potter and the Philosopher's stone",
+                bannerUrl =  "https://image.tmdb.org/t/p/original/hziiv14OpD73u9gAak4XDDfBKa2.jpg",
                 modifier = Modifier.width(200.dp),
             )
         }
