@@ -1,13 +1,22 @@
 package com.sunrisekcdeveloper.medialion.di
 
-import com.sunrisekcdeveloper.medialion.domain.collection.MLCollectionViewModel
-import com.sunrisekcdeveloper.medialion.domain.discovery.MLDiscoveryViewModel
-import com.sunrisekcdeveloper.medialion.domain.search.MLSearchViewModel
-import com.sunrisekcdeveloper.medialion.mappers.ListMapper
+import com.sunrisekcdeveloper.medialion.components.collections.domain.AddUpdateCollectionUseCase
+import com.sunrisekcdeveloper.medialion.components.collections.domain.DeleteCollectionUseCaseNew
+import com.sunrisekcdeveloper.medialion.components.collections.domain.FetchAllCollectionsAsTitledMediaUseCase
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.FetchDiscoveryContentUseCase
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.FetchMediaWithCategoryUseCase
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.FetchSuggestedMediaUseCase
+import com.sunrisekcdeveloper.medialion.components.discovery.domain.SearchForMediaUseCase
+import com.sunrisekcdeveloper.medialion.components.shared.domain.FetchAllMediaCategoriesUseCase
+import com.sunrisekcdeveloper.medialion.features.discovery.MLCategoriesViewModel
+import com.sunrisekcdeveloper.medialion.features.discovery.MLDiscoveryViewModelNew
+import com.sunrisekcdeveloper.medialion.features.mycollection.MLMyCollectionViewModelNew
+import com.sunrisekcdeveloper.medialion.features.search.MLSearchViewModelNew
+import com.sunrisekcdeveloper.medialion.components.shared.domain.FetchAllCollectionsUseCaseNew
+import com.sunrisekcdeveloper.medialion.features.shared.MLMiniCollectionViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.context.startKoin
-import org.koin.core.qualifier.named
 
 fun initKoin() {
     startKoin {
@@ -15,31 +24,42 @@ fun initKoin() {
     }
 }
 
-class WrapperMLSearchViewModel : KoinComponent {
-    fun instance() = MLSearchViewModel(
-        searchComponent = get(),
-        collectionComponent = get(),
-        mediaItemMapper = get(named(MapperNames.mediaDomainToUI)),
-        movieListMapper = ListMapper.Impl(get(named(MapperNames.movieDomainToUI))),
-        tvListMapper = ListMapper.Impl(get(named(MapperNames.tvDomainToUI))),
+class WrappedMLMiniCollectionViewModel : KoinComponent {
+    fun instance() = MLMiniCollectionViewModel.D(
+        get<FetchAllCollectionsUseCaseNew>(),
+        get<DeleteCollectionUseCaseNew>(),
+        get<AddUpdateCollectionUseCase>(),
         coroutineScope = null,
     )
 }
 
-class WrapperMLCollectionViewModel : KoinComponent {
-    fun instance() = MLCollectionViewModel(
-        collectionComponent = get(),
-        searchComponent = get(),
-        mediaListMapper = ListMapper.Impl(get(named(MapperNames.mediaDomainToUI))),
-        coroutineScope = null
+class WrappedMLSearchViewModelNew : KoinComponent {
+    fun instance() = MLSearchViewModelNew.Default(
+        get<SearchForMediaUseCase>(),
+        get<FetchSuggestedMediaUseCase>(),
+        coroutineScope = null,
     )
 }
 
-class WrapperMLDiscoveryViewModel : KoinComponent {
-    fun instance() = MLDiscoveryViewModel(
-        fetchDiscoveryContent = get(),
-        collectionComponent = get(),
-        searchComponent = get(),
-        coroutineScope = null
+class WrappedMLCollectionViewModelNew : KoinComponent {
+    fun instance() = MLMyCollectionViewModelNew.Default(
+        get<FetchAllCollectionsAsTitledMediaUseCase>(),
+        get<FetchAllCollectionsUseCaseNew>(),
+        coroutineScope = null,
+    )
+}
+
+class WrappedMLDiscoveryViewModelNew : KoinComponent {
+    fun instance() = MLDiscoveryViewModelNew.D(
+        get<FetchDiscoveryContentUseCase>(),
+        get<FetchMediaWithCategoryUseCase>(),
+        coroutineScope = null,
+    )
+}
+
+class WrappedMLCategoriesViewModel : KoinComponent {
+    fun instance() = MLCategoriesViewModel.D(
+        get<FetchAllMediaCategoriesUseCase>(),
+        coroutineScope = null,
     )
 }

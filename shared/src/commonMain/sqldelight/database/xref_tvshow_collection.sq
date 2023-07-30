@@ -1,6 +1,6 @@
 CREATE TABLE xref_tvshow_collection (
-    collection_id INTEGER AS Int NOT NULL,
-    tvshow_id INTEGER AS Int NOT NULL,
+    collection_id TEXT NOT NULL,
+    tvshow_id TEXT NOT NULL,
     FOREIGN KEY (collection_id) REFERENCES CollectionCache(id),
     FOREIGN KEY (tvshow_id) REFERENCES TVShowCache(id),
     UNIQUE (collection_id, tvshow_id)
@@ -30,6 +30,6 @@ DELETE FROM xref_tvshow_collection
 WHERE collection_id = ?
 AND tvshow_id = ?;
 
-deleteCollection:
+removeAllFromCollection:
 DELETE FROM xref_tvshow_collection
 WHERE collection_id = ?;

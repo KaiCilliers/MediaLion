@@ -1,12 +1,13 @@
 CREATE TABLE CollectionCache (
-    id INTEGER AS Int PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL UNIQUE
+    id TEXT PRIMARY KEY NOT NULL,
+    name TEXT NOT NULL UNIQUE,
+    createdAt TEXT NOT NULL
 );
 
 insert:
-INSERT OR IGNORE
+INSERT OR REPLACE
 INTO CollectionCache
-VALUES (?,?);
+VALUES (?,?,?);
 
 fetchAll:
 SELECT *

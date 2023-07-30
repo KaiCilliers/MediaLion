@@ -1,7 +1,7 @@
 import kotlin.collections.List;
 
 CREATE TABLE MovieCache (
-        id INTEGER AS Int PRIMARY KEY NOT NULL,
+        id TEXT PRIMARY KEY NOT NULL,
         adult INTEGER AS Boolean NOT NULL,
         backdrop_path TEXT NOT NULL,
         genre_ids TEXT AS List<Int> NOT NULL,

@@ -1,0 +1,23 @@
+CREATE TABLE CategoryCache (
+    id TEXT PRIMARY KEY NOT NULL,
+    name TEXT NOT NULL UNIQUE,
+    appliesToMedia TEXT NOT NULL
+);
+
+insert:
+INSERT OR REPLACE
+INTO CategoryCache
+VALUES ?;
+
+find:
+SELECT *
+FROM CategoryCache
+WHERE id = ?;
+
+all:
+SELECT *
+FROM CategoryCache;
+
+delete:
+DELETE FROM CollectionCache
+WHERE id = ?;

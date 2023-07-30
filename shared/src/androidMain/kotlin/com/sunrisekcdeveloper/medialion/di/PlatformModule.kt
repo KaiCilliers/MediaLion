@@ -1,17 +1,24 @@
 package com.sunrisekcdeveloper.medialion.di
 
 import android.content.Context
-import com.sunrisekcdeveloper.medialion.clients.TMDBClient
-import com.sunrisekcdeveloper.medialion.data.DefaultDispatcherProvider
-import com.sunrisekcdeveloper.medialion.data.DispatcherProvider
-import com.sunrisekcdeveloper.medialion.data.HttpClientFactory
+import com.sunrisekcdeveloper.medialion.components.shared.TMDBClientNew
 import com.sunrisekcdeveloper.medialion.database.MediaLionDatabase
-import com.sunrisekcdeveloper.medialion.local.DatabaseDriverFactory
-import com.sunrisekcdeveloper.medialion.local.MediaLionDatabaseFactory
+import com.sunrisekcdeveloper.medialion.di.MapperNames
+import com.sunrisekcdeveloper.medialion.utils.DefaultDispatcherProvider
+import com.sunrisekcdeveloper.medialion.utils.DispatcherProvider
+import com.sunrisekcdeveloper.medialion.network.HttpClientFactory
+import com.sunrisekcdeveloper.medialion.storage.DatabaseDriverFactory
+import com.sunrisekcdeveloper.medialion.storage.MediaLionDatabaseFactory
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 actual val platformModule = module {
-    single<TMDBClient> { TMDBClient.Default(HttpClientFactory().create()) }
+    single<TMDBClientNew> {
+        TMDBClientNew(
+            httpClient = HttpClientFactory().create(),
+            mapper = get(named(MapperNames.SingleMediaItemNames.responseToSingleMediaApiDto))
+        )
+    }
     single<MediaLionDatabase> { MediaLionDatabaseFactory(DatabaseDriverFactory(get<Context>())).create() }
     single<DispatcherProvider> { DefaultDispatcherProvider() }
 }

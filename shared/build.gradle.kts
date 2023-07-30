@@ -45,6 +45,8 @@ kotlin {
                 implementation("com.squareup.sqldelight:coroutines-extensions:$sqlDelightVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
+                implementation("com.michael-bull.kotlin-result:kotlin-result:1.1.18")
+
                 // logging
                 implementation("io.github.aakira:napier:2.6.1")
 
@@ -59,7 +61,10 @@ kotlin {
                 implementation(kotlin("test"))
                 implementation("com.willowtreeapps.assertk:assertk:0.25")
                 implementation("app.cash.turbine:turbine:0.7.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+                implementation("io.insert-koin:koin-test:3.4.0")
             }
         }
         val androidMain by getting {

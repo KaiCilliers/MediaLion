@@ -1,12 +1,11 @@
 package com.sunrisekcdeveloper.medialion.di
 
-import com.sunrisekcdeveloper.medialion.clients.TMDBClient
-import com.sunrisekcdeveloper.medialion.data.DefaultDispatcherProvider
-import com.sunrisekcdeveloper.medialion.data.DispatcherProvider
-import com.sunrisekcdeveloper.medialion.data.HttpClientFactory
+import com.sunrisekcdeveloper.medialion.utils.DefaultDispatcherProvider
+import com.sunrisekcdeveloper.medialion.utils.DispatcherProvider
+import com.sunrisekcdeveloper.medialion.network.HttpClientFactory
 import com.sunrisekcdeveloper.medialion.database.MediaLionDatabase
-import com.sunrisekcdeveloper.medialion.local.DatabaseDriverFactory
-import com.sunrisekcdeveloper.medialion.local.MediaLionDatabaseFactory
+import com.sunrisekcdeveloper.medialion.storage.DatabaseDriverFactory
+import com.sunrisekcdeveloper.medialion.storage.MediaLionDatabaseFactory
 import org.koin.dsl.module
 
 actual val platformModule = module {
