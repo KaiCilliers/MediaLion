@@ -18,7 +18,7 @@ interface SearchForMediaUseCase {
         private val mediaRequirementsFactory: MediaRequirementsFactory,
     ) : SearchForMediaUseCase {
         override suspend fun invoke(query: SearchQuery): Result<SearchResults, SearchForMediaError> {
-            return if (query.canPerformQuery()) {
+            return if (query.toString().length > 2) {
                 runCatching {
                     val requirements = mediaRequirementsFactory.fromSearchQuery(query)
                     val titledMedia = titledMediaRepository.withRequirement(requirements)

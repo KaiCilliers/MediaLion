@@ -62,28 +62,32 @@ interface MLSearchViewModelNew {
         }
 
         private fun search(query: SearchQuery) {
-            supervisorJob.cancelChildren()
-            cancellableScope.launch {
-                if (query.canPerformQuery()) {
-                    _screenState.update { SearchUIState.Loading(query) }
-                    searchForMediaUseCase(query)
-                        .onSuccess { results ->
-                            _screenState.update { SearchUIState.Results(query, results) }
-                        }
-                        .onFailure {  error ->
-                            when (error) {
-                                NoMediaFound -> _screenState.update { SearchUIState.NoResults(query) }
-                                is Failure -> throw Exception("Search Screen Failure!.", error.throwable)
-                                SearchQueryNotReady -> TODO()
+            if (query.toString().isEmpty()) {
+                fetchSuggestedMedia(SearchQuery.Default(""))
+            } else {
+                supervisorJob.cancelChildren()
+                viewModelScope.launch {
+                    if (query.toString().length > 2) {
+                        _screenState.update { SearchUIState.Loading(query) }
+                        searchForMediaUseCase(query)
+                            .onSuccess { results ->
+                                _screenState.update { SearchUIState.Results(query, results) }
                             }
-                        }
-                } else {
-                    _screenState.update {
-                        when(val currentState = _screenState.value) {
-                            is SearchUIState.Loading -> SearchUIState.Loading(SearchQuery.Default(query.toString()))
-                            is SearchUIState.NoResults -> SearchUIState.NoResults(SearchQuery.Default(query.toString()))
-                            is SearchUIState.Results -> SearchUIState.Results(SearchQuery.Default(query.toString()), currentState.results)
-                            is SearchUIState.TopSuggestions -> SearchUIState.TopSuggestions(SearchQuery.Default(query.toString()), currentState.media)
+                            .onFailure {  error ->
+                                when (error) {
+                                    NoMediaFound -> _screenState.update { SearchUIState.NoResults(query) }
+                                    is Failure -> throw Exception("Search Screen Failure!.", error.throwable)
+                                    SearchQueryNotReady -> TODO()
+                                }
+                            }
+                    } else {
+                        _screenState.update {
+                            when(val currentState = _screenState.value) {
+                                is SearchUIState.Loading -> SearchUIState.Loading(SearchQuery.Default(query.toString()))
+                                is SearchUIState.NoResults -> SearchUIState.NoResults(SearchQuery.Default(query.toString()))
+                                is SearchUIState.Results -> SearchUIState.Results(SearchQuery.Default(query.toString()), currentState.results)
+                                is SearchUIState.TopSuggestions -> SearchUIState.TopSuggestions(SearchQuery.Default(query.toString()), currentState.media)
+                            }
                         }
                     }
                 }
