@@ -124,7 +124,6 @@ fun MLQuickCollectionsDialog(
                             Button(
                                 onClick = { onDismiss() },
                                 modifier = Modifier
-                                    .background(MaterialTheme.colors.primaryVariant)
                                     .size(width = 80.dp, height = 40.dp),
                                 shape = RoundedCornerShape(8.dp),
                                 elevation = ButtonDefaults.elevation(
