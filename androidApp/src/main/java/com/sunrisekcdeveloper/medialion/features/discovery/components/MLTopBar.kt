@@ -8,13 +8,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sunrisekcdeveloper.medialion.android.R
+import com.sunrisekcdeveloper.medialion.theme.MediaLionTheme
 
 @Composable
 fun MLTopBar(
@@ -59,5 +62,18 @@ fun MLTopBar(
                 .clickable { onInfoIconClicked() }
 
         )
+    }
+}
+
+@Preview
+@Composable
+private fun MLTopBarPreview() {
+    MediaLionTheme {
+        Surface {
+            MLTopBar(
+                onSearchIconClicked = { /*TODO*/ },
+                onInfoIconClicked = { /*TODO*/ }
+            )
+        }
     }
 }

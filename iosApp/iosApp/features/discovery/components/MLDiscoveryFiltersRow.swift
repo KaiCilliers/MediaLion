@@ -17,7 +17,7 @@ enum Filter: Int {
 
 struct MLDiscoveryFiltersRow: View {
     
-    @State var selectedFilter : Filter = .all
+    var selectedFilter : Filter
     let onNewSelection: (Filter) -> ()
     
     
@@ -28,7 +28,6 @@ struct MLDiscoveryFiltersRow: View {
                     filterName: StringRes.filterAll,
                     selected: selectedFilter == .all,
                     onClick: {
-                        selectedFilter = .all
                         onNewSelection(selectedFilter)
                     }
                 )
@@ -39,7 +38,6 @@ struct MLDiscoveryFiltersRow: View {
                     filterName: StringRes.filterMovies,
                     selected: selectedFilter == .movies,
                     onClick: {
-                        selectedFilter = .movies
                         onNewSelection(selectedFilter)
                     }
                 )
@@ -50,7 +48,6 @@ struct MLDiscoveryFiltersRow: View {
                     filterName: StringRes.filterSeries,
                     selected: selectedFilter == .series,
                     onClick: {
-                        selectedFilter = .series
                         onNewSelection(selectedFilter)
                     }
                 )
@@ -61,7 +58,6 @@ struct MLDiscoveryFiltersRow: View {
                     filterName: StringRes.filterCategories,
                     selected: selectedFilter == .categories,
                     onClick: {
-                        selectedFilter = .categories
                         onNewSelection(selectedFilter)
                     }
                 )
@@ -77,6 +73,6 @@ struct MLDiscoveryFiltersRow: View {
     
     struct MLDiscoveryFilterRow: PreviewProvider {
         static var previews: some View {
-            MLDiscoveryFiltersRow( onNewSelection: {_ in })
+            MLDiscoveryFiltersRow( selectedFilter: Filter.all, onNewSelection: {_ in })
         }
 }
