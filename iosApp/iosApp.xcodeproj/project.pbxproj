@@ -137,6 +137,7 @@
 		600748A82A7E46CB0015B049 /* features */ = {
 			isa = PBXGroup;
 			children = (
+				600748AE2A7E51C20015B049 /* search */,
 				600748AA2A7E4AFF0015B049 /* discovery */,
 				600748A92A7E46E40015B049 /* shared */,
 			);
@@ -164,6 +165,22 @@
 			children = (
 				608EE2E22A0132C3005F2719 /* MLDiscoveryFiltersRow.swift */,
 				600748AC2A7E4B400015B049 /* MLDiscoveryFilterItem.swift */,
+			);
+			path = components;
+			sourceTree = "<group>";
+		};
+		600748AE2A7E51C20015B049 /* search */ = {
+			isa = PBXGroup;
+			children = (
+				600748AF2A7E51CA0015B049 /* components */,
+			);
+			path = search;
+			sourceTree = "<group>";
+		};
+		600748AF2A7E51CA0015B049 /* components */ = {
+			isa = PBXGroup;
+			children = (
+				60120C922A0ACE07002D7BE9 /* MLMediaBanner.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -265,7 +282,6 @@
 				607CE29829EB21F8005B8886 /* SearchEmptyState.swift */,
 				607CE29229EB21D3005B8886 /* MLSearchBar.swift */,
 				607CE29A29EB2202005B8886 /* SearchIdleState.swift */,
-				60120C922A0ACE07002D7BE9 /* MLMediaBanner.swift */,
 			);
 			path = ui;
 			sourceTree = "<group>";
