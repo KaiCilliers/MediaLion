@@ -15,33 +15,46 @@ import shared
     private var collectionHandle: DisposableHandle?
     private var genreHandle: DisposableHandle?
     
-    private var viewModel: MLDiscoveryViewModel = WrapperMLDiscoveryViewModel().instance()
-    private var collectionViewModel: MLCollectionViewModel = WrapperMLCollectionViewModel().instance()
+    private var sharedDiscoveryViewModel: MLDiscoveryViewModelNew = WrappedMLDiscoveryViewModelNew().instance()
+    private var sharedMiniCollectionViewModel: MLMiniCollectionViewModel = WrappedMLMiniCollectionViewModel().instance()
+    private var sharedCategoriesViewModel: MLCategoriesViewModel = WrappedMLCategoriesViewModel().instance()
     
-    @Published var state: DiscoveryState = DiscoveryState.Loading()
-    @Published var collectionState: NSArray = []
-    @Published var genreState: GenreState = GenreState.Genres(all: [])
+    @Published var discoveryState: DiscoveryUIState = DiscoveryUIState.Loading(tabSelection: DiscoveryScreenTabSelection.All())
+    @Published var miniCollectionState: MiniCollectionUIState = Loading()
+    @Published var categoriesState: CategoriesUIState = CategoriesUIStateLoading()
     
-    func submitAction(action: DiscoveryAction) {
+    func submitAction(action: DiscoveryNewActions) {
         print("IOS - submitting action \(action)")
-        self.viewModel.submitAction(action: action)
+        self.sharedDiscoveryViewModel.submit(action____: action)
+    }
+    
+    func submitAction(action: CategoriesAction) {
+        print("IOS - submitting action \(action)")
+        self.sharedCategoriesViewModel.submit(action___: action)
+    }
+    
+    func submitAction(action: MiniCollectionAction) {
+        print("IOS - submitting action \(action)")
+        self.sharedMiniCollectionViewModel.submit(action__: action)
     }
     
     func observe() {
-        handle = viewModel.state.subscribe(onCollect: { state in
+        handle = sharedDiscoveryViewModel.discState.subscribe(onCollect: { state in
             if let state = state {
                 print("IOS - discovery - state \(state)")
-                self.state = state
+                self.discoveryState = state
             }
         })
-        collectionHandle = viewModel.allCollectionsState.subscribe( onCollect: { collections in
-            if let collections = collections {
-                self.collectionState = collections
-            }
-        })
-        genreHandle = collectionViewModel.genres.subscribe(onCollect: { state in
+        collectionHandle = sharedMiniCollectionViewModel.miniCollectionState.subscribe( onCollect: { state in
             if let state = state {
-                self.genreState = state
+                print("IOS - discovery - mini collection state \(state)")
+                self.miniCollectionState = state
+            }
+        })
+        genreHandle = sharedCategoriesViewModel.catState.subscribe(onCollect: { state in
+            if let state = state {
+                print("IOS - discovery - categories state \(state)")
+                self.categoriesState = state
             }
         })
     }

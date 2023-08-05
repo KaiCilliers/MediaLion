@@ -18,9 +18,9 @@ struct Category : Identifiable {
 struct CustomCategoriesDialog: View {
     
     @State private var offset: CGFloat = 1000
-    let genres: [GenreWithType]
+    let categories: [MediaCategoryIOS]
     let title: String
-    let onClose: (GenreWithType) -> Void
+    let onClose: (MediaCategoryIOS) -> Void
     
     var body: some View  {
         
@@ -34,10 +34,10 @@ struct CustomCategoriesDialog: View {
                 HStack{
                     Spacer()
                     VStack(alignment: .center, spacing: 8) {
-                        ForEach(genres) { genre in
-                            Text("\(genre.genre.name) - \(genre.mediaType)")
+                        ForEach(categories) { category in
+                            Text("\(category.origin.name())")
                                 .onTapGesture {
-                                    onClose(genre)
+                                    onClose(category)
                                     close()
                                 }
                             
@@ -111,32 +111,33 @@ struct customCategoriesDialog_Previews: PreviewProvider {
     static var previews: some View {
         
         let categories = [
-            Category(id: 1, name: "Horror"),
-            Category(id: 2, name: "Romance"),
-            Category(id: 3, name:"Comedy"),
-            Category(id: 4, name:"Thriller"),
-            Category(id: 5, name:"Crime"),
-            Category(id: 6, name:"Drama"),
-            Category(id: 7, name:"Fantasy"),
-            Category(id: 8, name:"Rom-Com"),
-            Category(id: 9, name:"Action"),
-            Category(id: 10, name:"Animation"),
-            Category(id: 11, name:"Adventure"),
-            Category(id: 12, name:"Sci-Fi")
+            MediaCategoryIOS(origin: MediaCategoryD(id: "Horror")),
+            MediaCategoryIOS(origin: MediaCategoryD(id: "Romance")),
+            MediaCategoryIOS(origin: MediaCategoryD(id: "Comedy")),
+            MediaCategoryIOS(origin: MediaCategoryD(id: "Thriller")),
+            MediaCategoryIOS(origin: MediaCategoryD(id: "Crime")),
+            MediaCategoryIOS(origin: MediaCategoryD(id: "Drama")),
+            MediaCategoryIOS(origin: MediaCategoryD(id: "Fantasy")),
+            MediaCategoryIOS(origin: MediaCategoryD(id: "Rom-Com")),
+            MediaCategoryIOS(origin: MediaCategoryD(id: "Action")),
+            MediaCategoryIOS(origin: MediaCategoryD(id: "Animation")),
+            MediaCategoryIOS(origin: MediaCategoryD(id: "Sci-Fi")),
         ]
         
         CustomCategoriesDialog(
-            genres: categories.map({ item in
-                print("deadpool - \(item.name)")
-                return GenreWithType(
-                    genre: Genre(
-                        id: Int32(Int(Int.random(in: 0..<100000))),
-                        name: "\(item.name)",
-                        mediaType: MediaType.movie
-                    ), mediaType: MediaType.movie
-                )
-            }), title: "Categories",
+            categories: categories,
+            title: "Categories",
             onClose: {_ in}
         )
+    }
+}
+
+struct MediaCategoryIOS : Identifiable {
+    let origin: MediaCategory
+    var id: ObjectIdentifier
+    
+    init(origin: MediaCategory) {
+        self.origin = origin
+        self.id = ObjectIdentifier(origin.identifier())
     }
 }

@@ -1,57 +1,57 @@
+////
+////  gridItemScreen.swift
+////  iosApp
+////
+////  Created by Nadine Cilliers on 02/05/2023.
+////  Copyright © 2023 orgName. All rights reserved.
+////
 //
-//  gridItemScreen.swift
-//  iosApp
+//import SwiftUI
 //
-//  Created by Nadine Cilliers on 02/05/2023.
-//  Copyright © 2023 orgName. All rights reserved.
+//struct gridItemScreen: View {
+//    @Environment(\.editMode) var editMode
+//    
+//    var body: some View {
+//        ZStack{
+//            VStack (alignment: .center, spacing: 0) {
+//                HStack{
+//                    Image("backArrowIcon")
+//                        .resizable()
+//                        .frame(width: 30, height: 30)
+//                        .padding()
+//                    Spacer()
+//                    Image("aboutIcon")
+//                        .resizable()
+//                        .frame(width: 30, height: 30)
+//                        .padding()
+//                }.background(Color.background)
+////                MLTitledMediaGrid(title: "Horror")
+//                
+//            }
+//            .overlay {
+//                VStack{
+//                    Spacer()
+//                    HStack{
+//                        Spacer()
+//                        Button {
+//                            EditButton()
+//                        }label: {
+//                            Image("editIcon")
+//                                .resizable()
+//                                .frame(width: 90, height: 90)
+//                        }
+//                    }
+//                }
+//                .padding(.bottom, 100)
+//                .padding(.trailing, 20)
+//            }
+//        }
+//    }
+//}
 //
-
-import SwiftUI
-
-struct gridItemScreen: View {
-    @Environment(\.editMode) var editMode
-    
-    var body: some View {
-        ZStack{
-            VStack (alignment: .center, spacing: 0) {
-                HStack{
-                    Image("backArrowIcon")
-                        .resizable()
-                        .frame(width: 30, height: 30)
-                        .padding()
-                    Spacer()
-                    Image("aboutIcon")
-                        .resizable()
-                        .frame(width: 30, height: 30)
-                        .padding()
-                }.background(Color.background)
-//                MLTitledMediaGrid(title: "Horror")
-                
-            }
-            .overlay {
-                VStack{
-                    Spacer()
-                    HStack{
-                        Spacer()
-                        Button {
-                            EditButton()
-                        }label: {
-                            Image("editIcon")
-                                .resizable()
-                                .frame(width: 90, height: 90)
-                        }
-                    }
-                }
-                .padding(.bottom, 100)
-                .padding(.trailing, 20)
-            }
-        }
-    }
-}
-
-@available(iOS 16.0, *)
-struct gridItemScreen_Previews: PreviewProvider {
-    static var previews: some View {
-        gridItemScreen()
-    }
-}
+//@available(iOS 16.0, *)
+//struct gridItemScreen_Previews: PreviewProvider {
+//    static var previews: some View {
+//        gridItemScreen()
+//    }
+//}

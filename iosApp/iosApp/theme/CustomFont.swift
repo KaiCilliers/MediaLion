@@ -26,7 +26,7 @@ struct CustomFont : ViewModifier {
     
     var textStyle: TextStyle
     
-    func body(content: Content) -> some View {
+    func body(content: _ViewModifier_Content<Self>) -> some View {
            let scaledSize = UIFontMetrics.default.scaledValue(for: size)
         return content.font(Font(fontName.uiFont(withSize: scaledSize)))
         }
