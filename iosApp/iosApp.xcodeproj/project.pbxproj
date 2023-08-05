@@ -183,6 +183,7 @@
 			children = (
 				607CE29629EB21EE005B8886 /* MLTitledMediaRow.swift */,
 				607CE28E29EB21BA005B8886 /* MLMediaFavoriteListItem.swift */,
+				607CE29429EB21E2005B8886 /* MLTitledMediaGrid.swift */,
 				60120C922A0ACE07002D7BE9 /* MLMediaBanner.swift */,
 			);
 			path = components;
@@ -278,7 +279,6 @@
 		607CE28C29EB21A2005B8886 /* ui */ = {
 			isa = PBXGroup;
 			children = (
-				607CE29429EB21E2005B8886 /* MLTitledMediaGrid.swift */,
 				607CE29829EB21F8005B8886 /* SearchEmptyState.swift */,
 				607CE29229EB21D3005B8886 /* MLSearchBar.swift */,
 				607CE29A29EB2202005B8886 /* SearchIdleState.swift */,
