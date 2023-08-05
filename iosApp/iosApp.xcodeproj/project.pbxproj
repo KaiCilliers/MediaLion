@@ -180,6 +180,7 @@
 		600748AF2A7E51CA0015B049 /* components */ = {
 			isa = PBXGroup;
 			children = (
+				607CE28E29EB21BA005B8886 /* MLMediaFavoriteListItem.swift */,
 				60120C922A0ACE07002D7BE9 /* MLMediaBanner.swift */,
 			);
 			path = components;
@@ -275,7 +276,6 @@
 		607CE28C29EB21A2005B8886 /* ui */ = {
 			isa = PBXGroup;
 			children = (
-				607CE28E29EB21BA005B8886 /* MLMediaFavoriteListItem.swift */,
 				607CE29029EB21C5005B8886 /* MLMediaPoster.swift */,
 				607CE29429EB21E2005B8886 /* MLTitledMediaGrid.swift */,
 				607CE29629EB21EE005B8886 /* MLTitledMediaRow.swift */,
