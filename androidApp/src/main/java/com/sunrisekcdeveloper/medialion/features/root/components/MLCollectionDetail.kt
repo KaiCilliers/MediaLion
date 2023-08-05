@@ -118,8 +118,9 @@ fun MLCollectionDetail(
                     editMode = !editMode
                     if (!editMode) {
                         // this logic should be present in the Title object
-                        if (newTitleValue.trim().isNotEmpty()) {
-                            modifiableCollection = modifiableCollection.rename(Title(newTitleValue))
+                        val newTitle = newTitleValue.trim()
+                        if (newTitle.isNotEmpty()) {
+                            modifiableCollection = modifiableCollection.rename(Title(newTitle))
                             updateCollection(modifiableCollection)
                         } else {
                             newTitleValue = collection.title().toString()
