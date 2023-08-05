@@ -137,6 +137,7 @@
 		600748A82A7E46CB0015B049 /* features */ = {
 			isa = PBXGroup;
 			children = (
+				600748B02A7E59300015B049 /* home */,
 				600748AE2A7E51C20015B049 /* search */,
 				600748AA2A7E4AFF0015B049 /* discovery */,
 				600748A92A7E46E40015B049 /* shared */,
@@ -191,12 +192,35 @@
 			path = components;
 			sourceTree = "<group>";
 		};
-		605F60DA2A0A153D0049AB6F /* bottombar */ = {
+		600748B02A7E59300015B049 /* home */ = {
+			isa = PBXGroup;
+			children = (
+				600748B12A7E59410015B049 /* components */,
+			);
+			path = home;
+			sourceTree = "<group>";
+		};
+		600748B12A7E59410015B049 /* components */ = {
+			isa = PBXGroup;
+			children = (
+				600748B22A7E59470015B049 /* bottombar */,
+			);
+			path = components;
+			sourceTree = "<group>";
+		};
+		600748B22A7E59470015B049 /* bottombar */ = {
 			isa = PBXGroup;
 			children = (
 				608EE2DC2A013240005F2719 /* MLBottomBar.swift */,
 				605F60D82A0A15280049AB6F /* TabItem.swift */,
 				605F60DB2A0A155B0049AB6F /* MLTabItem.swift */,
+			);
+			path = bottombar;
+			sourceTree = "<group>";
+		};
+		605F60DA2A0A153D0049AB6F /* bottombar */ = {
+			isa = PBXGroup;
+			children = (
 			);
 			path = bottombar;
 			sourceTree = "<group>";
