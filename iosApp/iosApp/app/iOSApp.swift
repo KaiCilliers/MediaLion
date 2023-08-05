@@ -34,7 +34,7 @@ struct iOSApp: App {
 	var body: some Scene {
 		WindowGroup {
             NavigationStack {
-                Text("noice")
+                
             }
 		}
 	}
