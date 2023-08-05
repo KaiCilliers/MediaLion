@@ -144,6 +144,7 @@
 		600748A92A7E46E40015B049 /* shared */ = {
 			isa = PBXGroup;
 			children = (
+				6088366829FE8F1300D5F717 /* MLAboutDialog.swift */,
 				607CE28A29EB2189005B8886 /* MLCollectionListItem.swift */,
 				607CE29029EB21C5005B8886 /* MLMediaPoster.swift */,
 				60F944722A01738A004B5315 /* MLCategoriesDialog.swift */,
@@ -261,7 +262,6 @@
 		607CE27D29EB20F5005B8886 /* about */ = {
 			isa = PBXGroup;
 			children = (
-				6088366829FE8F1300D5F717 /* MLAboutDialog.swift */,
 			);
 			path = about;
 			sourceTree = "<group>";
