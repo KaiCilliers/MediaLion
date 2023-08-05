@@ -179,6 +179,7 @@
 		600748AF2A7E51CA0015B049 /* components */ = {
 			isa = PBXGroup;
 			children = (
+				604433DE2A0BA96C006327F3 /* LoadingScreen.swift */,
 				607CE29A29EB2202005B8886 /* SearchIdleState.swift */,
 				607CE29829EB21F8005B8886 /* SearchEmptyState.swift */,
 				607CE29629EB21EE005B8886 /* MLTitledMediaRow.swift */,
@@ -353,7 +354,6 @@
 			children = (
 				605F60DA2A0A153D0049AB6F /* bottombar */,
 				608EE2DE2A01325E005F2719 /* gridItemScreen.swift */,
-				604433DE2A0BA96C006327F3 /* LoadingScreen.swift */,
 			);
 			path = ui;
 			sourceTree = "<group>";
