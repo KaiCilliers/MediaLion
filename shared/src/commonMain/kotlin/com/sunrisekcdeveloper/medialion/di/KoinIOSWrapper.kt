@@ -3,6 +3,7 @@ package com.sunrisekcdeveloper.medialion.di
 import com.sunrisekcdeveloper.medialion.components.collections.domain.AddUpdateCollectionUseCase
 import com.sunrisekcdeveloper.medialion.components.collections.domain.DeleteCollectionUseCaseNew
 import com.sunrisekcdeveloper.medialion.components.collections.domain.FetchAllCollectionsAsTitledMediaUseCase
+import com.sunrisekcdeveloper.medialion.components.collections.domain.InsertDefaultCollectionsUseCase
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.FetchDiscoveryContentUseCase
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.FetchMediaWithCategoryUseCase
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.FetchSuggestedMediaUseCase
@@ -13,6 +14,7 @@ import com.sunrisekcdeveloper.medialion.features.discovery.MLDiscoveryViewModelN
 import com.sunrisekcdeveloper.medialion.features.mycollection.MLMyCollectionViewModelNew
 import com.sunrisekcdeveloper.medialion.features.search.MLSearchViewModelNew
 import com.sunrisekcdeveloper.medialion.components.shared.domain.FetchAllCollectionsUseCaseNew
+import com.sunrisekcdeveloper.medialion.features.discovery.InsertDefaultCollections
 import com.sunrisekcdeveloper.medialion.features.shared.MLMiniCollectionViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
@@ -53,6 +55,7 @@ class WrappedMLDiscoveryViewModelNew : KoinComponent {
     fun instance() = MLDiscoveryViewModelNew.D(
         get<FetchDiscoveryContentUseCase>(),
         get<FetchMediaWithCategoryUseCase>(),
+        get<InsertDefaultCollectionsUseCase>(),
         coroutineScope = null,
     )
 }

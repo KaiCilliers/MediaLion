@@ -3,6 +3,7 @@ package com.sunrisekcdeveloper.medialion.di
 import com.sunrisekcdeveloper.medialion.components.collections.domain.AddUpdateCollectionUseCase
 import com.sunrisekcdeveloper.medialion.components.collections.domain.DeleteCollectionUseCaseNew
 import com.sunrisekcdeveloper.medialion.components.collections.domain.FetchAllCollectionsAsTitledMediaUseCase
+import com.sunrisekcdeveloper.medialion.components.collections.domain.InsertDefaultCollectionsUseCase
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.FetchDiscoveryContentUseCase
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.FetchMediaWithCategoryUseCase
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.FetchSuggestedMediaUseCase
@@ -49,6 +50,7 @@ val viewModelModule = module {
         MLDiscoveryViewModelNew.D(
             get<FetchDiscoveryContentUseCase>(),
             get<FetchMediaWithCategoryUseCase>(),
+            get<InsertDefaultCollectionsUseCase>(),
             coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate),
         )
     }

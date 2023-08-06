@@ -19,14 +19,10 @@ import org.koin.android.ext.android.inject
 
 class MainActivity : FragmentActivity() {
 
-    private val insertDefaultCollectionsUseCase by inject<InsertDefaultCollectionsUseCase>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val app = application as MediaLionApp
-
-        MainScope().launch { insertDefaultCollectionsUseCase() }
 
         setContent {
             MediaLionTheme {

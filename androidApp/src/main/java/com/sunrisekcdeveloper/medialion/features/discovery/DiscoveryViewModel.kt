@@ -13,6 +13,7 @@ class DiscoveryViewModel(
     MLMiniCollectionViewModel by sharedMiniCollectionViewModel {
 
     init {
+        submit(InsertDefaultCollections)
         submit(FetchPageMediaContent(DiscoveryPage.All))
         submit(FetchAllCategories)
     }

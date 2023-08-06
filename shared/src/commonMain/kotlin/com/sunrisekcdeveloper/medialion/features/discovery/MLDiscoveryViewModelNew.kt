@@ -2,6 +2,7 @@ package com.sunrisekcdeveloper.medialion.features.discovery
 
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
+import com.sunrisekcdeveloper.medialion.components.collections.domain.InsertDefaultCollectionsUseCase
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.FetchDiscoveryContentUseCase
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.FetchMediaWithCategoryUseCase
 import com.sunrisekcdeveloper.medialion.components.discovery.domain.models.DiscoveryPage
@@ -23,6 +24,7 @@ interface MLDiscoveryViewModelNew {
     class D(
         private val fetchDiscoveryContentUseCase: FetchDiscoveryContentUseCase,
         private val fetchMediaForCategoryUseCase: FetchMediaWithCategoryUseCase,
+        private val insertDefaultCollectionsUseCase: InsertDefaultCollectionsUseCase,
         coroutineScope: CoroutineScope?,
     ) : MLDiscoveryViewModelNew {
 
@@ -66,6 +68,10 @@ interface MLDiscoveryViewModelNew {
                         }
                         .onFailure { _state.update { DiscoveryUIState.Error(tabSelection = selectedTab) } }
                 }
+
+                InsertDefaultCollections -> viewModelScope.launch {
+                    insertDefaultCollectionsUseCase()
+                }
             }
         }
 
@@ -83,6 +89,8 @@ sealed interface DiscoveryNewActions
 // todo used nested hierarchy - it is easier for me to find all the actions that way
 data class FetchPageMediaContent(val page: DiscoveryPage) : DiscoveryNewActions
 data class FetchMediaForCategory(val category: MediaCategory) : DiscoveryNewActions
+// placing this here to ensure it gets called since first screen is discovery
+object InsertDefaultCollections : DiscoveryNewActions
 
 sealed class DiscoveryUIState(
     open val tabSelection: DiscoveryScreenTabSelection = DiscoveryScreenTabSelection.All,
