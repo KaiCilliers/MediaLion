@@ -25,6 +25,18 @@ struct CollectionsScreen: View {
     
     var body: some View {
         ZStack{
+            CollectionScreenContent(
+                collectionState: viewModel.collectionState,
+                openInfoDialog: { onInfoClicked() },
+                openMediaPreviewSheet: {
+                    mediaPreviewSheet = MediaItemUiIdentifiable(media: $0)
+                    selectedMedia = $0
+                },
+                openCollectionDetail: {
+                    collectionDetailSheet = CollectionItemIdentifiable(collection: $0)
+                }
+            )
+            .disabled(showCollectionDialog || mediaPreviewSheet != nil)
             
             if showCollectionDialog {
                 MLCollectionsDialog(
@@ -39,19 +51,6 @@ struct CollectionsScreen: View {
                     }
                 )
             }
-            
-            CollectionScreenContent(
-                collectionState: viewModel.collectionState,
-                openInfoDialog: { onInfoClicked() },
-                openMediaPreviewSheet: {
-                    mediaPreviewSheet = MediaItemUiIdentifiable(media: $0)
-                    selectedMedia = $0
-                },
-                openCollectionDetail: {
-                    collectionDetailSheet = CollectionItemIdentifiable(collection: $0)
-                }
-            )
-            .disabled(showCollectionDialog || mediaPreviewSheet != nil)
         }
         .onAppear {
             print("IOS - collection - starting to observe viewModel")
