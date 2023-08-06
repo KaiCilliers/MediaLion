@@ -78,20 +78,21 @@ struct DiscoveryScreenContent: View {
                     }
                 )
                
-                ScrollView {
-                    VStack (alignment: .center, spacing: 0){
+                
                         switch(discoveryState) {
                             
                         case _ as DiscoveryUIState.Loading:
                             MLProgressIndicator(
                                 loadingText: "Fetching media..."
                             )
-                            
+                            Spacer(minLength: 100)
                         case _ as DiscoveryUIState.Error:
                             Text("Error...")
                                 .foregroundColor(Color.white)
                             
                         case let contentState as DiscoveryUIState.Content:
+                            ScrollView {
+                                VStack (alignment: .center, spacing: 0){
                             if (contentState.media.all().count > 1) {
                                 
                                 let wrappedMediaWithTitle = contentState.media.all().map { sharedModel in
@@ -137,12 +138,12 @@ struct DiscoveryScreenContent: View {
 
                                }
                             }
+                        }
+                }.padding(.bottom, 30)
                         default:
                             fatalError("state should not be reachable \(discoveryState)")
                         }
-                   
-                    }
-            }.padding(.bottom, 30)
+                
             }
             .background(Color.background)
         }
@@ -165,6 +166,22 @@ struct DiscoveryScreenContent_Previews: PreviewProvider {
                 )
             ),
             tabSelection: DiscoveryScreenTabSelection.Categories()
+        )
+        
+        DiscoveryScreenContent(
+            discoveryState: state,
+            fetchContentForPage: {_ in},
+            showCategoryDialog: {},
+            showInfoDialog: {},
+            showMediaPreview: {_ in}
+        )
+    }
+}
+
+struct DiscoveryScreenLoadingState_Previews: PreviewProvider {
+    static var previews: some View {
+        
+        let state: DiscoveryUIState = DiscoveryUIState.Loading(tabSelection: DiscoveryScreenTabSelection.All()
         )
         
         DiscoveryScreenContent(
