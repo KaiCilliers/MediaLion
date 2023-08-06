@@ -8,10 +8,16 @@
 
 import SwiftUI
 
-struct MLSearchLoading: View {
+struct MLProgressIndicator: View {
+    let loadingText: String
+    
+    init(loadingText: String = "") {
+        self.loadingText = loadingText
+    }
+    
     var body: some View {
         ZStack{
-            ProgressView("Searching for media...")
+            ProgressView(loadingText)
                 .progressViewStyle(CircularProgressViewStyle(tint: Color.dialogOrange))
                 .customFont(.subtitle1)
                 .foregroundColor(.dialogOrange)
@@ -24,6 +30,8 @@ struct MLSearchLoading: View {
 
 struct MLSearchLoading_Previews: PreviewProvider {
     static var previews: some View {
-        MLSearchLoading()
+        MLProgressIndicator(
+            loadingText: "Searching for media..."
+        )
     }
 }

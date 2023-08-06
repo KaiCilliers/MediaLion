@@ -83,7 +83,9 @@ struct DiscoveryScreenContent: View {
                         switch(discoveryState) {
                             
                         case _ as DiscoveryUIState.Loading:
-                            MLSearchLoading()
+                            MLProgressIndicator(
+                                loadingText: "Fetching media..."
+                            )
                             
                         case _ as DiscoveryUIState.Error:
                             Text("Error...")

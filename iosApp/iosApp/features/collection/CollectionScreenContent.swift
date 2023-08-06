@@ -44,10 +44,10 @@ struct CollectionScreenContent: View {
                         switch(collectionState) {
                             
                         case let _ as FailedToFetchCollections:
-                            MLSearchLoading()
+                            Text("Something went wrong...")
                             
                         case let _ as Loading_:
-                            MLSearchLoading()
+                            MLProgressIndicator()
                             
                         case let contentState as MyCollectionsContent:
                             

@@ -125,7 +125,7 @@ struct SearchScreen: View {
                     )
                     
                 case _ as SearchUIState.Loading:
-                    MLSearchLoading()
+                    MLProgressIndicator()
                     
                 case _ as SearchUIState.NoResults:
                     SearchEmptyState()
