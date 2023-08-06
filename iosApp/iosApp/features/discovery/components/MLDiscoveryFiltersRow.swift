@@ -28,7 +28,7 @@ struct MLDiscoveryFiltersRow: View {
                     filterName: StringRes.filterAll,
                     selected: selectedFilter == .all,
                     onClick: {
-                        onNewSelection(selectedFilter)
+                        onNewSelection(.all)
                     }
                 )
                 
@@ -38,7 +38,7 @@ struct MLDiscoveryFiltersRow: View {
                     filterName: StringRes.filterMovies,
                     selected: selectedFilter == .movies,
                     onClick: {
-                        onNewSelection(selectedFilter)
+                        onNewSelection(.movies)
                     }
                 )
                 
@@ -48,7 +48,7 @@ struct MLDiscoveryFiltersRow: View {
                     filterName: StringRes.filterSeries,
                     selected: selectedFilter == .series,
                     onClick: {
-                        onNewSelection(selectedFilter)
+                        onNewSelection(.series)
                     }
                 )
                 
@@ -58,7 +58,7 @@ struct MLDiscoveryFiltersRow: View {
                     filterName: StringRes.filterCategories,
                     selected: selectedFilter == .categories,
                     onClick: {
-                        onNewSelection(selectedFilter)
+                        onNewSelection(.categories)
                     }
                 )
                 

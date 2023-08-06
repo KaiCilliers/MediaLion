@@ -66,6 +66,7 @@ struct ContentView: View {
             discoveryViewModel.observe()
             if (fetchInitialContentFlag) {
                 discoveryViewModel.submitAction(action: FetchPageMediaContent(page: DiscoveryPage.All()))
+                discoveryViewModel.submitAction(action: FetchAllCategories())
                 fetchInitialContentFlag = false
             }
         }
