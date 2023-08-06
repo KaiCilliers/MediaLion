@@ -16,25 +16,15 @@ struct CollectionsScreen: View {
     @StateObject var searchViewModel = SearchViewModel()
     
     @State private var mediaPreviewSheet: MediaItemUiIdentifiable? = nil
+    @State private var collectionDetailSheet: CollectionItemIdentifiable? = nil
     @State private var showCollectionDialog = false
     @State private var selectedMedia: MediaItemUI? = nil
-    @State private var showCollectionDetail: CollectionsNewIOS? = nil
     
     
     private let staticCollections = ["Favorites"]
     
     var body: some View {
         ZStack{
-            
-            CollectionScreenContent(
-                collectionState: viewModel.collectionState,
-                openInfoDialog: { onInfoClicked() },
-                openMediaPreviewSheet: {
-                    mediaPreviewSheet = MediaItemUiIdentifiable(media: $0)
-                    selectedMedia = $0
-                }
-            )
-            .disabled(showCollectionDialog || mediaPreviewSheet != nil)
             
             if showCollectionDialog {
                 MLCollectionsDialog(
@@ -50,6 +40,18 @@ struct CollectionsScreen: View {
                 )
             }
             
+            CollectionScreenContent(
+                collectionState: viewModel.collectionState,
+                openInfoDialog: { onInfoClicked() },
+                openMediaPreviewSheet: {
+                    mediaPreviewSheet = MediaItemUiIdentifiable(media: $0)
+                    selectedMedia = $0
+                },
+                openCollectionDetail: {
+                    collectionDetailSheet = CollectionItemIdentifiable(collection: $0)
+                }
+            )
+            .disabled(showCollectionDialog || mediaPreviewSheet != nil)
         }
         .onAppear {
             print("IOS - collection - starting to observe viewModel")
@@ -75,14 +77,11 @@ struct CollectionsScreen: View {
             .presentationDetents([.medium, .fraction(0.4)])
             .presentationDragIndicator(.hidden)
         }
-        .sheet(item: $showCollectionDetail) { collection in
+        .sheet(item: $collectionDetailSheet) { collectionWrapper in
             MLCollectionDetail(
-                collection: collection.origin,
-                updateCollection: { updatedCollection in
-                    
-                },
+                collection: collectionWrapper.collection,
                 collectionViewModel: viewModel,
-                closeScreen: { showCollectionDetail = nil }
+                closeScreen: { collectionDetailSheet = nil }
             )
         }
     }

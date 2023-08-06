@@ -14,6 +14,7 @@ struct CollectionScreenContent: View {
     let collectionState: MyCollectionsUIState
     let openInfoDialog: () -> Void
     let openMediaPreviewSheet: (MediaItemUI) -> Void
+    let openCollectionDetail: (CollectionNew) -> Void
     
     var body: some View {
         ZStack{
@@ -65,7 +66,7 @@ struct CollectionScreenContent: View {
                                     rowTitle: "\(c.origin.title())",
                                     media: media,
                                     onMediaItemClicked: { openMediaPreviewSheet($0) },
-                                    onTitleClicked: {}
+                                    onTitleClicked: { openCollectionDetail(c.origin) }
                                 )
                             }
                         default:
@@ -92,7 +93,8 @@ struct CollectionScreenContent_Previews: PreviewProvider {
                 ]
             ),
             openInfoDialog: {},
-            openMediaPreviewSheet: {_ in}
+            openMediaPreviewSheet: {_ in},
+            openCollectionDetail: {_ in}
         )
     }
 }

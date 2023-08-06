@@ -216,6 +216,16 @@ struct MediaItemUiIdentifiable: Identifiable {
     }
 }
 
+struct CollectionItemIdentifiable: Identifiable {
+    let id: UUID
+    let collection: CollectionNew
+    
+    init(collection: CollectionNew) {
+        self.id = UUID()
+        self.collection = collection
+    }
+}
+
 func mediaItemToDomain(item: MediaItemUI) -> SingleMediaItemD {
     switch (item.mediaType) {
         case .movie:

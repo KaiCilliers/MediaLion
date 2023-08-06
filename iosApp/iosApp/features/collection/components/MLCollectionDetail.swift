@@ -12,14 +12,12 @@ import shared
 struct MLCollectionDetail: View {
     
     let collection: CollectionNew
-    let updateCollection: (CollectionNew) -> Void
     @State var modifiableCollection: CollectionNew
     @ObservedObject var collectionViewModel: CollectionViewModel
     let closeScreen: () -> Void
     
-    init(collection: CollectionNew, updateCollection: @escaping (CollectionNew) -> Void, collectionViewModel: CollectionViewModel, closeScreen: @escaping () -> Void) {
+    init(collection: CollectionNew, collectionViewModel: CollectionViewModel, closeScreen: @escaping () -> Void) {
         self.collection = collection
-        self.updateCollection = updateCollection
         _modifiableCollection = State(initialValue: collection)
         self.collectionViewModel = collectionViewModel
         self.closeScreen = closeScreen
@@ -32,12 +30,17 @@ struct MLCollectionDetail: View {
     @State private var selectedMedia: MediaItemUI? = nil
     @State private var showMiniCollectionDialog = false
     
+    func updateCollection(collection: CollectionNew) {
+        collectionViewModel.submitAction(action: UpdateCollection(collection: collection))
+    }
+    
     var body: some View {
         ZStack{
             ScrollView{
                 
                 // Title
-                if(!editMode && "\(collection.title())" != "Favorites") {
+                let _ = print("\(collection.title())")
+                if(!editMode || "\(collection.title())" == "Favorites") {
                     Text("\(collection.title())")
                         .foregroundColor(.white)
                         .customFont(.h2)
@@ -95,7 +98,7 @@ struct MLCollectionDetail: View {
                             if editMode {
                                 Button {
                                     modifiableCollection.remove(item: mediaItemToDomain(item: item))
-                                    updateCollection(modifiableCollection)
+                                    updateCollection(collection: modifiableCollection)
                                 } label: {
                                     Image(systemName: "xmark.square.fill")
                                         .font(.title)
@@ -149,7 +152,7 @@ struct MLCollectionDetail: View {
                         let trimmedNewTitle = newTitle.trimmingCharacters(in: .whitespacesAndNewlines)
                         if (!trimmedNewTitle.isEmpty) {
                             modifiableCollection = modifiableCollection.rename(newTitle: Title(value: trimmedNewTitle))
-                            updateCollection(modifiableCollection)
+                            updateCollection(collection: modifiableCollection)
                         } else {
                             newTitle = "\(collection.title())"
                         }
@@ -172,7 +175,6 @@ struct MLCollectionDetail_Previews: PreviewProvider {
                     SingleMediaItemMovie(name: "Movie Four"),
                 ]
             ),
-            updateCollection: {_ in},
             collectionViewModel: CollectionViewModel(),
             closeScreen: {}
         )
