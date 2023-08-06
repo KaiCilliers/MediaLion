@@ -21,6 +21,7 @@ struct MLCollectionDetail: View {
         _modifiableCollection = State(initialValue: collection)
         self.collectionViewModel = collectionViewModel
         self.closeScreen = closeScreen
+        _newTitle = State(initialValue: "\(collection.title())")
     }
     
     @State private var editMode: Bool = false
@@ -39,9 +40,8 @@ struct MLCollectionDetail: View {
             ScrollView{
                 
                 // Title
-                let _ = print("\(collection.title())")
                 if(!editMode || "\(collection.title())" == "Favorites") {
-                    Text("\(collection.title())")
+                    Text("\(modifiableCollection.title())")
                         .foregroundColor(.white)
                         .customFont(.h2)
                         .padding(.leading, 16)
@@ -50,12 +50,7 @@ struct MLCollectionDetail: View {
                 } else {
                     TextField(
                         "\(collection.title())",
-                        text: $newTitle,
-                        onEditingChanged: { (isBegin) in
-                            if isBegin {
-                                newTitle = "\(collection.title())"
-                            }
-                        }
+                        text: $newTitle
                     )
                     .foregroundColor(.white)
                     .customFont(.h2)
@@ -153,9 +148,10 @@ struct MLCollectionDetail: View {
                         if (!trimmedNewTitle.isEmpty) {
                             modifiableCollection = modifiableCollection.rename(newTitle: Title(value: trimmedNewTitle))
                             updateCollection(collection: modifiableCollection)
-                        } else {
-                            newTitle = "\(collection.title())"
                         }
+                    
+                        newTitle = "\(modifiableCollection.title())"
+                        print("newTitle is \(newTitle)")
                     }
                 }
             )
