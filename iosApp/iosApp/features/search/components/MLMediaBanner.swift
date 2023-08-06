@@ -18,7 +18,7 @@ struct MLMediaBanner: View {
     var body: some View {
         ZStack {
             CachedAsyncImage(
-                url: URL(string: bannerUrl)
+                url: URL(string: posterBaseUrl + bannerUrl)
             ) { image in
                 image
                     .resizable()
@@ -41,7 +41,7 @@ struct MLMediaBanner_Previews: PreviewProvider {
     static var previews: some View {
         MLMediaBanner(
             title: "Movie One",
-            bannerUrl: "https://image.tmdb.org/t/p/original/hziiv14OpD73u9gAak4XDDfBKa2.jpg"
+            bannerUrl: "/hziiv14OpD73u9gAak4XDDfBKa2.jpg"
             )
         .frame(width: 130.0, height: 90.0)
     }

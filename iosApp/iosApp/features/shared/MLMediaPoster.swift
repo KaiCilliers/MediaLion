@@ -10,6 +10,8 @@ import SwiftUI
 import shared
 import CachedAsyncImage
 
+let posterBaseUrl = "https://image.tmdb.org/t/p/w500"
+
 struct MLMediaPoster: View {
     
     let title: String
@@ -18,7 +20,7 @@ struct MLMediaPoster: View {
     var body: some View {
         ZStack {
             CachedAsyncImage(
-                url: URL(string: posterUrl)
+                url: URL(string: posterBaseUrl + posterUrl)
             ) { image in
                 image
                     .resizable()
@@ -41,7 +43,7 @@ struct MLMediaPoster_Previews: PreviewProvider {
     static var previews: some View {
         MLMediaPoster(
             title: "Movie One",
-            posterUrl: "https://image.tmdb.org/t/p/original/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg"
+            posterUrl: "/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg"
             )
             .frame(width: 100, height: 150)
     }
