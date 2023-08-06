@@ -26,10 +26,7 @@ struct DiscoveryScreen: View {
             DiscoveryScreenContent(
                 discoveryState: discoveryViewModel.discoveryState,
                 fetchContentForPage: { discoveryViewModel.submitAction(action: FetchPageMediaContent(page: $0)) },
-                showCategoryDialog: {
-                    print("Ok i pressed the categories item")
-                    showCategoriesDialog = true
-                },
+                showCategoryDialog: { showCategoriesDialog = true },
                 showInfoDialog: { onInfoClicked() },
                 showMediaPreview: {
                     mediaPreviewSheet = MediaItemUiIdentifiable(media: $0)
