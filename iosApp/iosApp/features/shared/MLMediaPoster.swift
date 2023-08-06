@@ -28,9 +28,16 @@ struct MLMediaPoster: View {
             } placeholder: {
                 ZStack {
                     LinearGradient(gradient: Gradient(colors: [.primaryVariant, .mlPrimary]), startPoint: .topTrailing, endPoint: .bottomLeading)
-                    Text(title)
-                        .customFont(.h1)
-                        .foregroundColor(Color.white)
+                    
+                    if (title.isEmpty) {
+                        Text("Placeholder")
+                            .customFont(.h1)
+                            .foregroundColor(Color.white)
+                    } else {
+                        Text(title)
+                            .customFont(.h1)
+                            .foregroundColor(Color.white)
+                    }
                 }
             }
         }
