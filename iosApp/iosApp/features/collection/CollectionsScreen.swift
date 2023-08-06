@@ -34,6 +34,7 @@ struct CollectionsScreen: View {
                     selectedMedia = $0
                 }
             )
+            .disabled(showCollectionDialog || mediaPreviewSheet != nil)
             
             if showCollectionDialog {
                 MLCollectionsDialog(
