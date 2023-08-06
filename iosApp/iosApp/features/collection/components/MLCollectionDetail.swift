@@ -37,6 +37,7 @@ struct MLCollectionDetail: View {
     
     var body: some View {
         ZStack{
+            
             ScrollView{
                 
                 // Title
@@ -105,21 +106,21 @@ struct MLCollectionDetail: View {
                     }
                 }
                 .environment(\.editMode, .constant(self.editMode ? EditMode.active : EditMode.inactive))
-                
-                if showMiniCollectionDialog {
-                    MLCollectionsDialog(
-                        onDismiss: { showMiniCollectionDialog = false },
-                        targetMediaItem: mediaItemToDomain(item: selectedMedia!),
-                        miniCollectionUiState: collectionViewModel.miniCollectionState,
-                        onUpdateCollection: { collection in
-                            collectionViewModel.submitAction(action: UpdateCollection(collection: collection))
-                        },
-                        onCreateCollection: { collection in
-                            collectionViewModel.submitAction(action: InsertCollection(collection: collection))
-                        }
-                    )
-                }
-                
+            }
+            .disabled(showMiniCollectionDialog)
+            
+            if showMiniCollectionDialog {
+                MLCollectionsDialog(
+                    onDismiss: { showMiniCollectionDialog = false },
+                    targetMediaItem: mediaItemToDomain(item: selectedMedia!),
+                    miniCollectionUiState: collectionViewModel.miniCollectionState,
+                    onUpdateCollection: { collection in
+                        collectionViewModel.submitAction(action: UpdateCollection(collection: collection))
+                    },
+                    onCreateCollection: { collection in
+                        collectionViewModel.submitAction(action: InsertCollection(collection: collection))
+                    }
+                )
             }
                 
         }
@@ -155,6 +156,7 @@ struct MLCollectionDetail: View {
                     }
                 }
             )
+            .disabled(showMiniCollectionDialog)
         }
     }
 }
