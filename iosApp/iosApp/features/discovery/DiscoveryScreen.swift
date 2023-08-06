@@ -33,6 +33,7 @@ struct DiscoveryScreen: View {
                     selectedMedia = $0
                 }
             )
+            .disabled(showCollectionDialog || showCategoriesDialog)
             .sheet(item: $mediaPreviewSheet) { mediaItem in
                 MLDetailPreviewSheet(
                     mediaItem: mediaItem.media,
@@ -51,14 +52,14 @@ struct DiscoveryScreen: View {
             if showCategoriesDialog {
                 MLCategoriesDialog(
                     state: discoveryViewModel.categoriesState,
-                    onDismiss: { showCollectionDialog = false },
+                    onDismiss: { showCategoriesDialog = false },
                     onSelection: { discoveryViewModel.submitAction(action: FetchMediaForCategory(category: $0.origin)) }
                 )
             }
             
             if showCollectionDialog {
                 MLCollectionsDialog(
-                    onDismiss: { showCategoriesDialog = false},
+                    onDismiss: { showCollectionDialog = false},
                     targetMediaItem: mediaItemToDomain(item: selectedMedia!),
                     miniCollectionUiState: discoveryViewModel.miniCollectionState,
                     onUpdateCollection: { discoveryViewModel.submitAction(action: UpdateCollection(collection: $0)) },
