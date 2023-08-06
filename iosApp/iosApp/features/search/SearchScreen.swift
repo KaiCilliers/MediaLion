@@ -16,7 +16,7 @@ struct SearchScreen: View {
     @StateObject private var searchViewModel = SearchViewModel()
 
     @State private var showAboutDialog: Bool = false
-    @State private var mediaPreviewSheet: PreviewMedia = PreviewMedia(media: nil,sheetVisible: false)
+    @State private var mediaPreviewSheet: MediaItemUiIdentifiable? = nil
     @State private var showCollectionDialog = false
     @State private var selectedMedia: MediaItemUI? = nil
     @State private var currentQuery: String = ""
@@ -24,7 +24,7 @@ struct SearchScreen: View {
     var body: some View {
         
         let screenBlurAmount: Float = {
-            if (showAboutDialog || mediaPreviewSheet.sheetVisible || showCollectionDialog) {
+            if (showAboutDialog) {
                 return 4
             } else {
                 return 0
@@ -83,7 +83,7 @@ struct SearchScreen: View {
                         rowTitle: StringRes.topSuggestions,
                         mediaWithFavorites: mediaFavTuple,
                         onMediaClicked: { item in
-                            mediaPreviewSheet.showSheet(media: item)
+                            mediaPreviewSheet = MediaItemUiIdentifiable(media: item)
                             selectedMedia = item
                         },
                         onFavoriteToggle: { item, favorited in
@@ -119,7 +119,7 @@ struct SearchScreen: View {
                         }),
                         suggestedMedia: [],
                         onMediaItemClicked: { media in
-                            mediaPreviewSheet.showSheet(media: media)
+                            mediaPreviewSheet = MediaItemUiIdentifiable(media: media)
                             selectedMedia = media
                         }
                     )
@@ -135,7 +135,7 @@ struct SearchScreen: View {
                 }
             }
             .blur(radius: CGFloat(screenBlurAmount))
-            .disabled(showAboutDialog)
+            .disabled(showAboutDialog || showCollectionDialog)
             
             if showAboutDialog {
                 MLAboutDialog(
@@ -167,23 +167,19 @@ struct SearchScreen: View {
             print("IOS - disposing viewModel")
             searchViewModel.dispose()
         }
-        .sheet(isPresented: $mediaPreviewSheet.sheetVisible) {
-            if let itemToPreview = mediaPreviewSheet.media {
-                MLDetailPreviewSheet(
-                    mediaItem: itemToPreview,
-                    onCloseClick: {
-                        mediaPreviewSheet.hideSheet()
-                    },
-                    onMyCollectionClick: { item in
-                        showCollectionDialog = true
-                        mediaPreviewSheet.hideSheet()
-                    }
-                )
-                .presentationDetents([.medium, .fraction(0.4)])
-                .presentationDragIndicator(.hidden)
-            } else {
-//                fatalError("item to show was nil!")
-            }
+        .sheet(item: $mediaPreviewSheet) { mediaToPreview in
+            MLDetailPreviewSheet(
+                mediaItem: mediaToPreview.media,
+                onCloseClick: {
+                    mediaPreviewSheet = nil
+                },
+                onMyCollectionClick: { item in
+                    showCollectionDialog = true
+                    mediaPreviewSheet = nil
+                }
+            )
+            .presentationDetents([.medium, .fraction(0.4)])
+            .presentationDragIndicator(.hidden)
         }
         
     }
