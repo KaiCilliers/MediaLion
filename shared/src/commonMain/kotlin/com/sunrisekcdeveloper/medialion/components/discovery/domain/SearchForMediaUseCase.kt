@@ -22,8 +22,17 @@ interface SearchForMediaUseCase {
                 runCatching {
                     val requirements = mediaRequirementsFactory.fromSearchQuery(query)
                     val titledMedia = titledMediaRepository.withRequirement(requirements)
-                    SearchResults.Default(titledMedia)
-                }.mapError { Failure(Exception(it)) }
+                    if (titledMedia.media().isEmpty()) {
+                        throw NoSuchElementException()
+                    } else {
+                        SearchResults.Default(titledMedia)
+                    }
+                }.mapError {
+                    when (it) {
+                        is NoSuchElementException -> NoMediaFound
+                      else -> Failure(Exception(it))
+                    }
+                }
             } else {
                 Err(SearchQueryNotReady)
             }
