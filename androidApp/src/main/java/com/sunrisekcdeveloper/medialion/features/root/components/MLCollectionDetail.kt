@@ -26,6 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sunrisekcdeveloper.medialion.android.R
@@ -35,11 +37,14 @@ import com.sunrisekcdeveloper.medialion.features.collections.PreviewWrapper
 import com.sunrisekcdeveloper.medialion.features.search.components.MLMediaPoster
 import com.sunrisekcdeveloper.medialion.oldArch.MediaItemUI
 import com.sunrisekcdeveloper.medialion.oldArch.domain.value.Title
+import kotlinx.coroutines.launch
 
 @Composable
 fun MLCollectionDetail(
     collection: CollectionNew,
     updateCollection: (CollectionNew) -> Unit,
+    deleteCollection: (CollectionNew) -> Unit,
+    onDismiss: () -> Unit,
     showMediaPreviewSheet: (SingleMediaItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -78,6 +83,25 @@ fun MLCollectionDetail(
                     )
                 }
             }
+
+            if (editMode && collection.title().toString() != "Favorites") {
+                item(span = { GridItemSpan(3) }) {
+                    Text(
+                        text = "Delete Collection",
+                        style = MaterialTheme.typography.caption,
+                        color = Color.Red,
+                        textAlign = TextAlign.End,
+                        textDecoration = TextDecoration.Underline,
+                        modifier = modifier
+                            .padding(top = 8.dp, bottom = 6.dp)
+                            .clickable {
+                                deleteCollection(collection)
+                                onDismiss()
+                            },
+                    )
+                }
+            }
+
             items(collection.media()) { mediaItem ->
                 val uiItem = MediaItemUI.from(mediaItem)
                 Box {
@@ -151,7 +175,9 @@ private fun MLCollectionDetailPreview() {
                     SingleMediaItem.Movie("Movie #8"),
                     SingleMediaItem.Movie("Movie #9"),
                 )
-            )
+            ),
+            deleteCollection = {},
+            onDismiss = {}
         )
     }
 }

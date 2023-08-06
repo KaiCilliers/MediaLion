@@ -33,6 +33,7 @@ import com.sunrisekcdeveloper.medialion.features.home.HomeKey
 import com.sunrisekcdeveloper.medialion.features.home.components.MLAppInfoDialog
 import com.sunrisekcdeveloper.medialion.features.mycollection.MyCollectionsContent
 import com.sunrisekcdeveloper.medialion.features.root.components.MLCollectionDetail
+import com.sunrisekcdeveloper.medialion.features.shared.DeleteCollection
 import com.sunrisekcdeveloper.medialion.features.shared.InsertCollection
 import com.sunrisekcdeveloper.medialion.features.shared.MLDetailPreviewSheet
 import com.sunrisekcdeveloper.medialion.features.shared.MLQuickCollectionsDialog
@@ -301,6 +302,8 @@ class RootScreen private constructor() {
                                                     collection = it,
                                                     showMediaPreviewSheet = { item -> mediaPreviewRouter.show(MediaItemUI.from(item)) },
                                                     updateCollection = { collection -> collectionsViewModel.submit(UpdateCollection(collection)) },
+                                                    deleteCollection = { collection -> collectionsViewModel.submit(DeleteCollection(collection)) },
+                                                    onDismiss = { scope.launch { fullCollectionSheetState.hide() } }
                                                 )
                                             }
                                     }
