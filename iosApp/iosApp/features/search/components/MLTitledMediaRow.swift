@@ -31,34 +31,32 @@ struct MLTitledMediaRow: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .onTapGesture { onTitleClicked() }
             
-            ScrollView(.horizontal) {
-                HStack(spacing: 20) {
-                    if (!media.isEmpty) {
-                        ForEach(media, id: \.self) { item in
-                            MLMediaPoster(
-                                title: item.title,
-                                posterUrl: item.posterUrl
-                            )
-                                .frame(width: 100, height: 170)
-                                .onTapGesture {
-                                    onMediaItemClicked(item)
-                                }
-                                
+            if(!media.isEmpty) {
+                ScrollView(.horizontal) {
+                    HStack(spacing: 20) {
+                        if (!media.isEmpty) {
+                            ForEach(media, id: \.self) { item in
+                                MLMediaPoster(
+                                    title: item.title,
+                                    posterUrl: item.posterUrl
+                                )
+                                    .frame(width: 100, height: 170)
+                                    .onTapGesture {
+                                        onMediaItemClicked(item)
+                                    }
+                                    
+                            }
                         }
-                    } else {
-                        MLMediaPoster(
-                            title: "",
-                            posterUrl: ""
-                        )
-                            .frame(width: 100, height: 170)
                     }
                 }
+                .padding(12)
+            } else {
+                NavigationLink(value: MLRootDestinations.search) {
+                    MLEmptyCollectionView()
+                }
             }
-            
         }
-        .padding(12)
         .background(Color.background)
-        
     }
 }
 
@@ -73,6 +71,16 @@ struct MLTitledMediaRow_Previews: PreviewProvider {
                 MediaItemUI(id: "1113", title: "Movie One", posterUrl: "https://search.yahoo.com/search?p=noster", bannerUrl: "http://www.bing.com/search?q=lacinia", categories: [], overview: "electram", popularity: 20.21, voteAverage: 22.23, voteCount: 5474, releaseYear: "mentitum", mediaType: MediaType.movie),
                 MediaItemUI(id: "1113", title: "Movie One", posterUrl: "https://search.yahoo.com/search?p=noster", bannerUrl: "http://www.bing.com/search?q=lacinia", categories: [], overview: "electram", popularity: 20.21, voteAverage: 22.23, voteCount: 5474, releaseYear: "mentitum", mediaType: MediaType.movie),
             ],
+            onMediaItemClicked: {_ in}
+        )
+    }
+}
+
+struct MLTitledMediaRow_Empty_Collection_Previews: PreviewProvider {
+    static var previews: some View {
+        MLTitledMediaRow(
+            rowTitle: "Collection with no media",
+            media: [],
             onMediaItemClicked: {_ in}
         )
     }
